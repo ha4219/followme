@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "@styles/Home.module.css";
 import React from "react";
 import Banner from "@components/Banner";
+import ProgramList from "@components/ProgramList";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>FOLLOWME</h1>
+        <ProgramList />
       </main>
     </div>
   );

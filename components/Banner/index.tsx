@@ -23,20 +23,20 @@ const Banner = () => {
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => {}}
+        onSlideChange={() => {}}
       >
         <SwiperSlide>
-          <Image src={"/bg.jpeg"} layout="fill" />
+          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={"/bg.jpeg"} layout="fill" />
+          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={"/bg.jpeg"} layout="fill" />
+          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide>
         <SwiperSlide>
-          <Image src={"/bg.jpeg"} layout="fill" />
+          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide>
       </Swiper>
     </BannerContainer>

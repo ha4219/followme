@@ -48,7 +48,7 @@ const Navbar = () => {
         <Link href="/login">고객센터</Link>
       </TopNav>
       <Toolbar disableGutters>
-        <Box sx={{ flexGrow: 0.7, display: { xs: "flex", md: "none" } }}>
+        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
             aria-label="account of current user"
