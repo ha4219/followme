@@ -12,12 +12,12 @@ export const BannerContainer = styled.div`
 
   & .swiper-button-prev {
     color: white;
-    margin-left: 6rem;
+    margin-left: 3rem;
   }
 
   & .swiper-button-next {
     color: white;
-    margin-right: 6rem;
+    margin-right: 3rem;
   }
 
   & .swiper-pagination-bullet-active {

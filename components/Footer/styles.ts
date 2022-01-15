@@ -28,6 +28,7 @@ export const ItemL = styled.div`
     & .intro-des {
       padding: 1rem;
       & div {
+        display: flex;
         margin: 0.3rem 0;
       }
     }
