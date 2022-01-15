@@ -20,30 +20,32 @@ const Footer = () => {
               <Link href="/intro">이용약관</Link>
             </div>
             <table className="intro">
-              <tr>
-                <td className="intro-logo">
-                  <Typography
-                    variant="h6"
-                    noWrap
-                    component={"div"}
-                    sx={{
-                      my: 2,
-                      color: "black",
-                      display: "block",
-                    }}
-                  >
-                    LOGOLOGO
-                  </Typography>
-                </td>
-                <td>
-                  <div className="intro-des">
-                    <div>(주) 팔로미 | 대표 : 임우리</div>
-                    <div>사업자 등록번호 : 636-87000912</div>
-                    <div>주소 : 서울시 종로구 경희궁1길 18 2F (우)03176</div>
-                    <div>Fax:02-208801673 | Email: insurance@bis.co.kr</div>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td className="intro-logo">
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      component={"div"}
+                      sx={{
+                        my: 2,
+                        color: "black",
+                        display: "block",
+                      }}
+                    >
+                      LOGOLOGO
+                    </Typography>
+                  </td>
+                  <td>
+                    <div className="intro-des">
+                      <div>(주) 팔로미 | 대표 : 임우리</div>
+                      <div>사업자 등록번호 : 636-87000912</div>
+                      <div>주소 : 서울시 종로구 경희궁1길 18 2F (우)03176</div>
+                      <div>Fax:02-208801673 | Email: insurance@bis.co.kr</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </ItemL>
         </Grid>
