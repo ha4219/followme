@@ -87,14 +87,16 @@ const Navbar = () => {
             ))}
           </Menu>
         </Box>
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-        >
-          LOGO
-        </Typography>
+        <Link href="/">
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+          >
+            LOGO
+          </Typography>
+        </Link>
         <Box
           sx={{
             flexGrow: 1,
@@ -102,14 +104,22 @@ const Navbar = () => {
             justifyContent: "center",
           }}
         >
-          <Typography
-            variant="h6"
-            noWrap
-            component={"div"}
-            sx={{ my: 3, mr: 2 }}
-          >
-            LOGO
-          </Typography>
+          <Link href="/">
+            <Button>
+              <Typography
+                variant="h6"
+                noWrap
+                component={"div"}
+                sx={{
+                  my: 2,
+                  color: "black",
+                  display: "block",
+                }}
+              >
+                LOGO
+              </Typography>
+            </Button>
+          </Link>
           {pages.map((page, index) => (
             <Button
               key={page}
