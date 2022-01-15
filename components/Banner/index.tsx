@@ -1,7 +1,11 @@
 import React from "react";
 
 const Banner = () => {
-  return <div>Banner</div>;
+  return (
+    <div>
+      <div>Banner</div>
+    </div>
+  );
 };
 
 export default Banner;

@@ -1,0 +1,58 @@
+import styled from "@emotion/styled";
+
+export const ContainerFooter = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8fa;
+`;
+
+export const ItemL = styled.div`
+  color: #616161;
+  font-size: 0.8rem;
+
+  & .nav {
+    & a {
+      margin-right: 1rem;
+    }
+  }
+
+  & .intro-logo {
+    vertical-align: top;
+    padding: 1rem;
+  }
+
+  & .intro {
+    & .intro-des {
+      padding: 1rem;
+      & div {
+        margin: 0.3rem 0;
+      }
+    }
+  }
+`;
+
+export const ItemR = styled.div`
+  color: #616161;
+  font-size: 0.8rem;
+
+  & .help-name {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  & .help-number {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+  }
+
+  & .help-des {
+  }
+
+  & .help-icons {
+    margin-top: 1rem;
+  }
+`;
