@@ -3,10 +3,6 @@ import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 
 export const PhotoContainer = styled(Box)`
-  & .title {
-    font-weight: bold;
-  }
-
   & img {
     border-radius: 10%;
   }
@@ -31,10 +27,17 @@ export const PhotoContainer = styled(Box)`
 
   & .description {
     padding: 0 1rem;
+    padding-top: 1rem;
+
+    & .title {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
   }
 `;
 
 export const TagContainer = styled(Grid)`
+  padding: 1rem 0;
   & span {
     border: 1px solid #3e3e3e;
     border-radius: 1rem;

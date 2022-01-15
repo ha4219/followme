@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid } from "@mui/material";
+import { Avatar, Box, Grid, IconButton } from "@mui/material";
 import Image from "next/image";
 import React, { VFC } from "react";
 import gravatar from "gravatar";
@@ -21,7 +21,7 @@ interface TagProps {
 
 const Tag: VFC<TagProps> = ({ tag }) => {
   return (
-    <Grid item md={3}>
+    <Grid item>
       <span>#{tag}</span>
     </Grid>
   );
@@ -35,7 +35,7 @@ const Program: VFC<Props> = ({ src, user, title, tags }) => {
           <div>
             <Avatar
               alt="user"
-              src={gravatar.url(user, { s: "28px", d: "wavatar" })}
+              src={gravatar.url(user, { s: "28px", d: "retro" })}
               className="avatar"
             />
           </div>
@@ -57,7 +57,7 @@ const Program: VFC<Props> = ({ src, user, title, tags }) => {
         </div>
         <div className="description">
           <span className="title">{titleSummary(title)}</span>
-          <TagContainer container md={9}>
+          <TagContainer container spacing={1}>
             {tags.map((tag, index) => (
               <Tag key={index} tag={tag} />
             ))}
