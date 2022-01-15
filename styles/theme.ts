@@ -21,6 +21,9 @@ let theme = createTheme({
       contrastText: "#000",
     },
   },
+  typography: {
+    fontFamily: ["Noto Sans KR"].join(","),
+  },
 });
 
 theme = responsiveFontSizes(theme);
