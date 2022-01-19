@@ -1,5 +1,4 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
+import "@styles/globals.css";
 import React from "react";
 import { CacheProvider, EmotionCache, ThemeProvider } from "@emotion/react";
 import createEmotionCache from "@styles/createEmotionCache";

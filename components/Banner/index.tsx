@@ -23,8 +23,8 @@ const Banner = () => {
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {}}
-        onSlideChange={() => {}}
+        // onSwiper={(swiper) => {}}
+        // onSlideChange={() => {}}
       >
         <SwiperSlide>
           <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />

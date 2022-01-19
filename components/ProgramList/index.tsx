@@ -1,6 +1,6 @@
 import Program from "@components/Program";
 import { Grid } from "@mui/material";
-import React, { VFC } from "react";
+import { VFC } from "react";
 
 interface Props {
   src: string;
@@ -8,6 +8,7 @@ interface Props {
   title: string;
   tags: string[];
 }
+
 const programs = [
   { user: "a", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
   { user: "a", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },

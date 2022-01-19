@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Box, Grid } from "@mui/material";
-import Image from "next/image";
 
 export const PhotoContainer = styled(Box)`
   & img {
