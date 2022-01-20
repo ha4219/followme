@@ -44,7 +44,7 @@ const PROGRAMS: Props[] = [
   { user: "c", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
 ];
 
-const ProgramList: VFC<Props> = ({}) => {
+const ProgramList: VFC = ({}) => {
   const [programs, setPrograms] = useState<Props[]>([]);
   useEffect(() => {
     const arr: Props[] = [];
