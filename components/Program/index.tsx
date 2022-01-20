@@ -21,9 +21,9 @@ interface TagProps {
 
 const Tag: VFC<TagProps> = ({ tag }) => {
   return (
-    <Grid item md={6}>
+    <Box>
       <span>#{tag}</span>
-    </Grid>
+    </Box>
   );
 };
 
@@ -57,15 +57,26 @@ const Program: VFC<Props> = ({ src, user, title, tags }) => {
         </div>
         <div className="description">
           <span className="title">{titleSummary(title)}</span>
-          <Grid container>
-            <Grid item md={6}>
-              <TagContainer container spacing={1}>
-                {tags.map((tag, index) => (
+          {tags.length > 3 ? (
+            <TagContainer>
+              <Box>
+                {tags.slice(0, 2).map((tag, index) => (
                   <Tag key={index} tag={tag} />
                 ))}
-              </TagContainer>
-            </Grid>
-          </Grid>
+              </Box>
+              <Box>
+                {tags.slice(2, 4).map((tag, index) => (
+                  <Tag key={index} tag={tag} />
+                ))}
+              </Box>
+            </TagContainer>
+          ) : (
+            <TagContainer>
+              {tags.map((tag, index) => (
+                <Tag key={index} tag={tag} />
+              ))}
+            </TagContainer>
+          )}
         </div>
       </PhotoContainer>
     </Grid>

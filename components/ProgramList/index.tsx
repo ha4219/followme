@@ -1,6 +1,6 @@
 import Program from "@components/Program";
 import { Grid } from "@mui/material";
-import { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 
 interface Props {
   src: string;
@@ -9,14 +9,14 @@ interface Props {
   tags: string[];
 }
 
-const programs = [
+const PROGRAMS: Props[] = [
   { user: "a", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
   { user: "a", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
   { user: "a", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
   {
     user: "b",
     title: "제주도 여행",
-    tags: ["제주도", "바다", "시원", "a", "b", "c", "d", "r"],
+    tags: ["제주도", "바다", "시원", "aasdfasfdsafdafs", "b", "c", "d", "r"],
     src: "",
   },
   {
@@ -44,12 +44,23 @@ const programs = [
   { user: "c", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
 ];
 
-const ProgramList: VFC = ({}) => {
+const ProgramList: VFC<Props> = ({}) => {
+  const [programs, setPrograms] = useState<Props[]>([]);
+  useEffect(() => {
+    const arr: Props[] = [];
+    PROGRAMS.forEach((program) => {
+      arr.push({
+        ...program,
+        tags: program.tags.length > 4 ? program.tags.slice(0, 4) : program.tags,
+      });
+    });
+    setPrograms(arr);
+  }, []);
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
       <Grid item xs>
         <Grid justifyContent={"center"} container spacing={1} minWidth={"md"}>
-          {programs.map((item, index) => (
+          {programs?.map((item, index) => (
             <Program
               key={index}
               src="a"
@@ -65,16 +76,12 @@ const ProgramList: VFC = ({}) => {
 };
 
 export async function getServerSideProps() {
-  const programList: Props[][] = [[], [], []];
-  console.warn("start", programList);
-
-  programs.forEach((item, index) => {
-    programList[index % 3].push(item);
-  });
+  // TODO fetch data
+  const programs: Props[] = [];
 
   return {
     props: {
-      programList,
+      programs,
     },
   };
 }

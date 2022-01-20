@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 
 export const PhotoContainer = styled(Box)`
   & img {
@@ -35,8 +35,10 @@ export const PhotoContainer = styled(Box)`
   }
 `;
 
-export const TagContainer = styled(Grid)`
+export const TagContainer = styled(Box)`
   padding: 1rem 0;
+  display: flex;
+
   & span {
     border: 1px solid #3e3e3e;
     border-radius: 1rem;

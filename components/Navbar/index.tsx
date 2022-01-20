@@ -112,11 +112,11 @@ const Navbar = () => {
                 component={"div"}
                 sx={{
                   my: 2,
-                  color: "black",
+                  color: "blue",
                   display: "block",
                 }}
               >
-                LOGO
+                HOME
               </Typography>
             </Button>
           </Link>
