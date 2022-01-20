@@ -48,12 +48,7 @@ const ProgramList: VFC = ({}) => {
   return (
     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
       <Grid item xs>
-        <Grid
-          justifyContent={"center"}
-          container
-          spacing={1}
-          sx={{ flexGrow: 1, alignItems: "stretch" }}
-        >
+        <Grid justifyContent={"center"} container spacing={1} minWidth={"md"}>
           {programs.map((item, index) => (
             <Program
               key={index}
