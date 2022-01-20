@@ -1,12 +1,46 @@
 import styled from "@emotion/styled";
 
 export const ContainerFooter = styled.div`
-  display: flex;
+  display: block;
   flex: 1;
   padding: 2rem 0;
-  justify-content: center;
-  align-items: center;
   background-color: #f8f8fa;
+
+  color: #616161;
+
+  & .nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & a {
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
+  }
+
+  & .help-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    & svg {
+      margin: 0 1rem;
+    }
+  }
+
+  & .help-des {
+    display: block;
+    font-size: 0.85rem;
+    & div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  & .any {
+    color: gray;
+  }
 `;
 
 export const ItemL = styled.div`
