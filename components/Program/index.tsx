@@ -51,8 +51,10 @@ const Program: VFC<Props> = ({ src, user, title, tags }) => {
             alt={title}
             src={"/back.jpeg"}
             objectFit="cover"
+            // layout="fill"
             width={1000}
-            height={Math.random() * 500 + 500}
+            height={1000}
+            // height={Math.random() * 500 + 500}
           />
         </div>
         <div className="description">

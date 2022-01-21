@@ -22,9 +22,9 @@ module.exports = {
     "prefer-const": "error",
   },
   settings: {
-    // react: {
-    //   version: "latest",
-    // },
+    react: {
+      version: "latest",
+    },
     "import/resolver": {
       typescript: {},
     },
