@@ -1,10 +1,61 @@
-import React, { VFC } from "react";
+import React, { useState } from "react";
+import Container from "@mui/material/Container";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Input,
+  InputAdornment,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import useInput from "@hooks/useInput";
+import SearchIcon from "@mui/icons-material/Search";
+import { borderRadius } from "@mui/system";
+import { MainContainer } from "./styles";
+import TagContainer from "@components/TagContainer";
+import ProgramList from "@components/ProgramList";
+
+const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
 
 const Editor = () => {
+  const [search, , onChangeSearch] = useInput("");
   return (
-    <div>
-      <div>hi</div>
-    </div>
+    <MainContainer>
+      <Box>
+        <FormControl fullWidth>
+          <OutlinedInput
+            id="search"
+            className="searchContainer"
+            placeholder="검색어를 입력하세요."
+            value={search}
+            onChange={onChangeSearch}
+            sx={{ borderRadius: "10px" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton>
+                  <SearchIcon fontSize="large" />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          <FormHelperText>{}</FormHelperText>
+        </FormControl>
+        <Box
+          sx={{
+            display: "flex",
+            mx: 5,
+            alignItems: "center",
+            fontWeight: "bold",
+          }}
+        >
+          추천키워드&emsp;|&emsp;
+          <TagContainer tags={RECOMMANDKEYWORD} />
+        </Box>
+      </Box>
+      <ProgramList />
+    </MainContainer>
   );
 };
 

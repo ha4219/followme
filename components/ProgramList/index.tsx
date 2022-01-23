@@ -63,7 +63,7 @@ const ProgramList: VFC = ({}) => {
           {programs?.map((item, index) => (
             <Program
               key={index}
-              src="a"
+              src={`https://picsum.photos/id/${index}/300/300`}
               user={item.user}
               title={item.title}
               tags={item.tags}

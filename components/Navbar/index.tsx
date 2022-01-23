@@ -13,12 +13,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import { TopNav } from "./styles";
 
-const pages: string[] = [
-  "Editor's pick",
-  "추천코스",
-  "테마여행",
-  "코스를 부탁해",
-  "내 주변 갈만한 곳",
+interface PageProps {
+  label: string;
+  target?: string;
+}
+
+const pages: PageProps[] = [
+  { label: "Home", target: "" },
+  { label: "Editor's pick", target: "editor" },
+  { label: "추천코스", target: "editor" },
+  { label: "테마여행", target: "editor" },
+  { label: "코스를 부탁해", target: "editor" },
+  { label: "내 주변 갈만한 곳", target: "map" },
 ];
 
 const Navbar = () => {
@@ -79,10 +85,10 @@ const Navbar = () => {
           >
             {pages.map((page, index) => (
               <MenuItem
-                key={page}
+                key={index}
                 onClick={(event) => onHandleNavItemClick(event, index)}
               >
-                <Typography textAlign="center">{page}</Typography>
+                <Typography textAlign="center">{page.label}</Typography>
               </MenuItem>
             ))}
           </Menu>
@@ -104,28 +110,13 @@ const Navbar = () => {
             // justifyContent: "center",
           }}
         >
-          <Link href="/">
-            <Button>
-              <Typography
-                variant="h6"
-                noWrap
-                component={"div"}
-                sx={{
-                  my: 2,
-                  color: "blue",
-                  display: "block",
-                }}
-              >
-                HOME
-              </Typography>
-            </Button>
-          </Link>
           {pages.map((page, index) => (
             <Button
-              key={page}
+              key={index}
               onClick={(event) => onHandleNavItemClick(event, index)}
               sx={[
                 {
+                  textTransform: "none",
                   my: 2,
                   color: "black",
                   display: "block",
@@ -133,11 +124,11 @@ const Navbar = () => {
                   fontWeight: "bold",
                 },
                 selectedNavIndex === index && {
-                  color: "orange",
+                  color: "#0068ff",
                 },
               ]}
             >
-              {page}
+              <Link href={`/${page.target}`}>{page.label}</Link>
             </Button>
           ))}
         </Box>
