@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       <Banner />
 
       <main className={styles.main}>
-        <h1 className={styles.title}>FOLLOWME</h1>
+        {/* <h1 className={styles.title}>FOLLOWME</h1> */}
         <ProgramList />
       </main>
     </div>

@@ -63,3 +63,13 @@ export const PhotoContainer = styled(Box)<PhotoProps>`
       z-index: 1;
     }
 `;
+
+export const DesContainer = styled(Box)`
+  padding: 0 1rem;
+  padding-top: 1rem;
+
+  & .title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+`;

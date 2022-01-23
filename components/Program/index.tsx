@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useCallback, useState, VFC } from "react";
 import gravatar from "gravatar";
 
-import { PhotoContainer } from "./styles";
+import { PhotoContainer, DesContainer } from "./styles";
 import { titleSummary } from "@helpers/programHelper";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -60,10 +60,10 @@ const Program: VFC<Props> = ({ src, user, title, tags }) => {
           </IconButton>
         </div>
       </PhotoContainer>
-      <div className="description">
+      <DesContainer className="description">
         <span className="title">{titleSummary(title)}</span>
         <TagContainer tags={tags} />
-      </div>
+      </DesContainer>
     </Grid>
   );
 };
