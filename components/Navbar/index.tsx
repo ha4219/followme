@@ -101,7 +101,7 @@ const Navbar = () => {
           sx={{
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
-            justifyContent: "center",
+            // justifyContent: "center",
           }}
         >
           <Link href="/">
