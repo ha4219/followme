@@ -1,40 +1,5 @@
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 import { Box } from "@mui/material";
-
-// export const PhotoContainer = styled(Box)`
-//   & img {
-//     border-radius: 10%;
-//   }
-
-//   & .topContainer {
-//     display: flex;
-//     justify-content: space-between;
-
-//     & .avatar {
-//       position: absolute;
-//       z-index: 1;
-//       transform: translate(1rem, 1rem);
-//     }
-
-//     & .heart {
-//       position: absolute;
-//       fill: white;
-//       z-index: 1;
-//       transform: translate(-3rem, 1rem);
-//     }
-//   }
-
-//   & .description {
-//     padding: 0 1rem;
-//     padding-top: 1rem;
-
-//     & .title {
-//       font-weight: bold;
-//       font-size: 1.2rem;
-//     }
-//   }
-// `;
 
 type PhotoProps = {
   src: string;

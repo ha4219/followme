@@ -13,9 +13,9 @@ import {
 import useInput from "@hooks/useInput";
 import SearchIcon from "@mui/icons-material/Search";
 import { borderRadius } from "@mui/system";
-import { MainContainer } from "./styles";
 import TagContainer from "@components/TagContainer";
 import ProgramList from "@components/ProgramList";
+import styled from "@emotion/styled";
 
 const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
 
@@ -58,5 +58,11 @@ const Editor = () => {
     </MainContainer>
   );
 };
+
+const MainContainer = styled(Container)`
+  & .searchContainer {
+    border-radius: 27px;
+  }
+`;
 
 export default Editor;
