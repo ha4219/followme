@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import Link from "next/link";
 
 import { TopNav } from "./styles";
 
@@ -87,9 +88,6 @@ const Navbar = () => {
               <MenuItem
                 key={index}
                 onClick={(event) => onHandleNavItemClick(event, index)}
-                sx={[{selectedNavIndex === index && {
-                  color: "#0068ff",
-                },}]}
               >
                 <Typography textAlign="center">{page.label}</Typography>
               </MenuItem>
@@ -141,4 +139,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-import Link from "next/link";

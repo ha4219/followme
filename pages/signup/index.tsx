@@ -1,9 +1,18 @@
-import { Container, Grid, Typography, TextField, FormControlLabel , Box, Button, FormControl, FormHelperText } from "@mui/material";
-import useInput from '@hooks/useInput';
-import SignupTextField from '@components/SignupTextField';
+import {
+  Container,
+  Grid,
+  Typography,
+  TextField,
+  FormControlLabel,
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+} from "@mui/material";
+import useInput from "@hooks/useInput";
 
 const Signup = () => {
-  const [value, setValue, onChangeValue] = useInput('');
+  const [value, setValue, onChangeValue] = useInput("");
 
   return (
     <Box px={"30%"}>
@@ -12,7 +21,7 @@ const Signup = () => {
       </Typography>
       <Grid container mb={3}>
         <Grid item xs={4} md={4}>
-          <Typography color="#3e3e3e" mt={2} sx={{fontWeight: 'bold'}}>
+          <Typography color="#3e3e3e" mt={2} sx={{ fontWeight: "bold" }}>
             이름
           </Typography>
         </Grid>
@@ -26,10 +35,10 @@ const Signup = () => {
           />
         </Grid>
       </Grid>
-      
+
       <Grid container mb={3}>
         <Grid item xs={4} md={4}>
-          <Typography color="#3e3e3e" mt={2} sx={{fontWeight: 'bold'}}>
+          <Typography color="#3e3e3e" mt={2} sx={{ fontWeight: "bold" }}>
             아이디
           </Typography>
         </Grid>
@@ -43,22 +52,20 @@ const Signup = () => {
           />
         </Grid>
         <Grid item xs={3} md={3}>
-          <Box mt={1} sx={{alignItems: 'center', textAlign: 'center'}}>
+          <Box mt={1} sx={{ alignItems: "center", textAlign: "center" }}>
             <Button variant="contained" disabled>
-              <Typography color="white">
-                중복확인
-              </Typography>
+              <Typography color="white">중복확인</Typography>
             </Button>
           </Box>
         </Grid>
       </Grid>
-      <Box mb={3} sx={{display: 'flex'}}>
-        <Box sx={{flex: 1}}>
-          <Typography color="#3e3e3e" mt={2} sx={{fontWeight: 'bold'}}>
+      <Box mb={3} sx={{ display: "flex" }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography color="#3e3e3e" mt={2} sx={{ fontWeight: "bold" }}>
             아이디
           </Typography>
         </Box>
-        <Box sx={{flex: 4}}>
+        <Box sx={{ flex: 4 }}>
           <TextField
             id="name"
             placeholder={"아이디를 입력해주세요."}
@@ -67,16 +74,14 @@ const Signup = () => {
             // helperText={helperText}
           />
         </Box>
-        <Box mt={1} ml={1} sx={{alignItems: 'center', textAlign: 'center'}}>
+        <Box mt={1} ml={1} sx={{ alignItems: "center", textAlign: "center" }}>
           <Button variant="contained" disabled>
-            <Typography color="white">
-              중복확인
-            </Typography>
+            <Typography color="white">중복확인</Typography>
           </Button>
         </Box>
       </Box>
     </Box>
-  )
+  );
 };
 
 export default Signup;

@@ -26,7 +26,7 @@ const Footer = () => {
           636-87-000912&emsp;|&emsp;(우) 03176 서울시 종로구 경희궁1길 18 2F
         </div>
         <div>
-          고객지원 : 1670-9010&emsp;|&emsp;Fax:02-2088-01673&emsp;|&emsp;EMAIL:
+          고객지원 : 1670-9010&emsp;|&emsp;Fax:02-2088-1673&emsp;|&emsp;EMAIL:
           insurance@bis.co.kr
         </div>
         <div>평일 09:00 am ~ 18:00 pm&emsp;|&emsp;주말 및 공휴일 휴무</div>

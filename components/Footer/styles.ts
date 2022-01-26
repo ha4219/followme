@@ -3,15 +3,16 @@ import styled from "@emotion/styled";
 export const ContainerFooter = styled.div`
   display: block;
   flex: 1;
-  padding: 2rem 0;
+  padding: 1rem 0rem;
+  padding-bottom: 4rem;
   background-color: #f8f8fa;
-
   color: #616161;
 
   & .nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 1rem;
     & a {
       font-size: 0.9rem;
       padding: 1rem;
@@ -22,7 +23,7 @@ export const ContainerFooter = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     & svg {
       margin: 0 1rem;
     }
@@ -31,6 +32,7 @@ export const ContainerFooter = styled.div`
   & .help-des {
     display: block;
     font-size: 0.85rem;
+    line-height: 2rem;
     & div {
       display: flex;
       justify-content: center;
@@ -39,7 +41,7 @@ export const ContainerFooter = styled.div`
   }
 
   & .any {
-    color: gray;
+    color: #9a9a9a;
   }
 `;
 
