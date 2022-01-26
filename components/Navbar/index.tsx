@@ -11,6 +11,7 @@ import {
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
+import Image from "next/image";
 
 import { TopNav } from "./styles";
 
@@ -111,6 +112,22 @@ const Navbar = () => {
             // justifyContent: "center",
           }}
         >
+          <Button
+            onClick={(event) => onHandleNavItemClick(event, 0)}
+            sx={[
+              {
+                textTransform: "none",
+                my: 2,
+                color: "black",
+                display: "block",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              },
+            ]}
+          >
+            <Image src="/logo.svg" layout="fill" />
+            Ulife
+          </Button>
           {pages.map((page, index) => (
             <Button
               key={index}
