@@ -50,8 +50,8 @@ const Navbar = () => {
   return (
     <Container>
       <TopNav>
-        <Link href="/login">Login</Link>|<Link href="/login">Join us</Link>|
-        <Link href="/login">고객센터</Link>
+        <Link href="/signin">Login</Link>|<Link href="/signup">Join us</Link>|
+        <Link href="/help">고객센터</Link>
       </TopNav>
       <Toolbar disableGutters>
         <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
