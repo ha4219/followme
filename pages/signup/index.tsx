@@ -18,9 +18,9 @@ const Signup = () => {
   const [value, setValue, onChangeValue] = useInput("");
 
   return (
-    <Container maxWidth="md" sx={{fontFamily: "paybooc-Medium"}}>
+    <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
       <Box py={10}>
-        <Box px={5}>
+        <Box>
           <Typography variant="h6" color="initial" pl={2}>
             회원가입
           </Typography>
@@ -92,37 +92,35 @@ const Signup = () => {
             />
           </form>
         </Box>
-        <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: '4rem' }} />
+        <Divider
+          sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
+        />
         <Box px={5} py={4}>
           <Box px={2} pb={2}>
             <div>
-              <Checkbox/>
+              <Checkbox />
               <span>회원약관 (필수)</span>
             </div>
             <div>
-              <Checkbox/>
-              <span>
-                개인정보 처리방침 (필수)
-              </span>
+              <Checkbox />
+              <span>개인정보 처리방침 (필수)</span>
             </div>
             <div>
-              <Checkbox/>
-              <span>
-                개인정보 제 3자 이용동의 (필수)
-              </span>
+              <Checkbox />
+              <span>개인정보 제 3자 이용동의 (필수)</span>
             </div>
           </Box>
-          <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6"}}/>
+          <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
           <Box mt={2}>
-            <Checkbox/>
-            <span>
-              모든 약관에 동의합니다
-            </span>
+            <Checkbox />
+            <span>모든 약관에 동의합니다</span>
           </Box>
         </Box>
-        <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e"}} />
-        <Box p={8} sx={{alignItems: 'center', textAlign: 'center'}}>
-          <Button variant="contained" sx={{color: '#ffffff'}}>가입하기</Button>
+        <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
+        <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
+          <Button variant="contained" sx={{ color: "#ffffff" }}>
+            가입하기
+          </Button>
         </Box>
       </Box>
     </Container>
