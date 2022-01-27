@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 
+
 export const SignupContainer = styled("div")`
   display: flex;
   padding: 1rem;
@@ -9,7 +10,7 @@ export const SignupContainer = styled("div")`
     font-family: paybooc-Bold;
     font-size: 1rem;
     align-self: center;
-    width: 120px;
+    width: 130px;
   }
 
   & .textInput {

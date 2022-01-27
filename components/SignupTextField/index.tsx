@@ -30,17 +30,17 @@ const SignupTextField = ({
   return (
     <SignupContainer>
       <div className="label">{label}</div>
-      <TextField
-        className="textInput"
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        helperText={helperText}
-        size="small"
-      />
-      {/* {helperText && <FormHelperText>{helperText}</FormHelperText>} */}
-
+      <div className="inputContainer">
+        <TextField
+          className="textInput"
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          size="small"
+        />
+        {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      </div>
       {btnLabel && (
         <Button className="btn" variant="contained" disabled={!btnActive}>
           {btnLabel}
