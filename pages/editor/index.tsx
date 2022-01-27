@@ -4,6 +4,7 @@ import {
   Box,
   FormControl,
   FormHelperText,
+  Grid,
   IconButton,
   Input,
   InputAdornment,
@@ -16,45 +17,51 @@ import { borderRadius } from "@mui/system";
 import TagContainer from "@components/TagContainer";
 import ProgramList from "@components/ProgramList";
 import styled from "@emotion/styled";
+import LeftLayout from "@components/LeftLayout";
 
 const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
 
 const Editor = () => {
   const [search, , onChangeSearch] = useInput("");
   return (
-    <MainContainer>
-      <Box>
-        <FormControl fullWidth>
-          <OutlinedInput
-            id="search"
-            className="searchContainer"
-            placeholder="검색어를 입력하세요."
-            value={search}
-            onChange={onChangeSearch}
-            sx={{ borderRadius: "10px" }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton>
-                  <SearchIcon fontSize="large" />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <FormHelperText>{}</FormHelperText>
-        </FormControl>
-        <Box
-          sx={{
-            display: "flex",
-            mx: 5,
-            alignItems: "center",
-            fontWeight: "bold",
-          }}
-        >
-          추천키워드&emsp;|&emsp;
-          <TagContainer tags={RECOMMANDKEYWORD} />
-        </Box>
-      </Box>
-      <ProgramList />
+    <MainContainer maxWidth="lg">
+      <Grid container>
+        <LeftLayout />
+        <Grid item xs={10}>
+          <Box>
+            <FormControl fullWidth>
+              <OutlinedInput
+                id="search"
+                className="searchContainer"
+                placeholder="검색어를 입력하세요."
+                value={search}
+                onChange={onChangeSearch}
+                sx={{ borderRadius: "10px" }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <SearchIcon fontSize="large" />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText>{}</FormHelperText>
+            </FormControl>
+            <Box
+              sx={{
+                display: "flex",
+                mx: 5,
+                alignItems: "center",
+                fontWeight: "bold",
+              }}
+            >
+              추천키워드&emsp;|&emsp;
+              <TagContainer tags={RECOMMANDKEYWORD} />
+            </Box>
+          </Box>
+          <ProgramList />
+        </Grid>
+      </Grid>
     </MainContainer>
   );
 };
