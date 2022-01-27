@@ -15,6 +15,7 @@ import Image from "next/image";
 
 import { TopNav } from "./styles";
 import Logo from "@components/Logo";
+import { useRouter } from "next/router";
 
 interface PageProps {
   label: string;
@@ -31,6 +32,7 @@ const pages: PageProps[] = [
 ];
 
 const Navbar = () => {
+  const router = useRouter();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
 
@@ -46,6 +48,7 @@ const Navbar = () => {
     (event: React.MouseEvent<HTMLElement>, index: number) => {
       handleCloseNavMenu();
       setSelectedNavIndex(index);
+      router.push(`/${pages[index].target}`);
     },
     []
   );
@@ -96,8 +99,7 @@ const Navbar = () => {
             ))}
           </Menu>
         </Box>
-        <Link href="/">
-          {/* <Typography
+        {/* <Typography
             variant="h6"
             noWrap
             component="div"
@@ -105,10 +107,17 @@ const Navbar = () => {
           >
             LOGO
           </Typography> */}
-          <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}, hover: 'cursor'}}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: { xs: "flex", md: "none" },
+            hover: "cursor",
+          }}
+        >
+          <Button sx={{ textTransform: "none" }}>
             <Logo />
-          </Box>
-        </Link>
+          </Button>
+        </Box>
         <Box
           sx={{
             flexGrow: 1,
@@ -129,9 +138,7 @@ const Navbar = () => {
               },
             ]}
           >
-            <Link href="/">
-              <Logo />
-            </Link>
+            <Logo />
           </Button>
           {pages.map((page, index) => (
             <Button
@@ -151,7 +158,7 @@ const Navbar = () => {
                 },
               ]}
             >
-              <Link href={`/${page.target}`}>{page.label}</Link>
+              {page.label}
             </Button>
           ))}
         </Box>

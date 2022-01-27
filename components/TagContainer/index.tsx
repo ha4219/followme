@@ -12,7 +12,7 @@ interface TagContainerProps {
 
 const Tag: FC<TagProps> = ({ tag }) => {
   return (
-    <Box>
+    <Box m={0.5}>
       <span>#{tag}</span>
     </Box>
   );
