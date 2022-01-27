@@ -14,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { TopNav } from "./styles";
+import Logo from "@components/Logo";
 
 interface PageProps {
   label: string;
@@ -96,14 +97,17 @@ const Navbar = () => {
           </Menu>
         </Box>
         <Link href="/">
-          <Typography
+          {/* <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
             LOGO
-          </Typography>
+          </Typography> */}
+          <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}, hover: 'cursor'}}>
+            <Logo />
+          </Box>
         </Link>
         <Box
           sx={{
@@ -125,8 +129,9 @@ const Navbar = () => {
               },
             ]}
           >
-            <Image src="/logo.svg" layout="fill" />
-            Ulife
+            <Link href="/">
+              <Logo />
+            </Link>
           </Button>
           {pages.map((page, index) => (
             <Button

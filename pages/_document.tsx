@@ -16,6 +16,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&display=swap"
           />
+          <link rel="icon" href="/logo.svg" />
         </Head>
         <body>
           <Main />

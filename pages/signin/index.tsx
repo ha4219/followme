@@ -7,8 +7,8 @@ import Link from 'next/link';
 const Signin = () => {
   return (
     <Container maxWidth="xs" sx={{fontFamily: "paybooc-Medium"}}>
-      <Box py={10}>
-        <Typography variant="h6">
+      <Box py={5}>
+        <Typography variant="h6" py={5}>
           로그인
         </Typography>
         <Box>
