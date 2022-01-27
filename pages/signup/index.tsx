@@ -18,7 +18,7 @@ const Signup = () => {
   const [value, setValue, onChangeValue] = useInput("");
 
   return (
-    <Container sx={{fontFamily: "paybooc-Medium", justifyContent: 'center'}}>
+    <Container maxWidth="md" sx={{fontFamily: "paybooc-Medium"}}>
       <Box py={10}>
         <Box px={5}>
           <Typography variant="h6" color="initial" pl={2}>
