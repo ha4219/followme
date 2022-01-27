@@ -27,8 +27,8 @@ const Editor = () => {
     <MainContainer maxWidth="lg">
       <Grid container>
         <LeftLayout />
-        <Grid item xs={10}>
-          <Box>
+        <Grid item xs={9}>
+          <Box py={2}>
             <FormControl fullWidth>
               <OutlinedInput
                 id="search"
