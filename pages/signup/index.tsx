@@ -1,54 +1,56 @@
 import {
   Container,
-  Grid,
   Typography,
-  TextField,
-  FormControlLabel,
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Divider,
   Checkbox,
 } from "@mui/material";
 import useInput from "@hooks/useInput";
 import SignupTextField from "@components/SignupTextField";
+
+import { useCallback } from "react";
 import axios from "axios";
-import { useEffect } from "react";
 
-const Signup = ({ posts }) => {
-  console.log(posts);
+const Signup = () => {
+  const [name, setName, onChangeName] = useInput("");
+  const [nickName, setNickName, onChangeNickName] = useInput("");
+  const [id, setId, onChangeId] = useInput("");
+  const [password, setPassword, onChangePassword] = useInput("");
+  const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("");
+  const [email, setEmail, onChangeEmail] = useInput("");
+  const [phone, setPhone, onChangePhone] = useInput("");
+  const [verified, setVerified, onChangeVerified] = useInput("");
 
-  const [value, setValue, onChangeValue] = useInput("");
-
+  const onSubmit = () => {};
   return (
-    <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
+    <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
       <Box py={10}>
         <Box>
           <Typography variant="h6" color="initial" pl={2}>
             회원가입
           </Typography>
-          <form>
+          <form onSubmit={onSubmit}>
             <SignupTextField
               label="이름"
-              value={value}
-              onChange={onChangeValue}
+              value={name}
+              onChange={onChangeName}
               placeholder="홍길동"
               btnLabel=""
               btnActive={true}
             />
             <SignupTextField
               label="닉네임"
-              value={value}
-              onChange={onChangeValue}
+              value={nickName}
+              onChange={onChangeNickName}
               placeholder="홍길동"
               btnLabel=""
               btnActive={true}
             />
             <SignupTextField
               label="아이디"
-              value={value}
-              onChange={onChangeValue}
+              value={id}
+              onChange={onChangeId}
               placeholder="아이디를 입력해주세요."
               btnLabel="중복확인"
               btnActive={true}
@@ -56,40 +58,40 @@ const Signup = ({ posts }) => {
             <SignupTextField
               type="password"
               label="비밀번호"
-              value={value}
-              onChange={onChangeValue}
+              value={password}
+              onChange={onChangePassword}
               placeholder="비밀번호를 입력해주세요."
               helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
             />
             <SignupTextField
               type="password"
               label="비밀번호 확인"
-              value={value}
-              onChange={onChangeValue}
+              value={passwordCh}
+              onChange={onChangePasswordCh}
               placeholder="비밀번호 확인"
               helperText="(다시 한 번 비밀번호를 입력해주세요)"
             />
             <SignupTextField
               type="email"
               label="이메일"
-              value={value}
-              onChange={onChangeValue}
+              value={email}
+              onChange={onChangeEmail}
               placeholder="이메일을 입력해주세요."
               btnLabel="중복확인"
               btnActive={true}
             />
             <SignupTextField
               label="휴대폰"
-              value={value}
-              onChange={onChangeValue}
+              value={phone}
+              onChange={onChangePhone}
               placeholder="휴대폰 번호 확인"
               btnLabel="인증번호 받기"
               btnActive={true}
             />
             <SignupTextField
               label="인증번호"
-              value={value}
-              onChange={onChangeValue}
+              value={verified}
+              onChange={onChangeVerified}
               placeholder="인증번호 확인"
               btnLabel="확인"
               btnActive={true}
@@ -122,7 +124,11 @@ const Signup = ({ posts }) => {
         </Box>
         <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
         <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
-          <Button variant="contained" sx={{ color: "#ffffff" }}>
+          <Button
+            variant="contained"
+            sx={{ color: "#ffffff" }}
+            onClick={onSubmit}
+          >
             가입하기
           </Button>
         </Box>
