@@ -10,19 +10,36 @@ import useInput from "@hooks/useInput";
 import SignupTextField from "@components/SignupTextField";
 
 import { useCallback } from "react";
+import { routes } from "../../src/routes";
 import axios from "axios";
+import { API } from "src/API";
 
 const Signup = () => {
-  const [name, setName, onChangeName] = useInput("");
-  const [nickName, setNickName, onChangeNickName] = useInput("");
-  const [id, setId, onChangeId] = useInput("");
-  const [password, setPassword, onChangePassword] = useInput("");
-  const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("");
-  const [email, setEmail, onChangeEmail] = useInput("");
-  const [phone, setPhone, onChangePhone] = useInput("");
-  const [verified, setVerified, onChangeVerified] = useInput("");
+  const [name, setName, onChangeName] = useInput("test");
+  const [nickName, setNickName, onChangeNickName] = useInput("test");
+  const [id, setId, onChangeId] = useInput("test");
+  const [password, setPassword, onChangePassword] = useInput("test");
+  const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("test");
+  const [email, setEmail, onChangeEmail] = useInput("test@naver.com");
+  const [phone, setPhone, onChangePhone] = useInput("01034506630");
+  const [verified, setVerified, onChangeVerified] = useInput("1234");
 
-  const onSubmit = () => {};
+  const onSubmit = async () => {
+    try {
+      const res = await API.post("/user/signup", {
+        name: name,
+        nickName: nickName,
+        id: id,
+        password: password,
+        email: email,
+        phoneNum: phone,
+      });
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
       <Box py={10}>
