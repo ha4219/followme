@@ -52,9 +52,6 @@ const formats = [
 const Course = () => {
   const [value, setValue] = useState("");
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
   return (
     <Container>
       <Grid container>

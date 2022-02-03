@@ -1,6 +1,8 @@
 import "@styles/globals.css";
 import React from "react";
 import { CacheProvider, EmotionCache, ThemeProvider } from "@emotion/react";
+import { RecoilRoot } from "recoil";
+
 import createEmotionCache from "@styles/createEmotionCache";
 import { CssBaseline } from "@mui/material";
 import theme from "@styles/theme";
@@ -17,15 +19,17 @@ function MyApp(props: {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
-          <Footer />
-        </Layout>
-      </ThemeProvider>
-    </CacheProvider>
+    <RecoilRoot>
+      <CacheProvider value={emotionCache}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Layout>
+            <Component {...pageProps} />
+            <Footer />
+          </Layout>
+        </ThemeProvider>
+      </CacheProvider>
+    </RecoilRoot>
   );
 }
 

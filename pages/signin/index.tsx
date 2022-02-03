@@ -10,25 +10,39 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "next/link";
 import useInput from "@hooks/useInput";
-import { useCallback } from "react";
-import axios from "axios";
-import { routes } from "src/routes";
-import { API } from "src/API";
+import { useCallback, useEffect } from "react";
+import { API, setToken } from "src/API";
+import { authState } from "@store/auth";
+import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
 
 const Signin = () => {
-  const [id, setId, onChangeId] = useInput("00002");
-  const [password, setPassowrd, onChangePassword] = useInput("develop");
+  const router = useRouter();
+  const [loggedIn, setLoggedIn] = useRecoilState(authState);
+
+  const [id, setId, onChangeId] = useInput("testtest");
+  const [password, setPassowrd, onChangePassword] = useInput("testtest");
+
+  console.log("before", loggedIn);
 
   const onSubmit = useCallback(async (e) => {
     e.preventDefault();
-    console.log(id, password);
-    const res = await API.post('/user/signin', {
+
+    const { data } = await API.post("/user/signin", {
       id: id,
       password: password,
     });
-    console.log(res);
-    
+    if (data?.success) {
+      setLoggedIn(true);
+      setToken(data.accessToken);
+    }
   }, []);
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push("/");
+    }
+  }, [loggedIn]);
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -100,7 +114,7 @@ const Signin = () => {
             variant="contained"
             size="large"
           >
-            네이버 로그인
+            네이버 로그인 {loggedIn}
           </Button>
           <Button
             sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}
@@ -133,3 +147,6 @@ const Signin = () => {
 };
 
 export default Signin;
+function useReciolValue(): [any, any] {
+  throw new Error("Function not implemented.");
+}

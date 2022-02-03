@@ -15,18 +15,20 @@ import axios from "axios";
 import { API } from "src/API";
 
 const Signup = () => {
-  const [name, setName, onChangeName] = useInput("test");
-  const [nickName, setNickName, onChangeNickName] = useInput("test");
-  const [id, setId, onChangeId] = useInput("test");
-  const [password, setPassword, onChangePassword] = useInput("test");
-  const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("test");
-  const [email, setEmail, onChangeEmail] = useInput("test@naver.com");
-  const [phone, setPhone, onChangePhone] = useInput("01034506630");
-  const [verified, setVerified, onChangeVerified] = useInput("1234");
+  const [name, setName, onChangeName] = useInput("");
+  const [nickName, setNickName, onChangeNickName] = useInput("");
+  const [id, setId, onChangeId] = useInput("");
+  const [password, setPassword, onChangePassword] = useInput("");
+  const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("");
+  const [email, setEmail, onChangeEmail] = useInput("");
+  const [phone, setPhone, onChangePhone] = useInput("");
+  const [verified, setVerified, onChangeVerified] = useInput("");
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async (e) => {
+    e.preventDefault();
+
     try {
-      const res = await API.post("/user/signup", {
+      const { data } = await API.post("/user/signup", {
         name: name,
         nickName: nickName,
         id: id,
@@ -34,20 +36,22 @@ const Signup = () => {
         email: email,
         phoneNum: phone,
       });
-      console.log(res);
+      if (data?.data === "success") {
+        alert(data);
+      }
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
       <Box py={10}>
-        <Box>
-          <Typography variant="h6" color="initial" pl={2}>
-            회원가입
-          </Typography>
-          <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
+          <Box>
+            <Typography variant="h6" color="initial" pl={2}>
+              회원가입
+            </Typography>
             <SignupTextField
               label="이름"
               value={name}
@@ -113,59 +117,41 @@ const Signup = () => {
               btnLabel="확인"
               btnActive={true}
             />
-          </form>
-        </Box>
-        <Divider
-          sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
-        />
-        <Box px={5} py={4}>
-          <Box px={2} pb={2}>
-            <div>
-              <Checkbox />
-              <span>회원약관 (필수)</span>
-            </div>
-            <div>
-              <Checkbox />
-              <span>개인정보 처리방침 (필수)</span>
-            </div>
-            <div>
-              <Checkbox />
-              <span>개인정보 제 3자 이용동의 (필수)</span>
-            </div>
           </Box>
-          <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
-          <Box mt={2}>
-            <Checkbox />
-            <span>모든 약관에 동의합니다</span>
+          <Divider
+            sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
+          />
+          <Box px={5} py={4}>
+            <Box px={2} pb={2}>
+              <div>
+                <Checkbox />
+                <span>회원약관 (필수)</span>
+              </div>
+              <div>
+                <Checkbox />
+                <span>개인정보 처리방침 (필수)</span>
+              </div>
+              <div>
+                <Checkbox />
+                <span>개인정보 제 3자 이용동의 (필수)</span>
+              </div>
+            </Box>
+            <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
+            <Box mt={2}>
+              <Checkbox />
+              <span>모든 약관에 동의합니다</span>
+            </Box>
           </Box>
-        </Box>
-        <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
-        <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
-          <Button
-            variant="contained"
-            sx={{ color: "#ffffff" }}
-            onClick={onSubmit}
-          >
-            가입하기
-          </Button>
-        </Box>
+          <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
+          <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
+            <Button type="submit" variant="contained" sx={{ color: "#ffffff" }}>
+              가입하기
+            </Button>
+          </Box>
+        </form>
       </Box>
     </Container>
   );
 };
-
-// This function gets called at build time
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("http://3.34.24.103:3000");
-  const posts = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      posts,
-    },
-  };
-}
 
 export default Signup;

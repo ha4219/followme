@@ -16,6 +16,8 @@ import Image from "next/image";
 import { TopNav } from "./styles";
 import Logo from "@components/Logo";
 import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { authState } from "@store/auth";
 
 interface PageProps {
   label: string;
@@ -27,12 +29,13 @@ const pages: PageProps[] = [
   { label: "Editor's pick", target: "editor" },
   { label: "추천코스", target: "editor" },
   { label: "테마여행", target: "editor" },
-  { label: "코스를 부탁해", target: "editor" },
+  { label: "코스를 부탁해", target: "course" },
   { label: "내 주변 갈만한 곳", target: "map" },
 ];
 
 const Navbar = () => {
   const router = useRouter();
+  const loggedIn = useRecoilValue(authState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
 
@@ -56,8 +59,19 @@ const Navbar = () => {
   return (
     <Container>
       <TopNav>
-        <Link href="/signin">Login</Link>|<Link href="/signup">Join us</Link>|
-        <Link href="/help">고객센터</Link>
+        {loggedIn ? (
+          <>
+            <Link href="/logout">Logout</Link>|
+            <Link href="/profile">Profile</Link>|
+            <Link href="/help">고객센터</Link>
+          </>
+        ) : (
+          <>
+            <Link href="/signin">Login</Link>|
+            <Link href="/signup">Join us</Link>|
+            <Link href="/help">고객센터</Link>
+          </>
+        )}
       </TopNav>
       <Toolbar disableGutters>
         <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

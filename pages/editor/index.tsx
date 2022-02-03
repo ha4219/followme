@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import {
   Box,
@@ -18,11 +18,34 @@ import TagContainer from "@components/TagContainer";
 import ProgramList from "@components/ProgramList";
 import styled from "@emotion/styled";
 import LeftLayout from "@components/LeftLayout";
+import { API } from "@src/API";
 
 const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
 
+interface Props {
+  index: number;
+  image: any;
+  title: string;
+  writer: string;
+  date: string;
+  deletedAt: string;
+  heartCnt: number;
+  createdAt: string;
+  season: string;
+  region: string;
+  tags: string[];
+  views: number;
+}
 const Editor = () => {
   const [search, , onChangeSearch] = useInput("");
+  const [data, setData] = useState();
+  useEffect(async () => {
+    const { data } = await API.get("/user/board");
+    setData(data);
+  }, []);
+
+  console.log(data);
+
   return (
     <MainContainer maxWidth="lg">
       <Grid container>
@@ -71,5 +94,15 @@ const MainContainer = styled(Container)`
     border-radius: 27px;
   }
 `;
+
+// export async function getServerSideProps() {
+//   const { data } = await API.get(process.env.API_URL + "/user/board");
+
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
 
 export default Editor;
