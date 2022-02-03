@@ -9,8 +9,27 @@ import Container from "@mui/material/Container";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "next/link";
+import useInput from "@hooks/useInput";
+import { useCallback } from "react";
+import axios from "axios";
+import { routes } from "src/routes";
+import { API } from "src/API";
 
 const Signin = () => {
+  const [id, setId, onChangeId] = useInput("00002");
+  const [password, setPassowrd, onChangePassword] = useInput("develop");
+
+  const onSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    console.log(id, password);
+    const res = await API.post('/user/signin', {
+      id: id,
+      password: password,
+    });
+    console.log(res);
+    
+  }, []);
+
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
       <Box py={5}>
@@ -18,10 +37,12 @@ const Signin = () => {
           로그인
         </Typography>
         <Box>
-          <form>
+          <form onSubmit={onSubmit}>
             <div>
               <TextField
                 fullWidth
+                value={id}
+                onChange={onChangeId}
                 placeholder="아이디를 입력해주세요."
                 InputProps={{
                   startAdornment: (
@@ -36,6 +57,8 @@ const Signin = () => {
             <div>
               <TextField
                 fullWidth
+                value={password}
+                onChange={onChangePassword}
                 type="password"
                 placeholder="비밀번호를 입력해주세요."
                 InputProps={{
@@ -60,7 +83,7 @@ const Signin = () => {
               <Link href="/signup">회원가입하기</Link>
             </Box>
 
-            <Button fullWidth variant="contained" size="large">
+            <Button type="submit" fullWidth variant="contained" size="large">
               로그인
             </Button>
           </form>
