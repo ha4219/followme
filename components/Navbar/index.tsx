@@ -16,7 +16,7 @@ import Image from "next/image";
 import { TopNav } from "./styles";
 import Logo from "@components/Logo";
 import { useRouter } from "next/router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { authState } from "@store/auth";
 
 interface PageProps {
@@ -35,7 +35,7 @@ const pages: PageProps[] = [
 
 const Navbar = () => {
   const router = useRouter();
-  const loggedIn = useRecoilValue(authState);
+  const [loggedIn, setLoggedIn] = useRecoilState(authState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
 
@@ -56,12 +56,16 @@ const Navbar = () => {
     []
   );
 
+  const doLogout = () => {
+    setLoggedIn("");
+  }
+
   return (
     <Container>
       <TopNav>
         {loggedIn ? (
           <>
-            <Link href="/logout">Logout</Link>|
+            <span onClick={doLogout}>Logout</span>|
             <Link href="/profile">Profile</Link>|
             <Link href="/help">고객센터</Link>
           </>

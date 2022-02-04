@@ -10,4 +10,10 @@ export const TopNav = styled.div`
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+
+  & span {
+    cursor: pointer;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 `;
