@@ -1,3 +1,4 @@
+import { ApiOutlined } from "@mui/icons-material";
 import axios from "axios";
 
 export const API = axios.create({
@@ -7,6 +8,10 @@ export const API = axios.create({
 
 export const setToken = (token: string) => {
   API.defaults.headers.common["Access-Token"] = `${token}`;
+};
+
+export const checkToken = () => {
+  return API.defaults.headers.common["Access-Token"] ? true : false;
 };
 
 API.interceptors.request.use((request) => {

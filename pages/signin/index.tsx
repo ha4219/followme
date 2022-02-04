@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "next/link";
 import useInput from "@hooks/useInput";
 import { useCallback, useEffect } from "react";
-import { API, setToken } from "src/API";
+import { API, checkToken, setToken } from "src/API";
 import { authState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
@@ -23,22 +23,25 @@ const Signin = () => {
   const [id, setId, onChangeId] = useInput("testtest");
   const [password, setPassowrd, onChangePassword] = useInput("testtest");
 
-  const onSubmit = useCallback(async (e) => {
-    e.preventDefault();
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    const { data } = await API.post("/user/signin", {
-      id: id,
-      password: password,
-    });
-    if (data?.success) {
-      setLoggedIn(data.accessToken);
-      setToken(data.accessToken);
-    }
-  }, []);
+      const { data } = await API.post("/user/signin", {
+        id: id,
+        password: password,
+      });
+      if (data?.success) {
+        setLoggedIn(data.accessToken);
+        setToken(data.accessToken);
+      }
+    },
+    [id, password]
+  );
 
   useEffect(() => {
     if (loggedIn) {
-      router.push("/");
+      // router.push("/");
     }
   }, [loggedIn]);
 
@@ -107,7 +110,10 @@ const Signin = () => {
             SNS 계정으로 로그인
           </Box>
           <Button
-            onClick={() => console.log(API.defaults.headers.common)}
+            onClick={() => {
+              console.log(checkToken());
+              console.log(API.defaults.headers.common);
+            }}
             sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
             fullWidth
             variant="contained"
@@ -146,6 +152,3 @@ const Signin = () => {
 };
 
 export default Signin;
-function useReciolValue(): [any, any] {
-  throw new Error("Function not implemented.");
-}
