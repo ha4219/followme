@@ -56,10 +56,10 @@ const Navbar = () => {
     []
   );
 
-  const doLogout = useCallback(() => {
-    setLoggedIn(false);
+  const doLogout = () => {
+    setLoggedIn("");
     alert("logout");
-  }, []);
+  };
 
   return (
     <Container>
