@@ -24,25 +24,28 @@ const Signup = () => {
   const [phone, setPhone, onChangePhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
 
-  const onSubmit = useCallback(async (e) => {
-    e.preventDefault();
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    try {
-      const { data } = await API.post("/user/signup", {
-        name: name,
-        nickName: nickName,
-        id: id,
-        password: password,
-        email: email,
-        phoneNum: phone,
-      });
-      if (data?.data === "success") {
-        alert(data);
+      try {
+        const { data } = await API.post("/user/signup", {
+          name: name,
+          nickName: nickName,
+          id: id,
+          password: password,
+          email: email,
+          phoneNum: phone,
+        });
+        if (data?.data === "success") {
+          alert(data);
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
+    },
+    [email, id, name, nickName, password, phone]
+  );
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -53,6 +56,7 @@ const Signup = () => {
               회원가입
             </Typography>
             <SignupTextField
+              id="name"
               label="이름"
               value={name}
               onChange={onChangeName}
@@ -61,6 +65,7 @@ const Signup = () => {
               btnActive={true}
             />
             <SignupTextField
+              id="nickName"
               label="닉네임"
               value={nickName}
               onChange={onChangeNickName}
@@ -69,6 +74,7 @@ const Signup = () => {
               btnActive={true}
             />
             <SignupTextField
+              id="id"
               label="아이디"
               value={id}
               onChange={onChangeId}
@@ -77,6 +83,7 @@ const Signup = () => {
               btnActive={true}
             />
             <SignupTextField
+              id="password"
               type="password"
               label="비밀번호"
               value={password}
@@ -85,6 +92,7 @@ const Signup = () => {
               helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
             />
             <SignupTextField
+              id="passwordCh"
               type="password"
               label="비밀번호 확인"
               value={passwordCh}
@@ -93,6 +101,7 @@ const Signup = () => {
               helperText="(다시 한 번 비밀번호를 입력해주세요)"
             />
             <SignupTextField
+              id="email"
               type="email"
               label="이메일"
               value={email}
@@ -102,6 +111,7 @@ const Signup = () => {
               btnActive={true}
             />
             <SignupTextField
+              id="phone"
               label="휴대폰"
               value={phone}
               onChange={onChangePhone}
@@ -110,6 +120,7 @@ const Signup = () => {
               btnActive={true}
             />
             <SignupTextField
+              id="phoneCh"
               label="인증번호"
               value={verified}
               onChange={onChangeVerified}

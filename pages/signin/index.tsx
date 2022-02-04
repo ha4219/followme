@@ -25,18 +25,21 @@ const Signin = () => {
 
   console.log("before", loggedIn);
 
-  const onSubmit = useCallback(async (e) => {
-    e.preventDefault();
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    const { data } = await API.post("/user/signin", {
-      id: id,
-      password: password,
-    });
-    if (data?.success) {
-      setLoggedIn(true);
-      setToken(data.accessToken);
-    }
-  }, []);
+      const { data } = await API.post("/user/signin", {
+        id: id,
+        password: password,
+      });
+      if (data?.success) {
+        setLoggedIn(true);
+        setToken(data.accessToken);
+      }
+    },
+    [id, password]
+  );
 
   useEffect(() => {
     if (loggedIn) {
