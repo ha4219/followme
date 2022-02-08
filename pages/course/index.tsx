@@ -54,8 +54,7 @@ const Course = () => {
 
   return (
     <Container>
-      <Grid container>
-        <LeftLayout />
+      <LeftLayout>
         <Grid xs={9}>
           <Box>
             <QuillWrapper
@@ -67,7 +66,7 @@ const Course = () => {
             />
           </Box>
         </Grid>
-      </Grid>
+      </LeftLayout>
     </Container>
   );
 };
