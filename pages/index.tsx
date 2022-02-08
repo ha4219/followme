@@ -22,4 +22,14 @@ const Home: NextPage = () => {
   );
 };
 
+// export async function getServerSideProps() {
+//   const { data } = await API.get(process.env.API_URL + "/main/swipers", {});
+
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
+
 export default Home;

@@ -14,6 +14,10 @@ export const checkToken = () => {
   return API.defaults.headers.common["Access-Token"] ? true : false;
 };
 
+export const resetToken = () => {
+  API.defaults.headers.common["Access-Token"] = "";
+};
+
 API.interceptors.request.use((request) => {
   console.log("request: ", request);
 

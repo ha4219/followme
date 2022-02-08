@@ -44,8 +44,6 @@ const Editor = () => {
     setData(data);
   }, []);
 
-  console.log(data);
-
   return (
     <MainContainer maxWidth="lg">
       <Grid container>

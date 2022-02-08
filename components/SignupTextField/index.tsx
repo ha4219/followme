@@ -26,6 +26,7 @@ const SignupTextField = ({
   helperText,
   btnLabel,
   btnActive,
+  onClickBtn,
 }: Props) => {
   return (
     <SignupContainer>
@@ -42,7 +43,12 @@ const SignupTextField = ({
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
       </div>
       {btnLabel && (
-        <Button className="btn" variant="contained" disabled={!btnActive}>
+        <Button
+          className="btn"
+          variant="contained"
+          disabled={!btnActive}
+          onClick={onClickBtn}
+        >
           {btnLabel}
         </Button>
       )}

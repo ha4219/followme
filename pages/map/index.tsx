@@ -31,13 +31,32 @@ const Map = () => {
         });
         marker.setMap(map);
       });
+
+      window.kakao.maps.load(() => {
+        const container = document.getElementById("map1");
+        const x = 126.570667;
+        const y = 33.450701;
+        const options = {
+          center: new window.kakao.maps.LatLng(y, x),
+        };
+        const map = new window.kakao.maps.Map(container, options);
+        const markerPosition = new window.kakao.maps.LatLng(y, x);
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(map);
+      });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   }, []);
 
-  return <MapContainer id="map" />;
+  return (
+    <>
+      <MapContainer id="map" />
+    </>
+  );
 };
 
 export const MapContainer = styled.div`

@@ -41,7 +41,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      // router.push("/");
+      router.push("/");
     }
   }, [loggedIn]);
 
@@ -110,16 +110,12 @@ const Signin = () => {
             SNS 계정으로 로그인
           </Box>
           <Button
-            onClick={() => {
-              console.log(checkToken());
-              console.log(API.defaults.headers.common);
-            }}
             sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
             fullWidth
             variant="contained"
             size="large"
           >
-            네이버 로그인 {loggedIn}
+            네이버 로그인
           </Button>
           <Button
             sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}

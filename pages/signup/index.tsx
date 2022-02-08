@@ -24,6 +24,20 @@ const Signup = () => {
   const [phone, setPhone, onChangePhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
 
+  const onIdDuplication = useCallback(async () => {
+    const { data } = await API.get("/user/checkId", {
+      id: id,
+    });
+    console.log(data);
+  }, [id]);
+
+  const onEmailDuplication = useCallback(async () => {
+    const { data } = await API.get("/user/checkEmail", {
+      email: email,
+    });
+    console.log(data);
+  }, [email]);
+
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -81,6 +95,7 @@ const Signup = () => {
               placeholder="아이디를 입력해주세요."
               btnLabel="중복확인"
               btnActive={true}
+              onClickBtn={onIdDuplication}
             />
             <SignupTextField
               id="password"
