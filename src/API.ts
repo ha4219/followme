@@ -1,5 +1,6 @@
-import { ApiOutlined } from "@mui/icons-material";
+import { authState } from "@store/auth";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
 
 export const API = axios.create({
   // baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
@@ -19,7 +20,14 @@ export const resetToken = () => {
 };
 
 API.interceptors.request.use((request) => {
-  console.log("request: ", request);
+  const data = JSON.parse(localStorage.getItem("recoil-persist"));
+  // console.log(loggedIn, checkToken());
+  console.log(data["loggedIn"], checkToken());
+
+  if (data["loggedIn"] && !checkToken()) {
+    setToken(data["loggedIn"]);
+  }
+  // console.log(data['loggedIn']);
 
   return request;
 });

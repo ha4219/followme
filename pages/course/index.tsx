@@ -15,15 +15,14 @@ const Course = () => {
 
   return (
     <Container>
-      <Grid container>
-        <LeftLayout />
+      <LeftLayout>
         <Grid xs={9}>
           <Box>
             {/* <CustomEditor /> */}
             <TestEditor description={value} setDescription={setValue} />
           </Box>
         </Grid>
-      </Grid>
+      </LeftLayout>
     </Container>
   );
 };

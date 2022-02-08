@@ -46,8 +46,7 @@ const Editor = () => {
 
   return (
     <MainContainer maxWidth="lg">
-      <Grid container>
-        <LeftLayout />
+      <LeftLayout>
         <Grid item xs={9}>
           <Box py={2}>
             <FormControl fullWidth>
@@ -82,7 +81,7 @@ const Editor = () => {
           </Box>
           <ProgramList />
         </Grid>
-      </Grid>
+      </LeftLayout>
     </MainContainer>
   );
 };
