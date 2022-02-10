@@ -1,4 +1,5 @@
 import ShadowTag from "@components/ShadowTag";
+import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
 
 interface Props {
@@ -16,9 +17,7 @@ const MapDiv = ({ url, title, content, tags, distance }: Props) => {
       <DesContainer>
         <div className="title">{title}</div>
         <div className="content">{content}</div>
-        {tags.slice(0, 2)?.map((item, index) => (
-          <ShadowTag key={index} tag={item} />
-        ))}
+        <TagContainer tags={tags} />
       </DesContainer>
     </Container>
   );
