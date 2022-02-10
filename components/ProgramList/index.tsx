@@ -11,66 +11,36 @@ interface Props {
   tags: string[];
 }
 
-const PROGRAMS: Props[] = [
-  { user: "a", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "a", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "a", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  {
-    user: "b",
-    title: "제주도 여행",
-    tags: ["제주도", "바다", "시원", "aasdfasfdsafdafs", "b", "c", "d", "r"],
-    src: "",
-  },
-  {
-    user: "a",
-    title:
-      "긴 이름입니다.긴 이름입니다.긴 이름입니다.긴 이름입니다.긴 이름입니다.긴 이름입니다.",
-    tags: ["남해안", "낭만"],
-    src: "",
-  },
-  { user: "c", title: "", tags: ["제주도", "바다"], src: "" },
-  { user: "d", title: "시험", tags: ["남해안", "낭만"], src: "" },
-  { user: "e", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "f", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "g", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "q", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "q", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "q", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "w", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "w", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "w", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "r", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "t", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "z", title: "통영 여행", tags: ["남해안", "낭만"], src: "" },
-  { user: "c", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-  { user: "c", title: "제주도 여행", tags: ["제주도", "바다"], src: "" },
-];
+const ProgramList: VFC = ({ programs }) => {
+  console.log(programs);
 
-const ProgramList: VFC = ({}) => {
   const [courses, setCourses] = useState([]);
   const [sortedType, setSortedType] = useState(0);
 
   useEffect(async () => {
-    const { data } = await API.get("/main/travelBoards", {});
-    setCourses(data);
+    // const { data } = await API.get("/main/travelBoards", {});
+    // setCourses(
+    //   data.map((item) => ({ ...item, sortDate: new Date(item.date).getTime() }))
+    // );
+    await setCourses(programs);
   }, []);
 
   useEffect(async () => {
     let arr = await [...courses];
+
     if (sortedType === 0) {
       arr = await arr.sort((a, b) => b.heartCnt - a.heartCnt);
     } else if (sortedType === 1) {
       arr = await arr.sort((a, b) => b.views - a.views);
     } else {
-      arr = await arr.sort((a, b) => b.date - a.date);
+      arr = await arr.sort((a, b) => b.sortDate - a.sortDate);
     }
-    console.log(arr);
 
     setCourses(arr);
   }, [sortedType]);
 
   return (
-    <Box minWidth="xs">
+    <Box sx={{ paddingY: 2 }}>
       <HeadContainer>
         <TitleContainer>
           <div className="sub">Recommend Course</div>
@@ -99,10 +69,11 @@ const ProgramList: VFC = ({}) => {
       </HeadContainer>
       {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
-      <Grid container spacing={2} minWidth={"md"} sx={{ flexGrow: 1 }}>
-        {courses?.map((item, index) => (
+      <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+        {programs?.map((item, index) => (
           <Program
             key={index}
+            idx={item.idx}
             src={item.image}
             user={item.writer}
             title={item.title}
@@ -129,6 +100,7 @@ const TitleContainer = styled.div`
 const HeadContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-bottom: 2.5rem;
 `;
 const SortedContainer = styled.div`
   display: flex;

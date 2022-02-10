@@ -56,5 +56,5 @@ export const DesContainer = styled.div`
 
 export const ContentContainer = styled(Box)`
   display: inline-flex;
-  padding: 0 2rem;
+  padding: 0 1rem;
 `;

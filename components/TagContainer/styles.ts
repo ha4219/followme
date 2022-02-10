@@ -12,7 +12,7 @@ export const TagConv = styled(Box)`
     border: 1px solid #b69775;
     border-radius: 1rem;
 
-    padding: 0.3rem;
+    padding: 0.25rem 0.7rem;
     font-size: 0.8rem;
     text-align: center;
     vertical-align: center;

@@ -8,7 +8,7 @@ import {
   Button,
   Container,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,9 +40,11 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
 
-  if (!checkToken() && loggedIn) {
-    setToken(loggedIn);
-  }
+  useEffect(() => {
+    if (!checkToken() && loggedIn) {
+      setToken(loggedIn);
+    }
+  }, []);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);

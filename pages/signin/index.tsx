@@ -20,8 +20,8 @@ const Signin = () => {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
 
-  const [id, setId, onChangeId] = useInput("testtest");
-  const [password, setPassowrd, onChangePassword] = useInput("testtest");
+  const [id, setId, onChangeId] = useInput("admin");
+  const [password, setPassowrd, onChangePassword] = useInput("admin123");
 
   const onSubmit = useCallback(
     async (e) => {

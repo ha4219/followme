@@ -16,25 +16,25 @@ import { API } from "@src/API";
 const Banner = () => {
   const [bgs, setBgs] = useState([]);
   const [imgs, setImgs] = useState([]);
-  useEffect(async () => {
-    const { data } = await API.get(
-      "/api/main/swipers",
-      {},
-      { responseType: "blob" }
-    );
-    console.warn(data[0].image.data, typeof data[0].image.data);
+  // useEffect(async () => {
+  //   const { data } = await API.get(
+  //     "/api/main/swipers",
+  //     {},
+  //     { responseType: "blob" }
+  //   );
+  //   console.warn(data[0].image.data, typeof data[0].image.data);
 
-    const tmp = await data.map((item) =>
-      URL.createObjectURL(
-        new Blob([new Uint8Array(item.image.data)], { type: "image/jpeg" })
-      )
-    );
+  //   const tmp = await data.map((item) =>
+  //     URL.createObjectURL(
+  //       new Blob([new Uint8Array(item.image.data)], { type: "image/jpeg" })
+  //     )
+  //   );
 
-    setImgs(tmp);
-    console.log(tmp);
+  //   setImgs(tmp);
+  //   console.log(tmp);
 
-    setBgs(data);
-  }, []);
+  //   setBgs(data);
+  // }, []);
 
   return (
     <BannerContainer>
@@ -64,7 +64,7 @@ const Banner = () => {
         {imgs.map((bg) => {
           return (
             <SwiperSlide>
-              <Image key={bg.index} src={bg} layout="fill" />
+              {/* <Image key={bg.index} src={bg} layout="fill" /> */}
             </SwiperSlide>
           );
         })}

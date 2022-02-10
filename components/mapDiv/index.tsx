@@ -26,7 +26,7 @@ const MapDiv = ({ url, title, content, tags, distance }: Props) => {
 
 const Container = styled.div`
   background-color: #ffffff;
-  display: inline-block;
+  display: flex;
   padding: 20px;
   margin-left: 1rem;
   border-radius: 15px;

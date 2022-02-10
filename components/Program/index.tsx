@@ -4,14 +4,16 @@ import React, { useCallback, useState, VFC } from "react";
 import gravatar from "gravatar";
 
 import { PhotoContainer, DesContainer, ContentContainer } from "./styles";
-import { titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary } from "@helpers/programHelper";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TagContainer from "@components/TagContainer";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface Props {
+  idx: number;
   src: string;
   user: string;
   title: string;
@@ -23,16 +25,24 @@ interface TagProps {
   tag: string;
 }
 
-const Program: VFC<Props> = ({ src, user, title, tags, content }) => {
+const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
   const [like, setLike] = useState(false);
   const router = useRouter();
 
-  const onClickLike = useCallback(() => {
-    setLike(!like);
-  }, [like]);
+  const onClickLike = useCallback(
+    (e) => {
+      e.stopPropagation();
+      setLike(!like);
+    },
+    [like]
+  );
 
   const onClickUser = useCallback(() => {
     router.push(`/users/${user}`);
+  }, []);
+
+  const onClickProgram = useCallback((id) => {
+    router.push(`/editor/${id}`);
   }, []);
 
   const toBase64 = (arr) => {
@@ -42,12 +52,16 @@ const Program: VFC<Props> = ({ src, user, title, tags, content }) => {
   return (
     <Grid item lg={4}>
       <Box
+        onClick={() => {
+          onClickProgram(idx);
+        }}
         sx={{
           alignItems: "stretch",
-          borderRadius: "10px",
+          borderRadius: "0 0 10px 10px",
           border: "1px solid #d8d8d8",
           borderTop: 0,
           paddingBottom: "2rem",
+          cursor: "pointer",
         }}
       >
         <PhotoContainer src={`data:image/png;base64,${toBase64(src.data)}`}>
@@ -77,7 +91,7 @@ const Program: VFC<Props> = ({ src, user, title, tags, content }) => {
             </IconButton>
           </div>
         </PhotoContainer>
-        <Box sx={{ padding: "0 2rem" }}>
+        <Box sx={{ padding: "0 1rem" }}>
           <TagContainer tags={tags} />
         </Box>
         <ContentContainer>
@@ -90,7 +104,7 @@ const Program: VFC<Props> = ({ src, user, title, tags, content }) => {
           </IconButton>
           <DesContainer className="description">
             <div className="title">{titleSummary(title)}</div>
-            <div className="content">{titleSummary(content)}</div>
+            <div className="content">{contentSummary(content)}</div>
           </DesContainer>
         </ContentContainer>
       </Box>
