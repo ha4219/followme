@@ -18,8 +18,8 @@ const Course = () => {
       <LeftLayout>
         <Grid xs={9}>
           <Box>
-            {/* <CustomEditor /> */}
-            <TestEditor description={value} setDescription={setValue} />
+            <CustomEditor />
+            {/* <TestEditor description={value} setDescription={setValue} /> */}
           </Box>
         </Grid>
       </LeftLayout>
