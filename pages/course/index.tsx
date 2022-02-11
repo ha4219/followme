@@ -55,17 +55,15 @@ const Course = () => {
   return (
     <Container>
       <LeftLayout>
-        <Grid xs={9}>
-          <Box>
-            <QuillWrapper
-              value={value}
-              onChange={setValue}
-              theme="snow"
-              modules={modules}
-              formats={formats}
-            />
-          </Box>
-        </Grid>
+        <Box>
+          <QuillWrapper
+            value={value}
+            onChange={setValue}
+            theme="snow"
+            modules={modules}
+            formats={formats}
+          />
+        </Box>
       </LeftLayout>
     </Container>
   );
