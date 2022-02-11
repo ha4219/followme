@@ -10,18 +10,16 @@ const Course = () => {
   const [value, setValue] = useState("");
 
   useEffect(() => {
-    console.log(value);
+    console.log(value.split("⁂"));
   }, [value]);
 
   return (
     <Container>
       <LeftLayout>
-        <Grid xs={9}>
-          <Box>
-            <CustomEditor />
-            {/* <TestEditor description={value} setDescription={setValue} /> */}
-          </Box>
-        </Grid>
+        <Box>
+          <CustomEditor />
+          {/* <TestEditor description={value} setDescription={setValue} /> */}
+        </Box>
       </LeftLayout>
     </Container>
   );

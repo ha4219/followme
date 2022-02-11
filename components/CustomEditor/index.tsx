@@ -1,5 +1,7 @@
+import MapEditor from "@components/MapEditor";
+import { Box, Button, Dialog, DialogActions, TextField } from "@mui/material";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const Quill = dynamic(import("react-quill"), {
   ssr: false,
@@ -172,21 +174,45 @@ export const QuillToolbar = () => (
 
 const CustomEditor = () => {
   const ref = useRef();
+  const [open, setOpen] = useState(true);
   const [value, setValue] = useState("");
+
+  const onCloseDialog = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const onSubmitDialog = () => {};
 
   useEffect(() => {
     console.log(value);
   }, [value]);
   return (
     <div>
-      <QuillToolbar />
-      <Quill
-        forwardedRef={ref}
-        onChange={setValue}
-        modules={modules}
-        formats={formats}
-      />
-      {/* <div dangerouslySetInnerHTML={{ __html: value }} /> */}
+      <Dialog open={open} onClose={onCloseDialog}>
+        <Box sx={{ width: "400px", height: "400px" }}>
+          <MapEditor />
+          <div>
+            <TextField placeholder="title" />
+          </div>
+          <div>
+            <TextField placeholder="content" />
+          </div>
+          <DialogActions>
+            <Button onClick={onSubmitDialog}>submit</Button>
+            <Button onClick={onCloseDialog}>close</Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
+      <div>
+        <QuillToolbar />
+        <Quill
+          forwardedRef={ref}
+          onChange={setValue}
+          modules={modules}
+          formats={formats}
+        />
+        <div dangerouslySetInnerHTML={{ __html: value }} />
+      </div>
     </div>
   );
 };

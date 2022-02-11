@@ -25,15 +25,22 @@ const Signup = () => {
   const [verified, setVerified, onChangeVerified] = useInput("");
 
   const onIdDuplication = useCallback(async () => {
-    const { data } = await API.get("/user/checkId", {
+    const { data } = await API.post("/user/checkId", {
       id: id,
     });
     console.log(data);
   }, [id]);
 
   const onEmailDuplication = useCallback(async () => {
-    const { data } = await API.get("/user/checkEmail", {
+    const { data } = await API.post("/user/checkEmail", {
       email: email,
+    });
+    console.log(data);
+  }, [email]);
+
+  const onNickNameDuplication = useCallback(async () => {
+    const { data } = await API.post("/user/checkEmail", {
+      nickName: nickName,
     });
     console.log(data);
   }, [email]);
@@ -124,6 +131,7 @@ const Signup = () => {
               placeholder="이메일을 입력해주세요."
               btnLabel="중복확인"
               btnActive={true}
+              onClickBtn={onEmailDuplication}
             />
             <SignupTextField
               id="phone"
