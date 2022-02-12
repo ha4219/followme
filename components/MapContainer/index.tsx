@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 
-// const { kakao } = window;
+const { kakao } = window;
 
 declare global {
   interface Window {
