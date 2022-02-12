@@ -2,8 +2,6 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 
-const { kakao } = window;
-
 declare global {
   interface Window {
     kakao: any;
@@ -102,30 +100,30 @@ const MapContainer = () => {
     document.head.appendChild(mapScript);
 
     const onLoadKakaoMap = () => {
-      kakao.maps.load(() => {
+      window.kakao.maps.load(() => {
         const container = document.getElementById("map");
         const positions = [
           {
             title: "test",
-            latlng: new kakao.maps.LatLng(
+            latlng: new window.kakao.maps.LatLng(
               37.62933576573074,
               127.08152009841304
             ),
           },
           {
             title: "test",
-            latlng: new kakao.maps.LatLng(
+            latlng: new window.kakao.maps.LatLng(
               37.62933576573074,
               127.09152009841304
             ),
           },
         ];
         const options = {
-          center: new kakao.maps.LatLng(curPos.lat, curPos.lon),
+          center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
         };
-        const map = new kakao.maps.Map(container, options);
+        const map = new window.kakao.maps.Map(container, options);
         for (let i = 0; i < positions.length; i++) {
-          const marker = new kakao.maps.Marker({
+          const marker = new window.kakao.maps.Marker({
             map: map,
             position: positions[i].latlng,
             title: positions[i].title,
