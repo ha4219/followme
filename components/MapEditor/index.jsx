@@ -11,10 +11,29 @@ const MapEditor = () => {
     lat: 37.62933576573074,
     lon: 127.08152009841304,
   });
-  const [mmarker, setMmarker] = useState(null);
+  const [markerPos, setMarkerPos] = useState();
+  const [markers, setMarkers] = useState([]);
+  const [curMarker, setCurMarker] = useState();
   // const [userMarker, setUserMarker] = useState(
   //   new window.kakao.maps.LatLng(37.62933576573074, 127.08152009841304)
   // );
+
+  const doMarker = async () => {
+    try {
+      if (markerPos) {
+        const marker = new window.kakao.maps.Marker({
+          position: markerPos,
+        });
+        marker.setMap(map);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    doMarker();
+  }, [markerPos]);
 
   const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -50,14 +69,8 @@ const MapEditor = () => {
         // }
         window.kakao.maps.event.addListener(map, "click", (e) => {
           const latlng = e.latLng;
-          const marker = new window.kakao.maps.Marker({
-            position: latlng,
-          });
-          if (mmarker) {
-            mmarker?.setMap(null);
-          }
-          marker.setMap(map);
-          setMmarker(marker);
+
+          setMarkerPos(latlng);
         });
       });
     };

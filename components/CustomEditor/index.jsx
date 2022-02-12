@@ -1,5 +1,12 @@
 import MapEditor from "@components/MapEditor";
-import { Box, Button, Dialog, DialogActions, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  Input,
+  TextField,
+} from "@mui/material";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -176,6 +183,7 @@ const CustomEditor = () => {
   const ref = useRef();
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState("");
+  const [dialogImg, setDialogImg] = useState();
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -186,6 +194,14 @@ const CustomEditor = () => {
   };
 
   useEffect(() => {
+    console.log(dialogImg);
+  }, [dialogImg]);
+
+  const onChange = (e) => {
+    setDialogImg(e.target.files[0]);
+  };
+
+  useEffect(() => {
     console.log(value);
   }, [value]);
   return (
@@ -193,6 +209,8 @@ const CustomEditor = () => {
       <Dialog open={open} onClose={onCloseDialog}>
         <Box sx={{ width: "400px", height: "400px" }}>
           <MapEditor />
+          <img />
+          <input type="file" accept="image/*" onChange={onChange} />
           <div>
             <TextField placeholder="title" />
           </div>

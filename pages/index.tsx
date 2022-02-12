@@ -8,9 +8,11 @@ import { API } from "@src/API";
 import { Box, Container, Button } from "@mui/material";
 import MapContainer from "@components/MapContainer";
 import styled from "@emotion/styled";
+import MainMapContainer from "@components/main/MainMapContainer";
+import MainEditorPickContainer from "@components/main/MainEditorPickContainer";
 
 const Home: NextPage = () => {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [travels, setTravels] = useState([]);
   const [sortedType, setSortedType] = useState(0);
 
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    getTravel();
+    // getTravel();
   }, []);
 
   return (
@@ -38,69 +40,16 @@ const Home: NextPage = () => {
         <></>
       ) : (
         <Container>
+          <MainEditorPickContainer />
+
           <ProgramList programs={travels} />
-          <HeadContainer>
-            <TitleContainer>
-              <div className="sub">Recommend Places</div>
-              <div className="main">내 주변 추천 장소</div>
-            </TitleContainer>
-            <SortedContainer>
-              <CustomButton
-                className={sortedType === 0 ? "active" : ""}
-                onClick={() => setSortedType(0)}
-              >
-                5km이내
-              </CustomButton>
-              <CustomButton
-                className={sortedType === 1 ? "active" : ""}
-                onClick={() => setSortedType(1)}
-              >
-                10km이내
-              </CustomButton>
-              <CustomButton
-                className={sortedType === 2 ? "active" : ""}
-                onClick={() => setSortedType(2)}
-              >
-                20km이내
-              </CustomButton>
-            </SortedContainer>
-          </HeadContainer>
-          <MapContainer />
+          <MainMapContainer />
           <Banner />
         </Container>
       )}
     </div>
   );
 };
-
-const TitleContainer = styled.div`
-  & .sub {
-    color: gray;
-  }
-  & .main {
-    font-size: 2rem;
-    letter-spacing: -1.76px;
-  }
-`;
-const HeadContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 2.5rem;
-`;
-const SortedContainer = styled.div`
-  display: flex;
-  padding-top: 2rem;
-
-  & .active {
-    color: #ffffff;
-    background-color: #000000;
-  }
-`;
-
-const CustomButton = styled(Button)`
-  border: 1px solid black;
-  margin-left: 5px;
-`;
 
 // export async function getServerSideProps() {
 //   const { data } = await API.get(process.env.API_URL + "/main/swipers", {});
