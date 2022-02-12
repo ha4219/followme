@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 const Home: NextPage = () => {
   const [isLoading, setLoading] = useState(true);
   const [travels, setTravels] = useState([]);
+  const [sortedType, setSortedType] = useState(0);
 
   const getTravel = async () => {
     const { data } = await API.get("/main/travelBoards", {
@@ -22,9 +23,8 @@ const Home: NextPage = () => {
     setTravels(data);
     setLoading(false);
   };
-  const sortedType = 0;
 
-  useEffect(async () => {
+  useEffect(() => {
     getTravel();
   }, []);
 
@@ -37,7 +37,7 @@ const Home: NextPage = () => {
       {isLoading ? (
         <></>
       ) : (
-        <Container md>
+        <Container>
           <ProgramList programs={travels} />
           <HeadContainer>
             <TitleContainer>

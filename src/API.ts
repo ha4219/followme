@@ -20,7 +20,7 @@ export const resetToken = () => {
 };
 
 API.interceptors.request.use((request) => {
-  const data = JSON.parse(localStorage.getItem("recoil-persist"));
+  const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
   // console.log(loggedIn, checkToken());
 
   if (data["loggedIn"] && !checkToken()) {

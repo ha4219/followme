@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import MapDiv from "@components/mapDiv";
+import MapDiv from "@components/MapDiv";
 
 declare global {
   interface Window {
@@ -13,70 +13,70 @@ const FAKE = [
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
     title: "닭강정",
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
-    distacne: 100,
+    distance: 100,
   },
 ];
 
@@ -86,7 +86,8 @@ const MapContainer = () => {
     lon: 127.08152009841304,
   });
   const id = 1;
-  useEffect(async () => {
+
+  const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
     });
@@ -133,6 +134,10 @@ const MapContainer = () => {
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
+  };
+
+  useEffect(() => {
+    mapInit();
   }, []);
 
   return (

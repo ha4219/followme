@@ -7,7 +7,7 @@ interface Props {
   title: string;
   content: string;
   tags: string[];
-  distacne: number;
+  distance: number;
 }
 
 const MapDiv = ({ url, title, content, tags, distance }: Props) => {

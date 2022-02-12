@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     kakao: any;
+//   }
+// }
 const MapEditor = () => {
   const [curPos, setCurPos] = useState({
     lat: 37.62933576573074,
@@ -15,7 +15,8 @@ const MapEditor = () => {
   // const [userMarker, setUserMarker] = useState(
   //   new window.kakao.maps.LatLng(37.62933576573074, 127.08152009841304)
   // );
-  useEffect(async () => {
+
+  const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
     });
@@ -48,14 +49,13 @@ const MapEditor = () => {
         //   });
         // }
         window.kakao.maps.event.addListener(map, "click", (e) => {
-          let latlng = e.latLng;
+          const latlng = e.latLng;
           const marker = new window.kakao.maps.Marker({
             position: latlng,
           });
           if (mmarker) {
-            mmarker.setMap(null);
+            mmarker?.setMap(null);
           }
-          mmarker.setMap(null);
           marker.setMap(map);
           setMmarker(marker);
         });
@@ -64,6 +64,9 @@ const MapEditor = () => {
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
+  };
+  useEffect(() => {
+    mapInit();
   }, []);
   return <MapContent id="map" />;
 };

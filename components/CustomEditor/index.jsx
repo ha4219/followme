@@ -181,7 +181,9 @@ const CustomEditor = () => {
     setOpen(false);
   }, []);
 
-  const onSubmitDialog = () => {};
+  const onSubmitDialog = () => {
+    console.log(1);
+  };
 
   useEffect(() => {
     console.log(value);

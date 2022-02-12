@@ -14,10 +14,10 @@ import Link from "next/link";
 
 interface Props {
   idx: number;
-  src: string;
+  src: any;
   user: string;
   title: string;
-  content: content;
+  content: string;
   tags: string[];
 }
 
@@ -46,7 +46,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
   }, []);
 
   const toBase64 = (arr) => {
-    return new Buffer.from(arr);
+    return Buffer.from(arr);
   };
 
   return (

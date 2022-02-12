@@ -50,7 +50,7 @@ const Editor = () => {
     setTravels(data);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     // const data1 = JSON.stringify({
     //   id: "admin",
     // });
