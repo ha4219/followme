@@ -24,7 +24,7 @@ const MainEditorContent: VFC<Props> = ({
   }, [link]);
 
   return (
-    <MainContainer url={src}>
+    <MainContainer src={src}>
       <div className="tag">
         <span>{region}</span>
       </div>
@@ -42,7 +42,7 @@ const MainEditorContent: VFC<Props> = ({
 const MainContainer = styled.div`
   width: 346px;
   display: block;
-  background: url(${(props: { url: string }) => props.url}) no-repeat;
+  background: url(${(props: { src: string }) => props.src}) no-repeat;
   border-radius: 5px;
   color: #ffffff;
   text-align: center;

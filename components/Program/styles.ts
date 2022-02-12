@@ -11,6 +11,10 @@ export const PhotoContainer = styled(Box)<PhotoProps>`
   background-position: top 12px right 0;
   background-size: cover;
   border-radius: 10px;
+  :hover {
+    background-color: #ffffff;
+    opacity: 0.6;
+  }
 
   & .topContainer {
     display: flex;
