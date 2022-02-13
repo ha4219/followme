@@ -13,7 +13,7 @@ import { useCallback } from "react";
 import { routes } from "../../src/routes";
 import axios from "axios";
 import { API } from "src/API";
-import { Head } from "next/head";
+import Head from "next/head";
 
 const Signup = () => {
   const [name, setName, onChangeName] = useInput("");
@@ -71,10 +71,6 @@ const Signup = () => {
 
   return (
     <>
-      {/* <Head>
-        <script src="https://code.jquery.com/jquery-1.12.4.min.js" />
-        <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js" />
-      </Head> */}
       <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
