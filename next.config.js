@@ -9,6 +9,8 @@ const nextConfig = {
       },
     ];
   },
+
+  IMP_UID: process.env.NEXT_PUBLIC_IAMPORT_CODE,
 };
 
 module.exports = nextConfig;

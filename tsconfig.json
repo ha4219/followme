@@ -25,7 +25,10 @@
       "@helpers/*": ["helpers/*"],
       "@src/*": ["src/*"],
       "@store/*": ["store/*"],
-    }
+    },
+    "types": [
+      "iamport-typings"
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

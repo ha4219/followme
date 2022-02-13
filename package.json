@@ -1,7 +1,7 @@
 {
   "name": "followme",
   "private": true,
-  "proxy": "http://3.34.24.103:3000",
+  "author": "ha4219 <ha4219@naver.com>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -45,6 +45,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "iamport-typings": "^1.3.0",
     "prettier": "^2.5.1",
     "typescript": "4.5.4"
   }
