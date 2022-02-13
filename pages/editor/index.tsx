@@ -59,7 +59,7 @@ const Editor = () => {
     // });
     // console.log(data);
     // setData(data);
-    getTravel();
+    // getTravel();
   }, []);
 
   return (
