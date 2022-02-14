@@ -11,31 +11,8 @@ const MapEditor = () => {
     lat: 37.62933576573074,
     lon: 127.08152009841304,
   });
-  const [markerPos, setMarkerPos] = useState();
-  const [markers, setMarkers] = useState([]);
-  const [curMarker, setCurMarker] = useState();
-  // const [userMarker, setUserMarker] = useState(
-  //   new window.kakao.maps.LatLng(37.62933576573074, 127.08152009841304)
-  // );
-
-  const doMarker = () => {
-    try {
-      if (markerPos) {
-        console.log(markerPos);
-        const marker = new window.kakao.maps.Marker({
-          position: markerPos,
-          title: "asdf",
-        });
-        marker.setMap(map);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    // doMarker();
-  }, [markerPos]);
+  const [marker, setMarker] = useState();
+  const [kakaoMap, setKakaoMap] = useState();
 
   const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -52,46 +29,18 @@ const MapEditor = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
-        // const positions = [
-        //   {
-        //     title: "test",
-        //     latlng: userMarker,
-        //   },
-        // ];
         const options = {
           center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
         };
         const map = new window.kakao.maps.Map(container, options);
-        // for (let i = 0; i < positions.length; i++) {
-        //   const marker = new window.kakao.maps.Marker({
-        //     map: map,
-        //     position: positions[i].latlng,
-        //     title: positions[i].title,
-        //   });
-        // }
-        window.kakao.maps.event.addListener(map, "click", (e) => {
-          if (curMarker) {
-            console.log(curMarker);
-          }
-          try {
-            console.log(map);
-            curMarker.setMap(null);
-          } catch (e) {
-            console.log(e);
-          }
-
-          const marker = new window.kakao.maps.Marker({
-            position: e.latLng,
-            title: "asdf",
-          });
-          marker.setMap(map);
-          setCurMarker(marker);
+        const tmpMarker = new window.kakao.maps.Marker({
+          position: map.getCenter(),
         });
-        // map.addListener("click", (e) => {
-        //   const latlng = e.latLng;
-
-        //   setMarkerPos(latlng);
-        // });
+        window.marker = tmpMarker;
+        window.marker.setMap(map);
+        window.kakao.maps.event.addListener(map, "click", (e) => {
+          window.marker.setPosition(e.latLng);
+        });
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);

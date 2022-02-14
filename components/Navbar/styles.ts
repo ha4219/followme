@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const TopNav = styled.div`
   display: flex;
-  color: #ffffff;
+  color: #616161;
   font-size: 0.8rem;
   justify-content: right;
   padding-top: 0.5rem;
@@ -14,5 +14,8 @@ export const TopNav = styled.div`
     cursor: pointer;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+  }
+  & .whiteTxt {
+    color: #ffffff;
   }
 `;

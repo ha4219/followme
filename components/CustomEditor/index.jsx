@@ -1,14 +1,22 @@
 import MapEditor from "@components/MapEditor";
+import styled from "@emotion/styled";
 import {
   Box,
   Button,
   Dialog,
   DialogActions,
   Input,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
+  Checkbox,
 } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import CheckContainer from "@components/CheckContainer";
+import useInput from "@hooks/useInput";
 
 const Quill = dynamic(import("react-quill"), {
   ssr: false,
@@ -181,9 +189,13 @@ export const QuillToolbar = () => (
 
 const CustomEditor = () => {
   const ref = useRef();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [title, setTitle] = useState("");
   const [dialogImg, setDialogImg] = useState();
+  const [day, setDay] = useState(1);
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]);
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -197,20 +209,37 @@ const CustomEditor = () => {
     console.log(dialogImg);
   }, [dialogImg]);
 
-  const onChange = (e) => {
+  const onChangeDialog = (e) => {
     setDialogImg(e.target.files[0]);
   };
 
+  const onTagKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      console.log(tags);
+      setTags([...tags, tag]);
+    }
+  };
+
+  const onTagClick = (index) => {
+    const arr = [...tags];
+    arr.pop(index);
+    setTags(arr);
+  };
+
+  const [region1, setRegion1, onChangeRegion1] = useInput("국내");
+  const [region2, setRegion2, onChangeRegion2] = useInput("서울");
+  const [date1, setDate1, onChangeDate1] = useInput(1);
+  const [date2, setDate2, onChangeDate2] = useInput(2);
   useEffect(() => {
     console.log(value);
   }, [value]);
   return (
-    <div>
+    <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
         <Box sx={{ width: "400px", height: "400px" }}>
           <MapEditor />
           <img />
-          <input type="file" accept="image/*" onChange={onChange} />
+          <input type="file" accept="image/*" onChange={onChangeDialog} />
           <div>
             <TextField placeholder="title" />
           </div>
@@ -223,18 +252,194 @@ const CustomEditor = () => {
           </DialogActions>
         </Box>
       </Dialog>
+      <OptionContainer>
+        <div className="checkContainer">
+          <div className="checkbox">
+            <Checkbox />
+            <span>추천코스</span>
+          </div>
+          <div className="checkbox">
+            <Checkbox />
+            <span>테마여행</span>
+          </div>
+        </div>
+        <div className="region">
+          <p className="label">지역</p>
+          {/* <InputLabel id="region1-select-label">선택</InputLabel> */}
+          <Select value={region1} onChange={onChangeRegion1} label="선택">
+            <MenuItem value="국내">국내</MenuItem>
+            <MenuItem value="해외">해외</MenuItem>
+          </Select>
+          <Select value={region2} onChange={onChangeRegion2}>
+            <MenuItem value="서울">서울</MenuItem>
+            <MenuItem value="경기">경기</MenuItem>
+          </Select>
+        </div>
+        <div className="date">
+          <p className="label">일정</p>
+          <Select value={date1} onChange={onChangeDate1}>
+            <MenuItem value={0}>0박</MenuItem>
+            <MenuItem value={1}>1박</MenuItem>
+            <MenuItem value={2}>2박</MenuItem>
+            <MenuItem value={3}>3박</MenuItem>
+            <MenuItem value={4}>4박</MenuItem>
+            <MenuItem value={5}>5박</MenuItem>
+            <MenuItem value={6}>6박</MenuItem>
+            <MenuItem value={7}>7박</MenuItem>
+            <MenuItem value={8}>8박</MenuItem>
+            <MenuItem value={9}>9박+</MenuItem>
+          </Select>
+          <Select value={date2} onChange={onChangeDate2}>
+            <MenuItem value={1}>1일</MenuItem>
+            <MenuItem value={2}>2일</MenuItem>
+            <MenuItem value={3}>3일</MenuItem>
+            <MenuItem value={4}>4일</MenuItem>
+            <MenuItem value={5}>5일</MenuItem>
+            <MenuItem value={6}>6일</MenuItem>
+            <MenuItem value={7}>7일</MenuItem>
+            <MenuItem value={8}>8일</MenuItem>
+            <MenuItem value={9}>9일+</MenuItem>
+          </Select>
+        </div>
+      </OptionContainer>
+      <TextField
+        fullWidth
+        placeholder="제목을 입력해주세요."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <MapAddContainer>
+        <div className="label">
+          <Button className="btn" size="small" onClick={() => setDay(day + 1)}>
+            +
+          </Button>
+          {day}일차
+          <Button className="btn" size="small" onClick={() => setDay(day - 1)}>
+            -
+          </Button>
+        </div>
+
+        <Button onClick={() => setOpen(true)}>
+          <AddLocationIcon />
+          <div className="add">업체 리스트 검색</div>
+        </Button>
+      </MapAddContainer>
       <div>
-        <QuillToolbar />
+        {/* <QuillToolbar />
         <Quill
           forwardedRef={ref}
           onChange={setValue}
           modules={modules}
           formats={formats}
-        />
+        /> */}
+        <Quill forwardedRef={ref} onChange={setValue} />
         <div dangerouslySetInnerHTML={{ __html: value }} />
       </div>
-    </div>
+      <TagContainer>
+        <TextField
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+          onKeyDown={onTagKeyDown}
+          fullWidth
+          placeholder="#태그를 입력해주세요. (최대 10개)"
+        />
+        <div className="list">
+          {tags.map((item, index) => (
+            <Button
+              className="item"
+              key={index}
+              onClick={() => onTagClick(index)}
+            >
+              #{item}
+            </Button>
+          ))}
+        </div>
+      </TagContainer>
+    </MainContainer>
   );
 };
+
+const MainContainer = styled.div``;
+
+const OptionContainer = styled.div`
+  display: flex;
+  padding: 1rem 0;
+  background-color: #aaaaaa;
+  & .checkContainer {
+    display: flex;
+    margin-right: 1rem;
+    & .checkbox {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  & .region {
+    display: flex;
+    margin-right: 1rem;
+
+    & p {
+      margin-right: 1rem;
+    }
+  }
+  & .date {
+    display: flex;
+    & p {
+      margin-right: 1rem;
+    }
+  }
+`;
+
+const MapAddContainer = styled.div`
+  display: flex;
+  padding: 6px 0;
+  margin: 1rem 0;
+  margin-bottom: 2rem;
+
+  & .label {
+    margin: auto 0px;
+    padding: 6px 0;
+    border: 1px solid #111111;
+    border-radius: 1rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+    & .btn {
+      padding: 3px 0;
+    }
+  }
+
+  & .add {
+    background-color: #aaaaaa;
+    border-radius: 1rem;
+    padding: 6px 1rem;
+  }
+`;
+
+const TagContainer = styled.div`
+  margin: 1rem 0;
+
+  & .list {
+    margin-top: 5px;
+    float: left;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: #aaaaaa;
+
+    & .item {
+      display: inline-block;
+      border: 1px solid #000000;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      background-color: #ffffff;
+
+      :hover {
+        background-color: red;
+      }
+    }
+  }
+`;
 
 export default CustomEditor;
