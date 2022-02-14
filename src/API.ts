@@ -22,10 +22,14 @@ export const resetToken = () => {
 API.interceptors.request.use((request) => {
   const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
   // console.log(loggedIn, checkToken());
-
-  if (data["loggedIn"] && !checkToken()) {
-    setToken(data["loggedIn"]);
+  try {
+    if (data["loggedIn"] && !checkToken()) {
+      setToken(data["loggedIn"]);
+    }
+  } catch (e) {
+    console.log(e);
   }
+
   // console.log(data['loggedIn']);
   console.log("request: ", request);
 
