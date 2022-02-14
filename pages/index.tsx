@@ -28,7 +28,7 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    // getTravel();
+    getTravel();
   }, []);
 
   return (

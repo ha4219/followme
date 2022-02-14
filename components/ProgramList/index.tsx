@@ -14,6 +14,7 @@ interface Props {
 interface Program {
   idx: number;
   src: any;
+  mainImg: any;
   image: any;
   writer: string;
   title: string;
@@ -93,7 +94,7 @@ const ProgramList: VFC<Programs> = ({ programs }) => {
           <Program
             key={index}
             idx={item.idx}
-            src={item.image}
+            src={item.mainImg.data}
             user={item.writer}
             title={item.title}
             tags={item.tags}

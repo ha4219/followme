@@ -8,14 +8,30 @@ import {
 } from "@mui/material";
 import useInput from "@hooks/useInput";
 import SignupTextField from "@components/SignupTextField";
+import { auth } from "@config/firebaseConfig";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { routes } from "../../src/routes";
 import axios from "axios";
 import { API } from "src/API";
 import Head from "next/head";
+import { phoneVerifyAndPass } from "@helpers/signUpHelper";
+import { useRouter } from "next/router";
+
+declare global {
+  interface Window {
+    recaptchaVerifier: any;
+    confirmationResult: any;
+  }
+}
 
 const Signup = () => {
+  const router = useRouter();
   const [name, setName, onChangeName] = useInput("");
   const [nickName, setNickName, onChangeNickName] = useInput("");
   const [id, setId, onChangeId] = useInput("");
@@ -24,27 +40,104 @@ const Signup = () => {
   const [email, setEmail, onChangeEmail] = useInput("");
   const [phone, setPhone, onChangePhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
+  const [idV, setIdV] = useState(false);
+  const [emailV, setEmailV] = useState(false);
+  const [nickNameV, setNickNameV] = useState(false);
+  const [phoneV, setPhoneV] = useState(false);
+
+  const initilizeCaptcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log(response);
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+        },
+        "expired-callback": () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          // ...
+        },
+      },
+      auth
+    );
+  };
 
   const onIdDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkId", {
+    API.post("/user/checkId", {
       id: id,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingId === "allow") {
+          setIdV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   const onEmailDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkEmail", {
+    API.post("/user/checkEmail", {
       email: email,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingEmail === "allow") {
+          setNickNameV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [email]);
 
   const onNickNameDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkEmail", {
+    API.post("/user/checkNickName", {
       nickName: nickName,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingNickname === "allow") {
+          setEmailV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [email]);
+
+  const onSendSMS = useCallback(async () => {
+    const regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    if (regPhone.test(phone) === true) {
+      const phoneVerified = phoneVerifyAndPass(phone);
+      signInWithPhoneNumber(auth, phoneVerified, window.recaptchaVerifier)
+        .then(function (confirmationResult) {
+          // confirmationResult can resolve with the fictional testVerificationCode above.
+          // return confirmationResult.confirm(testVerificationCode);
+          window.confirmationResult = confirmationResult;
+        })
+        .catch(function (error) {
+          // Error; SMS not sent
+          // ...
+          console.log(error);
+          alert("인증번호 전송실패");
+        });
+    } else {
+      alert("유효하지 않은 휴대폰 번호");
+    }
+  }, [phone]);
+
+  const onVerifySMS = useCallback(async () => {
+    window.confirmationResult
+      .confirm(verified)
+      .then((res) => {
+        console.log(res);
+        setPhoneV(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [verified]);
 
   const onSubmit = useCallback(
     async (e) => {
@@ -60,7 +153,8 @@ const Signup = () => {
           phoneNum: phone,
         });
         if (data?.data === "success") {
-          alert(data);
+          alert("회원가입 성공");
+          router.push("/signin");
         }
       } catch (e) {
         console.log(e);
@@ -68,6 +162,10 @@ const Signup = () => {
     },
     [email, id, name, nickName, password, phone]
   );
+
+  useEffect(() => {
+    initilizeCaptcha();
+  }, []);
 
   return (
     <>
@@ -93,8 +191,9 @@ const Signup = () => {
                 value={nickName}
                 onChange={onChangeNickName}
                 placeholder="홍길동"
-                btnLabel=""
+                btnLabel="중복확인"
                 btnActive={true}
+                onClickBtn={onNickNameDuplication}
               />
               <SignupTextField
                 id="id"
@@ -143,6 +242,7 @@ const Signup = () => {
                 placeholder="휴대폰 번호 확인"
                 btnLabel="인증번호 받기"
                 btnActive={true}
+                onClickBtn={onSendSMS}
               />
               <SignupTextField
                 id="phoneCh"
@@ -152,6 +252,7 @@ const Signup = () => {
                 placeholder="인증번호 확인"
                 btnLabel="확인"
                 btnActive={true}
+                onClickBtn={onVerifySMS}
               />
             </Box>
             <Divider
@@ -184,12 +285,27 @@ const Signup = () => {
                 type="submit"
                 variant="contained"
                 sx={{ color: "#ffffff" }}
+                disabled={
+                  !(
+                    idV ||
+                    emailV ||
+                    nickNameV ||
+                    phoneV ||
+                    password === passwordCh
+                  )
+                }
               >
                 가입하기
               </Button>
             </Box>
           </form>
         </Box>
+        <div
+          id="recaptcha-container"
+          // data-sitekey="6LcsaxsdAAAAAEBn0sPDCEncnU9564MisyRuDzD_"
+          data-callback="sendForm"
+          data-size="invisible"
+        ></div>
       </Container>
     </>
   );
