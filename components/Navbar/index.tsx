@@ -157,7 +157,7 @@ const Navbar = () => {
               {
                 textTransform: "none",
                 my: 2,
-                color: "black",
+                color: "white",
                 display: "block",
                 fontSize: "1rem",
                 fontWeight: "bold",
@@ -174,7 +174,7 @@ const Navbar = () => {
                 {
                   textTransform: "none",
                   my: 2,
-                  color: "black",
+                  color: "white",
                   display: "block",
                   fontSize: "1rem",
                   fontWeight: "bold",

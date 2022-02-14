@@ -1,4 +1,5 @@
 import AdminDrawer from "@components/AdminDrawer";
+import MainSearchContaier from "@components/main/MainSearchContainer";
 import Navbar from "@components/Navbar";
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
@@ -10,17 +11,22 @@ const Layout: FC = ({ children }) => {
 
   return (
     <Box>
-      {router?.pathname === "/" && <BackPhoto src={"/bg.jpeg"} />}
+      {router?.pathname === "/" && <BackPhoto src={"/back.jpeg"} />}
       <Navbar />
+
       {/* <AdminDrawer /> */}
       {children}
     </Box>
   );
 };
 
-const BackPhoto = styled.img`
+const BackPhoto = styled.div`
   position: absolute;
+  background: url(${(props: { src: string }) => props.src}) no-repeat;
   z-index: -9999;
+  background-size: cover;
+  width: 100%;
+  height: 600px;
 `;
 
 export default Layout;

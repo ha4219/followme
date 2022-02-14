@@ -18,11 +18,13 @@ const MapEditor = () => {
   //   new window.kakao.maps.LatLng(37.62933576573074, 127.08152009841304)
   // );
 
-  const doMarker = async () => {
+  const doMarker = () => {
     try {
       if (markerPos) {
+        console.log(markerPos);
         const marker = new window.kakao.maps.Marker({
           position: markerPos,
+          title: "asdf",
         });
         marker.setMap(map);
       }
@@ -32,7 +34,7 @@ const MapEditor = () => {
   };
 
   useEffect(() => {
-    doMarker();
+    // doMarker();
   }, [markerPos]);
 
   const mapInit = async () => {
@@ -68,19 +70,39 @@ const MapEditor = () => {
         //   });
         // }
         window.kakao.maps.event.addListener(map, "click", (e) => {
-          const latlng = e.latLng;
+          if (curMarker) {
+            console.log(curMarker);
+          }
+          try {
+            console.log(map);
+            curMarker.setMap(null);
+          } catch (e) {
+            console.log(e);
+          }
 
-          setMarkerPos(latlng);
+          const marker = new window.kakao.maps.Marker({
+            position: e.latLng,
+            title: "asdf",
+          });
+          marker.setMap(map);
+          setCurMarker(marker);
         });
+        // map.addListener("click", (e) => {
+        //   const latlng = e.latLng;
+
+        //   setMarkerPos(latlng);
+        // });
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
+
   useEffect(() => {
     mapInit();
   }, []);
+
   return <MapContent id="map" />;
 };
 

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
+import { Grid } from "@mui/material";
 
 declare global {
   interface Window {
@@ -14,13 +15,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
@@ -28,6 +24,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
@@ -35,6 +33,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
@@ -42,6 +42,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
@@ -49,6 +51,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
   {
     url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
@@ -56,27 +60,8 @@ const FAKE = [
     content: "맛없을듯",
     tags: ["kbs", "핸드폰", "음식사진"],
     distance: 100,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
+    lat: 37.62933576573074,
+    lon: 127.08152009841304,
   },
 ];
 
@@ -141,30 +126,43 @@ const MapContainer = () => {
   }, []);
 
   return (
-    <div>
+    <MainMapContainer>
+      {/* <Grid item md={9}> */}
       <MapContent id="map" />
+      {/* </Grid> */}
+      {/* <Grid item md={3}> */}
       <BottomDiv>
-        {/* <MapDiv /> */}
         {FAKE.map((item, index) => (
           <MapDiv key={index} {...item} />
         ))}
       </BottomDiv>
-    </div>
+      {/* </Grid> */}
+    </MainMapContainer>
   );
 };
 
-const BottomDiv = styled.div`
-  position: relative;
+const MainMapContainer = styled.div`
   display: flex;
-  margin-top: -200px;
-  z-index: 10;
-  overflow-x: auto;
+`;
+
+const MapContentDiv = styled(Grid)``;
+
+const BottomDiv = styled.div`
+  // display: block;
+  height: 500px;
+  width: 500px;
+  overflow-y: auto;
+  // overflow: hidden;
   font-family: paybooc-Medium;
   padding: 1rem;
 `;
 
+const LeftDiv = styled(Grid)``;
+
 export const MapContent = styled.div`
-  aspect-ratio: 320 / 220;
+  // aspect-ratio: 320 / 220;
+  width: 100%;
+  height: 500px;
 `;
 
 export default MapContainer;

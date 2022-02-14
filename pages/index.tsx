@@ -11,6 +11,7 @@ import styled from "@emotion/styled";
 import MainMapContainer from "@components/main/MainMapContainer";
 import MainEditorPickContainer from "@components/main/MainEditorPickContainer";
 import MainThemeContainer from "@components/main/MainThemeContainer";
+import MainSearchContaier from "@components/main/MainSearchContainer";
 
 const Home: NextPage = () => {
   const [isLoading, setLoading] = useState(false);
@@ -41,6 +42,7 @@ const Home: NextPage = () => {
         <></>
       ) : (
         <Container>
+          <MainSearchContaier />
           <MainEditorPickContainer />
 
           <ProgramList programs={travels} />

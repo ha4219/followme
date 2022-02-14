@@ -27,10 +27,11 @@ const MapDiv: VFC<Props> = ({ url, title, content, tags, distance }) => {
 const Container = styled.div`
   background-color: #ffffff;
   display: flex;
-  padding: 20px;
-  margin-left: 1rem;
+  padding: 1rem;
   border-radius: 15px;
+  border: 1px solid black;
   width: 365px;
+  margin-bottom: 5px;
 `;
 
 const ImgContainer = styled.img`
