@@ -26,13 +26,14 @@ const Signin = () => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      console.log(id, password);
 
       const { data } = await API.post("/user/signin", {
         id: id,
         password: password,
       });
       if (data?.success) {
+        console.log(data);
+
         setLoggedIn(data.accessToken);
         setToken(data.accessToken);
       }
