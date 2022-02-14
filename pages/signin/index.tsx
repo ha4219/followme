@@ -26,6 +26,7 @@ const Signin = () => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      console.log(id, password);
 
       const { data } = await API.post("/user/signin", {
         id: id,
