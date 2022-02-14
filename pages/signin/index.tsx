@@ -31,6 +31,8 @@ const Signin = () => {
         id: id,
         password: password,
       });
+      console.log(data);
+
       if (data?.success) {
         console.log(data);
 
