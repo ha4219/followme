@@ -8,7 +8,7 @@ import {
   Button,
   Container,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import Logo from "@components/Logo";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { authState } from "@store/auth";
+import { checkToken, setToken } from "@src/API";
 
 interface PageProps {
   label: string;
@@ -38,6 +39,12 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
+
+  useEffect(() => {
+    if (!checkToken() && loggedIn) {
+      setToken(loggedIn);
+    }
+  }, []);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);

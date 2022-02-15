@@ -19,6 +19,7 @@ import ProgramList from "@components/ProgramList";
 import styled from "@emotion/styled";
 import LeftLayout from "@components/LeftLayout";
 import { API } from "@src/API";
+import axios from "axios";
 
 const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
 
@@ -38,13 +39,28 @@ interface Props {
 }
 const Editor = () => {
   const [search, , onChangeSearch] = useInput("");
-  const [data, setData] = useState();
-  useEffect(async () => {
-    const { data } = await API.get("/user/board");
-    setData(data);
-  }, []);
+  const [travels, setTravels] = useState([]);
 
-  console.log(data);
+  const getTravel = async () => {
+    const { data } = await API.get("/main/travelBoards", {
+      data: JSON.stringify({
+        id: "admin",
+      }),
+    });
+    setTravels(data);
+  };
+
+  useEffect(async () => {
+    // const data1 = JSON.stringify({
+    //   id: "admin",
+    // });
+    // const { data } = await API.get("/user/board", {
+    //   data: data1,
+    // });
+    // console.log(data);
+    // setData(data);
+    getTravel();
+  }, []);
 
   return (
     <MainContainer maxWidth="lg">
@@ -79,8 +95,8 @@ const Editor = () => {
             추천키워드&emsp;|&emsp;
             <TagContainer tags={RECOMMANDKEYWORD} />
           </Box>
+          <ProgramList programs={travels} />
         </Box>
-        <ProgramList />
       </LeftLayout>
     </MainContainer>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
@@ -11,8 +11,31 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { API } from "@src/API";
 
 const Banner = () => {
+  const [bgs, setBgs] = useState([]);
+  const [imgs, setImgs] = useState([]);
+  // useEffect(async () => {
+  //   const { data } = await API.get(
+  //     "/api/main/swipers",
+  //     {},
+  //     { responseType: "blob" }
+  //   );
+  //   console.warn(data[0].image.data, typeof data[0].image.data);
+
+  //   const tmp = await data.map((item) =>
+  //     URL.createObjectURL(
+  //       new Blob([new Uint8Array(item.image.data)], { type: "image/jpeg" })
+  //     )
+  //   );
+
+  //   setImgs(tmp);
+  //   console.log(tmp);
+
+  //   setBgs(data);
+  // }, []);
+
   return (
     <BannerContainer>
       <Swiper
@@ -26,7 +49,7 @@ const Banner = () => {
         // onSwiper={(swiper) => {}}
         // onSlideChange={() => {}}
       >
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide>
         <SwiperSlide>
@@ -37,10 +60,29 @@ const Banner = () => {
         </SwiperSlide>
         <SwiperSlide>
           <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
+        </SwiperSlide> */}
+        {imgs.map((bg) => {
+          return (
+            <SwiperSlide>
+              {/* <Image key={bg.index} src={bg} layout="fill" /> */}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </BannerContainer>
   );
 };
+
+// export async function getServerSideProps() {
+//   const res = await API.get(process.env.API_URL + "/api/main/swipers", {});
+//   const { data } = res;
+//   console.log(res, data);
+
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
 
 export default Banner;

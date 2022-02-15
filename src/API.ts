@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 
 export const API = axios.create({
   // baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-  baseURL: "",
+  baseURL: "/api",
 });
 
 export const setToken = (token: string) => {
@@ -13,18 +13,22 @@ export const setToken = (token: string) => {
 
 export const checkToken = () => {
   return API.defaults.headers.common["Access-Token"] ? true : false;
-}
+};
+
+export const resetToken = () => {
+  API.defaults.headers.common["Access-Token"] = "";
+};
 
 API.interceptors.request.use((request) => {
   const data = JSON.parse(localStorage.getItem("recoil-persist"));
   // console.log(loggedIn, checkToken());
-  console.log(data['loggedIn'] , checkToken());
-  
-  if (data['loggedIn'] && !checkToken()) {
-    setToken(data['loggedIn']);
+
+  if (data["loggedIn"] && !checkToken()) {
+    setToken(data["loggedIn"]);
   }
   // console.log(data['loggedIn']);
-  
+  console.log("request: ", request);
+
   return request;
 });
 
