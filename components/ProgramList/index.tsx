@@ -11,33 +11,53 @@ interface Props {
   tags: string[];
 }
 
-const ProgramList: VFC = ({ programs }) => {
-  console.log(programs);
+interface Program {
+  idx: number;
+  src: any;
+  mainImg: any;
+  image: any;
+  writer: string;
+  title: string;
+  content: string;
+  tags: string[];
+  heartCnt: number;
+  views: number;
+  sortData: number;
+}
 
-  const [courses, setCourses] = useState([]);
+interface Programs {
+  programs: Program[];
+}
+
+const ProgramList: VFC<Programs> = ({ programs }) => {
+  // const [courses, setCourses] = useState<Programs>();
   const [sortedType, setSortedType] = useState(0);
 
-  useEffect(async () => {
-    // const { data } = await API.get("/main/travelBoards", {});
-    // setCourses(
-    //   data.map((item) => ({ ...item, sortDate: new Date(item.date).getTime() }))
-    // );
-    await setCourses(programs);
-  }, []);
+  // useEffect(() => {
+  //   // const { data } = await API.get("/main/travelBoards", {});
+  //   // setCourses(
+  //   //   data.map((item) => ({ ...item, sortDate: new Date(item.date).getTime() }))
+  //   // );
+  //   setCourses(programs);
+  // }, []);
 
-  useEffect(async () => {
-    let arr = await [...courses];
+  // const doSortedProgram = async () => {
+  //   let arr = await [...courses];
 
-    if (sortedType === 0) {
-      arr = await arr.sort((a, b) => b.heartCnt - a.heartCnt);
-    } else if (sortedType === 1) {
-      arr = await arr.sort((a, b) => b.views - a.views);
-    } else {
-      arr = await arr.sort((a, b) => b.sortDate - a.sortDate);
-    }
+  //   if (sortedType === 0) {
+  //     arr = await arr.sort((a, b) => b.heartCnt - a.heartCnt);
+  //   } else if (sortedType === 1) {
+  //     arr = await arr.sort((a, b) => b.views - a.views);
+  //   } else {
+  //     arr = await arr.sort((a, b) => b.sortDate - a.sortDate);
+  //   }
 
-    setCourses(arr);
-  }, [sortedType]);
+  //   setCourses(arr);
+  // }
+
+  // useEffect(() => {
+  //   doSortedProgram;();
+  // }, [sortedType]);
 
   return (
     <Box sx={{ paddingY: 2 }}>
@@ -74,7 +94,7 @@ const ProgramList: VFC = ({ programs }) => {
           <Program
             key={index}
             idx={item.idx}
-            src={item.image}
+            src={item.mainImg.data}
             user={item.writer}
             title={item.title}
             tags={item.tags}

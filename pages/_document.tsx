@@ -16,6 +16,8 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&display=swap"
           />
+          <script defer src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+          <script defer type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charSet="utf-8"></script>
           <link rel="icon" href="/logo.svg" />
         </Head>
         <body>

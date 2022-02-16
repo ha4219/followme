@@ -61,9 +61,9 @@ const Banner = () => {
         <SwiperSlide>
           <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
         </SwiperSlide> */}
-        {imgs.map((bg) => {
+        {imgs.map((bg, index) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={index}>
               {/* <Image key={bg.index} src={bg} layout="fill" /> */}
             </SwiperSlide>
           );

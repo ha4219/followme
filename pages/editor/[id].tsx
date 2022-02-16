@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 
 const EditorDetail = ({ id }) => {
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   return (
     <Container maxWidth="lg">

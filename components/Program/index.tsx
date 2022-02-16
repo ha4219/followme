@@ -14,10 +14,10 @@ import Link from "next/link";
 
 interface Props {
   idx: number;
-  src: string;
+  src: any;
   user: string;
   title: string;
-  content: content;
+  content: string;
   tags: string[];
 }
 
@@ -46,7 +46,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
   }, []);
 
   const toBase64 = (arr) => {
-    return new Buffer.from(arr);
+    return Buffer.from(arr);
   };
 
   return (
@@ -64,7 +64,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
           cursor: "pointer",
         }}
       >
-        <PhotoContainer src={`data:image/png;base64,${toBase64(src.data)}`}>
+        <PhotoContainer src={`data:image/png;base64,${toBase64(src)}`}>
           <div className="topContainer">
             <IconButton
               onClick={onClickLike}

@@ -8,13 +8,30 @@ import {
 } from "@mui/material";
 import useInput from "@hooks/useInput";
 import SignupTextField from "@components/SignupTextField";
+import { auth } from "@config/firebaseConfig";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { routes } from "../../src/routes";
 import axios from "axios";
 import { API } from "src/API";
+import Head from "next/head";
+import { phoneVerifyAndPass } from "@helpers/signUpHelper";
+import { useRouter } from "next/router";
+
+declare global {
+  interface Window {
+    recaptchaVerifier: any;
+    confirmationResult: any;
+  }
+}
 
 const Signup = () => {
+  const router = useRouter();
   const [name, setName, onChangeName] = useInput("");
   const [nickName, setNickName, onChangeNickName] = useInput("");
   const [id, setId, onChangeId] = useInput("");
@@ -23,27 +40,104 @@ const Signup = () => {
   const [email, setEmail, onChangeEmail] = useInput("");
   const [phone, setPhone, onChangePhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
+  const [idV, setIdV] = useState(false);
+  const [emailV, setEmailV] = useState(false);
+  const [nickNameV, setNickNameV] = useState(false);
+  const [phoneV, setPhoneV] = useState(false);
+
+  const initilizeCaptcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log(response);
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+        },
+        "expired-callback": () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          // ...
+        },
+      },
+      auth
+    );
+  };
 
   const onIdDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkId", {
+    API.post("/user/checkId", {
       id: id,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingId === "allow") {
+          setIdV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   const onEmailDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkEmail", {
+    API.post("/user/checkEmail", {
       email: email,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingEmail === "allow") {
+          setNickNameV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [email]);
 
   const onNickNameDuplication = useCallback(async () => {
-    const { data } = await API.post("/user/checkEmail", {
+    API.post("/user/checkNickName", {
       nickName: nickName,
-    });
-    console.log(data);
+    })
+      .then((res) => {
+        if (res.data.checkingNickname === "allow") {
+          setEmailV(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [email]);
+
+  const onSendSMS = useCallback(async () => {
+    const regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    if (regPhone.test(phone) === true) {
+      const phoneVerified = phoneVerifyAndPass(phone);
+      signInWithPhoneNumber(auth, phoneVerified, window.recaptchaVerifier)
+        .then(function (confirmationResult) {
+          // confirmationResult can resolve with the fictional testVerificationCode above.
+          // return confirmationResult.confirm(testVerificationCode);
+          window.confirmationResult = confirmationResult;
+        })
+        .catch(function (error) {
+          // Error; SMS not sent
+          // ...
+          console.log(error);
+          alert("인증번호 전송실패");
+        });
+    } else {
+      alert("유효하지 않은 휴대폰 번호");
+    }
+  }, [phone]);
+
+  const onVerifySMS = useCallback(async () => {
+    window.confirmationResult
+      .confirm(verified)
+      .then((res) => {
+        console.log(res);
+        setPhoneV(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [verified]);
 
   const onSubmit = useCallback(
     async (e) => {
@@ -59,7 +153,8 @@ const Signup = () => {
           phoneNum: phone,
         });
         if (data?.data === "success") {
-          alert(data);
+          alert("회원가입 성공");
+          router.push("/signin");
         }
       } catch (e) {
         console.log(e);
@@ -68,123 +163,151 @@ const Signup = () => {
     [email, id, name, nickName, password, phone]
   );
 
+  useEffect(() => {
+    initilizeCaptcha();
+  }, []);
+
   return (
-    <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
-      <Box py={10}>
-        <form onSubmit={onSubmit}>
-          <Box>
-            <Typography variant="h6" color="initial" pl={2}>
-              회원가입
-            </Typography>
-            <SignupTextField
-              id="name"
-              label="이름"
-              value={name}
-              onChange={onChangeName}
-              placeholder="홍길동"
-              btnLabel=""
-              btnActive={true}
-            />
-            <SignupTextField
-              id="nickName"
-              label="닉네임"
-              value={nickName}
-              onChange={onChangeNickName}
-              placeholder="홍길동"
-              btnLabel=""
-              btnActive={true}
-            />
-            <SignupTextField
-              id="id"
-              label="아이디"
-              value={id}
-              onChange={onChangeId}
-              placeholder="아이디를 입력해주세요."
-              btnLabel="중복확인"
-              btnActive={true}
-              onClickBtn={onIdDuplication}
-            />
-            <SignupTextField
-              id="password"
-              type="password"
-              label="비밀번호"
-              value={password}
-              onChange={onChangePassword}
-              placeholder="비밀번호를 입력해주세요."
-              helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
-            />
-            <SignupTextField
-              id="passwordCh"
-              type="password"
-              label="비밀번호 확인"
-              value={passwordCh}
-              onChange={onChangePasswordCh}
-              placeholder="비밀번호 확인"
-              helperText="(다시 한 번 비밀번호를 입력해주세요)"
-            />
-            <SignupTextField
-              id="email"
-              type="email"
-              label="이메일"
-              value={email}
-              onChange={onChangeEmail}
-              placeholder="이메일을 입력해주세요."
-              btnLabel="중복확인"
-              btnActive={true}
-              onClickBtn={onEmailDuplication}
-            />
-            <SignupTextField
-              id="phone"
-              label="휴대폰"
-              value={phone}
-              onChange={onChangePhone}
-              placeholder="휴대폰 번호 확인"
-              btnLabel="인증번호 받기"
-              btnActive={true}
-            />
-            <SignupTextField
-              id="phoneCh"
-              label="인증번호"
-              value={verified}
-              onChange={onChangeVerified}
-              placeholder="인증번호 확인"
-              btnLabel="확인"
-              btnActive={true}
-            />
-          </Box>
-          <Divider
-            sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
-          />
-          <Box px={5} py={4}>
-            <Box px={2} pb={2}>
-              <div>
-                <Checkbox />
-                <span>회원약관 (필수)</span>
-              </div>
-              <div>
-                <Checkbox />
-                <span>개인정보 처리방침 (필수)</span>
-              </div>
-              <div>
-                <Checkbox />
-                <span>개인정보 제 3자 이용동의 (필수)</span>
-              </div>
+    <>
+      <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
+        <Box py={10}>
+          <form onSubmit={onSubmit}>
+            <Box>
+              <Typography variant="h6" color="initial" pl={2}>
+                회원가입
+              </Typography>
+              <SignupTextField
+                id="name"
+                label="이름"
+                value={name}
+                onChange={onChangeName}
+                placeholder="홍길동"
+                btnLabel=""
+                btnActive={true}
+              />
+              <SignupTextField
+                id="nickName"
+                label="닉네임"
+                value={nickName}
+                onChange={onChangeNickName}
+                placeholder="홍길동"
+                btnLabel="중복확인"
+                btnActive={true}
+                onClickBtn={onNickNameDuplication}
+              />
+              <SignupTextField
+                id="id"
+                label="아이디"
+                value={id}
+                onChange={onChangeId}
+                placeholder="아이디를 입력해주세요."
+                btnLabel="중복확인"
+                btnActive={true}
+                onClickBtn={onIdDuplication}
+              />
+              <SignupTextField
+                id="password"
+                type="password"
+                label="비밀번호"
+                value={password}
+                onChange={onChangePassword}
+                placeholder="비밀번호를 입력해주세요."
+                helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
+              />
+              <SignupTextField
+                id="passwordCh"
+                type="password"
+                label="비밀번호 확인"
+                value={passwordCh}
+                onChange={onChangePasswordCh}
+                placeholder="비밀번호 확인"
+                helperText="(다시 한 번 비밀번호를 입력해주세요)"
+              />
+              <SignupTextField
+                id="email"
+                type="email"
+                label="이메일"
+                value={email}
+                onChange={onChangeEmail}
+                placeholder="이메일을 입력해주세요."
+                btnLabel="중복확인"
+                btnActive={true}
+                onClickBtn={onEmailDuplication}
+              />
+              <SignupTextField
+                id="phone"
+                label="휴대폰"
+                value={phone}
+                onChange={onChangePhone}
+                placeholder="휴대폰 번호 확인"
+                btnLabel="인증번호 받기"
+                btnActive={true}
+                onClickBtn={onSendSMS}
+              />
+              <SignupTextField
+                id="phoneCh"
+                label="인증번호"
+                value={verified}
+                onChange={onChangeVerified}
+                placeholder="인증번호 확인"
+                btnLabel="확인"
+                btnActive={true}
+                onClickBtn={onVerifySMS}
+              />
             </Box>
-            <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
-            <Box mt={2}>
-              <Checkbox />
-              <span>모든 약관에 동의합니다</span>
+            <Divider
+              sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
+            />
+            <Box px={5} py={4}>
+              <Box px={2} pb={2}>
+                <div>
+                  <Checkbox />
+                  <span>회원약관 (필수)</span>
+                </div>
+                <div>
+                  <Checkbox />
+                  <span>개인정보 처리방침 (필수)</span>
+                </div>
+                <div>
+                  <Checkbox />
+                  <span>개인정보 제 3자 이용동의 (필수)</span>
+                </div>
+              </Box>
+              <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
+              <Box mt={2}>
+                <Checkbox />
+                <span>모든 약관에 동의합니다</span>
+              </Box>
             </Box>
-          </Box>
-          <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
-          <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
-            <Button type="submit" variant="contained" sx={{ color: "#ffffff" }}>
-              가입하기
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Container>
+            <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
+            <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ color: "#ffffff" }}
+                disabled={
+                  !(
+                    idV ||
+                    emailV ||
+                    nickNameV ||
+                    phoneV ||
+                    password === passwordCh
+                  )
+                }
+              >
+                가입하기
+              </Button>
+            </Box>
+          </form>
+        </Box>
+        <div
+          id="recaptcha-container"
+          // data-sitekey="6LcsaxsdAAAAAEBn0sPDCEncnU9564MisyRuDzD_"
+          data-callback="sendForm"
+          data-size="invisible"
+        ></div>
+      </Container>
+    </>
   );
 };
 

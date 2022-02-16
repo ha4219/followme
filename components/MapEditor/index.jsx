@@ -1,21 +1,20 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     kakao: any;
+//   }
+// }
 const MapEditor = () => {
   const [curPos, setCurPos] = useState({
     lat: 37.62933576573074,
     lon: 127.08152009841304,
   });
-  const [mmarker, setMmarker] = useState(null);
-  // const [userMarker, setUserMarker] = useState(
-  //   new window.kakao.maps.LatLng(37.62933576573074, 127.08152009841304)
-  // );
-  useEffect(async () => {
+  const [marker, setMarker] = useState();
+  const [kakaoMap, setKakaoMap] = useState();
+
+  const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
     });
@@ -30,43 +29,29 @@ const MapEditor = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
-        // const positions = [
-        //   {
-        //     title: "test",
-        //     latlng: userMarker,
-        //   },
-        // ];
         const options = {
           center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
         };
         const map = new window.kakao.maps.Map(container, options);
-        // for (let i = 0; i < positions.length; i++) {
-        //   const marker = new window.kakao.maps.Marker({
-        //     map: map,
-        //     position: positions[i].latlng,
-        //     title: positions[i].title,
-        //   });
-        // }
+        const tmpMarker = new window.kakao.maps.Marker({
+          position: map.getCenter(),
+        });
+        window.marker = tmpMarker;
+        window.marker.setMap(map);
         window.kakao.maps.event.addListener(map, "click", (e) => {
-          let latlng = e.latLng;
-          const marker = new window.kakao.maps.Marker({
-            position: latlng,
-          });
-          console.log(mmarker, marker);
-          
-          if (mmarker) {
-            mmarker.setMap(null);
-          }
-          // mmarker.setMap(null);
-          marker.setMap(map);
-          setMmarker(marker);
+          window.marker.setPosition(e.latLng);
         });
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
+  };
+
+  useEffect(() => {
+    mapInit();
   }, []);
+
   return <MapContent id="map" />;
 };
 

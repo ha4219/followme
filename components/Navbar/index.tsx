@@ -39,12 +39,19 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
+  const [isMain, setIsMain] = useState(true);
 
   useEffect(() => {
     if (!checkToken() && loggedIn) {
       setToken(loggedIn);
     }
   }, []);
+
+  useEffect(() => {
+    if (router.pathname) {
+      setIsMain(router.pathname === "/");
+    }
+  }, [router.pathname]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -72,17 +79,17 @@ const Navbar = () => {
     <Container>
       <TopNav>
         {loggedIn ? (
-          <>
+          <div className={isMain ? "whiteTxt" : ""}>
             <span onClick={doLogout}>Logout</span>|
             <Link href="/profile">Profile</Link>|
             <Link href="/help">고객센터</Link>
-          </>
+          </div>
         ) : (
-          <>
+          <div className={isMain ? "whiteTxt" : ""}>
             <Link href="/signin">Login</Link>|
             <Link href="/signup">Join us</Link>|
             <Link href="/help">고객센터</Link>
-          </>
+          </div>
         )}
       </TopNav>
       <Toolbar disableGutters>
@@ -157,7 +164,7 @@ const Navbar = () => {
               {
                 textTransform: "none",
                 my: 2,
-                color: "black",
+                color: router.pathname === "/" ? "#ffffff" : "#000000",
                 display: "block",
                 fontSize: "1rem",
                 fontWeight: "bold",
@@ -174,7 +181,7 @@ const Navbar = () => {
                 {
                   textTransform: "none",
                   my: 2,
-                  color: "black",
+                  color: router.pathname === "/" ? "#ffffff" : "#000000",
                   display: "block",
                   fontSize: "1rem",
                   fontWeight: "bold",

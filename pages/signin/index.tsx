@@ -10,11 +10,19 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Link from "next/link";
 import useInput from "@hooks/useInput";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { API, checkToken, setToken } from "src/API";
 import { authState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
+import axios from "axios";
+
+declare global {
+  interface Window {
+    naver: any;
+    Kakao: any;
+  }
+}
 
 const Signin = () => {
   const router = useRouter();
@@ -22,7 +30,7 @@ const Signin = () => {
 
   const [id, setId, onChangeId] = useInput("admin");
   const [password, setPassowrd, onChangePassword] = useInput("admin123");
-
+  const [naver, setNaver] = useState();
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -31,7 +39,11 @@ const Signin = () => {
         id: id,
         password: password,
       });
+      console.log(data);
+
       if (data?.success) {
+        console.log(data);
+
         setLoggedIn(data.accessToken);
         setToken(data.accessToken);
       }
@@ -39,11 +51,56 @@ const Signin = () => {
     [id, password]
   );
 
+  // naver
+  const initNaverLogin = () => {
+    console.log(window.naver);
+    
+    const naverLogin = new window.naver.LoginWithNaverId({
+      clientId: process.env.NEXT_PUBLIC_NAVERID,
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin/naver`,
+      isPopup: false,
+      loginButton: {color: 'green', type: 1, height: 60},
+      callbackHandle: true,
+    });
+    naverLogin.init();
+    setNaver(naverLogin);
+  }
+  
+  const initKakao = () => {
+    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
+  }
+
+  // kakao
+  const kakaoLogin = () => {
+    window.Kakao.Auth.login({
+      success: (response) => {
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          success: (response) => {
+            console.log(response, 'kakao suc');
+          },
+          fail: (err) => {
+            console.log(err, 'kakao err');
+          },
+        })
+      },
+      fail: (err) => {
+        console.log(err, 'kakao err out');
+      }
+    })
+  }
+
   useEffect(() => {
     if (loggedIn) {
       router.push("/");
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    // console.log(naver, Kakao);
+    initNaverLogin();
+    initKakao();
+  }, []);
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -109,15 +166,17 @@ const Signin = () => {
           >
             SNS 계정으로 로그인
           </Box>
-          <Button
-            sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
-            fullWidth
-            variant="contained"
-            size="large"
+          <div
+            id="naverIdLogin"
+            // sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
+            // fullWidth
+            // variant="contained"
+            // size="large"
           >
             네이버 로그인
-          </Button>
+          </div>
           <Button
+            onClick={kakaoLogin}
             sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}
             fullWidth
             variant="contained"

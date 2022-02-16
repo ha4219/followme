@@ -8,6 +8,7 @@ import { CssBaseline } from "@mui/material";
 import theme from "@styles/theme";
 import Layout from "@components/Layout";
 import Footer from "@components/Footer";
+import "react-quill/dist/quill.snow.css";
 
 const clientSideEmotionCache = createEmotionCache();
 

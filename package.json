@@ -1,7 +1,7 @@
 {
   "name": "followme",
   "private": true,
-  "proxy": "http://3.34.24.103:3000",
+  "author": "ha4219 <ha4219@naver.com>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,8 +17,10 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.7",
     "axios": "^0.25.0",
+    "firebase": "^9.6.6",
     "gravatar": "^1.8.2",
     "next": "12.0.7",
+    "next-auth": "^4.2.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-modal": "^3.14.4",

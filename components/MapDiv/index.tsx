@@ -1,16 +1,17 @@
 import ShadowTag from "@components/ShadowTag";
 import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
+import { VFC } from "react";
 
 interface Props {
   url: string;
   title: string;
   content: string;
   tags: string[];
-  distacne: number;
+  distance: number;
 }
 
-const MapDiv = ({ url, title, content, tags, distance }: Props) => {
+const MapDiv: VFC<Props> = ({ url, title, content, tags, distance }) => {
   return (
     <Container>
       <ImgContainer src={url} alt={title} />
@@ -26,10 +27,11 @@ const MapDiv = ({ url, title, content, tags, distance }: Props) => {
 const Container = styled.div`
   background-color: #ffffff;
   display: flex;
-  padding: 20px;
-  margin-left: 1rem;
+  padding: 1rem;
   border-radius: 15px;
+  border: 1px solid black;
   width: 365px;
+  margin-bottom: 5px;
 `;
 
 const ImgContainer = styled.img`

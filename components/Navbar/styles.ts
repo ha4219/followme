@@ -15,4 +15,7 @@ export const TopNav = styled.div`
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+  & .whiteTxt {
+    color: #ffffff;
+  }
 `;
