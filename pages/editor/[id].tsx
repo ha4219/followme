@@ -113,9 +113,11 @@ const EditorDetail = () => {
             </Button>
           </div>
         </TitleContainer>
-        <ContentContainer
-          dangerouslySetInnerHTML={{ __html: course?.content }}
-        />
+        {course && (
+          <ContentContainer
+            dangerouslySetInnerHTML={{ __html: course.content }}
+          />
+        )}
         <ButtonContainer>
           <Button variant="contained">수정</Button>
           <Button variant="contained" color="error">

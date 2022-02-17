@@ -16,8 +16,7 @@ import { useRouter } from "next/router";
 
 const Banner = () => {
   const router = useRouter();
-  const [bgs, setBgs] = useState([]);
-  const [imgs, setImgs] = useState([]);
+  const [imgs, setImgs] = useState<{ img: any; url: string }[]>([]);
 
   const getBanner = async () => {
     const { data } = await API.get("/main/swipers", {});
