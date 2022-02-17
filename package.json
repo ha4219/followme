@@ -16,6 +16,7 @@
     "@mui/core": "^5.0.0-alpha.54",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.7",
+    "aws-sdk": "^2.1075.0",
     "axios": "^0.25.0",
     "firebase": "^9.6.6",
     "gravatar": "^1.8.2",
@@ -31,7 +32,8 @@
     "recoil-persist": "^4.0.0",
     "sass": "^1.48.0",
     "swiper": "^7.4.1",
-    "swr": "^1.2.0"
+    "swr": "^1.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/gravatar": "^1.8.3",

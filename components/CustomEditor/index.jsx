@@ -17,140 +17,36 @@ import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import CheckContainer from "@components/CheckContainer";
 import useInput from "@hooks/useInput";
+import { v1 } from "uuid";
 // import S3 from "react-aws-s3";
-import S3FileUpload from "react-s3";
+// import S3FileUpload from "react-s3";
+import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
+import { API } from "@src/API";
 
-const Quill = dynamic(import("react-quill"), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
+AWS.config.update({
+  accessKeyId: config.accessKeyID,
+  secretAccessKey: config.secretAccessKey,
 });
 
-const CustomUndo = () => (
-  <svg viewBox="0 0 18 18">
-    <polygon className="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10" />
-    <path
-      className="ql-stroke"
-      d="M8.09,13.91A4.6,4.6,0,0,0,9,14,5,5,0,1,0,4,9"
-    />
-  </svg>
+const myBucket = new AWS.S3({
+  params: { Bucket: config.bucketName },
+  region: config.region,
+});
+
+// const Quill = dynamic(import("react-quill"), {
+//   ssr: false,
+//   loading: () => <p>Loading ...</p>,
+// });
+const Quill = dynamic(
+  async () => {
+    const { default: RQ } = await import("react-quill");
+    return function comp({ forwardedRef, ...props }) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
+  },
+  { ssr: false }
 );
-// Redo button icon component for Quill editor
-const CustomRedo = () => (
-  <svg viewBox="0 0 18 18">
-    <polygon className="ql-fill ql-stroke" points="12 10 14 12 16 10 12 10" />
-    <path
-      className="ql-stroke"
-      d="M9.91,13.91A4.6,4.6,0,0,1,9,14a5,5,0,1,1,5-5"
-    />
-  </svg>
-);
-
-// Undo and redo functions for Custom Toolbar
-function undoChange() {
-  if (!this.quill) return;
-  try {
-    // console.log(this.quill?.getSelection());
-
-    const d = this.quill?.getSelection();
-    // console.log(d);
-    const data = `<div>test</div>`;
-    const delta = this.quill.clipboard.convert(data);
-    this.quill.setContents(delta, "silent");
-
-    // this.quill.insertText(d?.index, "<div>hh</div>");
-
-    // this.quill.setSelection(d.index + 10);
-  } catch (e) {}
-}
-function redoChange() {
-  // this.quill.history.redo();
-}
-
-// Add sizes to whitelist and register them
-// const Size = Quill.import("formats/size");
-// Size.whitelist = ["extra-small", "small", "medium", "large"];
-// Quill.register(Size, true);
-
-// Add fonts to whitelist and register them
-// const Font = Quill.import("formats/font");
-// Font.whitelist = [
-//   "arial",
-//   "comic-sans",
-//   "courier-new",
-//   "georgia",
-//   "helvetica",
-//   "lucida",
-// ];
-// Quill.register(Font, true);
-
-// Modules object for setting up the Quill editor
-// export const modules = useMemo({
-//   toolbar: {
-//     container: "#toolbar",
-//     handlers: {
-//       undo: undoChange,
-//       redo: redoChange,
-//     },
-//   },
-//   history: {
-//     delay: 500,
-//     maxStack: 100,
-//     userOnly: true,
-//   },
-// }, []);
-
-function imageHandler() {
-  console.log(1, config);
-  const input = document.createElement("input");
-
-  input.setAttribute("type", "file");
-  input.setAttribute("accept", "image/*");
-  input.click();
-
-  input.addEventListener("change", async () => {
-    const file = input.files[0];
-    const fileName = input.files[0].name;
-    // const ReactS3Client = new S3(config);
-    // ReactS3Client.uploadFile(file, fileName).then((data) => {
-    //   console.log(data);
-    //   if (data.status === 204) {
-    //     console.log(1);
-    //   } else {
-    //     console.log(0);
-    //   }
-    // });
-    S3FileUpload.uploadFile(file, config)
-      .then((data) => {
-        console.log(data.location);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-}
-
-// Formats objects for setting up the Quill editor
-export const formats = [
-  "header",
-  "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "align",
-  "strike",
-  "script",
-  "blockquote",
-  "background",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
-  "color",
-  "code-block",
-];
 
 // Quill Toolbar component
 export const QuillToolbar = () => (
@@ -235,11 +131,11 @@ const CustomEditor = () => {
   }, []);
 
   const onSubmitDialog = () => {
-    console.log(1);
+    console.log();
   };
 
   useEffect(() => {
-    console.log(dialogImg);
+    console.log();
   }, [dialogImg]);
 
   const onChangeDialog = (e) => {
@@ -266,6 +162,79 @@ const CustomEditor = () => {
   useEffect(() => {
     console.log(value);
   }, [value]);
+
+  const putObjectWrapper = (params) => {
+    return new Promise((resolve, reject) => {
+      myBucket.putObject(params, function (err, result) {
+        if (err) reject(err);
+        if (result) resolve(result);
+      });
+    });
+  };
+  function imageHandler() {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      const format = file.type.split("/")[1];
+      const fileName = `${v1()}.${format}`;
+      putObjectWrapper({
+        Body: file,
+        Bucket: config.bucketName,
+        Key: fileName,
+      })
+        .then((res) => {
+          console.log(res);
+          const range = ref.current.getEditorSelection();
+          ref.current
+            .getEditor()
+            .insertEmbed(
+              range.index,
+              "image",
+              `${process.env.NEXT_PUBLIC_S3URL}${fileName}`
+            );
+          ref.current.getEditor(range.index + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          input.remove();
+        });
+    });
+  }
+
+  const onSubmit = async () => {
+    const regex = /<img.*?src=['"](.*?)['"]/;
+    let mainImage = null;
+    try {
+      mainImage = regex.exec(value)[1];
+    } catch (e) {
+      console.log("not main image");
+      mainImage = "";
+    }
+    API.post("main/insertTravelBoards", {
+      title: title,
+      tags: tags,
+      shortContent: "",
+      content: value,
+      mainImg: mainImage,
+      isLocal: 1,
+      schedule: "2박3일",
+      region: "jeju",
+      season: "spring",
+      writer: "admin",
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const modules = useMemo(
     () => ({
@@ -411,6 +380,9 @@ const CustomEditor = () => {
           ))}
         </div>
       </TagContainer>
+      <Button variant="contained" onClick={onSubmit}>
+        제출
+      </Button>
     </MainContainer>
   );
 };

@@ -113,7 +113,9 @@ const EditorDetail = () => {
             </Button>
           </div>
         </TitleContainer>
-        <ContentContainer>{course?.content}</ContentContainer>
+        <ContentContainer
+          dangerouslySetInnerHTML={{ __html: course?.content }}
+        />
         <ButtonContainer>
           <Button variant="contained">수정</Button>
           <Button variant="contained" color="error">
@@ -121,7 +123,18 @@ const EditorDetail = () => {
           </Button>
         </ButtonContainer>
         <ReplyContainer>
-          <TextField id="" label="" value={reply} onChange={onChangeReply} />
+          <div className="write">
+            <TextField
+              id=""
+              label=""
+              value={reply}
+              onChange={onChangeReply}
+              fullWidth
+            />
+            <Button className="btn" variant="contained">
+              등록
+            </Button>
+          </div>
           <div className="reply">
             {FAKE.map((item, index) => (
               <ReplyContent key={index} {...item} />
@@ -143,12 +156,20 @@ const TitleContainer = styled.div`
 
   & .sub {
     display: flex;
+
+    & .avatar {
+      margin-right: 1rem;
+    }
   }
 `;
 
 const ContentContainer = styled.div`
   padding: 1rem;
   border-bottom: 1px solid #c7cacf;
+
+  & img {
+    width: 100%;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -161,6 +182,15 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const ReplyContainer = styled.div``;
+const ReplyContainer = styled.div`
+  & .write {
+    display: flex;
+
+    & .btn {
+      height: 44px;
+      margin-left: 2rem;
+    }
+  }
+`;
 
 export default EditorDetail;
