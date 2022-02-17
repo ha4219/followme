@@ -44,10 +44,9 @@ const Home: NextPage = () => {
         <Container>
           <MainSearchContaier />
           <MainEditorPickContainer />
-
           <ProgramList programs={travels} />
-          <Banner />
           <MainThemeContainer />
+          <Banner />
           <MainMapContainer />
         </Container>
       )}

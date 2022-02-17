@@ -12,8 +12,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { API } from "@src/API";
+import { useRouter } from "next/router";
 
 const Banner = () => {
+  const router = useRouter();
   const [bgs, setBgs] = useState([]);
   const [imgs, setImgs] = useState([]);
 
@@ -21,10 +23,14 @@ const Banner = () => {
     const { data } = await API.get("/main/swipers", {});
     setImgs(
       data.map((item) => {
-        return toBase64(item.img.data);
+        return { img: toBase64(item.img.data), url: item.urlTo };
       })
     );
     // setBgs(data.map(item => ));
+  };
+
+  const onClick = (url: string) => {
+    router.push(url);
   };
 
   useEffect(() => {
@@ -82,7 +88,11 @@ const Banner = () => {
         {imgs.map((bg, index) => {
           return (
             <SwiperSlide key={index}>
-              <Image src={`data:image/png;base64,${bg}`} layout="fill" />
+              <Image
+                src={`data:image/png;base64,${bg.img}`}
+                layout="fill"
+                onClick={() => onClick(bg.url)}
+              />
             </SwiperSlide>
           );
         })}
@@ -90,17 +100,5 @@ const Banner = () => {
     </BannerContainer>
   );
 };
-
-// export async function getServerSideProps() {
-//   const res = await API.get(process.env.API_URL + "/api/main/swipers", {});
-//   const { data } = res;
-//   console.log(res, data);
-
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
 
 export default Banner;

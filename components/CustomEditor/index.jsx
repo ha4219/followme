@@ -17,6 +17,9 @@ import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import CheckContainer from "@components/CheckContainer";
 import useInput from "@hooks/useInput";
+// import S3 from "react-aws-s3";
+import S3FileUpload from "react-s3";
+import { config } from "@config/s3Config";
 
 const Quill = dynamic(import("react-quill"), {
   ssr: false,
@@ -98,21 +101,34 @@ function redoChange() {
 // }, []);
 
 function imageHandler() {
-  console.log(1);
-  const input = document.createElement('input');
+  console.log(1, config);
+  const input = document.createElement("input");
 
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
+  input.setAttribute("type", "file");
+  input.setAttribute("accept", "image/*");
   input.click();
 
-  input.addEventListener('change', async () => {
-    console.log('onChange');
+  input.addEventListener("change", async () => {
     const file = input.files[0];
-    console.log(file);
-  })
+    const fileName = input.files[0].name;
+    // const ReactS3Client = new S3(config);
+    // ReactS3Client.uploadFile(file, fileName).then((data) => {
+    //   console.log(data);
+    //   if (data.status === 204) {
+    //     console.log(1);
+    //   } else {
+    //     console.log(0);
+    //   }
+    // });
+    S3FileUpload.uploadFile(file, config)
+      .then((data) => {
+        console.log(data.location);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 }
-
-
 
 // Formats objects for setting up the Quill editor
 export const formats = [
@@ -251,10 +267,11 @@ const CustomEditor = () => {
     console.log(value);
   }, [value]);
 
-  const modules = useMemo(() => ({
-  toolbar: {
-    container: [
-      ["bold", "italic", "underline", "strike", "blockquote"],
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          ["bold", "italic", "underline", "strike", "blockquote"],
           [{ size: ["small", false, "large", "huge"] }, { color: [] }],
           [
             { list: "ordered" },
@@ -264,12 +281,14 @@ const CustomEditor = () => {
             { align: [] },
           ],
           ["image", "video"],
-    ],
-    handlers: {
-      image: imageHandler,
-    },
-  }
-}), []);
+        ],
+        handlers: {
+          image: imageHandler,
+        },
+      },
+    }),
+    []
+  );
   return (
     <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
