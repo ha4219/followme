@@ -16,6 +16,24 @@ import { API } from "@src/API";
 const Banner = () => {
   const [bgs, setBgs] = useState([]);
   const [imgs, setImgs] = useState([]);
+
+  const getBanner = async () => {
+    const { data } = await API.get("/main/swipers", {});
+    setImgs(
+      data.map((item) => {
+        return toBase64(item.img.data);
+      })
+    );
+    // setBgs(data.map(item => ));
+  };
+
+  useEffect(() => {
+    getBanner();
+  }, []);
+
+  const toBase64 = (arr) => {
+    return Buffer.from(arr);
+  };
   // useEffect(async () => {
   //   const { data } = await API.get(
   //     "/api/main/swipers",
@@ -64,7 +82,7 @@ const Banner = () => {
         {imgs.map((bg, index) => {
           return (
             <SwiperSlide key={index}>
-              {/* <Image key={bg.index} src={bg} layout="fill" /> */}
+              <Image src={`data:image/png;base64,${bg}`} layout="fill" />
             </SwiperSlide>
           );
         })}
