@@ -10,6 +10,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ReplyContent from "@components/ReplyContent";
+import useInput from "@hooks/useInput";
 
 interface ICourse {
   title: string;
@@ -37,7 +38,7 @@ const FAKE = [
 
 const EditorDetail = () => {
   const router = useRouter();
-  const [reply, setReply] = useState("");
+  const [reply, setReply, onChangeReply] = useInput("");
   const [course, setCourse] = useState<ICourse>();
   const [isLoading, setLoading] = useState(true);
   const getDetail = async () => {
@@ -48,8 +49,12 @@ const EditorDetail = () => {
     }
   };
 
-  const onClick = () => {};
-  const onClickShare = () => {};
+  const onClick = () => {
+    console.log();
+  };
+  const onClickShare = () => {
+    console.log();
+  };
 
   const like = false;
   const heartCnt = 10;
@@ -116,7 +121,7 @@ const EditorDetail = () => {
           </Button>
         </ButtonContainer>
         <ReplyContainer>
-          <TextField id="" label="" value={reply} onChange={setReply} />
+          <TextField id="" label="" value={reply} onChange={onChangeReply} />
           <div className="reply">
             {FAKE.map((item, index) => (
               <ReplyContent key={index} {...item} />
