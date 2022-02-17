@@ -64,7 +64,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
           cursor: "pointer",
         }}
       >
-        <PhotoContainer src={`data:image/png;base64,${toBase64(src)}`}>
+        <PhotoContainer src={`${toBase64(src)}`}>
           <div className="topContainer">
             <IconButton
               onClick={onClickLike}

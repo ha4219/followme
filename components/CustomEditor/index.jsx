@@ -141,6 +141,7 @@ const CustomEditor = () => {
 
   const onSubmit = async () => {
     const regex = /<img.*?src=['"](.*?)['"]/;
+    // 정규표현식으로 shortContent 받기
     let mainImage = null;
     try {
       mainImage = regex.exec(value)[1];
@@ -154,9 +155,9 @@ const CustomEditor = () => {
       shortContent: "",
       content: value,
       mainImg: mainImage,
-      isLocal: 1,
-      schedule: "2박3일",
-      region: "jeju",
+      isLocal: region1 === "국내" ? 1 : 0,
+      schedule: `${date1}박${date2}일`,
+      region: region2,
       season: "spring",
       writer: "admin",
     })
