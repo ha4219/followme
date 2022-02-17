@@ -18,7 +18,7 @@ interface Program {
   image: any;
   writer: string;
   title: string;
-  content: string;
+  shortContent: string;
   tags: string[];
   heartCnt: number;
   views: number;
@@ -98,7 +98,7 @@ const ProgramList: VFC<Programs> = ({ programs }) => {
             user={item.writer}
             title={item.title}
             tags={item.tags}
-            content={item.content}
+            shortContent={item.shortContent}
           />
         ))}
       </Grid>

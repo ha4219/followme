@@ -17,7 +17,7 @@ interface Props {
   src: any;
   user: string;
   title: string;
-  content: string;
+  shortContent: string;
   tags: string[];
 }
 
@@ -25,7 +25,7 @@ interface TagProps {
   tag: string;
 }
 
-const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
+const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
   const [like, setLike] = useState(false);
   const router = useRouter();
 
@@ -104,7 +104,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, content }) => {
           </IconButton>
           <DesContainer className="description">
             <div className="title">{titleSummary(title)}</div>
-            <div className="content">{contentSummary(content)}</div>
+            <div className="content">{contentSummary(shortContent)}</div>
           </DesContainer>
         </ContentContainer>
       </Box>
