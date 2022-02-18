@@ -64,18 +64,6 @@ const Editor = () => {
     getTravel();
   }, []);
 
-  useEffect(() => {
-    console.log(sortedType);
-
-    const arr = [...travels];
-    console.log(arr);
-
-    if (sortedType === 0) {
-    } else if (sortedType === 1) {
-    } else {
-    }
-  }, [sortedType]);
-
   return (
     <MainContainer maxWidth="lg">
       <LeftLayout editorTags={RECOMMANDKEYWORD}>

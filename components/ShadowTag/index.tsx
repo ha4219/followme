@@ -15,6 +15,7 @@ const ShadowTag: VFC<TagProps> = ({ tag }) => {
 };
 
 const TagContainer = styled(Box)`
+  margin-right: 0.5rem;
   & :hover {
     cursor: pointer;
   }

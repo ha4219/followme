@@ -16,15 +16,11 @@ import { useRouter } from "next/router";
 
 const Banner = () => {
   const router = useRouter();
-  const [imgs, setImgs] = useState<{ img: any; url: string }[]>([]);
+  const [imgs, setImgs] = useState<{ imgURL: string; urlTo: string }[]>([]);
 
   const getBanner = async () => {
     const { data } = await API.get("/main/swipers", {});
-    setImgs(
-      data.map((item) => {
-        return { img: toBase64(item.img.data), url: item.urlTo };
-      })
-    );
+    setImgs(data.slice(7));
     // setBgs(data.map(item => ));
   };
 
@@ -88,9 +84,9 @@ const Banner = () => {
           return (
             <SwiperSlide key={index}>
               <Image
-                src={`data:image/png;base64,${bg.img}`}
+                src={`${process.env.NEXT_PUBLIC_S3URL}${bg.imgURL}`}
                 layout="fill"
-                onClick={() => onClick(bg.url)}
+                onClick={() => onClick(bg.urlTo)}
               />
             </SwiperSlide>
           );

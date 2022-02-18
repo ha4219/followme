@@ -5,7 +5,7 @@ import { Container } from "@mui/material";
 import { API } from "@src/API";
 import { useEffect, useState } from "react";
 
-const ProfileBoard = () => {
+const ProfileLike = () => {
   const [boards, setBoards] = useState([]);
 
   const getBoard = async () => {
@@ -22,8 +22,8 @@ const ProfileBoard = () => {
     <Container maxWidth="lg">
       <ProfileLeftLayout>
         <MainContainer>
-          <div className="title">내 작성글</div>
-          <CourseContainer courses={boards} like={false} />
+          <div className="title">내 좋아요</div>
+          <CourseContainer courses={boards} like={true} />
         </MainContainer>
       </ProfileLeftLayout>
     </Container>
@@ -40,4 +40,4 @@ const MainContainer = styled.div`
   }
 `;
 
-export default ProfileBoard;
+export default ProfileLike;

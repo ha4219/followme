@@ -70,7 +70,7 @@ const MapContainer = () => {
     lat: 37.62933576573074,
     lon: 127.08152009841304,
   });
-  const id = 1;
+  const [map, setMap] = useState();
 
   const mapInit = async () => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -107,6 +107,7 @@ const MapContainer = () => {
           center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
         };
         const map = new window.kakao.maps.Map(container, options);
+        setMap(map);
         for (let i = 0; i < positions.length; i++) {
           const marker = new window.kakao.maps.Marker({
             map: map,
@@ -126,7 +127,11 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    // window.kakao.maps;
+    if (map) {
+      console.log(map.setMap);
+
+      map.setCenter(new window.kakao.maps.LatLng(curPos.lat, curPos.lon));
+    }
   }, [curPos]);
 
   return (

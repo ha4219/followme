@@ -50,7 +50,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
   };
 
   return (
-    <Grid item lg={4}>
+    <Grid item lg={4} xs={4} md={4}>
       <Box
         onClick={() => {
           onClickProgram(idx);
@@ -62,6 +62,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
           borderTop: 0,
           paddingBottom: "2rem",
           cursor: "pointer",
+          overflow: "hidden",
         }}
       >
         <PhotoContainer src={`${toBase64(src)}`}>
