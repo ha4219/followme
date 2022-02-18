@@ -76,7 +76,6 @@ const CustomEditor = () => {
 
   const onTagKeyDown = (e) => {
     if (e.keyCode === 13) {
-      console.log(tags);
       setTags([...tags, tag]);
     }
   };

@@ -4,13 +4,14 @@ import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
 import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import gravatar from "gravatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
+import { IComment } from "types/apiType";
 
 interface ICourse {
   title: string;
@@ -18,36 +19,71 @@ interface ICourse {
   writer: string;
 }
 
-const FAKE = [
-  {
-    writer: "dongha",
-    content:
-      "국가안전보장회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다. 국방상 또는 국민경제상 긴절한 필요로 인하여 법률이 정하는 경우를 제외하고는, 사영기업을 국유 또는 공유로 이전하거나 그 경영을 통제 또는 관리할 수 없다.",
-  },
-  {
-    writer: "jdongha",
-    content:
-      "국가안전보장회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다. 국방상 또는 국민경제상 긴절한 필요로 인하여 법률이 정하는 경우를 제외하고는, 사영기업을 국유 또는 공유로 이전하거나 그 경영을 통제 또는 관리할 수 없다.",
-  },
-  {
-    writer: "admin",
-    content:
-      "국가안전보장회의의 조직·직무범위 기타 필요한 사항은 법률로 정한다. 국방상 또는 국민경제상 긴절한 필요로 인하여 법률이 정하는 경우를 제외하고는, 사영기업을 국유 또는 공유로 이전하거나 그 경영을 통제 또는 관리할 수 없다.",
-  },
-];
-
 const EditorDetail = () => {
   const router = useRouter();
-  const [reply, setReply, onChangeReply] = useInput("");
   const [course, setCourse] = useState<ICourse>();
   const [isLoading, setLoading] = useState(true);
+  const [comments, setComments] = useState<IComment[]>([]);
+  const [comment, setComment, onChangeComment] = useInput("");
+  const [idx, setIdx] = useState(-1);
+
   const getDetail = async () => {
     const { id } = router.query;
-    if (id) {
-      const { data } = await API.get<ICourse[]>(`/main/postDetail/${id}`, {});
-      setCourse(data[0]);
+    try {
+      setIdx(id);
+
+      if (id) {
+        const { data } = await API.get<ICourse[]>(`/main/postDetail/${id}`, {});
+        setCourse(data[0]);
+      }
+    } catch (e) {
+      console.log("router not ready", e);
     }
   };
+
+  const getComments = async () => {
+    const { id } = router.query;
+    try {
+      if (id) {
+        const { data } = await API.get<IComment[]>(
+          `/main/travelBoards/reply/${id}`,
+          {}
+        );
+        setComments(data);
+      }
+    } catch (e) {
+      console.log("router not ready", e);
+    }
+    setIdx(id);
+  };
+
+  const onSubmitComment = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        const { data }: { data: { data: string } } = await API.post(
+          `main/travelBoards/insertReply/${idx}`,
+          {
+            id: "admin",
+            content: comment,
+          }
+        );
+        if (data.data === "success") {
+          alert("댓글 작성 성공");
+          setComments([
+            ...comments,
+            { id: "admin", content: comment, updatedAt: "" },
+          ]);
+        }
+      } catch (e) {
+        console.log("댓글 작성 실패", e);
+        alert("댓글 작성 실패");
+      } finally {
+        setComment("");
+      }
+    },
+    [comment]
+  );
 
   const onClick = () => {
     console.log();
@@ -57,13 +93,12 @@ const EditorDetail = () => {
   };
 
   const like = false;
-  const heartCnt = 10;
 
   useEffect(() => {
     getDetail();
-
+    getComments();
     return () => setLoading(false);
-  }, []);
+  }, [router.isReady]);
 
   return (
     <Container maxWidth="lg">
@@ -125,20 +160,20 @@ const EditorDetail = () => {
           </Button>
         </ButtonContainer>
         <ReplyContainer>
-          <div className="write">
+          <form className="write" onSubmit={onSubmitComment}>
             <TextField
               id=""
               label=""
-              value={reply}
-              onChange={onChangeReply}
+              value={comment}
+              onChange={onChangeComment}
               fullWidth
             />
-            <Button className="btn" variant="contained">
+            <Button type="submit" className="btn" variant="contained">
               등록
             </Button>
-          </div>
+          </form>
           <div className="reply">
-            {FAKE.map((item, index) => (
+            {comments.map((item, index) => (
               <ReplyContent key={index} {...item} />
             ))}
           </div>

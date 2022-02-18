@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
 import { Avatar } from "@mui/material";
 import gravatar from "gravatar";
+import { IComment } from "types/apiType";
 
-const ReplyContent = ({ writer, content }) => {
+const ReplyContent = ({ id, content }: IComment) => {
   return (
     <MainContainer>
       <Avatar
         alt="user"
-        src={gravatar.url(writer ? writer : "default", {
+        src={gravatar.url(id ? id : "default", {
           s: "28px",
           d: "retro",
         })}
@@ -43,7 +44,7 @@ const MainContainer = styled.div`
       border-right-color: #f1f3f7;
       border-left: 0;
       margin-top: -24px;
-      margin-left: -24px;
+      margin-left: -10px;
     }
   }
 `;

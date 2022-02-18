@@ -7,6 +7,7 @@ export const ContainerFooter = styled.div`
   padding-bottom: 4rem;
   background-color: #f8f8fa;
   color: #616161;
+  margin-top: 2rem;
 
   & .nav {
     display: flex;
