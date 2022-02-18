@@ -20,44 +20,63 @@ interface Program {
   title: string;
   shortContent: string;
   tags: string[];
-  heartCnt: number;
+  likeCnts: number;
   views: number;
+  createdAt: string;
   sortData: number;
 }
 
-interface Programs {
-  programs: Program[];
-}
-
-const ProgramList: VFC<Programs> = ({ programs }) => {
+const ProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
-  const [sortedType, setSortedType] = useState(0);
+  const [sortedType, setSortedType] = useState(2);
+  const [travels, setTravels] = useState<Program[]>([]);
 
-  // useEffect(() => {
-  //   // const { data } = await API.get("/main/travelBoards", {});
-  //   // setCourses(
-  //   //   data.map((item) => ({ ...item, sortDate: new Date(item.date).getTime() }))
-  //   // );
-  //   setCourses(programs);
-  // }, []);
+  const getTravel = async () => {
+    const { data } = await API.get<Program[]>("/main/travelBoards", {
+      data: JSON.stringify({
+        id: "admin",
+      }),
+    });
+    setTravels(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
+  };
 
-  // const doSortedProgram = async () => {
-  //   let arr = await [...courses];
+  useEffect(() => {
+    const arr = [...travels];
 
-  //   if (sortedType === 0) {
-  //     arr = await arr.sort((a, b) => b.heartCnt - a.heartCnt);
-  //   } else if (sortedType === 1) {
-  //     arr = await arr.sort((a, b) => b.views - a.views);
-  //   } else {
-  //     arr = await arr.sort((a, b) => b.sortDate - a.sortDate);
-  //   }
+    if (sortedType === 0) {
+      setTravels(
+        arr.sort((l, r) => {
+          return r.likeCnts - l.likeCnts;
+        })
+      );
+    } else if (sortedType === 1) {
+      setTravels(
+        arr.sort((l, r) => {
+          return r.views - l.views;
+        })
+      );
+    } else {
+      setTravels(
+        arr.sort((l, r) => {
+          if (r.createdAt > l.createdAt) {
+            return 1;
+          }
+          return -1;
+        })
+      );
+    }
+  }, [sortedType]);
 
-  //   setCourses(arr);
-  // }
-
-  // useEffect(() => {
-  //   doSortedProgram;();
-  // }, [sortedType]);
+  useEffect(() => {
+    getTravel();
+  }, []);
 
   return (
     <Box sx={{ paddingY: 2 }}>
@@ -90,7 +109,7 @@ const ProgramList: VFC<Programs> = ({ programs }) => {
       {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        {programs?.map((item, index) => (
+        {travels?.map((item, index) => (
           <Program
             key={index}
             idx={item.idx}

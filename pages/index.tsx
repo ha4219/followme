@@ -15,22 +15,19 @@ import MainSearchContaier from "@components/main/MainSearchContainer";
 
 const Home: NextPage = () => {
   const [isLoading, setLoading] = useState(false);
-  const [travels, setTravels] = useState([]);
-  const [sortedType, setSortedType] = useState(0);
 
   const getTravel = async () => {
-    const { data } = await API.get("/main/travelBoards", {
-      data: JSON.stringify({
-        id: "admin",
-      }),
-    });
-    setTravels(data);
     setLoading(false);
   };
 
-  useEffect(() => {
-    getTravel();
-  }, []);
+  const getTags = async () => {
+    const { data } = await API.get("", {});
+    console.log(data);
+  };
+
+  // useEffect(() => {
+
+  // }, []);
 
   return (
     <div className={styles.container}>
@@ -44,7 +41,7 @@ const Home: NextPage = () => {
         <Container>
           <MainSearchContaier />
           <MainEditorPickContainer />
-          <ProgramList programs={travels} />
+          <ProgramList />
           <MainThemeContainer />
           <Banner />
           <MainMapContainer />

@@ -1,14 +1,36 @@
 import { Box, Drawer, Grid, Typography } from "@mui/material";
 import ShadowTag from "@components/ShadowTag";
 import CheckContainer from "@components/CheckContainer";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
+
+interface IProps {
+  editorTags?: string[];
+}
+
+interface ICheck {
+  name: string;
+  value: string;
+}
 
 const EDITORTAGS: string[] = ["해시태그", "해시태그", "해시태그", "해시태그"];
-const SEASONS: string[] = ["봄", "여름", "가을", "겨울"];
-const KOREAREGIONS: string[] = ["서울", "경기도", "강원도", "경상도"];
+const SEASONS: ICheck[] = [
+  { name: "봄", value: "spring" },
+  { name: "여름", value: "summer" },
+  { name: "가을", value: "autumn" },
+  { name: "겨울", value: "winter" },
+];
+const KOREAREGIONS: ICheck[] = [
+  { name: "서울", value: "서울" },
+  { name: "경기도", value: "경기도" },
+  { name: "강원도", value: "강원도" },
+];
 const FOREIGNREGIONS: string[] = ["일본", "태국", "필리핀", "미국"];
 
-const LeftLayout: FC = ({children}) => {
+const LeftLayout: FC<IProps> = ({ children, editorTags }) => {
+  useEffect(() => {
+    // setSeason({});
+  }, []);
+
   return (
     <Grid container>
       <Grid item xs={3} sx={{ fontFamily: "paybooc-Medium" }}>
@@ -19,7 +41,7 @@ const LeftLayout: FC = ({children}) => {
           >
             {"Editor's Pick"}
           </Typography>
-          {EDITORTAGS.map((tag, index) => (
+          {editorTags?.map((tag, index) => (
             <ShadowTag key={index} tag={tag} />
           ))}
         </Box>
@@ -31,7 +53,7 @@ const LeftLayout: FC = ({children}) => {
             {"계절별"}
           </Typography>
           {SEASONS.map((tag, index) => (
-            <CheckContainer key={index} tag={tag} />
+            <CheckContainer key={index} tag={tag.name} />
           ))}
         </Box>
         <Box py={2}>
@@ -42,7 +64,7 @@ const LeftLayout: FC = ({children}) => {
             {"지역별(국내)"}
           </Typography>
           {KOREAREGIONS.map((tag, index) => (
-            <CheckContainer key={index} tag={tag} />
+            <CheckContainer key={index} tag={tag.name} />
           ))}
         </Box>
         <Box py={2}>

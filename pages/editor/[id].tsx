@@ -25,7 +25,7 @@ const EditorDetail = () => {
   const [isLoading, setLoading] = useState(true);
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
-  const [idx, setIdx] = useState(-1);
+  const [idx, setIdx] = useState<any>();
 
   const getDetail = async () => {
     const { id } = router.query;

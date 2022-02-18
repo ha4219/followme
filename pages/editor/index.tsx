@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import {
   Box,
+  Button,
   FormControl,
   FormHelperText,
   Grid,
@@ -40,6 +41,7 @@ interface Props {
 const Editor = () => {
   const [search, , onChangeSearch] = useInput("");
   const [travels, setTravels] = useState([]);
+  const [sortedType, setSortedType] = useState(0);
 
   const getTravel = async () => {
     const { data } = await API.get("/main/travelBoards", {
@@ -62,9 +64,21 @@ const Editor = () => {
     getTravel();
   }, []);
 
+  useEffect(() => {
+    console.log(sortedType);
+
+    const arr = [...travels];
+    console.log(arr);
+
+    if (sortedType === 0) {
+    } else if (sortedType === 1) {
+    } else {
+    }
+  }, [sortedType]);
+
   return (
     <MainContainer maxWidth="lg">
-      <LeftLayout>
+      <LeftLayout editorTags={RECOMMANDKEYWORD}>
         <Box py={2}>
           <FormControl fullWidth>
             <OutlinedInput
@@ -95,7 +109,7 @@ const Editor = () => {
             추천키워드&emsp;|&emsp;
             <TagContainer tags={RECOMMANDKEYWORD} />
           </Box>
-          <ProgramList programs={travels} />
+          <ProgramList />
         </Box>
       </LeftLayout>
     </MainContainer>
@@ -106,6 +120,35 @@ const MainContainer = styled(Container)`
   & .searchContainer {
     border-radius: 27px;
   }
+`;
+
+const TitleContainer = styled.div`
+  & .sub {
+    color: gray;
+  }
+  & .main {
+    font-size: 2rem;
+    letter-spacing: -1.76px;
+  }
+`;
+const HeadContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2.5rem;
+`;
+const SortedContainer = styled.div`
+  display: flex;
+  padding-top: 2rem;
+
+  & .active {
+    color: #ffffff;
+    background-color: #000000;
+  }
+`;
+
+const CustomButton = styled(Button)`
+  border: 1px solid black;
+  margin-left: 5px;
 `;
 
 // export async function getServerSideProps() {

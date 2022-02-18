@@ -125,6 +125,10 @@ const MapContainer = () => {
     mapInit();
   }, []);
 
+  useEffect(() => {
+    // window.kakao.maps;
+  }, [curPos]);
+
   return (
     <MainMapContainer>
       {/* <Grid item md={9}> */}

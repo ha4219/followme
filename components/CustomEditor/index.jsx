@@ -290,7 +290,6 @@ const CustomEditor = () => {
           formats={formats}
         /> */}
         <Quill forwardedRef={ref} onChange={setValue} modules={modules} />
-        <div dangerouslySetInnerHTML={{ __html: value }} />
       </div>
       <TagContainer>
         <TextField
