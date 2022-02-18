@@ -1,7 +1,10 @@
-import { API } from "@src/API";
+import { API, getPayload, getToken } from "@src/API";
 import axios from "axios";
 
 export const getUser = async () => {
+  const { memberId } = getPayload();
+  console.log(memberId);
+
   const data = JSON.stringify({
     id: "admin",
   });

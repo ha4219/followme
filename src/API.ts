@@ -19,6 +19,14 @@ export const resetToken = () => {
   API.defaults.headers.common["Access-Token"] = "";
 };
 
+export const getToken = () => API.defaults.headers.common["Access-Token"];
+
+export const getPayload = () => {
+  const token = API.defaults.headers.common["Access-Token"] as string;
+  const base64Url = token.split(".")[1];
+  return JSON.parse(atob(base64Url));
+};
+
 API.interceptors.request.use((request) => {
   const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
   // console.log(loggedIn, checkToken());
