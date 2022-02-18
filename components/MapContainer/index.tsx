@@ -128,9 +128,8 @@ const MapContainer = () => {
 
   useEffect(() => {
     if (map) {
-      console.log(map.setMap);
-
-      map.setCenter(new window.kakao.maps.LatLng(curPos.lat, curPos.lon));
+      // console.log(map.setMap);
+      // map.setCenter(new window.kakao.maps.LatLng(curPos.lat, curPos.lon));
     }
   }, [curPos]);
 
