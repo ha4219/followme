@@ -81,7 +81,7 @@ const Navbar = () => {
         {loggedIn ? (
           <div className={isMain ? "whiteTxt" : ""}>
             <span onClick={doLogout}>Logout</span>|
-            <Link href="/profile">Profile</Link>|
+            <Link href="/profile/home">Profile</Link>|
             <Link href="/help">고객센터</Link>
           </div>
         ) : (

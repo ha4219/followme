@@ -23,4 +23,8 @@ export const BannerContainer = styled.div`
   & .swiper-pagination-bullet-active {
     --swiper-theme-color: white;
   }
+
+  & img:hover {
+    cursor: pointer;
+  }
 `;

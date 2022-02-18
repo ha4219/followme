@@ -229,8 +229,8 @@ const CustomEditor = () => {
             <MenuItem value="해외">해외</MenuItem>
           </Select>
           <Select value={region2} onChange={onChangeRegion2}>
-            <MenuItem value="서울">서울</MenuItem>
-            <MenuItem value="경기">경기</MenuItem>
+            <MenuItem value="seoul">서울</MenuItem>
+            <MenuItem value="jeju">제주</MenuItem>
           </Select>
         </div>
         <div className="date">
