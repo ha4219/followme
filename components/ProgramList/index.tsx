@@ -1,8 +1,11 @@
+import LeftLayout from "@components/LeftLayout";
 import Program from "@components/Program";
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
 import { API } from "@src/API";
+import { tagState } from "@store/tag";
 import { useEffect, useState, VFC } from "react";
+import { useRecoilState } from "recoil";
 
 interface Props {
   src: string;
@@ -25,11 +28,14 @@ interface Program {
   createdAt: string;
   sortData: number;
 }
+const RECOMMANDKEYWORD = ["test", "통영", "해돋이"];
 
 const ProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
   const [sortedType, setSortedType] = useState(2);
   const [travels, setTravels] = useState<Program[]>([]);
+  const [courses, setCourses] = useState<Program[]>([]);
+  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
 
   const getTravel = async () => {
     const { data } = await API.get<Program[]>("/main/travelBoards", {
@@ -38,6 +44,14 @@ const ProgramList: VFC = () => {
       }),
     });
     setTravels(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
+    setCourses(
       data.sort((l, r) => {
         if (r.createdAt > l.createdAt) {
           return 1;
@@ -75,54 +89,65 @@ const ProgramList: VFC = () => {
   }, [sortedType]);
 
   useEffect(() => {
+    if (selectedTag !== "") {
+      const arr = [...travels];
+      setCourses(arr.filter((item) => item.tags.includes(selectedTag)));
+    } else {
+      setCourses(travels);
+    }
+  }, [selectedTag]);
+
+  useEffect(() => {
     getTravel();
   }, []);
 
   return (
     <Box sx={{ paddingY: 2 }}>
-      <HeadContainer>
-        <TitleContainer>
-          <div className="sub">Recommend Course</div>
-          <div className="main">Ulife 추천코스</div>
-        </TitleContainer>
-        <SortedContainer>
-          <CustomButton
-            className={sortedType === 0 ? "active" : ""}
-            onClick={() => setSortedType(0)}
-          >
-            추천순
-          </CustomButton>
-          <CustomButton
-            className={sortedType === 1 ? "active" : ""}
-            onClick={() => setSortedType(1)}
-          >
-            인기순
-          </CustomButton>
-          <CustomButton
-            className={sortedType === 2 ? "active" : ""}
-            onClick={() => setSortedType(2)}
-          >
-            최신순
-          </CustomButton>
-        </SortedContainer>
-      </HeadContainer>
-      {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+      <LeftLayout editorTags={RECOMMANDKEYWORD} setTag={setSelectedTag}>
+        <HeadContainer>
+          <TitleContainer>
+            <div className="sub">Recommend Course</div>
+            <div className="main">Ulife 추천코스</div>
+          </TitleContainer>
+          <SortedContainer>
+            <CustomButton
+              className={sortedType === 0 ? "active" : ""}
+              onClick={() => setSortedType(0)}
+            >
+              추천순
+            </CustomButton>
+            <CustomButton
+              className={sortedType === 1 ? "active" : ""}
+              onClick={() => setSortedType(1)}
+            >
+              인기순
+            </CustomButton>
+            <CustomButton
+              className={sortedType === 2 ? "active" : ""}
+              onClick={() => setSortedType(2)}
+            >
+              최신순
+            </CustomButton>
+          </SortedContainer>
+        </HeadContainer>
+        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
-      <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        {travels?.map((item, index) => (
-          <Program
-            key={index}
-            idx={item.idx}
-            src={item.mainImg.data}
-            user={item.writer}
-            title={item.title}
-            tags={item.tags}
-            shortContent={item.shortContent}
-          />
-        ))}
-      </Grid>
-      {/* </Grid>
+        <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+          {courses?.map((item, index) => (
+            <Program
+              key={index}
+              idx={item.idx}
+              src={item.mainImg.data}
+              user={item.writer}
+              title={item.title}
+              tags={item.tags}
+              shortContent={item.shortContent}
+            />
+          ))}
+        </Grid>
+        {/* </Grid>
       </Grid> */}
+      </LeftLayout>
     </Box>
   );
 };

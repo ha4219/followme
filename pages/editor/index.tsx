@@ -22,8 +22,6 @@ import LeftLayout from "@components/LeftLayout";
 import { API } from "@src/API";
 import axios from "axios";
 
-const RECOMMANDKEYWORD = ["동해", "통영", "해돋이"];
-
 interface Props {
   index: number;
   image: any;
@@ -66,40 +64,9 @@ const Editor = () => {
 
   return (
     <MainContainer maxWidth="lg">
-      <LeftLayout editorTags={RECOMMANDKEYWORD}>
-        <Box py={2}>
-          <FormControl fullWidth>
-            <OutlinedInput
-              id="search"
-              className="searchContainer"
-              placeholder="검색어를 입력하세요."
-              value={search}
-              onChange={onChangeSearch}
-              sx={{ borderRadius: "10px" }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton>
-                    <SearchIcon fontSize="large" />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <FormHelperText>{}</FormHelperText>
-          </FormControl>
-          <Box
-            sx={{
-              display: "flex",
-              mx: 5,
-              alignItems: "center",
-              fontWeight: "bold",
-            }}
-          >
-            추천키워드&emsp;|&emsp;
-            <TagContainer tags={RECOMMANDKEYWORD} />
-          </Box>
-          <ProgramList />
-        </Box>
-      </LeftLayout>
+      <Box py={2}>
+        <ProgramList />
+      </Box>
     </MainContainer>
   );
 };

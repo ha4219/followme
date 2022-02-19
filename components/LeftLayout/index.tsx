@@ -2,9 +2,12 @@ import { Box, Drawer, Grid, Typography } from "@mui/material";
 import ShadowTag from "@components/ShadowTag";
 import CheckContainer from "@components/CheckContainer";
 import { FC, useCallback, useEffect, useState } from "react";
+// import { DATA } from "@data/LeftCheckBox";
+import EditorTag from "@components/editor/EditorTag";
 
 interface IProps {
   editorTags?: string[];
+  setTag?: any;
 }
 
 interface ICheck {
@@ -26,7 +29,7 @@ const KOREAREGIONS: ICheck[] = [
 ];
 const FOREIGNREGIONS: string[] = ["일본", "태국", "필리핀", "미국"];
 
-const LeftLayout: FC<IProps> = ({ children, editorTags }) => {
+const LeftLayout: FC<IProps> = ({ children, editorTags, setTag }) => {
   useEffect(() => {
     // setSeason({});
   }, []);
@@ -42,7 +45,7 @@ const LeftLayout: FC<IProps> = ({ children, editorTags }) => {
             {"Editor's Pick"}
           </Typography>
           {editorTags?.map((tag, index) => (
-            <ShadowTag key={index} tag={tag} />
+            <EditorTag key={index} tag={tag} />
           ))}
         </Box>
         <Box py={2}>

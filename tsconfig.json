@@ -26,6 +26,7 @@
       "@src/*": ["src/*"],
       "@store/*": ["store/*"],
       "@config/*": ["config/*"],
+      "@data/*": ["data/*"],
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
