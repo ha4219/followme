@@ -1,8 +1,10 @@
 import LeftLayout from "@components/LeftLayout";
 import Program from "@components/Program";
+import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
 import { API } from "@src/API";
+import { idState } from "@store/auth";
 import {
   domesticState,
   overseasState,
@@ -12,49 +14,23 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-
-interface Props {
-  src: string;
-  user: string;
-  title: string;
-  tags: string[];
-}
-
-interface Program {
-  idx: number;
-  src: any;
-  mainImg: any;
-  image: any;
-  writer: string;
-  title: string;
-  shortContent: string;
-  tags: string[];
-  likeCnts: number;
-  views: number;
-  createdAt: string;
-  region: string;
-  sortData: number;
-  season: string;
-  isLocal: boolean;
-}
-const RECOMMANDKEYWORD = ["test", "통영", "해돋이", "123"];
+import { ICourse } from "types/apiType";
 
 const EditorProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
   const router = useRouter();
   const [sortedType, setSortedType] = useState(2);
-  const [travels, setTravels] = useState<Program[]>([]);
-  const [courses, setCourses] = useState<Program[]>([]);
+  const [travels, setTravels] = useState<ICourse[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
   const selectedTag = useRecoilValue(tagState);
   const selectedSeason = useRecoilValue(seasonState);
   const selectedDomestic = useRecoilValue(domesticState);
   const selectedOverseas = useRecoilValue(overseasState);
+  const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.get<Program[]>("/main/travelBoards", {
-      data: JSON.stringify({
-        id: "admin",
-      }),
+    const { data } = await API.post<ICourse[]>("/main/travelBoards", {
+      id: loggedInId,
     });
     setTravels(
       data.sort((l, r) => {
@@ -100,7 +76,7 @@ const EditorProgramList: VFC = () => {
   useEffect(() => {
     let arr = [...travels];
 
-    if (selectedTag !== "") {
+    if (selectedTag !== "ALL" && selectedTag !== "") {
       arr = arr.filter((item) => item.tags.includes(selectedTag));
     }
     if (selectedSeason.length) {
@@ -115,6 +91,7 @@ const EditorProgramList: VFC = () => {
         (item) => !item.isLocal && selectedOverseas.includes(item.region)
       );
     }
+
     setCourses(arr);
   }, [
     selectedTag,
@@ -130,7 +107,7 @@ const EditorProgramList: VFC = () => {
 
   return (
     <Box sx={{ paddingY: 2 }}>
-      <LeftLayout editorTags={RECOMMANDKEYWORD}>
+      <LeftLayout>
         <HeadContainer>
           <TitleContainer>
             <div className="sub">
@@ -162,17 +139,9 @@ const EditorProgramList: VFC = () => {
         {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          {courses?.map((item, index) => (
-            <Program
-              key={index}
-              idx={item.idx}
-              src={item.mainImg.data}
-              user={item.writer}
-              title={item.title}
-              tags={item.tags}
-              shortContent={item.shortContent}
-            />
-          ))}
+          {courses.map((item, index) => {
+            return <Program key={index} {...item} />;
+          })}
         </Grid>
         <RightButton>
           <Button

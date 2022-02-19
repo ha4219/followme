@@ -16,9 +16,7 @@ export interface IUser {
 
 export interface ICourse {
   idx: number;
-  src: any;
   mainImg: any;
-  image: any;
   writer: string;
   title: string;
   shortContent: string;
@@ -26,4 +24,28 @@ export interface ICourse {
   likeCnts: number;
   views: number;
   createdAt: string;
+  isLocal: boolean;
+  likeClicked?: number;
+  region: string;
+  schedule: string;
+  season: string;
+  updatedAt: string;
+}
+
+export interface ICourseDetail {
+  content: string;
+  createdAt: string;
+  idx: number;
+  isLocal: boolean;
+  likeCnts: number;
+  mainImg: any;
+  region: string;
+  schedule: string;
+  season: string;
+  tags: string[];
+  title: string;
+  updatedAt: string;
+  views: number;
+  writer: string;
+  likeClicked?: number;
 }

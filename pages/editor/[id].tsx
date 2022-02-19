@@ -11,22 +11,22 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
-import { IComment } from "types/apiType";
-
-interface ICourse {
-  title: string;
-  content: string;
-  writer: string;
-}
+import { IComment, ICourseDetail } from "types/apiType";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import { toast } from "react-toastify";
 
 const EditorDetail = () => {
   const router = useRouter();
   // const { memberId } = getPayload();
-  const [course, setCourse] = useState<ICourse>();
+  const [course, setCourse] = useState<ICourseDetail>();
   const [isLoading, setLoading] = useState(true);
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [idx, setIdx] = useState<any>();
+  const [like, setLike] = useState(0);
+  const [likeCnt, setLikeCnt] = useState(0);
+  const loggedInId = useRecoilValue(idState);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -34,7 +34,14 @@ const EditorDetail = () => {
       setIdx(id);
 
       if (id) {
-        const { data } = await API.get<ICourse[]>(`/main/postDetail/${id}`, {});
+        const { data } = await API.post<ICourseDetail[]>(
+          `/main/postDetail/${id}`,
+          {
+            id: loggedInId,
+          }
+        );
+        setLike(data[0].likeClicked ? 1 : 0);
+        setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
       }
     } catch (e) {
@@ -70,7 +77,6 @@ const EditorDetail = () => {
           }
         );
         if (data.data === "success") {
-          alert("댓글 작성 성공");
           setComments([
             ...comments,
             { id: "admin", content: comment, updatedAt: "" },
@@ -78,7 +84,7 @@ const EditorDetail = () => {
         }
       } catch (e) {
         console.log("댓글 작성 실패", e);
-        alert("댓글 작성 실패");
+        toast.error("댓글 작성 error");
       } finally {
         setComment("");
       }
@@ -86,14 +92,33 @@ const EditorDetail = () => {
     [comment]
   );
 
-  const onClick = () => {
-    console.log();
-  };
+  const onClickLike = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      API.post(`/main/postLike/${idx}`, {
+        id: loggedInId,
+      })
+        .then(({ data }) => {
+          console.log(data);
+          if (course) {
+            if (like) {
+              setLikeCnt(course.likeCnts - 1);
+            } else {
+              setLikeCnt(course.likeCnts);
+            }
+          }
+
+          setLike(1 ^ like);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [like]
+  );
   const onClickShare = () => {
     console.log();
   };
-
-  const like = false;
 
   useEffect(() => {
     getDetail();
@@ -108,53 +133,63 @@ const EditorDetail = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <LeftLayout>
-        <TitleContainer>
-          <div className="sub">
-            <Avatar
-              alt="user"
-              src={gravatar.url(course ? course.writer : "default", {
-                s: "28px",
-                d: "retro",
-              })}
-              className="avatar"
-            />
-            <div className="title">{course?.title}</div>
-          </div>
-          <div className="btns">
-            <Button className="heart" onClick={onClick}>
-              {like ? (
-                <FavoriteIcon
-                  className="fillHeart"
-                  sx={{
-                    width: 22,
-                    height: 22,
-                    alignItems: "center",
-                    verticalAlign: "center",
-                  }}
-                />
-              ) : (
-                <FavoriteBorderIcon
-                  className="fillNotHeart"
-                  sx={{
-                    width: 22,
-                    height: 22,
-                    alignItems: "center",
-                    verticalAlign: "center",
-                  }}
-                />
-              )}
-            </Button>
-            <Button className="share" onClick={onClickShare}>
-              <ShareIcon />
-            </Button>
-          </div>
-        </TitleContainer>
         {course && (
-          <ContentContainer
-            dangerouslySetInnerHTML={{ __html: course.content }}
-          />
-        )}
-        {/* {course && course.writer === memberId && (
+          <>
+            <TitleContainer>
+              <div className="sub">
+                <Avatar
+                  alt="user"
+                  src={gravatar.url(course ? course.writer : "default", {
+                    s: "28px",
+                    d: "retro",
+                  })}
+                  className="avatar"
+                />
+                <div className="title">{course?.title}</div>
+              </div>
+              <div className="btns">
+                <span className="heartLabel"> {likeCnt}</span>
+                <Button className="heart" onClick={onClickLike}>
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="fillNotHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  )}
+                </Button>
+                <Button className="share" onClick={onClickShare}>
+                  <ShareIcon
+                    sx={{
+                      width: 18,
+                      height: 18,
+                      alignItems: "center",
+                      verticalAlign: "center",
+                    }}
+                  />
+                </Button>
+              </div>
+            </TitleContainer>
+            {course && (
+              <ContentContainer
+                dangerouslySetInnerHTML={{ __html: course.content }}
+              />
+            )}
+            {/* {course && course.writer === isLoggedInId && (
           <ButtonContainer>
             <Button variant="contained">수정</Button>
             <Button variant="contained" color="error">
@@ -163,25 +198,27 @@ const EditorDetail = () => {
           </ButtonContainer>
         )} */}
 
-        <ReplyContainer>
-          <form className="write" onSubmit={onSubmitComment}>
-            <TextField
-              id=""
-              label=""
-              value={comment}
-              onChange={onChangeComment}
-              fullWidth
-            />
-            <Button type="submit" className="btn" variant="contained">
-              등록
-            </Button>
-          </form>
-          <div className="reply">
-            {comments.map((item, index) => (
-              <ReplyContent key={index} {...item} />
-            ))}
-          </div>
-        </ReplyContainer>
+            <ReplyContainer>
+              <form className="write" onSubmit={onSubmitComment}>
+                <TextField
+                  id=""
+                  label=""
+                  value={comment}
+                  onChange={onChangeComment}
+                  fullWidth
+                />
+                <Button type="submit" className="btn" variant="contained">
+                  등록
+                </Button>
+              </form>
+              <div className="reply">
+                {comments.map((item, index) => (
+                  <ReplyContent key={index} {...item} />
+                ))}
+              </div>
+            </ReplyContainer>
+          </>
+        )}
       </LeftLayout>
     </Container>
   );
@@ -194,13 +231,26 @@ const TitleContainer = styled.div`
   display: flex;
   border-bottom: 1px solid #3e3e3e;
   justify-content: space-between;
+  align-items: center;
 
   & .sub {
     display: flex;
+    align-items: center;
 
     & .avatar {
       margin-right: 1rem;
     }
+  }
+
+  & .heartLabel {
+    font-weight: 300;
+    font-size: 0.8rem;
+  }
+  & .fillHeart {
+    color: #ff4e40;
+  }
+  & .fillNotHeart {
+    color: #ff4e40;
   }
 `;
 
@@ -224,6 +274,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ReplyContainer = styled.div`
+  margin-top: 5rem;
   & .write {
     display: flex;
 

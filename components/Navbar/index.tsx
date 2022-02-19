@@ -11,14 +11,14 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
-import Image from "next/image";
 
 import { TopNav } from "./styles";
 import Logo from "@components/Logo";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { authState } from "@store/auth";
+import { authState, idState } from "@store/auth";
 import { checkToken, setToken } from "@src/API";
+import { toast } from "react-toastify";
 
 interface PageProps {
   label: string;
@@ -37,6 +37,7 @@ const pages: PageProps[] = [
 const Navbar = () => {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
+  const [loggedInId, setLoggedInId] = useRecoilState(idState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
   const [isMain, setIsMain] = useState(true);
@@ -70,9 +71,15 @@ const Navbar = () => {
     []
   );
 
-  const doLogout = () => {
-    setLoggedIn("");
-    alert("logout");
+  const doLogout = async () => {
+    try {
+      setLoggedIn("");
+      setLoggedInId("");
+      router.push("/signin");
+      toast.success("로그아웃");
+    } catch (e) {
+      toast.error("로그아웃 error");
+    }
   };
 
   return (

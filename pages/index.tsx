@@ -16,15 +16,6 @@ import MainSearchContaier from "@components/main/MainSearchContainer";
 const Home: NextPage = () => {
   const [isLoading, setLoading] = useState(false);
 
-  const getTravel = async () => {
-    setLoading(false);
-  };
-
-  const getTags = async () => {
-    const { data } = await API.get("", {});
-    console.log(data);
-  };
-
   // useEffect(() => {
 
   // }, []);

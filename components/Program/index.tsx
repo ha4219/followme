@@ -11,35 +11,49 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import TagContainer from "@components/TagContainer";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import { ICourse } from "types/apiType";
+import { API } from "@src/API";
 
-interface Props {
-  idx: number;
-  src: any;
-  user: string;
-  title: string;
-  shortContent: string;
-  tags: string[];
-}
+const Program: VFC<ICourse> = ({
+  idx,
+  mainImg,
+  writer,
+  title,
+  shortContent,
+  tags,
+  likeCnts,
+  views,
+  createdAt,
+  isLocal,
+  likeClicked,
+  region,
+  schedule,
+  season,
+  updatedAt,
+}) => {
+  const [like, setLike] = useState(likeClicked === 1);
+  const loggedInId = useRecoilValue(idState);
 
-interface TagProps {
-  tag: string;
-}
-
-const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
-  const [like, setLike] = useState(false);
   const router = useRouter();
 
   const onClickLike = useCallback(
-    (e) => {
+    async (e) => {
       e.stopPropagation();
-      setLike(!like);
+      API.post(`/main/postLike/${idx}`, {
+        id: loggedInId,
+      })
+        .then(({ data }) => {
+          console.log(data);
+          setLike(!like);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     [like]
   );
-
-  const onClickUser = useCallback(() => {
-    router.push(`/users/${user}`);
-  }, []);
 
   const onClickProgram = useCallback((id) => {
     router.push(`/editor/${id}`);
@@ -65,7 +79,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
           overflow: "hidden",
         }}
       >
-        <PhotoContainer src={`${toBase64(src)}`}>
+        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
           <div className="topContainer">
             <IconButton
               onClick={onClickLike}
@@ -96,7 +110,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
           <TagContainer tags={tags} />
         </Box>
         <ContentContainer>
-          <IconButton onClick={onClickUser}>
+          <IconButton>
             <Avatar
               alt="user"
               // src={gravatar.url(user, { s: "28px", d: "retro" })}

@@ -12,7 +12,7 @@ import Link from "next/link";
 import useInput from "@hooks/useInput";
 import { useCallback, useEffect, useState } from "react";
 import { API, checkToken, setToken } from "src/API";
-import { authState } from "@store/auth";
+import { authState, idState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 // import axios from "axios";
@@ -28,6 +28,7 @@ declare global {
 const Signin = () => {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
+  const [loggedInId, setLoggedInId] = useRecoilState(idState);
 
   const [id, setId, onChangeId] = useInput("admin");
   const [password, setPassowrd, onChangePassword] = useInput("admin123");
@@ -44,6 +45,7 @@ const Signin = () => {
         if (data?.success) {
           toast.success("로그인 성공");
           setLoggedIn(data.accessToken);
+          setLoggedInId(id);
           setToken(data.accessToken);
         }
       } catch (e) {

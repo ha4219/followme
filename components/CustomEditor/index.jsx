@@ -23,6 +23,10 @@ import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
 import { API, getPayload } from "@src/API";
 import { DOMESTIC, OVERSEAS, SEASON } from "data/OptionData";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -50,7 +54,7 @@ const Quill = dynamic(
 
 const CustomEditor = () => {
   const ref = useRef();
-  // const { memberId } = getPayload();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -58,6 +62,7 @@ const CustomEditor = () => {
   const [day, setDay] = useState(1);
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
+  const isLoggedInId = useRecoilValue(idState);
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -130,7 +135,7 @@ const CustomEditor = () => {
             .insertEmbed(
               range.index,
               "image",
-              `${process.env.NEXT_PUBLIC_S3URL}${fileName}`
+              `${process.env.NEXT_PUBLIC_S3URL}/${fileName}`
             );
           ref.current.getEditor(range.index + 1);
         })
@@ -146,6 +151,7 @@ const CustomEditor = () => {
   const onSubmit = async () => {
     const regex = /<img.*?src=['"](.*?)['"]/;
     // 정규표현식으로 shortContent 받기
+    const shortContent = value.replace(/(<([^>]+)>)/gi, "").slice(0, 50);
     let mainImage = null;
     try {
       mainImage = regex.exec(value)[1];
@@ -156,19 +162,21 @@ const CustomEditor = () => {
     API.post("main/insertTravelBoards", {
       title: title,
       tags: tags,
-      shortContent: "",
+      shortContent: shortContent,
       content: value,
       mainImg: mainImage,
       isLocal: region1,
       schedule: `${date1}박${date2}일`,
       region: region2,
       season: season,
-      writer: "admin",
+      writer: isLoggedInId,
     })
       .then((res) => {
-        console.log(res);
+        toast.success("등록완료");
+        router.back();
       })
       .catch((err) => {
+        toast.error("에러");
         console.log(err);
       });
   };

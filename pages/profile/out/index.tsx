@@ -4,6 +4,7 @@ import useInput from "@hooks/useInput";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { API, resetToken } from "@src/API";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const ProfileOut = () => {
   const router = useRouter();
@@ -18,14 +19,14 @@ const ProfileOut = () => {
         password: password,
       });
       if (data.data === 1) {
-        alert("followme 탈퇴 성공");
+        toast.success("followme 탈퇴 성공");
       } else {
-        alert("followme 탈퇴 실패");
+        toast.error("followme 탈퇴 실패");
       }
       router.push("/profile/out/success");
     } catch (e) {
       console.log("error out", e);
-      alert("followme 탈퇴 실패");
+      toast.error("followme 탈퇴 실패");
     } finally {
       // resetToken();
     }

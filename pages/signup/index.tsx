@@ -22,6 +22,7 @@ import { API } from "src/API";
 import Head from "next/head";
 import { phoneVerifyAndPass } from "@helpers/signUpHelper";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 declare global {
   interface Window {
@@ -71,10 +72,14 @@ const Signup = () => {
       .then((res) => {
         if (res.data.checkingId === "allow") {
           setIdV(true);
+          toast.success("사용 가능한 아이디입니다.");
+        } else {
+          toast.error("사용 불가능한 아이디입니다.");
         }
       })
       .catch((err) => {
         console.log(err);
+        toast.error("id check error");
       });
   }, [id]);
 
@@ -85,10 +90,14 @@ const Signup = () => {
       .then((res) => {
         if (res.data.checkingEmail === "allow") {
           setNickNameV(true);
+          toast.success("사용 가능한 이메일입니다.");
+        } else {
+          toast.error("사용 불가능한 이메일입니다.");
         }
       })
       .catch((err) => {
         console.log(err);
+        toast.error("nickname check error");
       });
   }, [email]);
 
@@ -99,10 +108,14 @@ const Signup = () => {
       .then((res) => {
         if (res.data.checkingNickname === "allow") {
           setEmailV(true);
+          toast.success("사용 가능한 닉네임입니다.");
+        } else {
+          toast.error("사용 불가능한 닉네임입니다.");
         }
       })
       .catch((err) => {
         console.log(err);
+        toast.error("email check error");
       });
   }, [email]);
 
@@ -115,15 +128,16 @@ const Signup = () => {
           // confirmationResult can resolve with the fictional testVerificationCode above.
           // return confirmationResult.confirm(testVerificationCode);
           window.confirmationResult = confirmationResult;
+          toast.success("인증번호 전송성공");
         })
         .catch(function (error) {
           // Error; SMS not sent
           // ...
           console.log(error);
-          alert("인증번호 전송실패");
+          toast.error("인증번호 전송실패");
         });
     } else {
-      alert("유효하지 않은 휴대폰 번호");
+      toast.error("유효하지 않은 휴대폰 번호입니다.");
     }
   }, [phone]);
 
@@ -132,10 +146,12 @@ const Signup = () => {
       .confirm(verified)
       .then((res) => {
         console.log(res);
+        toast.success("인증성공");
         setPhoneV(true);
       })
       .catch((err) => {
         console.log(err);
+        toast.error("인증실패");
       });
   }, [verified]);
 
@@ -153,10 +169,11 @@ const Signup = () => {
           phoneNum: phone,
         });
         if (data?.data === "success") {
-          alert("회원가입 성공");
+          toast.success("회원가입 성공");
           router.push("/signup/success");
         }
       } catch (e) {
+        toast.error("회원가입 실패");
         console.log(e);
       }
     },

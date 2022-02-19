@@ -10,29 +10,66 @@ import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import Link from "next/link";
 import { API } from "@src/API";
 import CourseContainer from "@components/profile/CourseContainer";
+import { toast } from "react-toastify";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState, idState } from "@store/auth";
+import { useRouter } from "next/router";
 
 const ProfileHome = () => {
+  const router = useRouter();
   const [user, setUser] = useState<IUser>();
-  const [boards, setBoards] = useState([]);
+  const [myBoards, setMyBoards] = useState([]);
+  const [likeBoards, setLikeBoards] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
+  const isLoggedInId = useRecoilValue(idState);
   const [isLoading, setLoading] = useState(true);
 
   const getUser = async () => {
-    const { data } = await getUserProfile();
-
-    setUser(data.userData[0]);
-    setLoading(false);
+    getUserProfile()
+      .then((res) => {
+        setUser(res.data.userData[0]);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setIsLoggedIn("");
+        toast.error("토큰 만료");
+        router.push("/signin");
+      });
   };
 
-  const getBoard = async () => {
-    // const { data } = await getUserBoard();
-    const { data } = await API.get("/main/travelBoards", {});
+  const getMyBoard = async () => {
+    if (user) {
+      try {
+        const { data } = await API.post("/user/board", {
+          id: isLoggedInId,
+        });
+        setMyBoards(data.slice(-3));
+      } catch (e) {
+        console.log("myBoard", e);
+      }
+    }
+  };
 
-    setBoards(data.slice(-3));
+  const getLikeBoard = async () => {
+    if (user) {
+      try {
+        const { data } = await API.post("/user/likeList", {
+          id: isLoggedInId,
+        });
+        setLikeBoards(data.slice(-3));
+      } catch (e) {
+        console.log("likeBoard", e);
+      }
+    }
   };
 
   useEffect(() => {
+    getMyBoard();
+    getLikeBoard();
+  }, [user]);
+
+  useEffect(() => {
     getUser();
-    getBoard();
   }, []);
 
   return (
@@ -64,14 +101,14 @@ const ProfileHome = () => {
                 <div className="subTitle">내 작성글</div>
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={boards} like={false} />
+              <CourseContainer courses={myBoards} like={false} />
             </div>
             <div className="myboard">
               <div className="sub">
                 <div className="subTitle">내 좋아요</div>
                 <Link href="/profile/like">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={boards} like={true} />
+              <CourseContainer courses={likeBoards} like={true} />
             </div>
             <div className="mypoint">
               <div className="sub">
