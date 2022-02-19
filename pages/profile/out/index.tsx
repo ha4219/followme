@@ -3,8 +3,10 @@ import styled from "@emotion/styled";
 import useInput from "@hooks/useInput";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { API, resetToken } from "@src/API";
+import { useRouter } from "next/router";
 
 const ProfileOut = () => {
+  const router = useRouter();
   const [id, setId, onChangeId] = useInput("");
   const [password, setPassowrd, onChangePassword] = useInput("");
 
@@ -20,7 +22,7 @@ const ProfileOut = () => {
       } else {
         alert("followme 탈퇴 실패");
       }
-      resetToken();
+      router.push("/profile/out/success");
     } catch (e) {
       console.log("error out", e);
       alert("followme 탈퇴 실패");

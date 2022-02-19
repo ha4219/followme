@@ -154,7 +154,7 @@ const Signup = () => {
         });
         if (data?.data === "success") {
           alert("회원가입 성공");
-          router.push("/signin");
+          router.push("/signup/success");
         }
       } catch (e) {
         console.log(e);

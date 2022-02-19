@@ -6,6 +6,7 @@ import { Grid } from "@mui/material";
 declare global {
   interface Window {
     kakao: any;
+    map: any;
   }
 }
 const FAKE = [
@@ -103,10 +104,13 @@ const MapContainer = () => {
             ),
           },
         ];
+
         const options = {
           center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
         };
         const map = new window.kakao.maps.Map(container, options);
+
+        window.kakao.map = map;
         setMap(map);
         for (let i = 0; i < positions.length; i++) {
           const marker = new window.kakao.maps.Marker({
@@ -127,9 +131,10 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (map) {
-      // console.log(map.setMap);
-      // map.setCenter(new window.kakao.maps.LatLng(curPos.lat, curPos.lon));
+    if (window.kakao) {
+      window.kakao.map.setCenter(
+        new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
+      );
     }
   }, [curPos]);
 

@@ -34,18 +34,21 @@ const Signin = () => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-
-      const { data } = await API.post("/user/signin", {
-        id: id,
-        password: password,
-      });
-      console.log(data);
-
-      if (data?.success) {
+      try {
+        const { data } = await API.post("/user/signin", {
+          id: id,
+          password: password,
+        });
         console.log(data);
 
-        setLoggedIn(data.accessToken);
-        setToken(data.accessToken);
+        if (data?.success) {
+          console.log(data);
+
+          setLoggedIn(data.accessToken);
+          setToken(data.accessToken);
+        }
+      } catch (e) {
+        alert("로그인 실패");
       }
     },
     [id, password]
@@ -54,41 +57,45 @@ const Signin = () => {
   // naver
   const initNaverLogin = () => {
     console.log(window.naver);
-    
+
     const naverLogin = new window.naver.LoginWithNaverId({
       clientId: process.env.NEXT_PUBLIC_NAVERID,
       callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin/naver`,
       isPopup: false,
-      loginButton: {color: 'green', type: 1, height: 60},
+      loginButton: { color: "green", type: 1, height: 60 },
       callbackHandle: true,
     });
     naverLogin.init();
     setNaver(naverLogin);
-  }
-  
+  };
+
   const initKakao = () => {
     window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
-  }
+  };
 
   // kakao
   const kakaoLogin = () => {
-    window.Kakao.Auth.login({
-      success: (response) => {
-        window.Kakao.API.request({
-          url: '/v2/user/me',
-          success: (response) => {
-            console.log(response, 'kakao suc');
-          },
-          fail: (err) => {
-            console.log(err, 'kakao err');
-          },
-        })
-      },
-      fail: (err) => {
-        console.log(err, 'kakao err out');
-      }
-    })
-  }
+    try {
+      window.Kakao.Auth.login({
+        success: (response) => {
+          window.Kakao.API.request({
+            url: "/v2/user/me",
+            success: (response) => {
+              console.log(response, "kakao suc");
+            },
+            fail: (err) => {
+              console.log(err, "kakao err");
+            },
+          });
+        },
+        fail: (err) => {
+          console.log(err, "kakao err out");
+        },
+      });
+    } catch (e) {
+      alert("현재 도입 중입니다.");
+    }
+  };
 
   useEffect(() => {
     if (loggedIn) {
@@ -96,10 +103,18 @@ const Signin = () => {
     }
   }, [loggedIn]);
 
+  const init = async () => {
+    try {
+      initNaverLogin();
+      initKakao();
+    } catch (e) {
+      console.log("init social", e);
+    }
+  };
+
   useEffect(() => {
     // console.log(naver, Kakao);
-    initNaverLogin();
-    initKakao();
+    init();
   }, []);
 
   return (
