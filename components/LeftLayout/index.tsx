@@ -15,7 +15,6 @@ interface ICheck {
   value: string;
 }
 
-const EDITORTAGS: string[] = ["해시태그", "해시태그", "해시태그", "해시태그"];
 const SEASONS: ICheck[] = [
   { name: "봄", value: "spring" },
   { name: "여름", value: "summer" },

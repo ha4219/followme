@@ -28,7 +28,7 @@ interface Program {
   createdAt: string;
   sortData: number;
 }
-const RECOMMANDKEYWORD = ["test", "통영", "해돋이"];
+const RECOMMANDKEYWORD = ["test", "통영", "해돋이", "123"];
 
 const ProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
@@ -62,22 +62,22 @@ const ProgramList: VFC = () => {
   };
 
   useEffect(() => {
-    const arr = [...travels];
+    const arr = [...courses];
 
     if (sortedType === 0) {
-      setTravels(
+      setCourses(
         arr.sort((l, r) => {
           return r.likeCnts - l.likeCnts;
         })
       );
     } else if (sortedType === 1) {
-      setTravels(
+      setCourses(
         arr.sort((l, r) => {
           return r.views - l.views;
         })
       );
     } else {
-      setTravels(
+      setCourses(
         arr.sort((l, r) => {
           if (r.createdAt > l.createdAt) {
             return 1;
