@@ -1,6 +1,11 @@
 import { Box, Drawer, Grid, Typography } from "@mui/material";
 import ShadowTag from "@components/ShadowTag";
-import CheckContainer from "@components/CheckContainer";
+import {
+  CheckContainer,
+  CheckContainerSeason,
+  CheckContainerOverseas,
+  CheckContainerDomestic,
+} from "@components/CheckContainer";
 import { FC, useCallback, useEffect, useState } from "react";
 // import { DATA } from "@data/LeftCheckBox";
 import EditorTag from "@components/editor/EditorTag";
@@ -21,18 +26,18 @@ const SEASONS: ICheck[] = [
   { name: "가을", value: "autumn" },
   { name: "겨울", value: "winter" },
 ];
-const KOREAREGIONS: ICheck[] = [
+const DOMESTICREGIONS: ICheck[] = [
   { name: "서울", value: "서울" },
   { name: "경기도", value: "경기도" },
   { name: "강원도", value: "강원도" },
 ];
-const FOREIGNREGIONS: string[] = ["일본", "태국", "필리핀", "미국"];
+const OVERSEASREGIONS: ICheck[] = [
+  { name: "일본", value: "일본" },
+  { name: "미국", value: "미국" },
+  { name: "중국", value: "중국" },
+];
 
-const LeftLayout: FC<IProps> = ({ children, editorTags, setTag }) => {
-  useEffect(() => {
-    // setSeason({});
-  }, []);
-
+const LeftLayout: FC<IProps> = ({ children, editorTags }) => {
   return (
     <Grid container>
       <Grid item xs={3} sx={{ fontFamily: "paybooc-Medium" }}>
@@ -54,8 +59,12 @@ const LeftLayout: FC<IProps> = ({ children, editorTags, setTag }) => {
           >
             {"계절별"}
           </Typography>
-          {SEASONS.map((tag, index) => (
-            <CheckContainer key={index} tag={tag.name} />
+          {SEASONS.map((item, index) => (
+            <CheckContainerSeason
+              key={index}
+              tag={item.name}
+              value={item.value}
+            />
           ))}
         </Box>
         <Box py={2}>
@@ -65,8 +74,12 @@ const LeftLayout: FC<IProps> = ({ children, editorTags, setTag }) => {
           >
             {"지역별(국내)"}
           </Typography>
-          {KOREAREGIONS.map((tag, index) => (
-            <CheckContainer key={index} tag={tag.name} />
+          {DOMESTICREGIONS.map((item, index) => (
+            <CheckContainerDomestic
+              key={index}
+              tag={item.name}
+              value={item.value}
+            />
           ))}
         </Box>
         <Box py={2}>
@@ -76,8 +89,12 @@ const LeftLayout: FC<IProps> = ({ children, editorTags, setTag }) => {
           >
             {"지역별(해외)"}
           </Typography>
-          {FOREIGNREGIONS.map((tag, index) => (
-            <CheckContainer key={index} tag={tag} />
+          {OVERSEASREGIONS.map((item, index) => (
+            <CheckContainerOverseas
+              key={index}
+              tag={item.name}
+              value={item.value}
+            />
           ))}
         </Box>
       </Grid>

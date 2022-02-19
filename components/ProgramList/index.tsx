@@ -3,9 +3,14 @@ import Program from "@components/Program";
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
 import { API } from "@src/API";
-import { tagState } from "@store/tag";
+import {
+  domesticState,
+  overseasState,
+  seasonState,
+  tagState,
+} from "@store/tag";
 import { useEffect, useState, VFC } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 interface Props {
   src: string;
@@ -26,7 +31,10 @@ interface Program {
   likeCnts: number;
   views: number;
   createdAt: string;
+  region: string;
   sortData: number;
+  season: string;
+  isLocal: boolean;
 }
 const RECOMMANDKEYWORD = ["test", "통영", "해돋이", "123"];
 
@@ -35,7 +43,10 @@ const ProgramList: VFC = () => {
   const [sortedType, setSortedType] = useState(2);
   const [travels, setTravels] = useState<Program[]>([]);
   const [courses, setCourses] = useState<Program[]>([]);
-  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
+  const selectedTag = useRecoilValue(tagState);
+  const selectedSeason = useRecoilValue(seasonState);
+  const selectedDomestic = useRecoilValue(domesticState);
+  const selectedOverseas = useRecoilValue(overseasState);
 
   const getTravel = async () => {
     const { data } = await API.get<Program[]>("/main/travelBoards", {
@@ -65,37 +76,45 @@ const ProgramList: VFC = () => {
     const arr = [...courses];
 
     if (sortedType === 0) {
-      setCourses(
-        arr.sort((l, r) => {
-          return r.likeCnts - l.likeCnts;
-        })
-      );
+      arr.sort((l, r) => {
+        return r.likeCnts - l.likeCnts;
+      });
     } else if (sortedType === 1) {
-      setCourses(
-        arr.sort((l, r) => {
-          return r.views - l.views;
-        })
-      );
+      arr.sort((l, r) => {
+        return r.views - l.views;
+      });
     } else {
-      setCourses(
-        arr.sort((l, r) => {
-          if (r.createdAt > l.createdAt) {
-            return 1;
-          }
-          return -1;
-        })
-      );
+      arr.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      });
     }
+
+    setCourses(arr);
   }, [sortedType]);
 
   useEffect(() => {
+    let arr = [...travels];
+
     if (selectedTag !== "") {
-      const arr = [...travels];
-      setCourses(arr.filter((item) => item.tags.includes(selectedTag)));
-    } else {
-      setCourses(travels);
+      arr = arr.filter((item) => item.tags.includes(selectedTag));
     }
-  }, [selectedTag]);
+    if (selectedSeason.length) {
+      arr = arr.filter((item) => selectedSeason.includes(item.season));
+    }
+    if (selectedDomestic.length) {
+      arr = arr.filter(
+        (item) => item.isLocal && selectedDomestic.includes(item.region)
+      );
+    } else if (selectedOverseas.length) {
+      arr = arr.filter(
+        (item) => !item.isLocal && selectedOverseas.includes(item.region)
+      );
+    }
+    setCourses(arr);
+  }, [selectedTag, selectedSeason, selectedOverseas, selectedDomestic]);
 
   useEffect(() => {
     getTravel();
@@ -103,7 +122,7 @@ const ProgramList: VFC = () => {
 
   return (
     <Box sx={{ paddingY: 2 }}>
-      <LeftLayout editorTags={RECOMMANDKEYWORD} setTag={setSelectedTag}>
+      <LeftLayout editorTags={RECOMMANDKEYWORD}>
         <HeadContainer>
           <TitleContainer>
             <div className="sub">Recommend Course</div>
