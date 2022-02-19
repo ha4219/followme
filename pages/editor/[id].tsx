@@ -1,7 +1,7 @@
 import LeftLayout from "@components/LeftLayout";
 import styled from "@emotion/styled";
 import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
-import { API } from "@src/API";
+import { API, getPayload } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +21,7 @@ interface ICourse {
 
 const EditorDetail = () => {
   const router = useRouter();
+  const { memberId } = getPayload();
   const [course, setCourse] = useState<ICourse>();
   const [isLoading, setLoading] = useState(true);
   const [comments, setComments] = useState<IComment[]>([]);
@@ -153,12 +154,15 @@ const EditorDetail = () => {
             dangerouslySetInnerHTML={{ __html: course.content }}
           />
         )}
-        <ButtonContainer>
-          <Button variant="contained">수정</Button>
-          <Button variant="contained" color="error">
-            삭제
-          </Button>
-        </ButtonContainer>
+        {course && course.writer === memberId && (
+          <ButtonContainer>
+            <Button variant="contained">수정</Button>
+            <Button variant="contained" color="error">
+              삭제
+            </Button>
+          </ButtonContainer>
+        )}
+
         <ReplyContainer>
           <form className="write" onSubmit={onSubmitComment}>
             <TextField

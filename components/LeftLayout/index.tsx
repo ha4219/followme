@@ -1,4 +1,4 @@
-import { Box, Drawer, Grid, Typography } from "@mui/material";
+import { Box, Drawer, Grid, TextField, Typography } from "@mui/material";
 import ShadowTag from "@components/ShadowTag";
 import {
   CheckContainer,
@@ -9,6 +9,8 @@ import {
 import { FC, useCallback, useEffect, useState } from "react";
 // import { DATA } from "@data/LeftCheckBox";
 import EditorTag from "@components/editor/EditorTag";
+import { useRecoilState } from "recoil";
+import { tagState } from "@store/tag";
 
 interface IProps {
   editorTags?: string[];
@@ -38,16 +40,38 @@ const OVERSEASREGIONS: ICheck[] = [
 ];
 
 const LeftLayout: FC<IProps> = ({ children, editorTags }) => {
+  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
+  const [value, setValue] = useState("");
+
+  const onChangeValue = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [value]
+  );
+
+  const onKeyDownValue = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        setSelectedTag(value);
+        setValue("");
+      }
+    },
+    [value]
+  );
+
   return (
     <Grid container>
       <Grid item xs={3} sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={2}>
-          <Typography
-            py={1}
-            sx={{ fontFamily: "paybooc-Bold", fontSize: "1.2rem" }}
-          >
-            {"Editor's Pick"}
-          </Typography>
+          <Box pr={2}>
+            <TextField
+              fullWidth
+              value={value}
+              onChange={onChangeValue}
+              onKeyDown={onKeyDownValue}
+            />
+          </Box>
           {editorTags?.map((tag, index) => (
             <EditorTag key={index} tag={tag} />
           ))}

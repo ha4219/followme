@@ -21,6 +21,7 @@ import styled from "@emotion/styled";
 import LeftLayout from "@components/LeftLayout";
 import { API } from "@src/API";
 import axios from "axios";
+import EditorProgramList from "@components/editor/EditorProgramList";
 
 interface Props {
   index: number;
@@ -65,7 +66,7 @@ const Editor = () => {
   return (
     <MainContainer maxWidth="lg">
       <Box py={2}>
-        <ProgramList layout={true} />
+        <EditorProgramList />
       </Box>
     </MainContainer>
   );

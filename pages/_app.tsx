@@ -9,6 +9,8 @@ import theme from "@styles/theme";
 import Layout from "@components/Layout";
 import Footer from "@components/Footer";
 import "react-quill/dist/quill.snow.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -26,6 +28,7 @@ function MyApp(props: {
           <CssBaseline />
           <Layout>
             <Component {...pageProps} />
+            <ToastContainer />
             <Footer />
           </Layout>
         </ThemeProvider>

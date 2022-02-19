@@ -15,7 +15,8 @@ import { API, checkToken, setToken } from "src/API";
 import { authState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import axios from "axios";
+// import axios from "axios";
+import { toast } from "react-toastify";
 
 declare global {
   interface Window {
@@ -39,16 +40,20 @@ const Signin = () => {
           id: id,
           password: password,
         });
-        console.log(data);
 
         if (data?.success) {
-          console.log(data);
-
+          toast.success("로그인 성공", {
+            autoClose: 3000,
+            position: toast.POSITION.BOTTOM_RIGHT,
+          });
           setLoggedIn(data.accessToken);
           setToken(data.accessToken);
         }
       } catch (e) {
-        alert("로그인 실패");
+        toast.error("로그인 실패", {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       }
     },
     [id, password]
