@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { FC } from "react";
+import { VFC } from "react";
 import { TagConv } from "./styles";
 
 interface TagProps {
@@ -10,7 +10,7 @@ interface TagContainerProps {
   tags: string[];
 }
 
-const Tag: FC<TagProps> = ({ tag }) => {
+const Tag: VFC<TagProps> = ({ tag }) => {
   return (
     <Box className="tag">
       <span>#{tag}</span>
@@ -18,7 +18,7 @@ const Tag: FC<TagProps> = ({ tag }) => {
   );
 };
 
-const TagContainer: FC<TagContainerProps> = ({ tags }) => {
+const TagContainer: VFC<TagContainerProps> = ({ tags }) => {
   if (tags.length > 3) {
     return (
       <TagConv>

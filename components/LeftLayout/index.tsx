@@ -1,12 +1,11 @@
 import { Box, Drawer, Grid, TextField, Typography } from "@mui/material";
 import ShadowTag from "@components/ShadowTag";
 import {
-  CheckContainer,
   CheckContainerSeason,
   CheckContainerOverseas,
   CheckContainerDomestic,
 } from "@components/CheckContainer";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 // import { DATA } from "@data/LeftCheckBox";
 import EditorTag from "@components/editor/EditorTag";
 import { useRecoilState } from "recoil";

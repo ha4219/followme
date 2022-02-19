@@ -19,3 +19,8 @@ export const overseasState = atom<string[]>({
   key: "overseas",
   default: [],
 });
+
+export const courseTagState = atom({
+  key: "tag",
+  default: "",
+});

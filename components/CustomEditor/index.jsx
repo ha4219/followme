@@ -15,7 +15,6 @@ import {
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
-import CheckContainer from "@components/CheckContainer";
 import useInput from "@hooks/useInput";
 import { v1 } from "uuid";
 // import S3 from "react-aws-s3";
