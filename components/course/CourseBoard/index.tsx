@@ -12,10 +12,12 @@ import {
   TableRow,
 } from "@mui/material";
 import { courseTagState } from "@store/tag";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 const CourseBoard = () => {
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [size, setSize] = useState(0);
@@ -29,6 +31,10 @@ const CourseBoard = () => {
   const getCourses = async () => {
     setCourses(COURSES);
     setSize(Math.ceil(COURSES.length / rowsPerPage));
+  };
+
+  const onClickRow = (id: number) => {
+    router.push(`/course/${id}`);
   };
 
   useEffect(() => {
@@ -63,7 +69,11 @@ const CourseBoard = () => {
               )
             : courses
           ).map((item, index) => (
-            <TableRow key={index}>
+            <TableRow
+              key={index}
+              onClick={() => onClickRow(item.idx - 1)}
+              className="cursor"
+            >
               <TableCell className="title">
                 <Avatar
                   alt="user"
@@ -98,6 +108,10 @@ const MainContainer = styled(Container)`
     & .avatar {
       margin-right: 1rem;
     }
+  }
+
+  & .cursor {
+    cursor: pointer;
   }
 
   & .pagination {

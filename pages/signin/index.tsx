@@ -42,18 +42,12 @@ const Signin = () => {
         });
 
         if (data?.success) {
-          toast.success("로그인 성공", {
-            autoClose: 3000,
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
+          toast.success("로그인 성공");
           setLoggedIn(data.accessToken);
           setToken(data.accessToken);
         }
       } catch (e) {
-        toast.error("로그인 실패", {
-          autoClose: 3000,
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
+        toast.error("로그인 실패");
       }
     },
     [id, password]

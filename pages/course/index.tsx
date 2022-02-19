@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const Course = () => {
   return (
-    <Container>
+    <Container maxWidth="lg">
       <CourseLeftLayout>
         <Box py={2}>
           <CourseBoard />
