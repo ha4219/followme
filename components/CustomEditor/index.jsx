@@ -51,7 +51,7 @@ const Quill = dynamic(
 
 const CustomEditor = () => {
   const ref = useRef();
-  const { memberId } = getPayload();
+  // const { memberId } = getPayload();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -164,7 +164,7 @@ const CustomEditor = () => {
       schedule: `${date1}박${date2}일`,
       region: region2,
       season: season,
-      writer: memberId,
+      writer: "admin",
     })
       .then((res) => {
         console.log(res);

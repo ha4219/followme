@@ -21,7 +21,7 @@ interface ICourse {
 
 const EditorDetail = () => {
   const router = useRouter();
-  const { memberId } = getPayload();
+  // const { memberId } = getPayload();
   const [course, setCourse] = useState<ICourse>();
   const [isLoading, setLoading] = useState(true);
   const [comments, setComments] = useState<IComment[]>([]);
@@ -154,14 +154,14 @@ const EditorDetail = () => {
             dangerouslySetInnerHTML={{ __html: course.content }}
           />
         )}
-        {course && course.writer === memberId && (
+        {/* {course && course.writer === memberId && (
           <ButtonContainer>
             <Button variant="contained">수정</Button>
             <Button variant="contained" color="error">
               삭제
             </Button>
           </ButtonContainer>
-        )}
+        )} */}
 
         <ReplyContainer>
           <form className="write" onSubmit={onSubmitComment}>
