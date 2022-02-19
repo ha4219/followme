@@ -38,7 +38,7 @@ interface Program {
 }
 const RECOMMANDKEYWORD = ["test", "통영", "해돋이", "123"];
 
-const ProgramList: VFC = () => {
+const ProgramList: VFC<{ layout?: boolean }> = ({ layout }) => {
   // const [courses, setCourses] = useState<Programs>();
   const [sortedType, setSortedType] = useState(2);
   const [travels, setTravels] = useState<Program[]>([]);
@@ -120,53 +120,101 @@ const ProgramList: VFC = () => {
     getTravel();
   }, []);
 
+  if (layout) {
+    return (
+      <Box sx={{ paddingY: 2 }}>
+        <LeftLayout editorTags={RECOMMANDKEYWORD}>
+          <HeadContainer>
+            <TitleContainer>
+              <div className="sub">Recommend Course</div>
+              <div className="main">Ulife 추천코스</div>
+            </TitleContainer>
+            <SortedContainer>
+              <CustomButton
+                className={sortedType === 0 ? "active" : ""}
+                onClick={() => setSortedType(0)}
+              >
+                추천순
+              </CustomButton>
+              <CustomButton
+                className={sortedType === 1 ? "active" : ""}
+                onClick={() => setSortedType(1)}
+              >
+                인기순
+              </CustomButton>
+              <CustomButton
+                className={sortedType === 2 ? "active" : ""}
+                onClick={() => setSortedType(2)}
+              >
+                최신순
+              </CustomButton>
+            </SortedContainer>
+          </HeadContainer>
+          {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+        <Grid item xs> */}
+          <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+            {courses?.map((item, index) => (
+              <Program
+                key={index}
+                idx={item.idx}
+                src={item.mainImg.data}
+                user={item.writer}
+                title={item.title}
+                tags={item.tags}
+                shortContent={item.shortContent}
+              />
+            ))}
+          </Grid>
+          {/* </Grid>
+      </Grid> */}
+        </LeftLayout>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ paddingY: 2 }}>
-      <LeftLayout editorTags={RECOMMANDKEYWORD}>
-        <HeadContainer>
-          <TitleContainer>
-            <div className="sub">Recommend Course</div>
-            <div className="main">Ulife 추천코스</div>
-          </TitleContainer>
-          <SortedContainer>
-            <CustomButton
-              className={sortedType === 0 ? "active" : ""}
-              onClick={() => setSortedType(0)}
-            >
-              추천순
-            </CustomButton>
-            <CustomButton
-              className={sortedType === 1 ? "active" : ""}
-              onClick={() => setSortedType(1)}
-            >
-              인기순
-            </CustomButton>
-            <CustomButton
-              className={sortedType === 2 ? "active" : ""}
-              onClick={() => setSortedType(2)}
-            >
-              최신순
-            </CustomButton>
-          </SortedContainer>
-        </HeadContainer>
-        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+      <HeadContainer>
+        <TitleContainer>
+          <div className="sub">Recommend Course</div>
+          <div className="main">Ulife 추천코스</div>
+        </TitleContainer>
+        <SortedContainer>
+          <CustomButton
+            className={sortedType === 0 ? "active" : ""}
+            onClick={() => setSortedType(0)}
+          >
+            추천순
+          </CustomButton>
+          <CustomButton
+            className={sortedType === 1 ? "active" : ""}
+            onClick={() => setSortedType(1)}
+          >
+            인기순
+          </CustomButton>
+          <CustomButton
+            className={sortedType === 2 ? "active" : ""}
+            onClick={() => setSortedType(2)}
+          >
+            최신순
+          </CustomButton>
+        </SortedContainer>
+      </HeadContainer>
+      {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
-        <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          {courses?.map((item, index) => (
-            <Program
-              key={index}
-              idx={item.idx}
-              src={item.mainImg.data}
-              user={item.writer}
-              title={item.title}
-              tags={item.tags}
-              shortContent={item.shortContent}
-            />
-          ))}
-        </Grid>
-        {/* </Grid>
-      </Grid> */}
-      </LeftLayout>
+      <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+        {courses?.map((item, index) => (
+          <Program
+            key={index}
+            idx={item.idx}
+            src={item.mainImg.data}
+            user={item.writer}
+            title={item.title}
+            tags={item.tags}
+            shortContent={item.shortContent}
+          />
+        ))}
+      </Grid>
     </Box>
   );
 };

@@ -65,7 +65,7 @@ const Editor = () => {
   return (
     <MainContainer maxWidth="lg">
       <Box py={2}>
-        <ProgramList />
+        <ProgramList layout={true} />
       </Box>
     </MainContainer>
   );
