@@ -20,7 +20,7 @@ const HelpLeftLayout: FC = ({ children }) => {
     <Grid container>
       <Grid xs={3} item>
         <ProfileLeftContainer>
-          <div className="title">MyPage</div>
+          <div className="title">고객센터</div>
           <div className="btns">
             {PROFILE.map((item, index) => (
               <div key={index}>

@@ -82,13 +82,13 @@ const Navbar = () => {
           <div className={isMain ? "whiteTxt" : ""}>
             <span onClick={doLogout}>Logout</span>|
             <Link href="/profile/home">Profile</Link>|
-            <Link href="/help">고객센터</Link>
+            <Link href="/help/faq">고객센터</Link>
           </div>
         ) : (
           <div className={isMain ? "whiteTxt" : ""}>
             <Link href="/signin">Login</Link>|
             <Link href="/signup">Join us</Link>|
-            <Link href="/help">고객센터</Link>
+            <Link href="/help/faq">고객센터</Link>
           </div>
         )}
       </TopNav>

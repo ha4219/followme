@@ -11,10 +11,10 @@ const Footer = () => {
   return (
     <ContainerFooter>
       <div className="nav">
-        <Link href="/intro">회사소개</Link>
-        <Link href="/intro">찾아오시는 길</Link>
-        <Link href="/intro">개인정보처리방침</Link>
-        <Link href="/intro">이용약관</Link>
+        <Link href="/help/introduce">회사소개</Link>
+        <Link href="/help/course">찾아오시는 길</Link>
+        <Link href="/help/privacy">개인정보처리방침</Link>
+        <Link href="/help/use">이용약관</Link>
       </div>
       <div className="help-icons">
         <MusicVideoIcon />
