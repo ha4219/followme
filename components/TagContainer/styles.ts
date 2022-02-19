@@ -24,4 +24,8 @@ export const TagConv = styled(Box)`
     background-color: #b69775;
     color: #ffffff;
   }
+
+  & .tag {
+    display: inline-block;
+  }
 `;

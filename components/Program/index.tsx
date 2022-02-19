@@ -99,7 +99,7 @@ const Program: VFC<Props> = ({ idx, src, user, title, tags, shortContent }) => {
           <IconButton onClick={onClickUser}>
             <Avatar
               alt="user"
-              src={gravatar.url(user, { s: "28px", d: "retro" })}
+              // src={gravatar.url(user, { s: "28px", d: "retro" })}
               className="avatar"
             />
           </IconButton>

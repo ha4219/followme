@@ -9,6 +9,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -40,6 +41,7 @@ const RECOMMANDKEYWORD = ["test", "통영", "해돋이", "123"];
 
 const EditorProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
+  const router = useRouter();
   const [sortedType, setSortedType] = useState(2);
   const [travels, setTravels] = useState<Program[]>([]);
   const [courses, setCourses] = useState<Program[]>([]);
@@ -114,7 +116,13 @@ const EditorProgramList: VFC = () => {
       );
     }
     setCourses(arr);
-  }, [selectedTag, selectedSeason, selectedOverseas, selectedDomestic]);
+  }, [
+    selectedTag,
+    selectedSeason,
+    selectedOverseas,
+    selectedDomestic,
+    travels,
+  ]);
 
   useEffect(() => {
     getTravel();
@@ -122,7 +130,7 @@ const EditorProgramList: VFC = () => {
 
   return (
     <Box sx={{ paddingY: 2 }}>
-      <LeftLayout>
+      <LeftLayout editorTags={RECOMMANDKEYWORD}>
         <HeadContainer>
           <TitleContainer>
             <div className="sub">
@@ -166,6 +174,16 @@ const EditorProgramList: VFC = () => {
             />
           ))}
         </Grid>
+        <RightButton>
+          <Button
+            variant="contained"
+            onClick={() => {
+              router.push("/editor/write");
+            }}
+          >
+            글쓰기
+          </Button>
+        </RightButton>
       </LeftLayout>
     </Box>
   );
@@ -206,15 +224,9 @@ const CustomButton = styled(Button)`
   margin-left: 5px;
 `;
 
-export async function getServerSideProps() {
-  // TODO fetch data
-  const programs: Props[] = [];
-
-  return {
-    props: {
-      programs,
-    },
-  };
-}
+const RightButton = styled.div`
+  display: flex;
+  justify-content: right;
+`;
 
 export default EditorProgramList;

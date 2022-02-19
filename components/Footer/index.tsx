@@ -23,7 +23,7 @@ const Footer = () => {
       <div className="help-des">
         <div>
           대표 : 임우리&emsp;|&emsp;사업자등록번호 :
-          636-87-000912&emsp;|&emsp;(우) 03176 서울시 종로구 경희궁1길 18 2F
+          636-87-00912&emsp;|&emsp;(우) 03176 서울시 종로구 경희궁1길 18 2F
         </div>
         <div>
           고객지원 : 1670-9010&emsp;|&emsp;Fax:02-2088-1673&emsp;|&emsp;EMAIL:

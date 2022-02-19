@@ -6,12 +6,10 @@ import { useEffect, useState } from "react";
 const Course = () => {
   return (
     <Container>
-      <LeftLayout>
-        <Box>
-          <CustomEditor />
-          {/* <TestEditor description={value} setDescription={setValue} /> */}
-        </Box>
-      </LeftLayout>
+      <Box>
+        {/* <CustomEditor /> */}
+        {/* <TestEditor description={value} setDescription={setValue} /> */}
+      </Box>
     </Container>
   );
 };

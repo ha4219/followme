@@ -8,3 +8,9 @@ export const authState = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const idState = atom({
+  key: "id",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

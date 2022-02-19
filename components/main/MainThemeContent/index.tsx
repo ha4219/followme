@@ -36,7 +36,7 @@ const MainThemeContent: VFC<Props> = ({
   }, []);
 
   return (
-    <MainContainer md={3} item>
+    <MainContainer md={3} sm={3} xs={3} lg={3} item>
       <PhotoContainer src={src}>
         <span className="title">{titleSummary(title)}</span>
       </PhotoContainer>

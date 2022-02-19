@@ -22,7 +22,8 @@ import { v1 } from "uuid";
 // import S3FileUpload from "react-s3";
 import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
-import { API } from "@src/API";
+import { API, getPayload } from "@src/API";
+import { DOMESTIC, OVERSEAS, SEASON } from "data/OptionData";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -50,6 +51,7 @@ const Quill = dynamic(
 
 const CustomEditor = () => {
   const ref = useRef();
+  const { memberId } = getPayload();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -85,14 +87,18 @@ const CustomEditor = () => {
     arr.pop(index);
     setTags(arr);
   };
-
-  const [region1, setRegion1, onChangeRegion1] = useInput("국내");
+  const [season, setSeason, onChangeSeason] = useInput("spring");
+  const [region1, setRegion1, onChangeRegion1] = useInput(1);
   const [region2, setRegion2, onChangeRegion2] = useInput("서울");
   const [date1, setDate1, onChangeDate1] = useInput(1);
   const [date2, setDate2, onChangeDate2] = useInput(2);
   useEffect(() => {
     console.log(value);
   }, [value]);
+
+  useEffect(() => {
+    setRegion2(region1 ? DOMESTIC[0].value : OVERSEAS[0].value);
+  }, [region1]);
 
   const putObjectWrapper = (params) => {
     return new Promise((resolve, reject) => {
@@ -154,11 +160,11 @@ const CustomEditor = () => {
       shortContent: "",
       content: value,
       mainImg: mainImage,
-      isLocal: region1 === "국내" ? 1 : 0,
+      isLocal: region1,
       schedule: `${date1}박${date2}일`,
       region: region2,
-      season: "spring",
-      writer: "admin",
+      season: season,
+      writer: memberId,
     })
       .then((res) => {
         console.log(res);
@@ -220,17 +226,39 @@ const CustomEditor = () => {
             <span>테마여행</span>
           </div>
         </div>
+        <div className="season">
+          <p className="label">계절</p>
+          <Select value={season} onChange={onChangeSeason} label="선택">
+            {SEASON.map((item, index) => (
+              <MenuItem key={index} value={item.value}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
         <div className="region">
           <p className="label">지역</p>
-          {/* <InputLabel id="region1-select-label">선택</InputLabel> */}
           <Select value={region1} onChange={onChangeRegion1} label="선택">
-            <MenuItem value="국내">국내</MenuItem>
-            <MenuItem value="해외">해외</MenuItem>
+            <MenuItem value={1}>국내</MenuItem>
+            <MenuItem value={0}>해외</MenuItem>
           </Select>
-          <Select value={region2} onChange={onChangeRegion2}>
-            <MenuItem value="seoul">서울</MenuItem>
-            <MenuItem value="jeju">제주</MenuItem>
-          </Select>
+          {region1 ? (
+            <Select value={region2} onChange={onChangeRegion2}>
+              {DOMESTIC.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <Select value={region2} onChange={onChangeRegion2}>
+              {OVERSEAS.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
         </div>
         <div className="date">
           <p className="label">일정</p>
@@ -299,31 +327,41 @@ const CustomEditor = () => {
           fullWidth
           placeholder="#태그를 입력해주세요. (최대 10개)"
         />
-        <div className="list">
-          {tags.map((item, index) => (
-            <Button
-              className="item"
-              key={index}
-              onClick={() => onTagClick(index)}
-            >
-              #{item}
-            </Button>
-          ))}
-        </div>
+        {tags.length > 0 && (
+          <div className="list">
+            {tags.map((item, index) => (
+              <Button
+                className="item"
+                key={index}
+                onClick={() => onTagClick(index)}
+              >
+                #{item}
+              </Button>
+            ))}
+          </div>
+        )}
       </TagContainer>
-      <Button variant="contained" onClick={onSubmit}>
-        제출
-      </Button>
+      <div className="center">
+        <Button variant="contained" onClick={onSubmit}>
+          등록
+        </Button>
+      </div>
     </MainContainer>
   );
 };
 
-const MainContainer = styled.div``;
+const MainContainer = styled.div`
+  & .center {
+    text-align: center;
+  }
+`;
 
 const OptionContainer = styled.div`
   display: flex;
   padding: 1rem 0;
-  background-color: #aaaaaa;
+  justify-content: space-around;
+  background-color: #f1f3f7;
+  margin-bottom: 2rem;
   & .checkContainer {
     display: flex;
     margin-right: 1rem;
@@ -334,6 +372,15 @@ const OptionContainer = styled.div`
   }
 
   & .region {
+    display: flex;
+    margin-right: 1rem;
+
+    & p {
+      margin-right: 1rem;
+    }
+  }
+
+  & .season {
     display: flex;
     margin-right: 1rem;
 
@@ -369,26 +416,27 @@ const MapAddContainer = styled.div`
   }
 
   & .add {
-    background-color: #aaaaaa;
+    background-color: #f1f3f7;
     border-radius: 1rem;
     padding: 6px 1rem;
   }
 `;
 
 const TagContainer = styled.div`
-  margin: 1rem 0;
+  margin: 3rem 0;
 
   & .list {
-    margin-top: 5px;
+    margin-top: 1rem;
     float: left;
     width: 100%;
     border-radius: 1rem;
     padding: 1rem;
-    background-color: #aaaaaa;
+    background-color: #f1f3f7;
 
     & .item {
       display: inline-block;
-      border: 1px solid #000000;
+      color: #191919;
+      border: 1px solid #191919;
       border-radius: 1rem;
       padding: 0.5rem 1rem;
       margin-right: 1rem;

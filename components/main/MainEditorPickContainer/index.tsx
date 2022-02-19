@@ -63,10 +63,10 @@ const MainEditorPickContainer = () => {
           <div className="main">추천 여행지</div>
           <div className="content">간단한 설명이 들어갈 자리입니다.</div>
         </TitleContainer>
-        <BtnContainer>
+        {/* <BtnContainer>
           <CustomButton>{"<"}</CustomButton>
           <CustomButton>{">"}</CustomButton>
-        </BtnContainer>
+        </BtnContainer> */}
       </HeadContainer>
       <BodyContainer>
         {FAKE.map((item, index) => (
@@ -92,6 +92,7 @@ const BodyContainer = styled.div`
 `;
 
 const TitleContainer = styled.div`
+  width: 200px;
   & .sub {
     color: gray;
   }

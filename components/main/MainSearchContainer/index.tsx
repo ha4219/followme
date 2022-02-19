@@ -1,24 +1,55 @@
 import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
 import { Button, TextField } from "@mui/material";
+import { tagState } from "@store/tag";
+import { useRouter } from "next/router";
+import { useState, useCallback } from "react";
+import { useRecoilState } from "recoil";
 
 const FAKE = ["동해", "통영", "해돋이", "too long"];
 
 const MainSearchContaier = () => {
+  const router = useRouter();
+  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
+  const [value, setValue] = useState("");
+  const onChangeValue = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [value]
+  );
+
+  const onSubmitValue = useCallback(() => {
+    setSelectedTag(value);
+    router.push("/editor");
+  }, [value]);
+
+  const onClickTag = useCallback((tag) => {
+    setSelectedTag(tag);
+    router.push("/editor");
+  }, []);
+
   return (
     <MainContainer>
       <div className="sub">
         <div className="des">팔로미 여행지 검색</div>
         <div className="inputContainer">
           <div className="input">
-            <TextField fullWidth placeholder="검색어를 입력해주세요." />
+            <TextField
+              fullWidth
+              placeholder="검색어를 입력해주세요."
+              value={value}
+              onChange={onChangeValue}
+            />
           </div>
-          <Button className="btn">검색</Button>
+          <Button className="btn" onClick={onSubmitValue}>
+            검색
+          </Button>
         </div>
         <div className="tags">
           <div className="label">#추천 키워드</div>
           {FAKE.map((item, index) => (
-            <div key={index} className="tag">
+            <div key={index} className="tag" onClick={() => onClickTag(item)}>
               #{item}
             </div>
           ))}
@@ -96,6 +127,7 @@ const MainContainer = styled.div`
         :hover {
           color: #ffffff;
           background-color: #000000;
+          cursor: pointer;
         }
       }
     }
