@@ -56,6 +56,7 @@ const CourseDetail = () => {
 
   const getComments = async () => {
     const { id } = router.query;
+
     setComments(REPLYDATA.slice(0, COURSES[Number(id)].replyCnt));
   };
 
@@ -200,6 +201,7 @@ const MainContainer = styled(Box)`
     }
     & .btns {
       display: flex;
+      align-items: end;
 
       & .fillHeart {
         color: #ff4e40;

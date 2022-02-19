@@ -21,7 +21,7 @@ const ProfileHome = () => {
   const [myBoards, setMyBoards] = useState([]);
   const [likeBoards, setLikeBoards] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
-  const isLoggedInId = useRecoilValue(idState);
+  const loggedInId = useRecoilValue(idState);
   const [isLoading, setLoading] = useState(true);
 
   const getUser = async () => {
@@ -41,7 +41,7 @@ const ProfileHome = () => {
     if (user) {
       try {
         const { data } = await API.post("/user/board", {
-          id: isLoggedInId,
+          id: loggedInId,
         });
         setMyBoards(data.slice(-3));
       } catch (e) {
@@ -54,7 +54,7 @@ const ProfileHome = () => {
     if (user) {
       try {
         const { data } = await API.post("/user/likeList", {
-          id: isLoggedInId,
+          id: loggedInId,
         });
         setLikeBoards(data.slice(-3));
       } catch (e) {

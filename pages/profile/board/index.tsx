@@ -3,14 +3,19 @@ import ProfileLeftLayout from "@components/profile/ProfileLeftLayout";
 import styled from "@emotion/styled";
 import { Container } from "@mui/material";
 import { API } from "@src/API";
+import { idState } from "@store/auth";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 const ProfileBoard = () => {
   const [boards, setBoards] = useState([]);
+  const loggedInId = useRecoilValue(idState);
 
   const getBoard = async () => {
     // const { data } = await getUserBoard();
-    const { data } = await API.get("/main/travelBoards", {});
+    const { data } = await API.post("/user/board", {
+      id: loggedInId,
+    });
 
     setBoards(data.reverse());
   };
@@ -18,6 +23,7 @@ const ProfileBoard = () => {
   useEffect(() => {
     getBoard();
   }, []);
+
   return (
     <Container maxWidth="lg">
       <ProfileLeftLayout>

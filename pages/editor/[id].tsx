@@ -15,6 +15,7 @@ import { IComment, ICourseDetail } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
+import ShareButton from "@components/ShareButton";
 
 const EditorDetail = () => {
   const router = useRouter();
@@ -172,7 +173,7 @@ const EditorDetail = () => {
                     />
                   )}
                 </Button>
-                <Button className="share" onClick={onClickShare}>
+                {/* <Button className="share" onClick={onClickShare}>
                   <ShareIcon
                     sx={{
                       width: 18,
@@ -181,7 +182,8 @@ const EditorDetail = () => {
                       verticalAlign: "center",
                     }}
                   />
-                </Button>
+                </Button> */}
+                <ShareButton url={window.location.href} />
               </div>
             </TitleContainer>
             {course && (

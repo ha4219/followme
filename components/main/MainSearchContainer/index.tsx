@@ -1,12 +1,11 @@
 import TagContainer from "@components/TagContainer";
+import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
 import { Button, TextField } from "@mui/material";
 import { tagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
-
-const FAKE = ["동해", "통영", "해돋이", "too long"];
 
 const MainSearchContaier = () => {
   const router = useRouter();
@@ -48,7 +47,7 @@ const MainSearchContaier = () => {
         </div>
         <div className="tags">
           <div className="label">#추천 키워드</div>
-          {FAKE.map((item, index) => (
+          {COURSETAGS.map((item, index) => (
             <div key={index} className="tag" onClick={() => onClickTag(item)}>
               #{item}
             </div>
