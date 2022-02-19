@@ -33,7 +33,8 @@ const EditorTag: VFC<IProps> = ({ tag }) => {
 const MainContainer = styled(Box)`
   display: inline-block;
   padding: 0.25rem 0.7rem;
-  margin: 2.5px 5px;
+  margin-top: 5px;
+  margin-right: 5px;
   border: 1px solid #b69775;
   border-radius: 1rem;
   :hover {
