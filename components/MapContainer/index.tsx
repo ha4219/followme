@@ -83,6 +83,11 @@ const MapContainer = () => {
       (err) => {
         console.log(err);
         toast.error("위치 정보 시스템을 허용해주세요");
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 100,
+        timeout: Infinity,
       }
     );
   };
@@ -93,9 +98,9 @@ const MapContainer = () => {
 
   useEffect(() => {
     if (window.kakao) {
-      window.kakao.map.setCenter(
-        new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
-      );
+      // window.kakao.map.setCenter(
+      //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
+      // );
     }
   }, [curPos]);
 
