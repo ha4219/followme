@@ -1,51 +1,32 @@
-import { Box, Grid, TextField, Typography } from "@mui/material";
 import {
-  CheckContainerSeason,
-  CheckContainerOverseas,
   CheckContainerDomestic,
+  CheckContainerOverseas,
+  CheckContainerSeason,
+  CheckDetailSeason,
 } from "@components/CheckContainer";
-import { FC, useCallback, useState } from "react";
-// import { DATA } from "@data/LeftCheckBox";
-import EditorTag from "@components/editor/EditorTag";
-import { useRecoilState } from "recoil";
-import { tagState } from "@store/tag";
 import { DOMESTIC, OVERSEAS, SEASON } from "@data/OptionData";
-import { COURSETAGS } from "@data/CourseData";
+import { Box, Grid, Typography } from "@mui/material";
+import { FC } from "react";
+import EditorTag from "../EditorTag";
 
-const LeftLayout: FC = ({ children }) => {
-  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
-  const [value, setValue] = useState("");
+interface IProps {
+  tags: string[];
+  season: string;
+  region: string;
+}
 
-  const onChangeValue = useCallback(
-    (e) => {
-      setValue(e.target.value);
-    },
-    [value]
-  );
-
-  const onKeyDownValue = useCallback(
-    (e) => {
-      if (e.keyCode === 13) {
-        setSelectedTag(value);
-        setValue("");
-      }
-    },
-    [value]
-  );
-
+const EditorDetailLeftLayout: FC<IProps> = ({
+  children,
+  tags,
+  season,
+  region,
+}) => {
+  console.log(region);
   return (
     <Grid container>
-      <Grid item xs={3} sx={{ fontFamily: "paybooc-Medium" }}>
+      <Grid xs={3} item>
         <Box py={2}>
-          <Box pr={2}>
-            <TextField
-              fullWidth
-              value={value}
-              onChange={onChangeValue}
-              onKeyDown={onKeyDownValue}
-            />
-          </Box>
-          {COURSETAGS.map((tag, index) => (
+          {tags.map((tag, index) => (
             <EditorTag key={index} tag={tag} />
           ))}
         </Box>
@@ -57,10 +38,11 @@ const LeftLayout: FC = ({ children }) => {
             {"계절별"}
           </Typography>
           {SEASON.map((item, index) => (
-            <CheckContainerSeason
+            <CheckDetailSeason
               key={index}
               tag={item.name}
               value={item.value}
+              checked={item.value === season}
             />
           ))}
         </Box>
@@ -72,10 +54,11 @@ const LeftLayout: FC = ({ children }) => {
             {"지역별(국내)"}
           </Typography>
           {DOMESTIC.map((item, index) => (
-            <CheckContainerDomestic
+            <CheckDetailSeason
               key={index}
               tag={item.name}
               value={item.value}
+              checked={item.value === region}
             />
           ))}
         </Box>
@@ -87,19 +70,20 @@ const LeftLayout: FC = ({ children }) => {
             {"지역별(해외)"}
           </Typography>
           {OVERSEAS.map((item, index) => (
-            <CheckContainerOverseas
+            <CheckDetailSeason
               key={index}
               tag={item.name}
               value={item.value}
+              checked={item.value === region}
             />
           ))}
         </Box>
       </Grid>
-      <Grid item xs={9}>
+      <Grid xs={9} item>
         {children}
       </Grid>
     </Grid>
   );
 };
 
-export default LeftLayout;
+export default EditorDetailLeftLayout;

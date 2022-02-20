@@ -47,6 +47,15 @@ export const CheckContainerSeason: VFC<IProps> = ({ tag, value }) => {
   );
 };
 
+export const CheckDetailSeason: VFC<IProps> = ({ tag, value, checked }) => {
+  return (
+    <Box>
+      <Checkbox sx={{ padding: 0, paddingRight: 1 }} checked={checked} />
+      <span>{tag}</span>
+    </Box>
+  );
+};
+
 export const CheckContainerDomestic: VFC<IProps> = ({ tag, value }) => {
   const [selectedDomestic, setSelectedDomestic] = useRecoilState(domesticState);
   const [, setSelectedOverseas] = useRecoilState(overseasState);

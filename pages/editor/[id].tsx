@@ -16,6 +16,7 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
+import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 
 const EditorDetail = () => {
   const router = useRouter();
@@ -133,47 +134,50 @@ const EditorDetail = () => {
         <title>{course?.title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <LeftLayout>
-        {course && (
-          <>
-            <TitleContainer>
-              <div className="sub">
-                <Avatar
-                  alt="user"
-                  src={gravatar.url(course ? course.writer : "default", {
-                    s: "28px",
-                    d: "retro",
-                  })}
-                  className="avatar"
-                />
-                <div className="title">{course?.title}</div>
-              </div>
-              <div className="btns">
-                <span className="heartLabel"> {likeCnt}</span>
-                <Button className="heart" onClick={onClickLike}>
-                  {like ? (
-                    <FavoriteIcon
-                      className="fillHeart"
-                      sx={{
-                        width: 18,
-                        height: 18,
-                        alignItems: "center",
-                        verticalAlign: "center",
-                      }}
-                    />
-                  ) : (
-                    <FavoriteBorderIcon
-                      className="fillNotHeart"
-                      sx={{
-                        width: 18,
-                        height: 18,
-                        alignItems: "center",
-                        verticalAlign: "center",
-                      }}
-                    />
-                  )}
-                </Button>
-                {/* <Button className="share" onClick={onClickShare}>
+      {course && (
+        <EditorDetailLeftLayout
+          tags={course.tags}
+          season={course.season}
+          region={course.region}
+        >
+          <TitleContainer>
+            <div className="sub">
+              <Avatar
+                alt="user"
+                src={gravatar.url(course ? course.writer : "default", {
+                  s: "28px",
+                  d: "retro",
+                })}
+                className="avatar"
+              />
+              <div className="title">{course?.title}</div>
+            </div>
+            <div className="btns">
+              <span className="heartLabel"> {likeCnt}</span>
+              <Button className="heart" onClick={onClickLike}>
+                {like ? (
+                  <FavoriteIcon
+                    className="fillHeart"
+                    sx={{
+                      width: 18,
+                      height: 18,
+                      alignItems: "center",
+                      verticalAlign: "center",
+                    }}
+                  />
+                ) : (
+                  <FavoriteBorderIcon
+                    className="fillNotHeart"
+                    sx={{
+                      width: 18,
+                      height: 18,
+                      alignItems: "center",
+                      verticalAlign: "center",
+                    }}
+                  />
+                )}
+              </Button>
+              {/* <Button className="share" onClick={onClickShare}>
                   <ShareIcon
                     sx={{
                       width: 18,
@@ -183,15 +187,15 @@ const EditorDetail = () => {
                     }}
                   />
                 </Button> */}
-                <ShareButton url={window.location.href} />
-              </div>
-            </TitleContainer>
-            {course && (
-              <ContentContainer
-                dangerouslySetInnerHTML={{ __html: course.content }}
-              />
-            )}
-            {/* {course && course.writer === isLoggedInId && (
+              <ShareButton url={window.location.href} />
+            </div>
+          </TitleContainer>
+          {course && (
+            <ContentContainer
+              dangerouslySetInnerHTML={{ __html: course.content }}
+            />
+          )}
+          {/* {course && course.writer === isLoggedInId && (
           <ButtonContainer>
             <Button variant="contained">수정</Button>
             <Button variant="contained" color="error">
@@ -200,28 +204,27 @@ const EditorDetail = () => {
           </ButtonContainer>
         )} */}
 
-            <ReplyContainer>
-              <form className="write" onSubmit={onSubmitComment}>
-                <TextField
-                  id=""
-                  label=""
-                  value={comment}
-                  onChange={onChangeComment}
-                  fullWidth
-                />
-                <Button type="submit" className="btn" variant="contained">
-                  등록
-                </Button>
-              </form>
-              <div className="reply">
-                {comments.map((item, index) => (
-                  <ReplyContent key={index} {...item} />
-                ))}
-              </div>
-            </ReplyContainer>
-          </>
-        )}
-      </LeftLayout>
+          <ReplyContainer>
+            <form className="write" onSubmit={onSubmitComment}>
+              <TextField
+                id=""
+                label=""
+                value={comment}
+                onChange={onChangeComment}
+                fullWidth
+              />
+              <Button type="submit" className="btn" variant="contained">
+                등록
+              </Button>
+            </form>
+            <div className="reply">
+              {comments.map((item, index) => (
+                <ReplyContent key={index} {...item} />
+              ))}
+            </div>
+          </ReplyContainer>
+        </EditorDetailLeftLayout>
+      )}
     </Container>
   );
 };
