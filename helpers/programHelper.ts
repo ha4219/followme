@@ -22,3 +22,5 @@ export const mapContentSummary = (text: string): string =>
   text.length >= MAPCONTENTLENGTH
     ? text.slice(0, MAPCONTENTLENGTH) + "..."
     : text;
+
+export const dateHelper = (text: string): string => text.slice(0, 10);

@@ -339,7 +339,11 @@ const ThemeCustomEditor = () => {
           </Button>
         </div>
 
-        <Button onClick={() => setOpen(true)}>
+        <Button
+          onClick={() => {
+            toast.info("추가 예정입니다.");
+          }}
+        >
           <AddLocationIcon />
           <div className="add">업체 리스트 검색</div>
         </Button>

@@ -57,7 +57,7 @@ const ThemeDetail = () => {
           `/theme/themeBoards/reply/${id}`,
           {}
         );
-        setComments(data);
+        // setComments(data);
       }
     } catch (e) {
       console.log("router not ready", e);
@@ -79,7 +79,11 @@ const ThemeDetail = () => {
         if (data.data === "success") {
           setComments([
             ...comments,
-            { id: loggedInId, content: comment, updatedAt: "" },
+            {
+              id: loggedInId,
+              content: comment,
+              createdAt: new Date().toISOString(),
+            },
           ]);
         }
       } catch (e) {
@@ -208,13 +212,16 @@ const ThemeDetail = () => {
         )} */}
 
           <ReplyContainer>
+            <div className="replylabel">{`댓글  ${comments.length}`}</div>
+
             <form className="write" onSubmit={onSubmitComment}>
               <TextField
-                id=""
-                label=""
                 value={comment}
                 onChange={onChangeComment}
                 fullWidth
+                placeholder={
+                  loggedInId.length ? "" : "댓글을 작성하려면 로그인 해주세요."
+                }
               />
               <Button type="submit" className="btn" variant="contained">
                 등록
@@ -283,7 +290,13 @@ const ButtonContainer = styled.div`
 `;
 
 const ReplyContainer = styled.div`
-  margin-top: 5rem;
+  margin-top: 3rem;
+
+  & .replylabel {
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
   & .write {
     display: flex;
 

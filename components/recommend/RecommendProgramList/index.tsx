@@ -13,6 +13,7 @@ import {
 } from "@store/tag";
 import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
 import RecommendProgram from "../RecommendProgram";
@@ -148,7 +149,11 @@ const RecommendProgramList: VFC = () => {
           <Button
             variant="contained"
             onClick={() => {
-              router.push("/recommend/write");
+              if (loggedInId.length) {
+                router.push("/recommend/write");
+              } else {
+                toast.error("로그인 후 이용해주세요.");
+              }
             }}
           >
             글쓰기

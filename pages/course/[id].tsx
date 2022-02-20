@@ -40,7 +40,11 @@ const CourseDetail = () => {
         toast.success("댓글 작성 성공");
         setComments([
           ...comments,
-          { id: "admin", content: comment, updatedAt: "" },
+          {
+            id: "admin",
+            content: comment,
+            createdAt: new Date().toISOString(),
+          },
         ]);
         // }
       } catch (e) {

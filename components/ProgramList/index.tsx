@@ -1,4 +1,5 @@
 import Program from "@components/Program";
+import RecommendProgram from "@components/recommend/RecommendProgram";
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
 import { API } from "@src/API";
@@ -127,7 +128,7 @@ const ProgramList: VFC = () => {
         <Grid item xs> */}
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         {courses?.map((item, index) => (
-          <Program {...item} key={index} />
+          <RecommendProgram {...item} key={index} />
         ))}
       </Grid>
     </Box>

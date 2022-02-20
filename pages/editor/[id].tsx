@@ -79,7 +79,11 @@ const EditorDetail = () => {
         if (data.data === "success") {
           setComments([
             ...comments,
-            { id: "admin", content: comment, updatedAt: "" },
+            {
+              id: "admin",
+              content: comment,
+              createdAt: new Date().toISOString(),
+            },
           ]);
         }
       } catch (e) {

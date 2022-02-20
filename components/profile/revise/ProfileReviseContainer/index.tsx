@@ -229,14 +229,14 @@ const ProfileReviseContainer = () => {
             onClickBtn={onVerifySMS}
           />
 
-          <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
+          <Box p={8} sx={{ alignItems: "left", textAlign: "center" }}>
             <Button
               type="submit"
               variant="contained"
               sx={{ color: "#ffffff" }}
-              disabled={!(password === passwordCh)}
+              disabled={!(password === passwordCh && password.length)}
             >
-              가입하기
+              수정하기
             </Button>
           </Box>
         </form>

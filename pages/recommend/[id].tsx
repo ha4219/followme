@@ -79,7 +79,11 @@ const RecommendDetail = () => {
         if (data.data === "success") {
           setComments([
             ...comments,
-            { id: loggedInId, content: comment, updatedAt: "" },
+            {
+              id: loggedInId,
+              content: comment,
+              createdAt: new Date().toISOString(),
+            },
           ]);
         }
       } catch (e) {

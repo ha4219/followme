@@ -13,9 +13,11 @@ import {
   TableRow,
 } from "@mui/material";
 import { API } from "@src/API";
+import { idState } from "@store/auth";
 import { courseTagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 
 const CourseBoard = () => {
@@ -25,6 +27,7 @@ const CourseBoard = () => {
   const [size, setSize] = useState(0);
   const [courses, setCourses] = useState<ICourseData[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
+  const loggedInId = useRecoilValue(idState);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
@@ -46,15 +49,15 @@ const CourseBoard = () => {
     router.push(`/course/${id}`);
   };
 
-  useEffect(() => {
-    let arr = [...COURSES];
+  // useEffect(() => {
+  //   let arr = [...COURSES];
 
-    if (selectedTag !== "ALL" && selectedTag !== "") {
-      arr = arr.filter((item) => item.tags.includes(selectedTag));
-    }
-    setSize(Math.ceil(arr.length / rowsPerPage));
-    setCourses(arr);
-  }, [selectedTag]);
+  //   if (selectedTag !== "ALL" && selectedTag !== "") {
+  //     arr = arr.filter((item) => item.tags.includes(selectedTag));
+  //   }
+  //   setSize(Math.ceil(arr.length / rowsPerPage));
+  //   setCourses(arr);
+  // }, [selectedTag]);
 
   useEffect(() => {
     getCourses();
@@ -104,7 +107,11 @@ const CourseBoard = () => {
               variant="contained"
               size="small"
               onClick={() => {
-                router.push("/course/write");
+                if (loggedInId.length) {
+                  router.push("/course/write");
+                } else {
+                  toast.error("로그인 후 이용해주세요.");
+                }
               }}
             >
               글쓰기
