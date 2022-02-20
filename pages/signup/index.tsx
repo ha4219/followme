@@ -89,7 +89,7 @@ const Signup = () => {
     })
       .then((res) => {
         if (res.data.checkingEmail === "allow") {
-          setNickNameV(true);
+          setEmailV(true);
           toast.success("사용 가능한 이메일입니다.");
         } else {
           toast.error("사용 불가능한 이메일입니다.");
@@ -107,7 +107,7 @@ const Signup = () => {
     })
       .then((res) => {
         if (res.data.checkingNickname === "allow") {
-          setEmailV(true);
+          setNickNameV(true);
           toast.success("사용 가능한 닉네임입니다.");
         } else {
           toast.error("사용 불가능한 닉네임입니다.");
@@ -117,7 +117,7 @@ const Signup = () => {
         console.log(err);
         toast.error("email check error");
       });
-  }, [email]);
+  }, [nickName]);
 
   const onSendSMS = useCallback(async () => {
     const regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;

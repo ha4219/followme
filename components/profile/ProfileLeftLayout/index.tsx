@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
+import { getUserProfile } from "api/auth";
 // import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 const PROFILE = [
   { label: "홈", to: "/profile/home" },
@@ -15,6 +16,20 @@ const PROFILE = [
 
 const ProfileLeftLayout: FC = ({ children }) => {
   const router = useRouter();
+  const getUser = async () => {
+    getUserProfile()
+      .then((res) => {
+        // setUser(res.data.userData[0]);
+        // setLoading(false);
+      })
+      .catch((e) => {
+        router.push("/logout");
+      });
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <Grid container>

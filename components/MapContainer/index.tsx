@@ -75,23 +75,40 @@ const MapContainer = () => {
   const [map, setMap] = useState();
 
   const mapInit = async () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-        setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-      },
-      (err) => {
-        console.log(err);
-        toast.error("위치 정보 시스템을 허용해주세요");
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 100,
-        timeout: Infinity,
-      }
-    );
+    try {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+          setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+        },
+        errorMessage,
+        {
+          enableHighAccuracy: true,
+          maximumAge: 300000,
+          timeout: 5000,
+        }
+      );
+    } catch (e) {
+      toast.error("지원하지 않는 브라우저입니다.");
+    }
   };
 
+  const errorMessage = (err) => {
+    switch (err.code) {
+      case err.PERMISSION_DENIED:
+        toast.error("Geolocation API 사용을 허용해주세요");
+        break;
+      case err.POSITION_UNAVAILABLE:
+        toast.error("가져온 위치 정보를 사용할 수 없습니다");
+        break;
+      case err.TIMEOUT:
+        toast.error("요청 허용 시간을 초과했습니다.");
+        break;
+      case err.UNKNOWN_ERROR:
+        toast.error("알 수 없는 오류입니다.");
+        break;
+    }
+  };
   useEffect(() => {
     mapInit();
   }, []);

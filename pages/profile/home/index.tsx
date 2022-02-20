@@ -31,9 +31,7 @@ const ProfileHome = () => {
         setLoading(false);
       })
       .catch((e) => {
-        setIsLoggedIn("");
-        toast.error("토큰 만료");
-        router.push("/signin");
+        router.push("/logout");
       });
   };
 
