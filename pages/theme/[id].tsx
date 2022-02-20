@@ -57,7 +57,7 @@ const ThemeDetail = () => {
           `/theme/themeBoards/reply/${id}`,
           {}
         );
-        // setComments(data);
+        setComments(data);
       }
     } catch (e) {
       console.log("router not ready", e);

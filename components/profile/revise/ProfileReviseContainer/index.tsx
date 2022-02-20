@@ -14,17 +14,44 @@ import { auth } from "@config/firebaseConfig";
 const ProfileReviseContainer = () => {
   const router = useRouter();
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<IUser>();
 
   const userId = useRecoilValue(idState);
   const [name, setName, onChangeName] = useInput("");
-  const [id, setId, onChangeId] = useInput("");
-  const [nickName, setNickName, onChangeNickName] = useInput("");
+  const [id, setId] = useState("");
+  const [nickName, setNickName] = useState("");
   const [password, setPassword, onChangePassword] = useInput("");
   const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("");
-  const [email, setEmail, onChangeEmail] = useInput("");
-  const [phone, setPhone, onChangePhone] = useInput("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [verified, setVerified, onChangeVerified] = useInput("");
+  const [emailV, setEmailV] = useState(true);
+  const [nickNameV, setNickNameV] = useState(true);
+  const [phoneV, setPhoneV] = useState(false);
+
+  const onChangeNickName = useCallback(
+    (e) => {
+      setNickName(e.target.value);
+      setNickNameV(user.nickName === e.target.value ? true : false);
+    },
+    [nickName]
+  );
+
+  const onChangeEmail = useCallback(
+    (e) => {
+      setEmail(e.target.value);
+      setEmailV(user.email === e.target.value ? true : false);
+    },
+    [nickName]
+  );
+
+  const onChangePhone = useCallback(
+    (e) => {
+      setPhone(e.target.value);
+      setPhoneV(false);
+    },
+    [phone]
+  );
 
   const getUser = async () => {
     API.post("/user/profile", {
@@ -32,6 +59,7 @@ const ProfileReviseContainer = () => {
     })
       .then((response) => {
         setUser(response.data.userData[0]);
+        setId(response.data.userData[0].id);
         setNickName(response.data.userData[0].nickName);
         setName(response.data.userData[0].name);
         setEmail(response.data.userData[0].email);
@@ -90,7 +118,7 @@ const ProfileReviseContainer = () => {
       .then((res) => {
         console.log(res);
         toast.success("인증성공");
-        // setPhoneV(true);
+        setPhoneV(true);
       })
       .catch((err) => {
         console.log(err);
@@ -134,9 +162,25 @@ const ProfileReviseContainer = () => {
       });
   }, [email]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    toast.info("작업중입니다.");
+    try {
+      const { data } = await API.post("/user/profileRevise", {
+        name: name,
+        nickName: nickName,
+        password: password,
+        email: email,
+        phoneNum: phone,
+      });
+      if (data?.data === "success") {
+        toast.success("개인정보 수정 성공");
+        router.push("/profile/home");
+      }
+    } catch (e) {
+      toast.error("개인정보 수정 실패");
+      console.log(e);
+    }
+    // toast.info("작업중입니다.");
   };
 
   useEffect(() => {
@@ -168,15 +212,15 @@ const ProfileReviseContainer = () => {
             onChange={onChangeNickName}
             placeholder="홍길동"
             btnLabel="중복확인"
-            btnActive={true}
+            btnActive={!nickNameV}
             onClickBtn={onNickNameDuplication}
           />
           <SignupTextField
             id="id"
             label="아이디"
             value={userId}
-            onChange={onChangeId}
-            btnActive={true}
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            onChange={() => {}}
             placeholder=""
           />
           <SignupTextField
@@ -205,7 +249,7 @@ const ProfileReviseContainer = () => {
             onChange={onChangeEmail}
             placeholder="이메일을 입력해주세요."
             btnLabel="중복확인"
-            btnActive={true}
+            btnActive={!emailV}
             onClickBtn={onEmailDuplication}
           />
           <SignupTextField
@@ -225,7 +269,7 @@ const ProfileReviseContainer = () => {
             onChange={onChangeVerified}
             placeholder="인증번호 확인"
             btnLabel="확인"
-            btnActive={true}
+            btnActive={!phoneV}
             onClickBtn={onVerifySMS}
           />
 
@@ -234,7 +278,15 @@ const ProfileReviseContainer = () => {
               type="submit"
               variant="contained"
               sx={{ color: "#ffffff" }}
-              disabled={!(password === passwordCh && password.length)}
+              disabled={
+                !(
+                  emailV &&
+                  nickNameV &&
+                  phoneV &&
+                  password === passwordCh &&
+                  password.length
+                )
+              }
             >
               수정하기
             </Button>
