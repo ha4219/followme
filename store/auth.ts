@@ -14,3 +14,8 @@ export const idState = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const tokenState = atom({
+  key: "token",
+  default: false,
+});

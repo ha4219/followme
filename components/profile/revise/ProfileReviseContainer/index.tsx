@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { auth } from "@config/firebaseConfig";
+import { IUser } from "types/apiType";
 
 const ProfileReviseContainer = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const ProfileReviseContainer = () => {
   const onChangeNickName = useCallback(
     (e) => {
       setNickName(e.target.value);
-      setNickNameV(user.nickName === e.target.value ? true : false);
+      setNickNameV(user && user.nickName === e.target.value ? true : false);
     },
     [nickName]
   );
@@ -40,7 +41,7 @@ const ProfileReviseContainer = () => {
   const onChangeEmail = useCallback(
     (e) => {
       setEmail(e.target.value);
-      setEmailV(user.email === e.target.value ? true : false);
+      setEmailV(user && user.email === e.target.value ? true : false);
     },
     [nickName]
   );

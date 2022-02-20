@@ -123,7 +123,7 @@ const ProfileHome = () => {
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
               <Box py={2}>
-                <CourseTable courses={COURSES.slice(-5)} />
+                <CourseTable courses={COURSES.slice(-1)} />
               </Box>
             </div>
           </ProfileContainer>

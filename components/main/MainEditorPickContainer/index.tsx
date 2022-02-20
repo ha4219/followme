@@ -42,11 +42,7 @@ const MainEditorPickContainer = () => {
       </HeadContainer>
       <BodyContainer>
         {picks.map((item, index) => (
-          <MainEditorContent
-            key={item.idx}
-            {...item}
-            src={`https://picsum.photos/id/${index}/346/472`}
-          />
+          <MainEditorContent key={item.idx} {...item} />
         ))}
       </BodyContainer>
     </MainContainer>

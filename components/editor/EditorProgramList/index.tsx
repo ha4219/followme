@@ -1,4 +1,5 @@
 import LeftLayout from "@components/LeftLayout";
+import MainEditorContent from "@components/main/MainEditorContent";
 import Program from "@components/Program";
 import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
@@ -15,6 +16,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
+import EditorProgram from "../EditorProgram";
 
 const EditorProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
@@ -29,25 +31,25 @@ const EditorProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    // const { data } = await API.post<ICourse[]>("/main/travelBoards", {
-    //   id: loggedInId,
-    // });
-    // setTravels(
-    //   data.sort((l, r) => {
-    //     if (r.createdAt > l.createdAt) {
-    //       return 1;
-    //     }
-    //     return -1;
-    //   })
-    // );
-    // setCourses(
-    //   data.sort((l, r) => {
-    //     if (r.createdAt > l.createdAt) {
-    //       return 1;
-    //     }
-    //     return -1;
-    //   })
-    // );
+    const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
+      id: loggedInId,
+    });
+    setTravels(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
+    setCourses(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
   };
 
   useEffect(() => {
@@ -140,10 +142,10 @@ const EditorProgramList: VFC = () => {
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {courses.map((item, index) => {
-            return <Program key={index} {...item} />;
+            return <EditorProgram key={index} {...item} />;
           })}
         </Grid>
-        <RightButton>
+        {/* <RightButton>
           <Button
             variant="contained"
             onClick={() => {
@@ -152,7 +154,7 @@ const EditorProgramList: VFC = () => {
           >
             글쓰기
           </Button>
-        </RightButton>
+        </RightButton> */}
       </LeftLayout>
     </Box>
   );

@@ -45,7 +45,6 @@ const MainThemeContent: VFC<ICourse> = ({
         id: loggedInId,
       })
         .then(({ data }) => {
-          console.log(data);
           setLike(like ? 0 : 1);
         })
         .catch((err) => {
@@ -60,7 +59,7 @@ const MainThemeContent: VFC<ICourse> = ({
   };
 
   return (
-    <MainContainer md={3} sm={3} xs={3} lg={3} item>
+    <MainContainer md={3} sm={6} xs={6} lg={3} item>
       <Box sx={{ cursor: "pointer" }} onClick={onClickProgram}>
         <PhotoContainer src={`${toBase64(mainImg.data)}`}>
           <span className="title">{titleSummary(title)}</span>

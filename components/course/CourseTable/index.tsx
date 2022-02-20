@@ -3,9 +3,7 @@ import styled from "@emotion/styled";
 import { tableTitleSummary } from "@helpers/programHelper";
 import {
   Avatar,
-  Button,
-  Container,
-  Pagination,
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -22,12 +20,12 @@ interface IProps {
 const CourseTable: VFC<IProps> = ({ courses }) => {
   const router = useRouter();
 
-  const onClickRow = (id: number) => {
-    router.push(`/course/${id}`);
-  };
+  // const onClickRow = (id: number) => {
+  //   router.push(`/course/${id}`);
+  // };
 
   return (
-    <MainContainer maxWidth="md">
+    <MainContainer maxWidth="md" sx={{ padding: 0 }}>
       <Table>
         <TableHead className="head">
           <TableRow className="head">
@@ -40,7 +38,7 @@ const CourseTable: VFC<IProps> = ({ courses }) => {
           {courses.map((item, index) => (
             <TableRow
               key={index}
-              onClick={() => onClickRow(item.idx - 1)}
+              // onClick={() => onClickRow(item.idx - 1)}
               className="cursor"
             >
               <TableCell className="cellTitle">
@@ -61,7 +59,9 @@ const CourseTable: VFC<IProps> = ({ courses }) => {
   );
 };
 
-const MainContainer = styled(Container)`
+const MainContainer = styled(Box)`
+  padding: 0;
+  margin: 0;
   & .head {
     border-top: 1px solid #191919;
     border-bottom: 1px solid #191919;

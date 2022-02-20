@@ -1,4 +1,5 @@
 import LeftLayout from "@components/LeftLayout";
+import MainThemeContent from "@components/main/MainThemeContent";
 import Program from "@components/Program";
 import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
@@ -142,7 +143,7 @@ const ThemeProgramList: VFC = () => {
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {courses.map((item) => {
-            return <ThemeProgram key={item.idx} {...item} />;
+            return <MainThemeContent key={item.idx} {...item} />;
           })}
         </Grid>
         <RightButton>

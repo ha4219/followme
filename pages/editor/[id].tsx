@@ -35,7 +35,7 @@ const EditorDetail = () => {
 
       if (id) {
         const { data } = await API.post<ICourseDetail[]>(
-          `/main/postDetail/${id}`,
+          `/theme/postDetail/${id}`,
           {
             id: loggedInId,
           }
@@ -54,7 +54,7 @@ const EditorDetail = () => {
     try {
       if (id) {
         const { data } = await API.get<IComment[]>(
-          `/main/travelBoards/reply/${id}`,
+          `/theme/themeBoards/reply/${id}`,
           {}
         );
         setComments(data);
@@ -70,9 +70,9 @@ const EditorDetail = () => {
       e.preventDefault();
       try {
         const { data }: { data: { data: string } } = await API.post(
-          `main/travelBoards/insertReply/${idx}`,
+          `theme/themeBoards/insertReply/${idx}`,
           {
-            id: "admin",
+            id: loggedInId,
             content: comment,
           }
         );
@@ -80,7 +80,7 @@ const EditorDetail = () => {
           setComments([
             ...comments,
             {
-              id: "admin",
+              id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
             },

@@ -64,7 +64,7 @@ const Program: VFC<ICourse> = ({
   };
 
   return (
-    <Grid item lg={4} xs={4} md={4}>
+    <Grid item lg={4} xs={6} md={4} sm={6}>
       <Box
         onClick={() => {
           onClickProgram(idx);

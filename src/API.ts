@@ -1,7 +1,12 @@
-import { authState } from "@store/auth";
+import { tokenState } from "@store/auth";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRouter } from "next/router";
+import { useRecoilState, useRecoilValue } from "recoil";
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
+// const router = useRouter();
+// eslint-disable-next-line react-hooks/rules-of-hooks
+// const [isToken, setIsToken] = useRecoilState(tokenState);
 export const API = axios.create({
   // baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
   baseURL: "/api",
@@ -44,8 +49,14 @@ API.interceptors.request.use((request) => {
   return request;
 });
 
-API.interceptors.response.use((response) => {
-  console.log("response: ", response);
-
-  return response;
-});
+API.interceptors.response.use(
+  (response) => {
+    console.log("response: ", response);
+    return response;
+  }
+  // (err) => {
+  //   if (err.response.status === 403) {
+  //     setIsToken(false);
+  //   }
+  // }
+);
