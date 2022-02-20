@@ -12,6 +12,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { API } from "@src/API";
 import { courseTagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -30,8 +31,15 @@ const CourseBoard = () => {
   };
 
   const getCourses = async () => {
-    setCourses(COURSES);
-    setSize(Math.ceil(COURSES.length / rowsPerPage));
+    // setCourses(COURSES);
+    API.get("/course/courseBoards", {})
+      .then(({ data }) => {
+        setCourses(data);
+        setSize(Math.ceil(data.length / rowsPerPage));
+      })
+      .catch((e) => {
+        console.log("course 받아오기 에러", e);
+      });
   };
 
   const onClickRow = (id: number) => {

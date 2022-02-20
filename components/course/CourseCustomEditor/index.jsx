@@ -116,36 +116,20 @@ const CourseCustomEditor = () => {
   }
 
   const onSubmit = async () => {
-    // const regex = /<img.*?src=['"](.*?)['"]/;
-    // // 정규표현식으로 shortContent 받기
-    // const shortContent = value.replace(/(<([^>]+)>)/gi, "").slice(0, 50);
-    // let mainImage = null;
-    // try {
-    //   mainImage = regex.exec(value)[1];
-    // } catch (e) {
-    //   console.log("not main image");
-    //   mainImage = "";
-    // }
-    // API.post("main/insertTravelBoards", {
-    //   title: title,
-    //   tags: tags,
-    //   shortContent: shortContent,
-    //   content: value,
-    //   mainImg: mainImage,
-    //   schedule: `${date1}박${date2}일`,
-    //   region: region2,
-    //   season: season,
-    //   writer: isLoggedInId,
-    // })
-    //   .then((res) => {
-    //     toast.success("등록완료");
-    //     router.back();
-    //   })
-    //   .catch((err) => {
-    //     toast.error("에러");
-    //     console.log(err);
-    //   });
-    toast.info("추가 예정입니다");
+    API.post("course/insertCourseBoards", {
+      title: title,
+      content: value,
+      writer: isLoggedInId,
+    })
+      .then((res) => {
+        toast.success("등록완료");
+        router.back();
+      })
+      .catch((err) => {
+        toast.error("에러");
+        console.log(err);
+      });
+    // toast.info("추가 예정입니다");
   };
 
   const modules = useMemo(
@@ -202,7 +186,7 @@ const CourseCustomEditor = () => {
           </div>
         </LocalizationProvider>
       </div>
-      <div>
+      <div className="quill">
         {/* <QuillToolbar />
         <Quill
           forwardedRef={ref}
@@ -212,7 +196,7 @@ const CourseCustomEditor = () => {
         /> */}
         <Quill forwardedRef={ref} onChange={setValue} modules={modules} />
       </div>
-      <TagContainer>
+      {/* <TagContainer>
         <TextField
           value={tag}
           onChange={(e) => setTag(e.target.value)}
@@ -233,7 +217,7 @@ const CourseCustomEditor = () => {
             ))}
           </div>
         )}
-      </TagContainer>
+      </TagContainer> */}
       <div className="center">
         <Button variant="contained" onClick={onSubmit}>
           등록
@@ -262,6 +246,10 @@ const MainContainer = styled.div`
 
       margin-right: 1rem;
     }
+  }
+
+  & .quill {
+    padding: 1rem 0;
   }
 `;
 
