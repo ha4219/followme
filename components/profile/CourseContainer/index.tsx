@@ -11,7 +11,7 @@ const CourseContainer: VFC<IProps> = ({ courses, like }) => {
   return (
     <Grid container spacing={1}>
       {courses?.map((item, index) => (
-        <CourseContent key={index} course={item} like={like} />
+        <CourseContent key={index} course={item} />
       ))}
     </Grid>
   );

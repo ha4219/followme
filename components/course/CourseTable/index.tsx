@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { VFC } from "react";
 
 interface IProps {
   courses: ICourseData[];
