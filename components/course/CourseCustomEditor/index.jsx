@@ -65,10 +65,10 @@ const CourseCustomEditor = () => {
   const [date1, setDate1] = useState();
   const [date2, setDate2] = useState();
   const onChangeDate1 = (newValue) => {
-    setValue(newValue);
+    setDate1(newValue);
   };
   const onChangeDate2 = (newValue) => {
-    setValue(newValue);
+    setDate2(newValue);
   };
 
   const putObjectWrapper = (params) => {

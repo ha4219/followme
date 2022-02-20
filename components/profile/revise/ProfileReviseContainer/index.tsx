@@ -32,7 +32,6 @@ const ProfileReviseContainer = () => {
     })
       .then((response) => {
         setUser(response.data.userData[0]);
-        console.log(response.data.userData[0]);
         setNickName(response.data.userData[0].nickName);
         setName(response.data.userData[0].name);
         setEmail(response.data.userData[0].email);

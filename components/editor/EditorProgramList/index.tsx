@@ -194,6 +194,7 @@ const CustomButton = styled(Button)`
 `;
 
 const RightButton = styled.div`
+  margin-top: 1rem;
   display: flex;
   justify-content: right;
 `;
