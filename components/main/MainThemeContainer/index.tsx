@@ -1,141 +1,58 @@
 import styled from "@emotion/styled";
 import { Button, Grid } from "@mui/material";
-import { useState } from "react";
+import { API } from "@src/API";
+import { idState } from "@store/auth";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { ICourse } from "types/apiType";
 import MainThemeContent from "../MainThemeContent";
 
-const FAKE = [
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    tags: ["통영1박2일", "광화문갈만한곳", "서울근교", "태국", "3박4일"],
-    writer: "dongha",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여",
-    heartCnt: 1100,
-  },
-];
-
 const MainThemeContainer = () => {
+  const [travels, setTravels] = useState<ICourse[]>([]);
+  const [themes, setThemes] = useState<ICourse[]>([]);
   const [sortedType, setSortedType] = useState(0);
+  const loggedInId = useRecoilValue(idState);
+
+  const getTravel = async () => {
+    const { data } = await API.post<ICourse[]>(
+      "/theme/themeBoards",
+      loggedInId.length
+        ? {
+            id: loggedInId,
+          }
+        : {}
+    );
+    setTravels(data.slice(-16));
+    setThemes(data.slice(-16));
+  };
+
+  useEffect(() => {
+    const arr = [...travels];
+
+    if (sortedType === 0) {
+      arr.sort((l, r) => {
+        return r.likeCnts - l.likeCnts;
+      });
+    } else if (sortedType === 1) {
+      arr.sort((l, r) => {
+        return r.views - l.views;
+      });
+    } else {
+      arr.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      });
+    }
+
+    setThemes(arr);
+  }, [sortedType]);
+
+  useEffect(() => {
+    getTravel();
+  }, []);
+
   return (
     <MainContainer>
       <HeadContainer>
@@ -166,12 +83,8 @@ const MainThemeContainer = () => {
       </HeadContainer>
 
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        {FAKE.map((item, index) => (
-          <MainThemeContent
-            {...item}
-            key={index}
-            src={`https://picsum.photos/id/${index}/327/340`}
-          />
+        {themes.map((item) => (
+          <MainThemeContent {...item} key={item.idx} />
         ))}
       </Grid>
     </MainContainer>

@@ -1,40 +1,49 @@
 import styled from "@emotion/styled";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, VFC } from "react";
+import { useCallback, useState, VFC } from "react";
+import { ICourse } from "types/apiType";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import { contentSummary, titleSummary } from "@helpers/programHelper";
 
-interface Props {
-  region: string;
-  title: string;
-  src: string;
-  content: string;
-  link: string;
-}
-
-const MainEditorContent: VFC<Props> = ({
-  region,
+const MainEditorContent: VFC<ICourse> = ({
+  idx,
+  mainImg,
+  writer,
   title,
-  content,
-  link,
-  src,
+  shortContent,
+  tags,
+  likeCnts,
+  views,
+  createdAt,
+  isLocal,
+  likeClicked,
+  region,
+  schedule,
+  season,
+  updatedAt,
 }) => {
   const router = useRouter();
-  const onClick = useCallback(() => {
-    router.push(link);
-  }, [link]);
+  const onClickProgram = useCallback((id) => {
+    router.push(`/editor/${idx}`);
+  }, []);
 
+  const toBase64 = (arr) => {
+    return Buffer.from(arr);
+  };
   return (
-    <MainContainer src={src}>
+    <MainContainer src={`${toBase64(mainImg.data)}`}>
       <div className="tag">
         <span>{region}</span>
       </div>
       <div className="title">
-        <span>{title}</span>
+        <span>{titleSummary(title)}</span>
       </div>
       <div className="content">
-        <span>{content}</span>
+        <span>{contentSummary(shortContent)}</span>
       </div>
-      <CustomButton onClick={onClick}>바로가기</CustomButton>
+      <CustomButton onClick={onClickProgram}>바로가기</CustomButton>
     </MainContainer>
   );
 };

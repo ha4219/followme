@@ -1,60 +1,32 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import { API } from "@src/API";
+import { idState } from "@store/auth";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { ICourse } from "types/apiType";
 import MainEditorContent from "../MainEditorContent";
 
-const FAKE = [
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-  {
-    title: "통영여행 제목이 들어갈 자리입니다.",
-    region: "통영시",
-    content:
-      "본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을 인용하여 이용자에게 보여줄 수 있습니다.",
-    link: "https://www.naver.com/",
-  },
-];
-
 const MainEditorPickContainer = () => {
+  const [picks, setPicks] = useState<ICourse[]>([]);
+  const loggedInId = useRecoilValue(idState);
+
+  const getTravel = async () => {
+    const { data } = await API.post<ICourse[]>(
+      "/theme/themeBoards",
+      loggedInId.length
+        ? {
+            id: loggedInId,
+          }
+        : {}
+    );
+    setPicks(data.slice(-9));
+  };
+
+  useEffect(() => {
+    getTravel();
+  }, []);
+
   return (
     <MainContainer>
       <HeadContainer>
@@ -69,9 +41,9 @@ const MainEditorPickContainer = () => {
         </BtnContainer> */}
       </HeadContainer>
       <BodyContainer>
-        {FAKE.map((item, index) => (
+        {picks.map((item, index) => (
           <MainEditorContent
-            key={index}
+            key={item.idx}
             {...item}
             src={`https://picsum.photos/id/${index}/346/472`}
           />

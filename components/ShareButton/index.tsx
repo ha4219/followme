@@ -55,7 +55,12 @@ const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+      >
         <ShareIcon sx={{ width: 15, height: 15 }} />
       </Button>
       <OutSideContainer open={open} onClose={() => setOpen(false)}>

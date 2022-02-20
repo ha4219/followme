@@ -1,5 +1,4 @@
-import { Avatar, Box, Grid, IconButton, stepperClasses } from "@mui/material";
-import Image from "next/image";
+import { Avatar, Box, Grid, IconButton } from "@mui/material";
 import React, { useCallback, useState, VFC } from "react";
 import gravatar from "gravatar";
 
@@ -10,7 +9,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TagContainer from "@components/TagContainer";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { ICourse } from "types/apiType";

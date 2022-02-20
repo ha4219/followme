@@ -1,57 +1,83 @@
 import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
-import { Avatar, Button, Grid } from "@mui/material";
+import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useCallback, useState, VFC } from "react";
 import gravatar from "gravatar";
 import { contentSummary, titleSummary } from "@helpers/programHelper";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+import { ICourse } from "types/apiType";
+import ShareButton from "@components/ShareButton";
+import { API } from "@src/API";
+import { idState } from "@store/auth";
+import { useRecoilValue } from "recoil";
+import { useRouter } from "next/router";
 
-interface Props {
-  title: string;
-  tags: string[];
-  writer: string;
-  content: string;
-  src: string;
-  heartCnt: number;
-}
-
-const MainThemeContent: VFC<Props> = ({
-  title,
-  tags,
+const MainThemeContent: VFC<ICourse> = ({
+  idx,
+  mainImg,
   writer,
-  content,
-  src,
-  heartCnt,
+  title,
+  shortContent,
+  tags,
+  likeCnts,
+  views,
+  createdAt,
+  isLocal,
+  likeClicked,
+  region,
+  schedule,
+  season,
+  updatedAt,
 }) => {
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(likeClicked);
+  const loggedInId = useRecoilValue(idState);
+  const router = useRouter();
 
-  const onClick = useCallback(() => {
-    setLike(!like);
-  }, [like]);
-
-  const onClickShare = useCallback(() => {
-    console.log("share");
+  const onClickProgram = useCallback((id) => {
+    router.push(`/theme/${idx}`);
   }, []);
+
+  const onClickLike = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      API.post(`/theme/postLike/${idx}`, {
+        id: loggedInId,
+      })
+        .then(({ data }) => {
+          console.log(data);
+          setLike(like ? 0 : 1);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [like]
+  );
+
+  const toBase64 = (arr) => {
+    return Buffer.from(arr);
+  };
 
   return (
     <MainContainer md={3} sm={3} xs={3} lg={3} item>
-      <PhotoContainer src={src}>
-        <span className="title">{titleSummary(title)}</span>
-      </PhotoContainer>
-      <TagContainer tags={tags} />
-      <ContentContainer>
-        <div className="avatar">
-          <Avatar
-            alt="user"
-            src={gravatar.url(writer, { s: "28px", d: "retro" })}
-          />
-        </div>
-        <div className="content">{contentSummary(content)}</div>
-      </ContentContainer>
+      <Box sx={{ cursor: "pointer" }} onClick={onClickProgram}>
+        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
+          <span className="title">{titleSummary(title)}</span>
+        </PhotoContainer>
+        <TagContainer tags={tags} />
+        <ContentContainer>
+          <div className="avatar">
+            <Avatar
+              alt="user"
+              src={gravatar.url(writer, { s: "28px", d: "retro" })}
+            />
+          </div>
+          <div className="content">{contentSummary(shortContent)}</div>
+        </ContentContainer>
+      </Box>
       <BottomContainer>
-        <Button className="heart" onClick={onClick}>
+        <Button className="heart" onClick={onClickLike}>
           {like ? (
             <FavoriteIcon
               className="fillHeart"
@@ -73,11 +99,14 @@ const MainThemeContent: VFC<Props> = ({
               }}
             />
           )}
-          <div className="heartTxt">{heartCnt}</div>
+          <div className="heartTxt">{likeCnts}</div>
         </Button>
-        <Button className="share" onClick={onClickShare}>
+        <ShareButton
+          url={`${process.env.NEXT_PUBLIC_DEPLOYURL}/theme/${idx}`}
+        />
+        {/* <Button className="share" onClick={onClickShare}>
           <ShareIcon />
-        </Button>
+        </Button> */}
       </BottomContainer>
     </MainContainer>
   );
@@ -102,6 +131,7 @@ const PhotoContainer = styled.div`
   & .title {
     padding: 0.2rem;
     font-size: 1.1rem;
+    font-weight: bold;
     align-self:flex-end
     display: inline-flex;
     background-color: #ffffff;
