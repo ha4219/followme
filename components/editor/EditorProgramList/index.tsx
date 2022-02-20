@@ -29,25 +29,25 @@ const EditorProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>("/main/travelBoards", {
-      id: loggedInId,
-    });
-    setTravels(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
-    setCourses(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
+    // const { data } = await API.post<ICourse[]>("/main/travelBoards", {
+    //   id: loggedInId,
+    // });
+    // setTravels(
+    //   data.sort((l, r) => {
+    //     if (r.createdAt > l.createdAt) {
+    //       return 1;
+    //     }
+    //     return -1;
+    //   })
+    // );
+    // setCourses(
+    //   data.sort((l, r) => {
+    //     if (r.createdAt > l.createdAt) {
+    //       return 1;
+    //     }
+    //     return -1;
+    //   })
+    // );
   };
 
   useEffect(() => {

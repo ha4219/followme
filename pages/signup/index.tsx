@@ -33,6 +33,7 @@ declare global {
 
 const Signup = () => {
   const router = useRouter();
+  const [checked, setChecked] = useState([true, true, true]);
   const [name, setName, onChangeName] = useInput("");
   const [nickName, setNickName, onChangeNickName] = useInput("");
   const [id, setId, onChangeId] = useInput("");
@@ -154,6 +155,26 @@ const Signup = () => {
         toast.error("인증실패");
       });
   }, [verified]);
+
+  const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked([
+      event.target.checked,
+      event.target.checked,
+      event.target.checked,
+    ]);
+  };
+
+  const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked([event.target.checked, checked[1], checked[2]]);
+  };
+
+  const handleChange3 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked([checked[0], event.target.checked, checked[2]]);
+  };
+
+  const handleChange4 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked([checked[0], checked[1], event.target.checked]);
+  };
 
   const onSubmit = useCallback(
     async (e) => {
@@ -278,21 +299,25 @@ const Signup = () => {
             <Box px={5} py={4}>
               <Box px={2} pb={2}>
                 <div>
-                  <Checkbox />
+                  <Checkbox checked={checked[0]} onChange={handleChange2} />
                   <span>회원약관 (필수)</span>
                 </div>
                 <div>
-                  <Checkbox />
+                  <Checkbox checked={checked[1]} onChange={handleChange3} />
                   <span>개인정보 처리방침 (필수)</span>
                 </div>
                 <div>
-                  <Checkbox />
+                  <Checkbox checked={checked[2]} onChange={handleChange4} />
                   <span>개인정보 제 3자 이용동의 (필수)</span>
                 </div>
               </Box>
               <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
               <Box mt={2}>
-                <Checkbox />
+                <Checkbox
+                  checked={checked[0] && checked[1] && checked[2]}
+                  // indeterminate={checked[0] !== checked[1]}
+                  onChange={handleChange1}
+                />
                 <span>모든 약관에 동의합니다</span>
               </Box>
             </Box>
@@ -304,11 +329,12 @@ const Signup = () => {
                 sx={{ color: "#ffffff" }}
                 disabled={
                   !(
-                    idV ||
-                    emailV ||
-                    nickNameV ||
-                    phoneV ||
-                    password === passwordCh
+                    idV &&
+                    emailV &&
+                    nickNameV &&
+                    phoneV &&
+                    password === passwordCh &&
+                    password.length
                   )
                 }
               >

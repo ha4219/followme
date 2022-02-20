@@ -26,7 +26,7 @@ const ProgramList: VFC = () => {
 
   const getTravel = async () => {
     const { data } = await API.post<ICourse[]>(
-      "/main/travelBoards",
+      "/theme/themeBoards",
       loggedInId !== "" ? { id: loggedInId } : {}
     );
     setTravels(
