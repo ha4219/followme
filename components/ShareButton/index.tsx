@@ -1,7 +1,7 @@
 import { Button, Dialog } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useState, VFC } from "react";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -10,7 +10,14 @@ import {
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const ShareButton = ({ url, des, user }) => {
+interface IProps {
+  url: string;
+  des?: string;
+  user?: string;
+  imageUrl?: string;
+}
+
+const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
@@ -26,9 +33,14 @@ const ShareButton = ({ url, des, user }) => {
       window.Kakao.Link.sendDefault({
         objectType: "feed",
         content: {
-          title: "여행 정보를 한눈에!FOLLOW ME!!",
-          description: `${user}님이 "${des}" 정보를 공유했어요! 확인해보세요!`,
-          imageUrl: url,
+          title: "카카오톡으로 공유된 여행 정보를 확인해주세요!, Follow me",
+          description:
+            des && user
+              ? `${user}님이 "${des}" 정보를 공유했어요! 확인해보세요!`
+              : "여행 정보를 한눈에! FOLLOW ME!!",
+          imageUrl: imageUrl
+            ? imageUrl
+            : `${process.env.NEXT_PUBLIC_S3URL}/logo.ico`,
           link: {
             webUrl: url,
             mobileWebUrl: url,

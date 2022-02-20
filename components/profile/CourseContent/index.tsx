@@ -2,24 +2,41 @@ import ShadowTag from "@components/ShadowTag";
 import styled from "@emotion/styled";
 import { titleSummary } from "@helpers/programHelper";
 import { Box, Grid, IconButton } from "@mui/material";
-import { VFC } from "react";
+import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import { API } from "@src/API";
 
 interface IProp {
   course: ICourse;
-  like: boolean;
 }
 
-const CourseContent: VFC<IProp> = ({ course, like }) => {
+const CourseContent: VFC<IProp> = ({ course }) => {
+  const loggedInId = useRecoilValue(idState);
+  const [like, setLike] = useState(course.likeClicked ? true : false);
   const toBase64 = (arr) => {
     return Buffer.from(arr);
   };
 
-  const onClickLike = () => {
-    console.log("todo");
-  };
+  const onClickLike = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      API.post(`/main/postLike/${course.idx}`, {
+        id: loggedInId,
+      })
+        .then(({ data }) => {
+          console.log(data);
+          setLike(!like);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [like]
+  );
 
   return (
     <Grid item xs={4} md={4} lg={4}>
