@@ -17,9 +17,28 @@ const ShareButton = ({ url }) => {
   //   console.log(Window.kakao);
   // }, [Window.kakao]);
 
-  const onClickKakao = () => {
-    console.log(window.Kakao.isInitialized());
+  const onClickKakao = async () => {
     // TODO
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
+    }
+    try {
+      window.Kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "followme",
+          description: "followme",
+          imageUrl: url,
+          link: {
+            webUrl: url,
+            mobileWebUrl: url,
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    console.log(window.Kakao);
   };
 
   return (
