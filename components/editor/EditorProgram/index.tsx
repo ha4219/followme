@@ -61,7 +61,7 @@ const MainContainer = styled(Grid)`
   border-radius: 5px;
   color: #ffffff;
   text-align: center;
-  padding: 5rem;
+  padding: 4.5rem;
   cursor: pointer;
 
   :hover {
@@ -70,11 +70,11 @@ const MainContainer = styled(Grid)`
   }
 
   & .tag {
-    display: block;
+    display: inline-block;
 
     & span {
       background-color: #ff9016;
-      padding: 0.3rem 2rem;
+      padding: 0.3rem 1.5rem;
       border-radius: 14px;
     }
   }

@@ -194,7 +194,8 @@ const Navbar = () => {
                   fontWeight: "bold",
                 },
                 selectedNavIndex === index && {
-                  color: "#0068ff",
+                  color: "#ff9016",
+                  borderBottom: "2px solid #ff9016",
                 },
               ]}
             >

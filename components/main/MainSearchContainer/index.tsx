@@ -61,7 +61,7 @@ const MainSearchContaier = () => {
 const MainContainer = styled.div`
   margin-top: 210px;
   display: flex;
-  min-width: 500px;
+  min-width: 300px;
   padding-bottom: 2rem;
 
   & .sub {
