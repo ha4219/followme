@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
+import ThemeProgram from "../ThemeProgram";
 
 const ThemeProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
@@ -139,8 +140,8 @@ const ThemeProgramList: VFC = () => {
         {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          {courses.map((item, index) => {
-            return <Program key={index} {...item} />;
+          {courses.map((item) => {
+            return <ThemeProgram key={item.idx} {...item} />;
           })}
         </Grid>
         <RightButton>

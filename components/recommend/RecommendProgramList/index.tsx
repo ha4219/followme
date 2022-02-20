@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
+import RecommendProgram from "../RecommendProgram";
 
 const RecommendProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
@@ -140,7 +141,7 @@ const RecommendProgramList: VFC = () => {
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {courses.map((item, index) => {
-            return <Program key={index} {...item} />;
+            return <RecommendProgram key={index} {...item} />;
           })}
         </Grid>
         <RightButton>

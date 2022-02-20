@@ -35,7 +35,7 @@ const RecommendDetail = () => {
 
       if (id) {
         const { data } = await API.post<ICourseDetail[]>(
-          `/recommend/recommendBoards/${id}`,
+          `/recommend/postDetail/${id}`,
           {
             id: loggedInId,
           }

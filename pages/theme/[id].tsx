@@ -35,7 +35,7 @@ const ThemeDetail = () => {
 
       if (id) {
         const { data } = await API.post<ICourseDetail[]>(
-          `/theme/themeBoards/${id}`,
+          `/theme/postDetail/${id}`,
           {
             id: loggedInId,
           }
