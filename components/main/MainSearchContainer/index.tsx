@@ -61,7 +61,7 @@ const MainSearchContaier = () => {
 const MainContainer = styled.div`
   margin-top: 210px;
   display: flex;
-  min-width: 300px;
+  min-width: 50%;
   padding-bottom: 2rem;
 
   & .sub {
@@ -85,7 +85,7 @@ const MainContainer = styled.div`
       display: flex;
 
       & .input {
-        width: 500px;
+        width: 70%;
       }
       & .btn {
         color: #ffffff;
