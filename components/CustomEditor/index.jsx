@@ -194,7 +194,7 @@ const CustomEditor = () => {
             { indent: "+1" },
             { align: [] },
           ],
-          ["image", "video"],
+          ["image"],
         ],
         handlers: {
           image: imageHandler,

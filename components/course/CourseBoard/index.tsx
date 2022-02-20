@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { tableTitleSummary } from "@helpers/programHelper";
 import {
   Avatar,
+  Button,
   Container,
   Pagination,
   Table,
@@ -87,9 +88,30 @@ const CourseBoard = () => {
             </TableRow>
           ))}
         </TableBody>
-        <div className="pagination">
-          <Pagination count={size} onChange={handleChangePage} />
-        </div>
+        <TableRow className="rightButton">
+          {/* <TableCell></TableCell>
+          <TableCell></TableCell> */}
+          <TableCell align="right" colSpan={3}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => {
+                router.push("/course/write");
+              }}
+            >
+              글쓰기
+            </Button>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell className="pagination" colSpan={3} align="center">
+            <Pagination
+              className="paginationIn"
+              count={size}
+              onChange={handleChangePage}
+            />
+          </TableCell>
+        </TableRow>
       </Table>
     </MainContainer>
   );
@@ -114,10 +136,26 @@ const MainContainer = styled(Container)`
     cursor: pointer;
   }
 
+  & .rightButton {
+    text-align: right;
+
+    & td {
+      border: none;
+    }
+  }
   & .pagination {
     margin-top: 2rem;
-    display: flex;
-    justify-content: center;
+    border: none;
+    // display: flex;
+    // justify-content: center;
+  }
+
+  & .paginationIn {
+    margin: auto;
+
+    & ul {
+      justify-content: center;
+    }
   }
 `;
 
