@@ -5,6 +5,7 @@ import {
   mapTitleSummary,
   titleSummary,
 } from "@helpers/programHelper";
+import { Button } from "@mui/material";
 import { VFC } from "react";
 
 interface Props {
@@ -53,18 +54,22 @@ const MapDiv: VFC<Props> = ({ url, title, content, tags, distance }) => {
         <div className="title">{mapTitleSummary(title)}</div>
         <div className="content">{mapContentSummary(content)}</div>
         <TagContainer tags={tags.slice(-3)} />
+        <div className="dis">{distance}m</div>
       </DesContainer>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled(Button)`
   background-color: #ffffff;
   display: flex;
   padding: 1rem;
   border-radius: 10px;
-  flex: 1;
   box-shadow: 0 0 6px 0 rgba(5, 16, 106, 0.12);
+  text-align: left;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: top;
 
   margin-bottom: 5px;
 `;
@@ -86,6 +91,10 @@ const DesContainer = styled.div`
   }
   & .content {
     font-size: 0.8rem;
+  }
+  & .dis {
+    color: #00a0e0;
+    font-weight: bold;
   }
 `;
 

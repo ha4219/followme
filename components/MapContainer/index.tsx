@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
-import { getMapDummyDataGenerate } from "@data/MapData";
+import { getMapDummyDataGenerate, MapDataType } from "@data/MapData";
 
 declare global {
   interface Window {
@@ -17,7 +17,7 @@ const MapContainer = () => {
     lat: 37.0933576573074,
     lon: 127.1852009841304,
   });
-  const data = getMapDummyDataGenerate(10, 50);
+  const [data, setData] = useState<MapDataType[]>([]);
   const [map, setMap] = useState();
   const [page, setPage] = useState(0);
   const perPage = 3;
@@ -67,7 +67,16 @@ const MapContainer = () => {
       //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
       // );
     }
+    setData(getMapDummyDataGenerate(10, 50));
   }, [curPos]);
+
+  const onNextPage = useCallback(() => {
+    setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
+  }, [page, data.length]);
+
+  const onPrevPage = useCallback(() => {
+    setPage(page > 0 ? page - 1 : page);
+  }, [page, data.length]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
@@ -112,18 +121,8 @@ const MapContainer = () => {
         <div className="head">
           <div className="label">장소</div>
           <div className="bts">
-            <button onClick={() => setPage(page > 0 ? page - 1 : page)}>
-              {"<"}
-            </button>
-            <button
-              onClick={() =>
-                setPage(
-                  page < Math.floor(data.length / perPage) ? page + 1 : page
-                )
-              }
-            >
-              {">"}
-            </button>
+            <button onClick={onPrevPage}>{"<"}</button>
+            <button onClick={onNextPage}>{">"}</button>
           </div>
         </div>
         {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
@@ -141,9 +140,9 @@ const MainMapContainer = styled.div`
 
 const BottomDiv = styled.div`
   // display: block;
-  height: 800px;
+  height: 650px;
   // width: 500px;
-  display: flex;
+  display: inline-block;
   flex-direction: column;
   // overflow: hidden;
   font-family: paybooc-Medium;
@@ -166,7 +165,7 @@ const LeftDiv = styled(Grid)``;
 export const MapContent = styled.div`
   // aspect-ratio: 320 / 220;
   width: 100%;
-  height: 800px;
+  height: 650px;
 `;
 
 export default MapContainer;
