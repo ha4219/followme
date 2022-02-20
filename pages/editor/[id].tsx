@@ -1,14 +1,12 @@
-import LeftLayout from "@components/LeftLayout";
 import styled from "@emotion/styled";
-import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
-import { API, getPayload } from "@src/API";
+import { Avatar, Button, Container, TextField } from "@mui/material";
+import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import gravatar from "gravatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
 import { IComment, ICourseDetail } from "types/apiType";

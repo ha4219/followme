@@ -1,7 +1,7 @@
 import ThemeCustomEditor from "@components/theme/ThemeCustomEditor";
 import { Box, Container } from "@mui/material";
 
-const ThemeWrite = () => {
+const RecommendWrite = () => {
   return (
     <Container maxWidth="md">
       <Box>
@@ -11,4 +11,4 @@ const ThemeWrite = () => {
   );
 };
 
-export default ThemeWrite;
+export default RecommendWrite;
