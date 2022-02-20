@@ -102,7 +102,7 @@ const MapContainer = () => {
 
         window.kakao.map = map;
         setMap(map);
-        for (let i = 0; i < positions.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           const marker = new window.kakao.maps.Marker({
             map: map,
             position: new window.kakao.maps.LatLng(data[i].lat, data[i].lon),

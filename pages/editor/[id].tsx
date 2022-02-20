@@ -113,14 +113,14 @@ const EditorDetail = () => {
           setLike(1 ^ like);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
+          if (err.response.status === 403) {
+            router.push("/logout");
+          }
         });
     },
     [like]
   );
-  const onClickShare = () => {
-    console.log();
-  };
 
   useEffect(() => {
     getDetail();
@@ -153,8 +153,9 @@ const EditorDetail = () => {
               <div className="title">{course?.title}</div>
             </div>
             <div className="btns">
-              <span className="heartLabel"> {likeCnt}</span>
+              <span className="heartLabel"> {course.writer}</span>
               <Button className="heart" onClick={onClickLike}>
+                <span className="heartLabel"> &nbsp;{likeCnt}</span>
                 {like ? (
                   <FavoriteIcon
                     className="fillHeart"
@@ -250,6 +251,7 @@ const TitleContainer = styled.div`
   & .heartLabel {
     font-weight: 300;
     font-size: 0.8rem;
+    margin-right: 0.5rem;
   }
   & .fillHeart {
     color: #ff4e40;

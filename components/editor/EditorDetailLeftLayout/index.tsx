@@ -21,7 +21,6 @@ const EditorDetailLeftLayout: FC<IProps> = ({
   season,
   region,
 }) => {
-  console.log(region);
   return (
     <Grid container>
       <Grid xs={3} item>

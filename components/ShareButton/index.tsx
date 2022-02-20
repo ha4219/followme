@@ -25,7 +25,7 @@ const ShareButton = ({ url }) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>
-        <ShareIcon />
+        <ShareIcon sx={{ width: 15, height: 15 }} />
       </Button>
       <OutSideContainer open={open} onClose={() => setOpen(false)}>
         <div className="container">

@@ -20,7 +20,7 @@ export const getMapDummyDataGenerate = (length: number, size: number) => {
       url: `https://picsum.photos/id/${i}/${size}/${size}`,
       title: chance.sentence(),
       content: chance.paragraph(),
-      lat: chance.latitude({ min: 33, max: 34 }),
+      lat: chance.latitude({ min: 34, max: 38 }),
       lon: chance.longitude({ min: 124, max: 132 }),
       tags: chance.sentence().split(" "),
       score: chance.integer({ min: 0, max: 5 }),
