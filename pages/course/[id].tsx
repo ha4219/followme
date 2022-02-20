@@ -14,6 +14,8 @@ import ReplyContent from "@components/ReplyContent";
 import { IComment } from "types/apiType";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const CourseDetail = () => {
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
+  const loggedInId = useRecoilValue(idState);
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
@@ -132,7 +135,11 @@ const CourseDetail = () => {
                   {/* <Button className="share" onClick={onClickShare}>
                     <ShareIcon />
                   </Button> */}
-                  <ShareButton url={window.location.href} />
+                  <ShareButton
+                    url={window.location.href}
+                    des={course.title}
+                    user={loggedInId}
+                  />
                 </div>
               </div>
               <div

@@ -1,6 +1,6 @@
 import ProfileLeftLayout from "@components/profile/ProfileLeftLayout";
 import styled from "@emotion/styled";
-import { Avatar, Button, Container } from "@mui/material";
+import { Avatar, Box, Button, Container } from "@mui/material";
 import { getUserBoard, getUserProfile } from "api/auth";
 import { useState, useEffect } from "react";
 import gravatar from "gravatar";
@@ -14,6 +14,9 @@ import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState, idState } from "@store/auth";
 import { useRouter } from "next/router";
+import CourseBoard from "@components/course/CourseBoard";
+import CourseTable from "@components/course/CourseTable";
+import { COURSES } from "@data/CourseData";
 
 const ProfileHome = () => {
   const router = useRouter();
@@ -119,6 +122,9 @@ const ProfileHome = () => {
                 <div className="subTitle">코스를 부탁해</div>
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
+              <Box py={2}>
+                <CourseTable courses={COURSES.slice(-5)} />
+              </Box>
             </div>
           </ProfileContainer>
         )}

@@ -1,10 +1,10 @@
-import MapContainer from "@components/MapContainer";
+import MapWrapper from "@components/MapWrapper";
 import { Container } from "@mui/material";
 
 const Map = () => {
   return (
     <Container>
-      <MapContainer />
+      <MapWrapper />
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 import { Button, Dialog } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -10,7 +10,7 @@ import {
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const ShareButton = ({ url }) => {
+const ShareButton = ({ url, des, user }) => {
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
@@ -26,8 +26,8 @@ const ShareButton = ({ url }) => {
       window.Kakao.Link.sendDefault({
         objectType: "feed",
         content: {
-          title: "followme",
-          description: "followme",
+          title: "여행 정보를 한눈에!FOLLOW ME!!",
+          description: `${user}님이 "${des}" 정보를 공유했어요! 확인해보세요!`,
           imageUrl: url,
           link: {
             webUrl: url,

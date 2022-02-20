@@ -30,6 +30,7 @@ const TagContainer: VFC<{ tags: string[] }> = ({ tags }) => {
 
 const TagDiv = styled.div`
   display: flex;
+  overflow: hidden;
 
   & .tag {
     font-size: 11px;

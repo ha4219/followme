@@ -188,7 +188,11 @@ const EditorDetail = () => {
                     }}
                   />
                 </Button> */}
-              <ShareButton url={window.location.href} />
+              <ShareButton
+                url={window.location.href}
+                user={loggedInId}
+                des={course.title}
+              />
             </div>
           </TitleContainer>
           {course && (

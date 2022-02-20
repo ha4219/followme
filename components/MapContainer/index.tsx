@@ -4,6 +4,8 @@ import MapDiv from "@components/MapDiv";
 import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
 import { getMapDummyDataGenerate, MapDataType } from "@data/MapData";
+import { mapTitleSummary } from "@helpers/programHelper";
+import dynamic from "next/dynamic";
 
 declare global {
   interface Window {
@@ -20,12 +22,15 @@ const MapContainer = () => {
   const [data, setData] = useState<MapDataType[]>([]);
   const [map, setMap] = useState();
   const [page, setPage] = useState(0);
+  const [clickList, setClickList] = useState([]);
   const perPage = 3;
 
   const mapInit = async () => {
     try {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
+          console.log(pos);
+
           kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
           setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
         },
@@ -68,7 +73,7 @@ const MapContainer = () => {
       // );
     }
     setData(getMapDummyDataGenerate(10, 50));
-  }, [curPos]);
+  }, []);
 
   const onNextPage = useCallback(() => {
     setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
@@ -98,10 +103,25 @@ const MapContainer = () => {
         window.kakao.map = map;
         setMap(map);
         for (let i = 0; i < data.length; i++) {
+          const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
           const marker = new window.kakao.maps.Marker({
-            map: map,
-            position: new window.kakao.maps.LatLng(data[i].lat, data[i].lon),
+            position: latlon,
             title: data[i].title,
+          });
+          marker.setMap(map);
+          const iwContent = `<div style="display:flex;padding:5px;"><img src="${
+            data[i].url
+          }" />${mapTitleSummary(data[i].title)}</div>`;
+
+          const infowindow = new window.kakao.maps.CustomOverlay({
+            // position: latlon,
+            content: iwContent,
+            removable: true,
+          });
+          // infowindow.open(map, marker);
+          window.kakao.maps.event.addListener(marker, "click", function () {
+            // 마커 위에 인포윈도우를 표시합니다
+            infowindow.open(map, marker);
           });
         }
       });
@@ -159,8 +179,6 @@ const BottomDiv = styled.div`
     }
   }
 `;
-
-const LeftDiv = styled(Grid)``;
 
 export const MapContent = styled.div`
   // aspect-ratio: 320 / 220;
