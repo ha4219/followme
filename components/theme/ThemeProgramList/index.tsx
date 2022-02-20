@@ -16,7 +16,7 @@ import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
 
-const EditorProgramList: VFC = () => {
+const ThemeProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
   const router = useRouter();
   const [sortedType, setSortedType] = useState(2);
@@ -29,25 +29,25 @@ const EditorProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    // const { data } = await API.post<ICourse[]>("/main/travelBoards", {
-    //   id: loggedInId,
-    // });
-    // setTravels(
-    //   data.sort((l, r) => {
-    //     if (r.createdAt > l.createdAt) {
-    //       return 1;
-    //     }
-    //     return -1;
-    //   })
-    // );
-    // setCourses(
-    //   data.sort((l, r) => {
-    //     if (r.createdAt > l.createdAt) {
-    //       return 1;
-    //     }
-    //     return -1;
-    //   })
-    // );
+    const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
+      id: loggedInId,
+    });
+    setTravels(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
+    setCourses(
+      data.sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
   };
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const EditorProgramList: VFC = () => {
           <Button
             variant="contained"
             onClick={() => {
-              router.push("/editor/write");
+              router.push("/theme/write");
             }}
           >
             글쓰기
@@ -199,4 +199,4 @@ const RightButton = styled.div`
   justify-content: right;
 `;
 
-export default EditorProgramList;
+export default ThemeProgramList;
