@@ -11,6 +11,12 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { auth } from "@config/firebaseConfig";
 import { IUser } from "types/apiType";
+import {
+  checkEmail,
+  checkId,
+  checkNickName,
+  checkPhone,
+} from "@helpers/checkReg";
 
 const ProfileReviseContainer = () => {
   const router = useRouter();
@@ -43,7 +49,7 @@ const ProfileReviseContainer = () => {
       setEmail(e.target.value);
       setEmailV(user && user.email === e.target.value ? true : false);
     },
-    [nickName]
+    [email]
   );
 
   const onChangePhone = useCallback(
@@ -128,6 +134,10 @@ const ProfileReviseContainer = () => {
   }, [verified]);
 
   const onNickNameDuplication = useCallback(async () => {
+    if (!checkNickName(nickName)) {
+      toast.warning("닉네임을 입력해주세요");
+      return;
+    }
     API.post("/user/checkNickName", {
       nickName: nickName,
     })
@@ -146,6 +156,10 @@ const ProfileReviseContainer = () => {
   }, [nickName]);
 
   const onEmailDuplication = useCallback(async () => {
+    if (!checkEmail(email)) {
+      toast.warning("알맞은 형식의 이메일을 입력해주세요 ");
+      return;
+    }
     API.post("/user/checkEmail", {
       email: email,
     })
@@ -231,7 +245,7 @@ const ProfileReviseContainer = () => {
             value={password}
             onChange={onChangePassword}
             placeholder="비밀번호를 입력해주세요."
-            helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
+            helperText="(8~16자/영문과 숫자, 특수문자를 포함하여 입력해주세요)"
           />
           <SignupTextField
             id="passwordCh"
@@ -260,7 +274,7 @@ const ProfileReviseContainer = () => {
             onChange={onChangePhone}
             placeholder="휴대폰 번호 확인"
             btnLabel="인증번호 받기"
-            btnActive={true}
+            btnActive={!phoneV}
             onClickBtn={onSendSMS}
           />
           <SignupTextField

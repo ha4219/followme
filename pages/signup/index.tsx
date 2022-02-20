@@ -17,12 +17,17 @@ import {
 
 import { useCallback, useEffect, useState } from "react";
 import { routes } from "../../src/routes";
-import axios from "axios";
 import { API } from "src/API";
 import Head from "next/head";
 import { phoneVerifyAndPass } from "@helpers/signUpHelper";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import {
+  checkEmail,
+  checkId,
+  checkNickName,
+  checkPhone,
+} from "@helpers/checkReg";
 
 declare global {
   interface Window {
@@ -35,12 +40,12 @@ const Signup = () => {
   const router = useRouter();
   const [checked, setChecked] = useState([true, true, true]);
   const [name, setName, onChangeName] = useInput("");
-  const [nickName, setNickName, onChangeNickName] = useInput("");
-  const [id, setId, onChangeId] = useInput("");
+  const [nickName, setNickName] = useInput("");
+  const [id, setId] = useInput("");
   const [password, setPassword, onChangePassword] = useInput("");
   const [passwordCh, setPasswordCh, onChangePasswordCh] = useInput("");
-  const [email, setEmail, onChangeEmail] = useInput("");
-  const [phone, setPhone, onChangePhone] = useInput("");
+  const [email, setEmail] = useInput("");
+  const [phone, setPhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
   const [idV, setIdV] = useState(false);
   const [emailV, setEmailV] = useState(false);
@@ -66,7 +71,42 @@ const Signup = () => {
     );
   };
 
+  const onChangeId = useCallback(
+    (e) => {
+      setId(e.target.value);
+      setIdV(false);
+    },
+    [id]
+  );
+  const onChangeNickName = useCallback(
+    (e) => {
+      setNickName(e.target.value);
+      setNickNameV(false);
+    },
+    [nickName]
+  );
+
+  const onChangeEmail = useCallback(
+    (e) => {
+      setEmail(e.target.value);
+      setEmailV(false);
+    },
+    [email]
+  );
+
+  const onChangePhone = useCallback(
+    (e) => {
+      setPhone(e.target.value);
+      setPhoneV(false);
+    },
+    [phone]
+  );
+
   const onIdDuplication = useCallback(async () => {
+    if (!checkId(id)) {
+      toast.warning("아이디를 입력해주세요");
+      return;
+    }
     API.post("/user/checkId", {
       id: id,
     })
@@ -85,6 +125,10 @@ const Signup = () => {
   }, [id]);
 
   const onEmailDuplication = useCallback(async () => {
+    if (!checkEmail(email)) {
+      toast.warning("알맞은 형식의 이메일을 입력해주세요 ");
+      return;
+    }
     API.post("/user/checkEmail", {
       email: email,
     })
@@ -103,6 +147,10 @@ const Signup = () => {
   }, [email]);
 
   const onNickNameDuplication = useCallback(async () => {
+    if (!checkNickName(nickName)) {
+      toast.warning("닉네임을 입력해주세요");
+      return;
+    }
     API.post("/user/checkNickName", {
       nickName: nickName,
     })
@@ -121,6 +169,10 @@ const Signup = () => {
   }, [nickName]);
 
   const onSendSMS = useCallback(async () => {
+    if (!checkPhone(phone)) {
+      toast.warning("알맞은 형식의 휴대폰 번호를 입력해주세요");
+      return;
+    }
     const regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
     if (regPhone.test(phone) === true) {
       const phoneVerified = phoneVerifyAndPass(phone);
@@ -230,7 +282,7 @@ const Signup = () => {
                 onChange={onChangeNickName}
                 placeholder="홍길동"
                 btnLabel="중복확인"
-                btnActive={true}
+                btnActive={!nickNameV}
                 onClickBtn={onNickNameDuplication}
               />
               <SignupTextField
@@ -240,7 +292,7 @@ const Signup = () => {
                 onChange={onChangeId}
                 placeholder="아이디를 입력해주세요."
                 btnLabel="중복확인"
-                btnActive={true}
+                btnActive={!idV}
                 onClickBtn={onIdDuplication}
               />
               <SignupTextField
@@ -250,7 +302,7 @@ const Signup = () => {
                 value={password}
                 onChange={onChangePassword}
                 placeholder="비밀번호를 입력해주세요."
-                helperText="(8~16자/영문과 숫자, 특수문자 2가지 이상을 조합하여 입력해주세요)"
+                helperText="(8~16자/영문과 숫자, 특수문자를 포함하여 입력해주세요)"
               />
               <SignupTextField
                 id="passwordCh"
@@ -269,7 +321,7 @@ const Signup = () => {
                 onChange={onChangeEmail}
                 placeholder="이메일을 입력해주세요."
                 btnLabel="중복확인"
-                btnActive={true}
+                btnActive={!emailV}
                 onClickBtn={onEmailDuplication}
               />
               <SignupTextField
@@ -279,7 +331,7 @@ const Signup = () => {
                 onChange={onChangePhone}
                 placeholder="휴대폰 번호 확인"
                 btnLabel="인증번호 받기"
-                btnActive={true}
+                btnActive={!phoneV}
                 onClickBtn={onSendSMS}
               />
               <SignupTextField
@@ -289,7 +341,7 @@ const Signup = () => {
                 onChange={onChangeVerified}
                 placeholder="인증번호 확인"
                 btnLabel="확인"
-                btnActive={true}
+                btnActive={!phoneV}
                 onClickBtn={onVerifySMS}
               />
             </Box>
