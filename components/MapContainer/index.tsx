@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 import { Grid } from "@mui/material";
 import { toast } from "react-toastify";
+import { getMapDummyDataGenerate } from "@data/MapData";
 
 declare global {
   interface Window {
@@ -10,68 +11,13 @@ declare global {
     map: any;
   }
 }
-const FAKE = [
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-  {
-    url: "https://news.kbs.co.kr/data/news/2017/01/04/3405677_bH6.jpg",
-    title: "닭강정",
-    content: "맛없을듯",
-    tags: ["kbs", "핸드폰", "음식사진"],
-    distance: 100,
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
-  },
-];
 
 const MapContainer = () => {
   const [curPos, setCurPos] = useState({
     lat: 37.0933576573074,
     lon: 127.1852009841304,
   });
+  const data = getMapDummyDataGenerate(100, 50);
   const [map, setMap] = useState();
 
   const mapInit = async () => {
@@ -159,8 +105,8 @@ const MapContainer = () => {
         for (let i = 0; i < positions.length; i++) {
           const marker = new window.kakao.maps.Marker({
             map: map,
-            position: positions[i].latlng,
-            title: positions[i].title,
+            position: new window.kakao.maps.LatLng(data[i].lat, data[i].lon),
+            title: data[i].title,
           });
         }
       });
@@ -177,7 +123,7 @@ const MapContainer = () => {
       {/* </Grid> */}
       {/* <Grid item md={3}> */}
       <BottomDiv>
-        {FAKE.map((item, index) => (
+        {data.map((item, index) => (
           <MapDiv key={index} {...item} />
         ))}
       </BottomDiv>
