@@ -1,6 +1,10 @@
 import ShadowTag from "@components/ShadowTag";
-import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
+import {
+  mapContentSummary,
+  mapTitleSummary,
+  titleSummary,
+} from "@helpers/programHelper";
 import { VFC } from "react";
 
 interface Props {
@@ -11,14 +15,44 @@ interface Props {
   distance: number;
 }
 
+const TagContainer: VFC<{ tags: string[] }> = ({ tags }) => {
+  return (
+    <TagDiv>
+      {tags.map((item, index) => (
+        <div key={index} className="tag">
+          {item}
+        </div>
+      ))}
+    </TagDiv>
+  );
+};
+
+const TagDiv = styled.div`
+  display: flex;
+
+  & .tag {
+    font-size: 11px;
+    font-weight: bold;
+    border: solid 1px #b69775;
+    margin: 11px 5px;
+    padding: 3px 6px 6px 10px;
+    border-radius: 12px;
+  }
+
+  & .tag:hover {
+    color: #fff;
+    background-color: #b69775;
+  }
+`;
+
 const MapDiv: VFC<Props> = ({ url, title, content, tags, distance }) => {
   return (
     <Container>
       <ImgContainer src={url} alt={title} />
       <DesContainer>
-        <div className="title">{title}</div>
-        <div className="content">{content}</div>
-        <TagContainer tags={tags} />
+        <div className="title">{mapTitleSummary(title)}</div>
+        <div className="content">{mapContentSummary(content)}</div>
+        <TagContainer tags={tags.slice(-3)} />
       </DesContainer>
     </Container>
   );
@@ -28,9 +62,10 @@ const Container = styled.div`
   background-color: #ffffff;
   display: flex;
   padding: 1rem;
-  border-radius: 15px;
-  border: 1px solid black;
-  width: 365px;
+  border-radius: 10px;
+  flex: 1;
+  box-shadow: 0 0 6px 0 rgba(5, 16, 106, 0.12);
+
   margin-bottom: 5px;
 `;
 
@@ -38,7 +73,7 @@ const ImgContainer = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 8px;
-  margin-right: 5px;
+  margin-right: 10px;
 `;
 
 const DesContainer = styled.div`

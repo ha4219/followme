@@ -13,6 +13,7 @@ import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
 import { IComment } from "types/apiType";
 import { toast } from "react-toastify";
+import ShareButton from "@components/ShareButton";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const CourseDetail = () => {
   const [course, setCourse] = useState<ICourseData>();
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
-
+  const [like, setLike] = useState(false);
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
@@ -62,6 +63,7 @@ const CourseDetail = () => {
 
   const onClickHeart = () => {
     //TODO
+    setLike(!like);
   };
 
   const onClickShare = () => {
@@ -105,12 +107,12 @@ const CourseDetail = () => {
                 </div>
                 <div className="btns">
                   <Button className="heart" onClick={onClickHeart}>
-                    {1 ? (
+                    {like ? (
                       <FavoriteIcon
                         className="fillHeart"
                         sx={{
-                          width: 22,
-                          height: 22,
+                          width: 15,
+                          height: 15,
                           alignItems: "center",
                           verticalAlign: "center",
                         }}
@@ -119,17 +121,18 @@ const CourseDetail = () => {
                       <FavoriteBorderIcon
                         className="fillNotHeart"
                         sx={{
-                          width: 22,
-                          height: 22,
+                          width: 15,
+                          height: 15,
                           alignItems: "center",
                           verticalAlign: "center",
                         }}
                       />
                     )}
                   </Button>
-                  <Button className="share" onClick={onClickShare}>
+                  {/* <Button className="share" onClick={onClickShare}>
                     <ShareIcon />
-                  </Button>
+                  </Button> */}
+                  <ShareButton url={window.location.href} />
                 </div>
               </div>
               <div

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
 import { getMapDummyDataGenerate } from "@data/MapData";
 
@@ -17,8 +17,10 @@ const MapContainer = () => {
     lat: 37.0933576573074,
     lon: 127.1852009841304,
   });
-  const data = getMapDummyDataGenerate(100, 50);
+  const data = getMapDummyDataGenerate(10, 50);
   const [map, setMap] = useState();
+  const [page, setPage] = useState(0);
+  const perPage = 3;
 
   const mapInit = async () => {
     try {
@@ -78,22 +80,6 @@ const MapContainer = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
-        const positions = [
-          {
-            title: "test",
-            latlng: new window.kakao.maps.LatLng(
-              37.62933576573074,
-              127.08152009841304
-            ),
-          },
-          {
-            title: "test",
-            latlng: new window.kakao.maps.LatLng(
-              37.62933576573074,
-              127.09152009841304
-            ),
-          },
-        ];
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
@@ -123,7 +109,24 @@ const MapContainer = () => {
       {/* </Grid> */}
       {/* <Grid item md={3}> */}
       <BottomDiv>
-        {data.map((item, index) => (
+        <div className="head">
+          <div className="label">장소</div>
+          <div className="bts">
+            <button onClick={() => setPage(page > 0 ? page - 1 : page)}>
+              {"<"}
+            </button>
+            <button
+              onClick={() =>
+                setPage(
+                  page < Math.floor(data.length / perPage) ? page + 1 : page
+                )
+              }
+            >
+              {">"}
+            </button>
+          </div>
+        </div>
+        {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
           <MapDiv key={index} {...item} />
         ))}
       </BottomDiv>
@@ -136,16 +139,26 @@ const MainMapContainer = styled.div`
   display: flex;
 `;
 
-const MapContentDiv = styled(Grid)``;
-
 const BottomDiv = styled.div`
   // display: block;
-  height: 500px;
-  width: 500px;
-  overflow-y: auto;
+  height: 800px;
+  // width: 500px;
+  display: flex;
+  flex-direction: column;
   // overflow: hidden;
   font-family: paybooc-Medium;
   padding: 1rem;
+  background-color: #edeef8;
+
+  & .head {
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    & .label {
+      font-weight: bold;
+    }
+  }
 `;
 
 const LeftDiv = styled(Grid)``;
@@ -153,7 +166,7 @@ const LeftDiv = styled(Grid)``;
 export const MapContent = styled.div`
   // aspect-ratio: 320 / 220;
   width: 100%;
-  height: 500px;
+  height: 800px;
 `;
 
 export default MapContainer;
