@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 import { Grid } from "@mui/material";
+import { toast } from "react-toastify";
 
 declare global {
   interface Window {
@@ -68,16 +69,37 @@ const FAKE = [
 
 const MapContainer = () => {
   const [curPos, setCurPos] = useState({
-    lat: 37.62933576573074,
-    lon: 127.08152009841304,
+    lat: 37.0933576573074,
+    lon: 127.1852009841304,
   });
   const [map, setMap] = useState();
 
   const mapInit = async () => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+        setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+      },
+      (err) => {
+        console.log(err);
+        toast.error("위치 정보 시스템을 허용해주세요");
+      }
+    );
+  };
 
+  useEffect(() => {
+    mapInit();
+  }, []);
+
+  useEffect(() => {
+    if (window.kakao) {
+      window.kakao.map.setCenter(
+        new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
+      );
+    }
+  }, [curPos]);
+
+  const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
 
     mapScript.async = true;
@@ -106,7 +128,7 @@ const MapContainer = () => {
         ];
 
         const options = {
-          center: new window.kakao.maps.LatLng(curPos.lat, curPos.lon),
+          center: new window.kakao.maps.LatLng(lat, lon),
         };
         const map = new window.kakao.maps.Map(container, options);
 
@@ -125,18 +147,6 @@ const MapContainer = () => {
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
-
-  useEffect(() => {
-    mapInit();
-  }, []);
-
-  useEffect(() => {
-    if (window.kakao) {
-      window.kakao.map.setCenter(
-        new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
-      );
-    }
-  }, [curPos]);
 
   return (
     <MainMapContainer>
