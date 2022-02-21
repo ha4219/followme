@@ -1,6 +1,6 @@
 import { COURSES, ICourseData } from "@data/CourseData";
 import styled from "@emotion/styled";
-import { tableTitleSummary } from "@helpers/programHelper";
+import { dateHelper, tableTitleSummary } from "@helpers/programHelper";
 import {
   Avatar,
   Button,
@@ -19,13 +19,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
+import { ICourse } from "types/apiType";
 
 const CourseBoard = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [size, setSize] = useState(0);
-  const [courses, setCourses] = useState<ICourseData[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
   const loggedInId = useRecoilValue(idState);
 
@@ -94,8 +95,10 @@ const CourseBoard = () => {
                 />
                 {tableTitleSummary(item.title)}
               </TableCell>
-              <TableCell align="center">{item.replyCnt}</TableCell>
-              <TableCell align="center">{item.date}</TableCell>
+              <TableCell align="center">
+                {item?.comments ? item.comments.length : 0}
+              </TableCell>
+              <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

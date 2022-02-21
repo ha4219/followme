@@ -31,6 +31,7 @@ export interface ICourse {
   schedule: string;
   season: string;
   updatedAt: string;
+  comments?: any;
 }
 
 export interface ICourseDetail {

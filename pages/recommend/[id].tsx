@@ -35,10 +35,10 @@ const RecommendDetail = () => {
 
       if (id) {
         const { data } = await API.post<ICourseDetail[]>(
-          `/recommend/postDetail/${id}`,
-          {
-            // id: loggedInId,
-          }
+          `/recommend/postDetail/${id}`
+          // {
+          //   id: loggedInId,
+          // }
         );
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);

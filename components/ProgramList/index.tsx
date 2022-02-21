@@ -27,7 +27,7 @@ const ProgramList: VFC = () => {
 
   const getTravel = async () => {
     const { data } = await API.post<ICourse[]>(
-      "/theme/themeBoards",
+      "/recommend/recommendBoards",
       loggedInId !== "" ? { id: loggedInId } : {}
     );
     setTravels(
@@ -128,7 +128,7 @@ const ProgramList: VFC = () => {
         <Grid item xs> */}
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         {courses?.map((item, index) => (
-          <RecommendProgram {...item} key={index} />
+          <RecommendProgram {...item} key={item.idx} />
         ))}
       </Grid>
     </Box>
