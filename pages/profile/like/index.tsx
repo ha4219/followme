@@ -6,9 +6,10 @@ import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { ICourse, ICourseDetail } from "types/apiType";
 
 const ProfileLike = () => {
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState<ICourse[]>([]);
   const loggedInId = useRecoilValue(idState);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(1);

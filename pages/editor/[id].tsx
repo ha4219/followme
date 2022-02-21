@@ -83,7 +83,7 @@ const EditorDetail = () => {
             {
               id: loggedInId,
               content: comment,
-              updatedAt: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
             },
           ]);
         }
@@ -100,7 +100,7 @@ const EditorDetail = () => {
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      if (logggedInId === "") {
+      if (loggedInId === "") {
         toast.error("로그인 후 이용해주세요");
         return;
       }

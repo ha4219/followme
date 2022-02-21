@@ -11,7 +11,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
-import { IComment, ICourse } from "types/apiType";
+import { IComment, ICourse, ICourseDetail } from "types/apiType";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
@@ -21,7 +21,7 @@ import { API } from "@src/API";
 const CourseDetail = () => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
-  const [course, setCourse] = useState<ICourse>();
+  const [course, setCourse] = useState<ICourseDetail>();
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
@@ -61,11 +61,14 @@ const CourseDetail = () => {
   const getCourse = async () => {
     const { id } = router.query;
     if (id) {
-      const { data } = await API.get<ICourse[]>(`/course/courseBoards/${id}`, {
-        // id: loggedInId,
-      });
+      const { data } = await API.get<ICourseDetail[]>(
+        `/course/courseBoards/${id}`,
+        {
+          // id: loggedInId,
+        }
+      );
       setCourse(data[0]);
-      setComments(data[0].comments);
+      // setComments(data[0].comments);
     }
 
     // setCourse(COURSES[Number(id)]);
@@ -106,7 +109,7 @@ const CourseDetail = () => {
                   // src={gravatar.url(user, { s: "28px", d: "retro" })}
                   className="avatar"
                 />
-                <div className="subContainer">
+                {/* <div className="subContainer">
                   <div className="title">{course.title}</div>
                   <div className="dateContainer">
                     <div className="start">
@@ -120,7 +123,7 @@ const CourseDetail = () => {
                       <DateRangeIcon />
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="btns">
                   <Button className="heart" onClick={onClickHeart}>
                     {like ? (
@@ -168,7 +171,7 @@ const CourseDetail = () => {
           </ButtonContainer>
         )} */}
               <ReplyContainer>
-                <div className="replyCnt">{`댓글: ${course.replyCnt}`}</div>
+                <div className="replyCnt">{`댓글: ${course.comments.length}`}</div>
                 <form className="write" onSubmit={onSubmitComment}>
                   <TextField
                     id=""
