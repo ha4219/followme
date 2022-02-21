@@ -114,7 +114,7 @@ const ThemeProgramList: VFC = () => {
         <HeadContainer>
           <TitleContainer>
             <div className="sub">
-              {"Editor's Pick"}
+              {"테마여행"}
               <span className="orange">{courses.length}</span>개
             </div>
           </TitleContainer>

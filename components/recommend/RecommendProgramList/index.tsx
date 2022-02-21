@@ -113,7 +113,7 @@ const RecommendProgramList: VFC = () => {
         <HeadContainer>
           <TitleContainer>
             <div className="sub">
-              {"Editor's Pick"}
+              {"추천코스"}
               <span className="orange">{courses.length}</span>개
             </div>
           </TitleContainer>
