@@ -245,10 +245,4 @@ export const REPLYDATA: IComment[] = [
   },
 ];
 
-export const COURSETAGS: string[] = [
-  "ALL",
-  "통영1박2일",
-  "광화문갈만한곳",
-  "서울근교",
-  "태국3박4일",
-];
+export const COURSETAGS: string[] = ["ALL", "부산", "제주도", "인생샷"];
