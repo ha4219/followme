@@ -30,8 +30,8 @@ const Signin = () => {
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
   const [loggedInId, setLoggedInId] = useRecoilState(idState);
 
-  const [id, setId, onChangeId] = useInput("dongha");
-  const [password, setPassowrd, onChangePassword] = useInput("dongha");
+  const [id, setId, onChangeId] = useInput("");
+  const [password, setPassowrd, onChangePassword] = useInput("");
   const [naver, setNaver] = useState();
   const onSubmit = useCallback(
     async (e) => {

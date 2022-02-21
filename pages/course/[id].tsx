@@ -25,28 +25,30 @@ const CourseDetail = () => {
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
+  const [idx, setIdx] = useState<any>();
   const loggedInId = useRecoilValue(idState);
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
       try {
-        // const { data }: { data: { data: string } } = await API.post(
-        //   `main/travelBoards/insertReply/${idx}`,
-        //   {
-        //     id: "admin",
-        //     content: comment,
-        //   }
-        // );
-        // if (data.data === "success") {
-        toast.success("댓글 작성 성공");
-        setComments([
-          ...comments,
+        const { data }: { data: { data: string } } = await API.post(
+          `course/insertCourseComments/${idx}`,
           {
-            id: "admin",
+            id: loggedInId,
             content: comment,
-            createdAt: new Date().toISOString(),
-          },
-        ]);
+          }
+        );
+        if (data.data === "success") {
+          toast.success("댓글 작성 성공");
+          setComments([
+            ...comments,
+            {
+              id: "admin",
+              content: comment,
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+        }
         // }
       } catch (e) {
         console.log("post comment error", e);
@@ -60,6 +62,8 @@ const CourseDetail = () => {
 
   const getCourse = async () => {
     const { id } = router.query;
+    setIdx(id);
+
     if (id) {
       const { data } = await API.get<ICourseDetail[]>(
         `/course/courseBoards/${id}`,
@@ -74,19 +78,10 @@ const CourseDetail = () => {
     // setCourse(COURSES[Number(id)]);
   };
 
-  const getComments = async () => {
-    const { id } = router.query;
-
-    setComments(REPLYDATA.slice(0, COURSES[Number(id)].replyCnt));
-  };
-
   const onClickHeart = () => {
     //TODO
+    toast.info("추가 예정입니다");
     setLike(!like);
-  };
-
-  const onClickShare = () => {
-    //TODO
   };
 
   useEffect(() => {
@@ -104,27 +99,30 @@ const CourseDetail = () => {
           {course && (
             <>
               <div className="titleContainer">
-                <Avatar
-                  alt="user"
-                  // src={gravatar.url(user, { s: "28px", d: "retro" })}
-                  className="avatar"
-                />
-                {/* <div className="subContainer">
-                  <div className="title">{course.title}</div>
-                  <div className="dateContainer">
-                    <div className="start">
-                      <span className="bold">출발 예정일</span>
-                      {course.start}
-                      <DateRangeIcon />
-                    </div>
-                    <div className="end">
-                      <span className="bold">도착 예정일</span>
-                      {course.end}
-                      <DateRangeIcon />
+                <div className="subsub">
+                  <Avatar
+                    alt="user"
+                    // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                    className="avatar"
+                  />
+                  <div className="subContainer">
+                    <div className="title">{course.title}</div>
+                    <div className="dateContainer">
+                      <div className="start">
+                        <span className="bold">출발 예정일</span>
+                        {/* {course.start} */}
+                        <DateRangeIcon />
+                      </div>
+                      <div className="end">
+                        <span className="bold">도착 예정일</span>
+                        {/* {course.end} */}
+                        <DateRangeIcon />
+                      </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
                 <div className="btns">
+                  <span className="heartLabel"> {course.writer}</span>
                   <Button className="heart" onClick={onClickHeart}>
                     {like ? (
                       <FavoriteIcon
@@ -171,7 +169,9 @@ const CourseDetail = () => {
           </ButtonContainer>
         )} */}
               <ReplyContainer>
-                <div className="replyCnt">{`댓글: ${course.comments.length}`}</div>
+                <div className="replyCnt">{`댓글: ${
+                  course.comments ? course.comments.length : 0
+                }`}</div>
                 <form className="write" onSubmit={onSubmitComment}>
                   <TextField
                     id=""
@@ -203,7 +203,13 @@ const MainContainer = styled(Box)`
   & .titleContainer {
     display: flex;
     padding: 2rem 0;
+    justify-content: space-between;
+
     border-bottom: 1px solid #3e3e3e;
+
+    & .subsub {
+      display: flex;
+    }
     & .avatar {
       margin-right: 1rem;
     }
@@ -228,6 +234,11 @@ const MainContainer = styled(Box)`
     & .btns {
       display: flex;
       align-items: end;
+      & .heartLabel {
+        font-weight: 300;
+        font-size: 0.8rem;
+        margin-right: 0.5rem;
+      }
 
       & .fillHeart {
         color: #ff4e40;
