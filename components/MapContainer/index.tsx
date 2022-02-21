@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
 import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
-import { getMapDummyDataGenerate, MapDataType } from "@data/MapData";
+import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 
@@ -72,7 +72,7 @@ const MapContainer = () => {
       //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
       // );
     }
-    setData(getMapDummyDataGenerate(10, 50));
+    setData(mapDummyData);
   }, []);
 
   const onNextPage = useCallback(() => {

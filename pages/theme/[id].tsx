@@ -147,10 +147,10 @@ const ThemeDetail = () => {
             <div className="sub">
               <Avatar
                 alt="user"
-                src={gravatar.url(course ? course.writer : "default", {
-                  s: "28px",
-                  d: "retro",
-                })}
+                // src={gravatar.url(course ? course.writer : "default", {
+                //   s: "28px",
+                //   d: "retro",
+                // })}
                 className="avatar"
               />
               <div className="title">{course?.title}</div>

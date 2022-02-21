@@ -69,7 +69,7 @@ const MainThemeContent: VFC<ICourse> = ({
           <div className="avatar">
             <Avatar
               alt="user"
-              src={gravatar.url(writer, { s: "28px", d: "retro" })}
+              // src={gravatar.url(writer, { s: "28px", d: "retro" })}
             />
           </div>
           <div className="content">{contentSummary(shortContent)}</div>
