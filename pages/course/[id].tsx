@@ -72,6 +72,9 @@ const CourseDetail = () => {
         }
       );
       setCourse(data[0]);
+      if (data[0].comments) {
+        setComments(data[0].comments);
+      }
       // setComments(data[0].comments);
     }
 
@@ -157,7 +160,7 @@ const CourseDetail = () => {
                 </div>
               </div>
               <div
-                className="content"
+                className="detailContent"
                 dangerouslySetInnerHTML={{ __html: course.content }}
               />
               {/* {course && course.writer === memberId && (
@@ -253,7 +256,7 @@ const MainContainer = styled(Box)`
       }
     }
   }
-  & .content {
+  & .detailContent {
     width: 100%;
     padding: 2rem;
     border-bottom: 1px solid #dcdce6;

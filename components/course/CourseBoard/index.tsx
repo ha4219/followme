@@ -70,7 +70,7 @@ const CourseBoard = () => {
         <TableHead className="head">
           <TableRow className="head">
             <TableCell align="center">제목</TableCell>
-            <TableCell align="center">답글</TableCell>
+            <TableCell align="center">좋아요</TableCell>
             <TableCell align="center">작성일</TableCell>
           </TableRow>
         </TableHead>
@@ -96,7 +96,8 @@ const CourseBoard = () => {
                 {tableTitleSummary(item.title)}
               </TableCell>
               <TableCell align="center">
-                {item?.comments ? item.comments.length : 0}
+                {/* {item?.comments ? item.comments.length : 0} */}
+                {item.likeCnts}
               </TableCell>
               <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
             </TableRow>
