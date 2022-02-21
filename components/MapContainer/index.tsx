@@ -160,7 +160,7 @@ const MainMapContainer = styled.div`
 
 const BottomDiv = styled.div`
   // display: block;
-  height: 650px;
+  height: 500px;
   // width: 500px;
   display: inline-block;
   flex-direction: column;
@@ -183,7 +183,7 @@ const BottomDiv = styled.div`
 export const MapContent = styled.div`
   // aspect-ratio: 320 / 220;
   width: 100%;
-  height: 650px;
+  height: 500px;
 `;
 
 export default MapContainer;

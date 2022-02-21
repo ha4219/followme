@@ -86,7 +86,7 @@ const ProfileHome = () => {
               <div className="sub">
                 <Avatar
                   alt="user"
-                  src={gravatar.url(user.id, { s: "28px", d: "retro" })}
+                  // src={gravatar.url(user.id, { s: "28px", d: "retro" })}
                   className="avatar"
                 />
                 <div className="titleContent">
