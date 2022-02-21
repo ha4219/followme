@@ -1,6 +1,7 @@
 export interface IComment {
   id: string;
   content: string;
+  fk_user_id?: string;
   createdAt: string;
 }
 
@@ -33,6 +34,7 @@ export interface ICourse {
 }
 
 export interface ICourseDetail {
+  comments: IComment[];
   content: string;
   createdAt: string;
   idx: number;

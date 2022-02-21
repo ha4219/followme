@@ -43,6 +43,7 @@ const EditorDetail = () => {
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
+        setComments(data[0].comments);
       }
     } catch (e) {
       console.log("router not ready", e);
@@ -82,7 +83,7 @@ const EditorDetail = () => {
             {
               id: loggedInId,
               content: comment,
-              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
             },
           ]);
         }
@@ -99,6 +100,10 @@ const EditorDetail = () => {
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
+      if (logggedInId === "") {
+        toast.error("로그인 후 이용해주세요");
+        return;
+      }
       API.post(`/main/postLike/${idx}`, {
         id: loggedInId,
       })
@@ -126,7 +131,7 @@ const EditorDetail = () => {
 
   useEffect(() => {
     getDetail();
-    getComments();
+    // getComments();
     return () => setLoading(false);
   }, [router.isReady]);
 

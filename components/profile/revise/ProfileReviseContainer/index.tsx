@@ -182,6 +182,7 @@ const ProfileReviseContainer = () => {
     try {
       const { data } = await API.post("/user/profileRevise", {
         name: name,
+        id: id,
         nickName: nickName,
         password: password,
         email: email,

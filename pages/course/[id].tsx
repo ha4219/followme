@@ -11,16 +11,17 @@ import ShareIcon from "@mui/icons-material/Share";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
-import { IComment } from "types/apiType";
+import { IComment, ICourse } from "types/apiType";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
+import { API } from "@src/API";
 
 const CourseDetail = () => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
-  const [course, setCourse] = useState<ICourseData>();
+  const [course, setCourse] = useState<ICourse>();
   const [comments, setComments] = useState<IComment[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
@@ -59,7 +60,15 @@ const CourseDetail = () => {
 
   const getCourse = async () => {
     const { id } = router.query;
-    setCourse(COURSES[Number(id)]);
+    if (id) {
+      const { data } = await API.get<ICourse[]>(`/course/courseBoards/${id}`, {
+        // id: loggedInId,
+      });
+      setCourse(data[0]);
+      setComments(data[0].comments);
+    }
+
+    // setCourse(COURSES[Number(id)]);
   };
 
   const getComments = async () => {
@@ -79,7 +88,7 @@ const CourseDetail = () => {
 
   useEffect(() => {
     getCourse();
-    getComments();
+    // getComments();
   }, [router.isReady]);
 
   return (

@@ -44,7 +44,9 @@ const ProfileHome = () => {
         const { data } = await API.post("/user/board", {
           id: loggedInId,
         });
-        setMyBoards(data.slice(-3));
+
+        const arr = [...data.theme, ...data.recommend];
+        setMyBoards(arr.slice(-3));
       } catch (e) {
         console.log("myBoard", e);
       }
@@ -57,7 +59,9 @@ const ProfileHome = () => {
         const { data } = await API.post("/user/likeList", {
           id: loggedInId,
         });
-        setLikeBoards(data.slice(-3));
+
+        const arr = [...data.theme, ...data.recommend];
+        setLikeBoards(arr.slice(-3));
       } catch (e) {
         console.log("likeBoard", e);
       }

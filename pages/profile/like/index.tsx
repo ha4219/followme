@@ -19,9 +19,9 @@ const ProfileLike = () => {
     const { data } = await API.post("/user/likeList", {
       id: loggedInId,
     });
-    setSize(Math.ceil(data.length / perPage));
-
-    setBoards(data.reverse());
+    const arr = [...data.theme, ...data.recommend];
+    setSize(Math.ceil(arr.length / perPage));
+    setBoards(arr);
   };
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);

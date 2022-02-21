@@ -82,8 +82,8 @@ const CourseBoard = () => {
             : courses
           ).map((item, index) => (
             <TableRow
-              key={index}
-              onClick={() => onClickRow(item.idx - 1)}
+              key={item.idx}
+              onClick={() => onClickRow(item.idx)}
               className="cursor"
             >
               <TableCell className="title">

@@ -43,6 +43,7 @@ const ThemeDetail = () => {
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
+        setComments(data[0].comments);
       }
     } catch (e) {
       console.log("router not ready", e);
@@ -126,7 +127,7 @@ const ThemeDetail = () => {
 
   useEffect(() => {
     getDetail();
-    getComments();
+    // getComments();
     return () => setLoading(false);
   }, [router.isReady]);
 

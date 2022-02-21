@@ -4,7 +4,7 @@ import { Avatar } from "@mui/material";
 import gravatar from "gravatar";
 import { IComment } from "types/apiType";
 
-const ReplyContent = ({ id, content, createdAt }: IComment) => {
+const ReplyContent = ({ id, content, createdAt, fk_user_id }: IComment) => {
   return (
     <MainContainer>
       <Avatar
@@ -16,7 +16,7 @@ const ReplyContent = ({ id, content, createdAt }: IComment) => {
         className="avatar"
       />
       <div className="content">
-        <div className="replyId">{id}</div>
+        <div className="replyId">{id ? id : fk_user_id}</div>
         <div className="replyContent">{content}</div>
         <div className="replyDate">{dateHelper(createdAt)}</div>
       </div>
