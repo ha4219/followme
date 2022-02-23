@@ -1,20 +1,18 @@
-import styled from "@emotion/styled";
-import { Button, TextField } from "@mui/material";
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState, useMemo } from "react";
-import { v1 } from "uuid";
-// import S3 from "react-aws-s3";
-// import S3FileUpload from "react-s3";
 import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
-import { API, getPayload } from "@src/API";
-import { useRecoilValue } from "recoil";
+import dynamic from "next/dynamic";
 import { idState } from "@store/auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { Button, TextField } from "@mui/material";
+import styled from "@emotion/styled";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import { useRecoilValue } from "recoil";
+import { IComment, ICourse, ICourseDetail } from "types/apiType";
+import { API } from "@src/API";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -26,10 +24,6 @@ const myBucket = new AWS.S3({
   region: config.region,
 });
 
-// const Quill = dynamic(import("react-quill"), {
-//   ssr: false,
-//   loading: () => <p>Loading ...</p>,
-// });
 const Quill = dynamic(
   async () => {
     const { default: RQ } = await import("react-quill");
@@ -40,7 +34,7 @@ const Quill = dynamic(
   { ssr: false }
 );
 
-const CourseCustomEditor = () => {
+const CourseReivseEditor = ({ idx }) => {
   const ref = useRef();
   const router = useRouter();
   const [value, setValue] = useState("");
@@ -48,18 +42,6 @@ const CourseCustomEditor = () => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const isLoggedInId = useRecoilValue(idState);
-
-  const onTagKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      setTags([...tags, tag]);
-    }
-  };
-
-  const onTagClick = (index) => {
-    const arr = [...tags];
-    arr.pop(index);
-    setTags(arr);
-  };
   const [date1, setDate1] = useState();
   const [date2, setDate2] = useState();
   const onChangeDate1 = (newValue) => {
@@ -68,6 +50,32 @@ const CourseCustomEditor = () => {
   const onChangeDate2 = (newValue) => {
     setDate2(newValue);
   };
+
+  const getCourse = async () => {
+    if (idx) {
+      const { data } = await API.get(`/course/courseBoards/${idx}`, {
+        // id: loggedInId,
+      });
+      setTitle(data[0].title);
+      // setValue(data[0].content);
+
+      // setCourse(data[0]);
+      // if (data[0].comments) {
+      //   setComments(data[0].comments);
+      // }
+      // setComments(data[0].comments);
+    }
+
+    // setCourse(COURSES[Number(id)]);
+  };
+
+  useEffect(() => {
+    getCourse();
+  }, []);
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   const putObjectWrapper = (params) => {
     return new Promise((resolve, reject) => {
@@ -278,4 +286,4 @@ const TagContainer = styled.div`
   }
 `;
 
-export default CourseCustomEditor;
+export default CourseReivseEditor;

@@ -15,6 +15,7 @@ import { idState } from "@store/auth";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
+import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 
 const ThemeDetail = () => {
   const router = useRouter();
@@ -203,14 +204,15 @@ const ThemeDetail = () => {
               dangerouslySetInnerHTML={{ __html: course.content }}
             />
           )}
-          {/* {course && course.writer === isLoggedInId && (
-          <ButtonContainer>
-            <Button variant="contained">수정</Button>
-            <Button variant="contained" color="error">
-              삭제
-            </Button>
-          </ButtonContainer>
-        )} */}
+          {course && course.writer === loggedInId && (
+            // <ButtonContainer>
+            //   <Button variant="contained">수정</Button>
+            //   <Button variant="contained" color="error">
+            //     삭제
+            //   </Button>
+            // </ButtonContainer>
+            <ReviseDeleteButtons url="theme" id={loggedInId} idx={idx} />
+          )}
 
           <ReplyContainer>
             <div className="replylabel">{`댓글  ${comments.length}`}</div>

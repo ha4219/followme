@@ -17,6 +17,7 @@ import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { API } from "@src/API";
+import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -163,14 +164,15 @@ const CourseDetail = () => {
                 className="detailContent"
                 dangerouslySetInnerHTML={{ __html: course.content }}
               />
-              {/* {course && course.writer === memberId && (
-          <ButtonContainer>
-            <Button variant="contained">수정</Button>
-            <Button variant="contained" color="error">
-              삭제
-            </Button>
-          </ButtonContainer>
-        )} */}
+              {course && course.writer === loggedInId && (
+                // <ButtonContainer>
+                //   <Button variant="contained">수정</Button>
+                //   <Button variant="contained" color="error">
+                //     삭제
+                //   </Button>
+                // </ButtonContainer>
+                <ReviseDeleteButtons url="course" id={loggedInId} idx={idx} />
+              )}
               <ReplyContainer>
                 <div className="replyCnt">{`댓글: ${
                   course.comments ? course.comments.length : 0
