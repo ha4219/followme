@@ -35,7 +35,7 @@ const LeftLayout: FC = ({ children }) => {
 
   return (
     <Grid container>
-      <Grid item xs={3} sx={{ fontFamily: "paybooc-Medium" }}>
+      <Grid item xs={12} sm={12} md={3} sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={2}>
           <Box pr={2}>
             <TextField
@@ -95,7 +95,7 @@ const LeftLayout: FC = ({ children }) => {
           ))}
         </Box>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={12} sm={12} md={9}>
         {children}
       </Grid>
     </Grid>
