@@ -23,7 +23,7 @@ const EditorDetailLeftLayout: FC<IProps> = ({
 }) => {
   return (
     <Grid container>
-      <Grid xs={3} item>
+      <Grid xs={12} sm={12} md={3} item>
         <Box py={2}>
           {tags.map((tag, index) => (
             <EditorTag key={index} tag={tag} />
@@ -78,7 +78,7 @@ const EditorDetailLeftLayout: FC<IProps> = ({
           ))}
         </Box>
       </Grid>
-      <Grid xs={9} item>
+      <Grid xs={12} sm={12} md={9} item>
         {children}
       </Grid>
     </Grid>
