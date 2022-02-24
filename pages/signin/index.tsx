@@ -15,8 +15,15 @@ import { API, checkToken, setToken } from "src/API";
 import { authState, idState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
-// import axios from "axios";
 import { toast } from "react-toastify";
+import { auth } from "@config/firebaseConfig";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
+} from "firebase/auth";
 
 declare global {
   interface Window {
@@ -32,7 +39,7 @@ const Signin = () => {
 
   const [id, setId, onChangeId] = useInput("");
   const [password, setPassowrd, onChangePassword] = useInput("");
-  const [naver, setNaver] = useState();
+  const [naver, setNaver] = useState<any>();
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -61,9 +68,9 @@ const Signin = () => {
 
     const naverLogin = new window.naver.LoginWithNaverId({
       clientId: process.env.NEXT_PUBLIC_NAVERID,
-      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin/naver`,
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin`,
       isPopup: false,
-      loginButton: { color: "green", type: 1, height: 60 },
+      loginButton: { color: "green", type: 3, height: 44, width: 352 },
       callbackHandle: true,
     });
     naverLogin.init();
@@ -103,6 +110,49 @@ const Signin = () => {
       router.push("/");
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    console.log(
+      naver?.getLoginStatus((status) => {
+        console.log(status);
+        if (status) {
+          console.log(naver.user);
+        }
+      })
+    );
+  }, [naver]);
+
+  const onClickGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((res) => {
+        const credential = GoogleAuthProvider.credentialFromResult(res);
+        const token = credential?.accessToken;
+        const user = res.user;
+        console.log(res, credential, token, user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // return auth.signInWithPopup(provider);
+  };
+
+  // const onClickFacebook = () => {
+  //   const provider = new FacebookAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then((res) => {
+  //       console.log(res);
+
+  //       const credential = FacebookAuthProvider.credentialFromResult(res);
+  //       const token = credential.accessToken;
+  //       const user = res.user;
+  //       console.log(res, credential, token, user);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const init = async () => {
     try {
@@ -200,15 +250,17 @@ const Signin = () => {
           >
             카카오 로그인
           </Button>
-          <Button
+          {/* <Button
+            onClick={onClickFacebook}
             sx={{ marginTop: "1rem", backgroundColor: "#3a5ca9" }}
             fullWidth
             variant="contained"
             size="large"
           >
             Facebook 로그인
-          </Button>
+          </Button> */}
           <Button
+            onClick={onClickGoogle}
             sx={{ marginTop: "1rem", backgroundColor: "#e74133" }}
             fullWidth
             variant="contained"
