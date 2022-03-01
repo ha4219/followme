@@ -9,12 +9,7 @@ import { useRecoilState } from "recoil";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import {
-  MainPageSubText,
-  MainPageText,
-  MainPageText1,
-  MainPageText2,
-} from "@data/mainData";
+import { MainPageSubText, MainPageText1, MainPageText2 } from "@data/mainData";
 
 const MainSearchContaier = () => {
   const router = useRouter();
