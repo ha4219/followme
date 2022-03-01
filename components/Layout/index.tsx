@@ -12,9 +12,7 @@ const Layout: FC = ({ children }) => {
   return (
     <Box>
       {router?.pathname === "/" && <BackPhoto src={"/back.jpeg"} />}
-      <Navbar />
-
-      {/* <AdminDrawer /> */}
+      {router?.pathname.includes("admin") ? <AdminDrawer /> : <Navbar />}
       {children}
     </Box>
   );

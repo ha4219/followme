@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import CourseBoard from "@components/course/CourseBoard";
 import CourseTable from "@components/course/CourseTable";
 import { COURSES } from "@data/CourseData";
+import ProfilePointHistory from "@components/profile/PointHistory";
 
 const ProfileHome = () => {
   const router = useRouter();
@@ -120,6 +121,9 @@ const ProfileHome = () => {
                 <div className="subTitle">포인트 내역</div>
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
+              <Box>
+                <ProfilePointHistory />
+              </Box>
             </div>
             <div className="mycourse">
               <div className="sub">
