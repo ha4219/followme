@@ -6,6 +6,9 @@ import { tagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 const MainSearchContaier = () => {
   const router = useRouter();
@@ -17,6 +20,10 @@ const MainSearchContaier = () => {
     },
     [value]
   );
+  const [date, setDate] = useState();
+  const onChangeDate = (newValue) => {
+    setDate(newValue);
+  };
 
   const onSubmitValue = useCallback(() => {
     setSelectedTag(value);
@@ -41,6 +48,28 @@ const MainSearchContaier = () => {
               onChange={onChangeValue}
             />
           </div>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <div className="subContainer">
+              <DesktopDatePicker
+                inputFormat="MM/dd/yyyy"
+                value={date}
+                onChange={onChangeDate}
+                label="여행시작일 선택"
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="여행도착일 선택" />
+                )}
+              />
+            </div>
+            <div className="subContainer">
+              <DesktopDatePicker
+                inputFormat="MM/dd/yyyy"
+                value={date}
+                onChange={onChangeDate}
+                label="여행도착일 선택"
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </div>
+          </LocalizationProvider>
           <Button className="btn" onClick={onSubmitValue}>
             검색
           </Button>
@@ -63,6 +92,10 @@ const MainContainer = styled.div`
   display: flex;
   min-width: 50%;
   padding-bottom: 2rem;
+
+  & .subContainer {
+    margin-left: 0.5rem;
+  }
 
   & .sub {
     padding: 3rem;
