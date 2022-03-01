@@ -8,6 +8,7 @@ import {
   Button,
   Container,
   TextField,
+  InputAdornment,
 } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -21,6 +22,7 @@ import { authState, idState } from "@store/auth";
 import { checkToken, setToken } from "@src/API";
 import { toast } from "react-toastify";
 import useInput from "@hooks/useInput";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface PageProps {
   label: string;
@@ -86,23 +88,12 @@ const Navbar = () => {
   };
 
   return (
-    <Container sx={{ borderBottom: "1px solid rgba(255,255,255,0.3)" }}>
-      <TopNav>
-        {loggedIn ? (
-          <div className={isMain ? "topSub whiteTxt" : "topSub"}>
-            <span onClick={doLogout}>Logout</span>|
-            <Link href="/profile/home">Profile</Link>|
-            <Link href="/help/faq">고객센터</Link>
-          </div>
-        ) : (
-          <div className={isMain ? "topSub whiteTxt" : "topSub"}>
-            <Link href="/signin">Login</Link>|
-            <Link href="/signup">Join us</Link>|
-            <Link href="/help/faq">고객센터</Link>
-          </div>
-        )}
-        {/* <TextField id="search" value={search} onChange={onChangeSearch} /> */}
-      </TopNav>
+    <Container
+      sx={{
+        borderBottom: "1px solid rgba(255,255,255,0.3)",
+        paddingBottom: "1rem",
+      }}
+    >
       <Toolbar disableGutters>
         <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
           <IconButton
@@ -179,6 +170,9 @@ const Navbar = () => {
                 display: "block",
                 fontSize: "1rem",
                 fontWeight: "bold",
+                paddingBottom: 0,
+                paddingTop: "1.1rem",
+                marginBottom: 0,
               },
             ]}
           >
@@ -196,6 +190,9 @@ const Navbar = () => {
                   display: "block",
                   fontSize: "1rem",
                   fontWeight: "bold",
+                  paddingBottom: 0,
+                  paddingTop: "1.1rem",
+                  marginBottom: 0,
                 },
                 selectedNavIndex === index && {
                   color: "#ff9016",
@@ -207,6 +204,44 @@ const Navbar = () => {
             </Button>
           ))}
         </Box>
+        <TopNav>
+          <div>
+            {loggedIn ? (
+              <div className={isMain ? "topSub whiteTxt" : "topSub"}>
+                <span onClick={doLogout}>Logout</span>|
+                <Link href="/profile/home">Profile</Link>|
+                <Link href="/help/faq">고객센터</Link>
+              </div>
+            ) : (
+              <div className={isMain ? "topSub whiteTxt" : "topSub"}>
+                <Link href="/signin">Login</Link>|
+                <Link href="/signup">Join us</Link>|
+                <Link href="/help/faq">고객센터</Link>
+              </div>
+            )}
+            <TextField
+              id="search"
+              className="searchField"
+              value={search}
+              onChange={onChangeSearch}
+              sx={{
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                marginTop: "10px",
+              }}
+              size="small"
+              placeholder="검색어를 입력해주세요."
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+        </TopNav>
       </Toolbar>
     </Container>
   );

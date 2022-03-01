@@ -21,4 +21,7 @@ export const TopNav = styled.div`
       color: #ffffff;
     }
   }
+
+  & .searchField {
+  }
 `;

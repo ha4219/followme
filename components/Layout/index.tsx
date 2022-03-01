@@ -24,7 +24,7 @@ const BackPhoto = styled.div`
   z-index: -9999;
   background-size: cover;
   width: 100%;
-  height: 600px;
+  height: 700px;
 `;
 
 export default Layout;

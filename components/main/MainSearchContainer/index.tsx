@@ -99,7 +99,7 @@ const MainSearchContaier = () => {
 };
 
 const MainContainer = styled.div`
-  margin-top: 30px;
+  margin-top: 140px;
   min-width: 50%;
   padding-bottom: 2rem;
   text-align: center;
