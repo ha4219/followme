@@ -9,6 +9,12 @@ import { useRecoilState } from "recoil";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import {
+  MainPageSubText,
+  MainPageText,
+  MainPageText1,
+  MainPageText2,
+} from "@data/mainData";
 
 const MainSearchContaier = () => {
   const router = useRouter();
@@ -37,6 +43,11 @@ const MainSearchContaier = () => {
 
   return (
     <MainContainer>
+      <div className="mainText">
+        <div className="mainTxt">{MainPageText1}</div>
+        <div className="mainTxt">{MainPageText2}</div>
+        <div className="subTxt">{MainPageSubText}</div>
+      </div>
       <div className="sub">
         <div className="des">팔로미 여행지 검색</div>
         <div className="inputContainer">
@@ -88,18 +99,33 @@ const MainSearchContaier = () => {
 };
 
 const MainContainer = styled.div`
-  margin-top: 210px;
-  display: flex;
+  margin-top: 30px;
   min-width: 50%;
   padding-bottom: 2rem;
+  text-align: center;
 
+  & .mainText {
+    padding-left: 13%;
+    padding-right: auto;
+    text-align: left;
+    padding-bottom: 2rem;
+    color: #ffffff;
+    & .mainTxt {
+      font-size: 2.3rem;
+      font-weight: bold;
+    }
+
+    & .subTxt {
+      font-size: 1.3rem;
+    }
+  }
   & .subContainer {
     margin-left: 0.5rem;
   }
 
   & .sub {
     padding: 3rem;
-
+    text-align: left;
     display: inline-block;
     background-color: #ffffff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
