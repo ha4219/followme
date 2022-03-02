@@ -72,7 +72,9 @@ const MainEditorPickContainer = () => {
           </TitleContainer>
           <BtnContainer>
             <CustomButton onClick={onLeftClick}>{"<"}</CustomButton>
-            <CustomButton onClick={onRightClick}>{">"}</CustomButton>
+            <CustomButton sx={{ borderLeft: "" }} onClick={onRightClick}>
+              {">"}
+            </CustomButton>
           </BtnContainer>
         </HeadContainer>
         <BodyContainer item sm={6} md={9}>
@@ -132,7 +134,11 @@ const BtnContainer = styled.div`
 
 const CustomButton = styled(Button)`
   border: 1px solid black;
-  margin-left: 5px;
+  // margin-left: 5px;
+  border-radius: 0;
+  font-weight: bold;
+  font-family: paybooc-ExtraBold;
+  padding: 0.8rem 0;
 `;
 
 export default MainEditorPickContainer;
