@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
@@ -33,7 +33,7 @@ const MainEditorContent: VFC<ICourse> = ({
     return Buffer.from(arr);
   };
   return (
-    <MainContainer src={`${toBase64(mainImg.data)}`}>
+    <MainContainer src={`${toBase64(mainImg.data)}`} item sm={12} md={4}>
       <div className="tag">
         <span>{region}</span>
       </div>
@@ -48,14 +48,13 @@ const MainEditorContent: VFC<ICourse> = ({
   );
 };
 
-const MainContainer = styled.div`
-  width: 346px;
+const MainContainer = styled(Grid)`
   display: block;
   background: url(${(props: { src: string }) => props.src}) no-repeat;
   border-radius: 5px;
   color: #ffffff;
   text-align: center;
-  padding: 5rem;
+  padding: 5rem 0;
 
   :hover {
     background-color: #ffffff;
@@ -88,7 +87,9 @@ const MainContainer = styled.div`
 `;
 
 const CustomButton = styled(Button)`
-  margin-top: 3rem;
+  display: inline-block;
+  align-self: flex-end;
+  margin-bottom: 1rem;
   color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 5px;
