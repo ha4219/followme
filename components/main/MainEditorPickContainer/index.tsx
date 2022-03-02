@@ -51,6 +51,7 @@ const MainEditorPickContainer = () => {
 
 const MainContainer = styled.div`
   display: flex;
+  width: 100%;
   background: linear-gradient(0deg, #edeef8 30%, white 30%);
 `;
 

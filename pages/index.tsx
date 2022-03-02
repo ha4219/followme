@@ -29,14 +29,17 @@ const Home: NextPage = () => {
       {isLoading ? (
         <></>
       ) : (
-        <Container>
+        <div>
           <MainSearchContaier />
           <MainEditorPickContainer />
-          <ProgramList />
-          <MainThemeContainer />
-          <Banner />
-          <MainMapContainer />
-        </Container>
+
+          <Container>
+            <ProgramList />
+            <MainThemeContainer />
+            <Banner />
+            <MainMapContainer />
+          </Container>
+        </div>
       )}
     </div>
   );

@@ -23,6 +23,7 @@ import { checkToken, setToken } from "@src/API";
 import { toast } from "react-toastify";
 import useInput from "@hooks/useInput";
 import SearchIcon from "@mui/icons-material/Search";
+import { tagState } from "@store/tag";
 
 interface PageProps {
   label: string;
@@ -45,7 +46,19 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedNavIndex, setSelectedNavIndex] = useState(-1);
   const [isMain, setIsMain] = useState(true);
-  const [search, setSearch, onChangeSearch] = useInput("");
+  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
+  const [value, setValue] = useState("");
+  const onChangeValue = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [value]
+  );
+
+  const onSubmitValue = useCallback(() => {
+    setSelectedTag(value);
+    router.push("/editor");
+  }, [value]);
 
   useEffect(() => {
     if (!checkToken() && loggedIn) {
@@ -203,45 +216,45 @@ const Navbar = () => {
               {page.label}
             </Button>
           ))}
+          <TopNav>
+            <div>
+              {loggedIn ? (
+                <div className={isMain ? "topSub whiteTxt" : "topSub"}>
+                  <span onClick={doLogout}>Logout</span>|
+                  <Link href="/profile/home">Profile</Link>|
+                  <Link href="/help/faq">고객센터</Link>
+                </div>
+              ) : (
+                <div className={isMain ? "topSub whiteTxt" : "topSub"}>
+                  <Link href="/signin">Login</Link>|
+                  <Link href="/signup">Join us</Link>|
+                  <Link href="/help/faq">고객센터</Link>
+                </div>
+              )}
+              <TextField
+                id="search"
+                className="searchField"
+                value={value}
+                onChange={onChangeValue}
+                sx={{
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  marginTop: "10px",
+                }}
+                size="small"
+                placeholder="검색어를 입력해주세요."
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={onSubmitValue}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </div>
+          </TopNav>
         </Box>
-        <TopNav>
-          <div>
-            {loggedIn ? (
-              <div className={isMain ? "topSub whiteTxt" : "topSub"}>
-                <span onClick={doLogout}>Logout</span>|
-                <Link href="/profile/home">Profile</Link>|
-                <Link href="/help/faq">고객센터</Link>
-              </div>
-            ) : (
-              <div className={isMain ? "topSub whiteTxt" : "topSub"}>
-                <Link href="/signin">Login</Link>|
-                <Link href="/signup">Join us</Link>|
-                <Link href="/help/faq">고객센터</Link>
-              </div>
-            )}
-            <TextField
-              id="search"
-              className="searchField"
-              value={search}
-              onChange={onChangeSearch}
-              sx={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                marginTop: "10px",
-              }}
-              size="small"
-              placeholder="검색어를 입력해주세요."
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-        </TopNav>
       </Toolbar>
     </Container>
   );

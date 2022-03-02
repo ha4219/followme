@@ -1,7 +1,7 @@
 import TagContainer from "@components/TagContainer";
 import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
-import { Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { tagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useState, useCallback } from "react";
@@ -38,12 +38,14 @@ const MainSearchContaier = () => {
 
   return (
     <MainContainer>
-      <div className="mainText">
-        <div className="mainTxt">{MainPageText1}</div>
-        <div className="mainTxt">{MainPageText2}</div>
-        <div className="subTxt">{MainPageSubText}</div>
-      </div>
-      <div className="sub">
+      <Box className="mainText">
+        <div className="mainSubText">
+          <div className="mainTxt">{MainPageText1}</div>
+          <div className="mainTxt">{MainPageText2}</div>
+          <div className="subTxt">{MainPageSubText}</div>
+        </div>
+      </Box>
+      <Box className="sub" sx={{ display: { xs: "none", md: "inline-block" } }}>
         <div className="des">팔로미 여행지 검색</div>
         <div className="inputContainer">
           <div className="input">
@@ -88,7 +90,7 @@ const MainSearchContaier = () => {
             </div>
           ))}
         </div>
-      </div>
+      </Box>
     </MainContainer>
   );
 };
@@ -96,22 +98,28 @@ const MainSearchContaier = () => {
 const MainContainer = styled.div`
   margin-top: 140px;
   min-width: 50%;
-  padding-bottom: 2rem;
+  padding-bottom: 5rem;
   text-align: center;
 
   & .mainText {
-    padding-left: 13%;
-    padding-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: left;
     padding-bottom: 2rem;
     color: #ffffff;
-    & .mainTxt {
-      font-size: 2.3rem;
-      font-weight: bold;
-    }
 
-    & .subTxt {
-      font-size: 1.3rem;
+    & .mainSubText {
+      margin-left: 15%;
+      margin-right: auto;
+      & .mainTxt {
+        font-size: 2.3rem;
+        font-weight: bold;
+      }
+
+      & .subTxt {
+        font-size: 1.3rem;
+      }
     }
   }
   & .subContainer {
@@ -121,7 +129,6 @@ const MainContainer = styled.div`
   & .sub {
     padding: 3rem;
     text-align: left;
-    display: inline-block;
     background-color: #ffffff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
     border-radius: 20px;
@@ -139,7 +146,7 @@ const MainContainer = styled.div`
       display: flex;
 
       & .input {
-        width: 70%;
+        width: 560px;
       }
       & .btn {
         color: #ffffff;
