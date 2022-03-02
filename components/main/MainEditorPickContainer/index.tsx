@@ -103,9 +103,10 @@ const TitleContainer = styled.div`
     color: gray;
   }
   & .main {
+    font-family: paybooc-ExtraBold;
     font-size: 2rem;
     letter-spacing: -1.76px;
-    letter-spacing: -0.66px;
+    // letter-spacing: -0.66px;
   }
   & .content {
     font-size: 0.8rem;
