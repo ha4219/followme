@@ -33,32 +33,44 @@ const MainEditorContent: VFC<ICourse> = ({
     return Buffer.from(arr);
   };
   return (
-    <MainContainer src={`${toBase64(mainImg.data)}`} item sm={12} md={4}>
-      <div className="tag">
-        <span>{region}</span>
-      </div>
-      <div className="title">
-        <span>{titleSummary(title)}</span>
-      </div>
-      <div className="content">
-        <span>{contentSummary(shortContent)}</span>
-      </div>
-      <CustomButton onClick={onClickProgram}>바로가기</CustomButton>
-    </MainContainer>
+    <Grid item sm={12} md={4}>
+      <WrapperContainer src={`${toBase64(mainImg.data)}`}>
+        <MainContainer>
+          <div className="tag">
+            <span>{region}</span>
+          </div>
+          <div className="title">
+            <span>{titleSummary(title)}</span>
+          </div>
+          <div className="content">
+            <span>{contentSummary(shortContent)}</span>
+          </div>
+          <CustomButton onClick={onClickProgram}>바로가기</CustomButton>
+        </MainContainer>
+      </WrapperContainer>
+    </Grid>
   );
 };
 
-const MainContainer = styled(Grid)`
-  display: block;
+const WrapperContainer = styled.div`
   background: url(${(props: { src: string }) => props.src}) no-repeat;
   border-radius: 5px;
+  background-size: cover;
+  height: 50vh;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
   color: #ffffff;
   text-align: center;
   padding: 5rem 0;
+  border-radius: 5px;
 
   :hover {
-    background-color: #ffffff;
-    opacity: 0.6;
+    background: #323fb2b3;
   }
 
   & .tag {
@@ -87,9 +99,9 @@ const MainContainer = styled(Grid)`
 `;
 
 const CustomButton = styled(Button)`
-  display: inline-block;
-  align-self: flex-end;
-  margin-bottom: 1rem;
+  // display: block;
+  width: 130px;
+  margin-top: auto;
   color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 5px;

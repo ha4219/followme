@@ -30,8 +30,6 @@ const MainEditorPickContainer = () => {
   };
 
   const onRightClick = useCallback(() => {
-    console.log(page, picks.length / perPageSize - 1);
-
     setPage(page < picks.length / perPageSize - 1 ? page + 1 : page);
   }, [page, perPageSize]);
 
@@ -40,7 +38,9 @@ const MainEditorPickContainer = () => {
   }, [page]);
 
   useEffect(() => {
-    setPaerPageSize(width >= 900 ? 3 : 1);
+    if (width) {
+      setPaerPageSize(width >= 900 ? 3 : 1);
+    }
   }, [width]);
 
   //나중에 바꿔
@@ -76,7 +76,7 @@ const MainEditorPickContainer = () => {
           </BtnContainer>
         </HeadContainer>
         <BodyContainer item sm={6} md={9}>
-          <Grid container spacing={0}>
+          <Grid container spacing={1}>
             {picks
               .slice(page * perPageSize, (page + 1) * perPageSize)
               .map((item, index) => (
