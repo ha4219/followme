@@ -66,7 +66,7 @@ const MainContainer = styled.div`
   align-items: center;
   color: #ffffff;
   text-align: center;
-  padding: 5rem 0;
+  padding: 5rem 1rem;
   border-radius: 5px;
 
   :hover {
