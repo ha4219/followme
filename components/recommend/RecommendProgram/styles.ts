@@ -8,35 +8,42 @@ type PhotoProps = {
 export const PhotoContainer = styled(Box)<PhotoProps>`
   height: 30vh;
   background: url(${(props) => props.src}) no-repeat;
-  background-position: top 12px right 0;
+  // background-position: top 12px right 0;
   background-size: cover;
   border-radius: 10px;
-  :hover {
-    background-color: #ffffff;
-    opacity: 0.6;
+
+  & div {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
   }
+`;
 
-  & .topContainer {
-    display: flex;
-    justify-content: right;
-    
-    & .haertContainer {
-      background-color: #f93b1d;
-      width: 62px;
-      height: 72px;
-      padding: 24px 0;
-      border-radius: 5px 5px 40px 40px;
+export const TopContainer = styled.div`
+  right: 0px;
+  top: -10px;
+  position: absolute;
+  display: flex;
+  justify-content: right;
+  z-index: 99;
 
-      & .heart {
-        fill: white;
-        z-index: 1;
-      }
+  & .haertContainer {
+    background-color: #f93b1d;
+    width: 62px;
+    height: 72px;
+    padding: 24px 0;
+    border-radius: 5px 5px 40px 40px;
 
-      & .fillHeart {
-        fill: white;
-        z-index: 1;
-      }
+    & .heart {
+      fill: white;
+      z-index: 1;
     }
+
+    & .fillHeart {
+      fill: white;
+      z-index: 1;
+    }
+  }
 `;
 
 export const DesContainer = styled.div`
@@ -52,13 +59,22 @@ export const DesContainer = styled.div`
     display: block;
     font-size: 1rem;
   }
-
-  :hover {
-    color: #00a0e0;
-  }
 `;
 
 export const ContentContainer = styled(Box)`
   display: inline-flex;
   padding: 0 1rem;
+`;
+
+export const MainContainer = styled(Box)`
+  padding-bottom: 2rem;
+  position: relative;
+  cursor: pointer;
+
+  :hover {
+    & .hoverImg {
+      background: #323fb2b3;
+    }
+    color: #00a0e0;
+  }
 `;

@@ -33,7 +33,7 @@ const MainEditorContent: VFC<ICourse> = ({
     return Buffer.from(arr);
   };
   return (
-    <Grid item sm={12} md={4}>
+    <Grid item xs={12} sm={12} md={4}>
       <WrapperContainer src={`${toBase64(mainImg.data)}`}>
         <MainContainer>
           <div className="tag">

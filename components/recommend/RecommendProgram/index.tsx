@@ -3,7 +3,13 @@ import Image from "next/image";
 import React, { useCallback, useState, VFC } from "react";
 import gravatar from "gravatar";
 
-import { PhotoContainer, DesContainer, ContentContainer } from "./styles";
+import {
+  PhotoContainer,
+  DesContainer,
+  ContentContainer,
+  TopContainer,
+  MainContainer,
+} from "./styles";
 import { contentSummary, titleSummary } from "@helpers/programHelper";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -65,64 +71,71 @@ const ThemeProgram: VFC<ICourse> = ({
 
   return (
     <Grid item lg={4} xs={6} md={4} sm={6}>
-      <Box
+      <MainContainer
         onClick={() => {
           onClickProgram(idx);
         }}
         sx={{
-          alignItems: "stretch",
-          borderRadius: "0 0 10px 10px",
-          border: "1px solid #d8d8d8",
-          borderTop: 0,
           paddingBottom: "2rem",
+          position: "relative",
           cursor: "pointer",
-          overflow: "hidden",
         }}
       >
-        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
-          <div className="topContainer">
-            <IconButton
-              onClick={onClickLike}
-              sx={{ padding: 0, marginRight: 2, display: "flex" }}
-            >
-              <div className="haertContainer">
-                {like ? (
-                  <FavoriteIcon
-                    className="fillHeart"
-                    sx={{
-                      width: 28,
-                      height: 28,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    className="heart"
-                    sx={{ width: 28, height: 28 }}
-                  />
-                )}
-              </div>
-            </IconButton>
-          </div>
-        </PhotoContainer>
-        <Box sx={{ padding: "0 1rem" }}>
-          <TagContainer tags={tags} />
-        </Box>
-        <ContentContainer>
-          <IconButton>
-            <Avatar
-              alt="user"
-              // src={gravatar.url(user, { s: "28px", d: "retro" })}
-              className="avatar"
-            />
+        <TopContainer>
+          <IconButton
+            onClick={onClickLike}
+            sx={{ padding: 0, marginRight: 2, display: "flex" }}
+          >
+            <div className="haertContainer">
+              {like ? (
+                <FavoriteIcon
+                  className="fillHeart"
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    alignItems: "center",
+                    verticalAlign: "center",
+                  }}
+                />
+              ) : (
+                <FavoriteBorderIcon
+                  className="heart"
+                  sx={{ width: 28, height: 28 }}
+                />
+              )}
+            </div>
           </IconButton>
-          <DesContainer className="description">
-            <div className="title">{titleSummary(title)}</div>
-            <div className="content">{contentSummary(shortContent)}</div>
-          </DesContainer>
-        </ContentContainer>
-      </Box>
+        </TopContainer>
+        <Box
+          sx={{
+            border: "1px solid #d8d8d8",
+            borderTop: 0,
+            cursor: "pointer",
+            alignItems: "stretch",
+            borderRadius: "0 0 10px 10px",
+          }}
+        >
+          <PhotoContainer src={`${toBase64(mainImg.data)}`}>
+            <div className="hoverImg" />
+          </PhotoContainer>
+          <Box sx={{ padding: "0 1rem" }}>
+            <TagContainer tags={tags} />
+          </Box>
+          <ContentContainer>
+            <IconButton>
+              <Avatar
+                alt="user"
+                // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                className="avatar"
+              />
+            </IconButton>
+            <DesContainer className="description">
+              <div className="title">{titleSummary(title)}</div>
+              <div className="content">{contentSummary(shortContent)}</div>
+            </DesContainer>
+          </ContentContainer>
+        </Box>
+      </MainContainer>
     </Grid>
   );
 };

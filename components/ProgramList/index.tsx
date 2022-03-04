@@ -105,18 +105,21 @@ const ProgramList: VFC = () => {
         </TitleContainer>
         <SortedContainer>
           <CustomButton
+            size="small"
             className={sortedType === 0 ? "active" : ""}
             onClick={() => setSortedType(0)}
           >
             추천순
           </CustomButton>
           <CustomButton
+            size="small"
             className={sortedType === 1 ? "active" : ""}
             onClick={() => setSortedType(1)}
           >
             인기순
           </CustomButton>
           <CustomButton
+            size="small"
             className={sortedType === 2 ? "active" : ""}
             onClick={() => setSortedType(2)}
           >
@@ -163,6 +166,7 @@ const SortedContainer = styled.div`
 const CustomButton = styled(Button)`
   border: 1px solid black;
   margin-left: 5px;
+  height: 30px;
 `;
 
 export default ProgramList;

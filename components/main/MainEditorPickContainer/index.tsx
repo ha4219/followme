@@ -13,9 +13,10 @@ const MainEditorPickContainer = () => {
   const [picks, setPicks] = useState<ICourse[]>([]);
   const theme = useTheme();
   const [page, setPage] = useState(0);
-  const [perPageSize, setPaerPageSize] = useState(3);
+  const [mdPerPageSize, setPaerPageSize] = useState(3);
+  const [smPerPageSize, setPerPageSize] = useState(1);
   const loggedInId = useRecoilValue(idState);
-  const [width, setWidth] = useRecoilState(windowState);
+  // const [width, setWidth] = useRecoilState(windowState);
 
   const getTravel = async () => {
     const { data } = await API.post<ICourse[]>(
@@ -30,32 +31,36 @@ const MainEditorPickContainer = () => {
   };
 
   const onRightClick = useCallback(() => {
-    setPage(page < picks.length / perPageSize - 1 ? page + 1 : page);
-  }, [page, perPageSize]);
+    setPage(page < picks.length / mdPerPageSize - 1 ? page + 1 : page);
+  }, [page]);
+
+  const onSmRightClick = useCallback(() => {
+    setPage(page < picks.length / smPerPageSize - 1 ? page + 1 : page);
+  }, [page]);
 
   const onLeftClick = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);
   }, [page]);
 
-  useEffect(() => {
-    if (width) {
-      setPaerPageSize(width >= 900 ? 3 : 1);
-    }
-  }, [width]);
+  // useEffect(() => {
+  //   if (width) {
+  //     setPaerPageSize(width >= 900 ? 3 : 1);
+  //   }
+  // }, [width]);
 
   //나중에 바꿔
-  useEffect(() => {
-    if (window) {
-      const handleResize = () => {
-        setWidth(window.innerWidth);
-      };
-      window.addEventListener("resize", handleResize);
+  // useEffect(() => {
+  //   if (window) {
+  //     const handleResize = () => {
+  //       setWidth(window.innerWidth);
+  //     };
+  //     window.addEventListener("resize", handleResize);
 
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }
-  }, []);
+  //     return () => {
+  //       window.removeEventListener("resize", handleResize);
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     getTravel();
@@ -78,10 +83,32 @@ const MainEditorPickContainer = () => {
           </BtnContainer>
         </HeadContainer>
         <BodyContainer item sm={6} md={9}>
-          <Grid container spacing={1}>
+          {/* <Grid container spacing={1}>
             {picks
               .slice(page * perPageSize, (page + 1) * perPageSize)
-              .map((item, index) => (
+              .map((item) => (
+                <MainEditorContent key={item.idx} {...item} />
+              ))}
+          </Grid> */}
+          <Grid
+            container
+            spacing={1}
+            sx={{ display: { sm: "none", md: "flex" } }}
+          >
+            {picks
+              .slice(page * mdPerPageSize, (page + 1) * mdPerPageSize)
+              .map((item) => (
+                <MainEditorContent key={item.idx} {...item} />
+              ))}
+          </Grid>
+          <Grid
+            container
+            spacing={1}
+            sx={{ display: { sm: "flex", md: "none" } }}
+          >
+            {picks
+              .slice(page * smPerPageSize, (page + 1) * smPerPageSize)
+              .map((item) => (
                 <MainEditorContent key={item.idx} {...item} />
               ))}
           </Grid>

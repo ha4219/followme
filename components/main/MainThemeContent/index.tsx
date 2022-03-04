@@ -64,7 +64,7 @@ const MainThemeContent: VFC<ICourse> = ({
         <PhotoContainer src={`${toBase64(mainImg.data)}`}>
           <span className="title">{titleSummary(title)}</span>
         </PhotoContainer>
-        <TagContainer tags={tags} />
+        {tags ? <TagContainer tags={tags} /> : <div className="noTags" />}
         <ContentContainer>
           <div className="avatar">
             <Avatar
@@ -158,6 +158,10 @@ const BottomContainer = styled.div`
   & .share {
     color: #b9b9b9;
   }
+
+  & .noTags {
+    height: 1rem;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -168,6 +172,7 @@ const ContentContainer = styled.div`
   }
   & .content {
     padding: 0 1rem;
+    height: 3rem;
   }
 `;
 // background: url(${(props: { src: string }) => props.src}) no-repeat;
