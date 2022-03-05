@@ -100,6 +100,7 @@ const TitleContainer = styled.div`
     color: gray;
   }
   & .main {
+    font-family: paybooc-ExtraBold;
     font-size: 2rem;
     letter-spacing: -1.76px;
   }
@@ -122,6 +123,7 @@ const SortedContainer = styled.div`
 const CustomButton = styled(Button)`
   border: 1px solid black;
   margin-left: 5px;
+  height: 30px;
 `;
 
 export default MainThemeContainer;

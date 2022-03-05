@@ -58,6 +58,7 @@ export const DesContainer = styled.div`
   & .content {
     display: block;
     font-size: 1rem;
+    height: 5rem;
   }
 `;
 

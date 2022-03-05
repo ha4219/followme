@@ -128,7 +128,7 @@ const PhotoContainer = styled.div`
   
 
   & .title {
-    padding: 0.2rem;
+    padding: 0.2rem 1rem;
     font-size: 1.1rem;
     font-weight: bold;
     align-self:flex-end
@@ -160,7 +160,7 @@ const BottomContainer = styled.div`
   }
 
   & .noTags {
-    height: 1rem;
+    height: 4rem;
   }
 `;
 
@@ -168,6 +168,8 @@ const ContentContainer = styled.div`
   display: inline-flex;
   border-bottom: 1px solid #d8d8d8;
   padding: 1rem 0;
+  height: 5rem;
+  overflow: hidden;
   & .avatar {
   }
   & .content {

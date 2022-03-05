@@ -37,8 +37,8 @@ const Home: NextPage = () => {
             <ProgramList />
             <MainThemeContainer />
             <Banner />
-            <MainMapContainer />
           </Container>
+          <MainMapContainer />
         </div>
       )}
     </div>

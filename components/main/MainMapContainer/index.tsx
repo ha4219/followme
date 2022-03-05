@@ -45,11 +45,12 @@ const TitleContainer = styled.div`
   & .main {
     font-size: 2rem;
     letter-spacing: -1.76px;
+    font-family: paybooc-ExtraBold;
   }
 `;
 const HeadContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-bottom: 2.5rem;
 `;
 const SortedContainer = styled.div`

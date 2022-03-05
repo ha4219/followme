@@ -112,7 +112,7 @@ const ThemeProgram: VFC<ICourse> = ({
             borderTop: 0,
             cursor: "pointer",
             alignItems: "stretch",
-            borderRadius: "0 0 10px 10px",
+            borderRadius: "10px",
           }}
         >
           <PhotoContainer src={`${toBase64(mainImg.data)}`}>
