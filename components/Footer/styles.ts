@@ -5,28 +5,25 @@ export const ContainerFooter = styled.div`
   flex: 1;
   padding: 1rem 0rem;
   padding-bottom: 4rem;
-  background-color: #f8f8fa;
+  // background-color: #f8f8fa;
   color: #616161;
   margin-top: 2rem;
 
   & .nav {
+    font-family: paybooc-Bold;
     display: flex;
-    justify-content: center;
     align-items: center;
+    border-top: 1px solid #e1e2eb;
+    border-bottom: 1px solid #e1e2eb;
+    padding: 1rem;
     margin-bottom: 1rem;
     & a {
       font-size: 0.9rem;
-      padding: 1rem;
+      // padding-right: 2rem;
     }
-  }
 
-  & .help-icons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
-    & svg {
-      margin: 0 1rem;
+    & .dividor {
+      padding: 1rem;
     }
   }
 
@@ -34,14 +31,16 @@ export const ContainerFooter = styled.div`
     display: block;
     font-size: 0.85rem;
     line-height: 2rem;
+    font-family: paybooc-Medium;
     & div {
-      display: flex;
+      display: block;
       justify-content: center;
       align-items: center;
     }
   }
 
   & .any {
+    padding-top: 1rem;
     color: #9a9a9a;
   }
 `;

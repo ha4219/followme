@@ -66,6 +66,7 @@ const SortedContainer = styled.div`
 const CustomButton = styled(Button)`
   border: 1px solid black;
   margin-left: 5px;
+  height: 30px;
 `;
 
 export default MainMapContainer;
