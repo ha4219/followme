@@ -171,8 +171,9 @@ const Signin = () => {
     init();
   }, []);
 
-  const url = `https://kauth.kakao.com/oauth/authorize?client_id=51ae03197626765cf6b38489a34b9215&redirect_uri=http://3.34.24.103:3000/api/user/kakao/oauth
-&response_type=code`;
+  const rulr = "http://3.34.24.103:3300/user/kakao/oauth";
+  const cid = "51ae03197626765cf6b38489a34b9215";
+  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${cid}&redirect_uri=${rulr}&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -274,7 +275,7 @@ const Signin = () => {
           >
             Google 로그인
           </Button>
-          <a href={url}>kakao tesat</a>
+          <a href={url}>kakao test</a>
         </Box>
       </Box>
     </Container>
