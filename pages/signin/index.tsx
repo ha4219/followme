@@ -69,7 +69,7 @@ const Signin = () => {
 
     const naverLogin = new window.naver.LoginWithNaverId({
       clientId: process.env.NEXT_PUBLIC_NAVERID,
-      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin`,
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin/naver`,
       isPopup: false,
       loginButton: { color: "green", type: 3, height: 44, width: 352 },
       callbackHandle: true,
@@ -171,9 +171,8 @@ const Signin = () => {
     init();
   }, []);
 
-  const rulr = "https://followme1.vercel.app/signin/kakao";
-  const cid = "51ae03197626765cf6b38489a34b9215";
-  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${cid}&redirect_uri=${rulr}&response_type=code`;
+  const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
+  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
