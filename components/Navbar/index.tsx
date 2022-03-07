@@ -101,9 +101,10 @@ const Navbar = () => {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         borderBottom: "1px solid #dbdbdb",
+        padding: 0,
         paddingBottom: "1rem",
       }}
     >
@@ -256,7 +257,7 @@ const Navbar = () => {
           </TopNav>
         </Box>
       </Toolbar>
-    </Container>
+    </Box>
   );
 };
 

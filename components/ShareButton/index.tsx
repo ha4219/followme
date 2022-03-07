@@ -57,6 +57,7 @@ const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
     <>
       <Button
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           setOpen(true);
         }}

@@ -10,7 +10,7 @@ const Layout: FC = ({ children }) => {
   const router = useRouter();
 
   return (
-    <Box>
+    <Box sx={{ padding: 0 }}>
       {router?.pathname === "/" && <BackPhoto src={"/back.jpeg"} />}
       {router?.pathname.includes("admin") ? <AdminDrawer /> : <Navbar />}
       {children}

@@ -22,7 +22,7 @@ const EditorDetailLeftLayout: FC<IProps> = ({
   region,
 }) => {
   return (
-    <Grid container>
+    <Grid container pr={4}>
       <Grid xs={12} sm={12} md={3} item>
         <Box py={2}>
           {tags.map((tag, index) => (
@@ -36,14 +36,17 @@ const EditorDetailLeftLayout: FC<IProps> = ({
           >
             {"계절별"}
           </Typography>
-          {SEASON.map((item, index) => (
-            <CheckDetailSeason
-              key={index}
-              tag={item.name}
-              value={item.value}
-              checked={item.value === season}
-            />
-          ))}
+          <Grid container>
+            {SEASON.map((item, index) => (
+              <Grid item xs={6} key={index}>
+                <CheckDetailSeason
+                  tag={item.name}
+                  value={item.value}
+                  checked={item.value === season}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Box>
         <Box py={2}>
           <Typography
