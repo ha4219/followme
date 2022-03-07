@@ -171,7 +171,7 @@ const Signin = () => {
     init();
   }, []);
 
-  const rulr = "http://3.34.24.103:3300/user/kakao/oauth";
+  const rulr = "http://localhost:3000/signin/kakao";
   const cid = "51ae03197626765cf6b38489a34b9215";
   const url = `https://kauth.kakao.com/oauth/authorize?client_id=${cid}&redirect_uri=${rulr}&response_type=code`;
 
