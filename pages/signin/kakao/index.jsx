@@ -2,7 +2,7 @@ import { API } from "@src/API";
 import { useEffect } from "react";
 
 const KakaoLogin = () => {
-  const test = async (code: string) => {
+  const test = async (code) => {
     const res = await API.get(`/user/kakao/oauth/${code}`);
   };
   useEffect(() => {
