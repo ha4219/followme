@@ -18,3 +18,14 @@ export const getUserBoard = async () => {
   const res = await API.get(`/user/board/${memberId}`, {});
   return res;
 };
+
+export const doKakaoSignin = async (token: string) => {
+  try {
+    const res = await API.get("http://3.34.24.103:3000/user/kakao/oauth", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(res);
+  } catch (e) {
+    console.log(e);
+  }
+};

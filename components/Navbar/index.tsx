@@ -103,7 +103,7 @@ const Navbar = () => {
   return (
     <Container
       sx={{
-        borderBottom: "1px solid rgba(255,255,255,0.3)",
+        borderBottom: "1px solid #dbdbdb",
         paddingBottom: "1rem",
       }}
     >

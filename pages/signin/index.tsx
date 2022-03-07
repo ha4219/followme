@@ -24,6 +24,7 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
 } from "firebase/auth";
+import { doKakaoSignin } from "api/auth";
 
 declare global {
   interface Window {
@@ -83,26 +84,28 @@ const Signin = () => {
 
   // kakao
   const kakaoLogin = () => {
-    try {
-      window.Kakao.Auth.login({
-        success: (response) => {
-          window.Kakao.API.request({
-            url: "/v2/user/me",
-            success: (response) => {
-              console.log(response, "kakao suc");
-            },
-            fail: (err) => {
-              console.log(err, "kakao err");
-            },
-          });
-        },
-        fail: (err) => {
-          console.log(err, "kakao err out");
-        },
-      });
-    } catch (e) {
-      alert("현재 도입 중입니다.");
-    }
+    // try {
+    //   window.Kakao.Auth.login({
+    //     success: (response) => {
+    //       console.log(111, response);
+    //       doKakaoSignin(response.access_token);
+    //       // window.Kakao.API.request({
+    //       //   url: "/v2/user/me",
+    //       //   success: (response) => {
+    //       //     console.log(response, "kakao suc");
+    //       //   },
+    //       //   fail: (err) => {
+    //       //     console.log(err, "kakao err");
+    //       //   },
+    //       // });
+    //     },
+    //     fail: (err) => {
+    //       console.log(err, "kakao err out");
+    //     },
+    //   });
+    // } catch (e) {
+    //   alert("현재 도입 중입니다.");
+    // }
   };
 
   useEffect(() => {
@@ -167,6 +170,9 @@ const Signin = () => {
     // console.log(naver, Kakao);
     init();
   }, []);
+
+  const url = `https://kauth.kakao.com/oauth/authorize?client_id=51ae03197626765cf6b38489a34b9215&redirect_uri=http://3.34.24.103:3000/api/user/kakao/oauth
+&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -268,6 +274,7 @@ const Signin = () => {
           >
             Google 로그인
           </Button>
+          <a href={url}>kakao tesat</a>
         </Box>
       </Box>
     </Container>
