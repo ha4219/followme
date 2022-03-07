@@ -9,6 +9,7 @@ const KakaoLogin = () => {
     const href = window.location.href;
     const params = new URL(document.location).searchParams;
     const code = params.get("code");
+    console.log(1);
 
     test(code);
   }, []);
