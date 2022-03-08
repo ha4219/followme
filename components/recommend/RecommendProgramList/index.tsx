@@ -1,3 +1,4 @@
+import EditorProgram from "@components/editor/EditorProgram";
 import LeftLayout from "@components/LeftLayout";
 import Program from "@components/Program";
 import { COURSETAGS } from "@data/CourseData";
@@ -141,8 +142,8 @@ const RecommendProgramList: VFC = () => {
         {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
         <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          {courses.map((item, index) => {
-            return <RecommendProgram key={index} {...item} />;
+          {courses.map((item) => {
+            return <EditorProgram key={item.idx} {...item} />;
           })}
         </Grid>
         <RightButton>

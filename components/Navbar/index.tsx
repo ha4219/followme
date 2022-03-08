@@ -33,7 +33,7 @@ interface PageProps {
 const pages: PageProps[] = [
   { label: "Home", target: "" },
   { label: "Editor's pick", target: "editor" },
-  { label: "추천코스", target: "recommend" },
+  { label: "Ulife 추천코스", target: "recommend" },
   { label: "테마여행", target: "theme" },
   { label: "코스를 부탁해", target: "course" },
   { label: "내 주변 갈만한 곳", target: "map" },

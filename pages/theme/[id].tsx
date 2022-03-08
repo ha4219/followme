@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
+import ProgramHeader from "@components/ProgramHeader";
 
 const ThemeDetail = () => {
   const router = useRouter();
@@ -139,50 +140,51 @@ const ThemeDetail = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       {course && (
-        <EditorDetailLeftLayout
-          tags={course.tags}
-          season={course.season}
-          region={course.region}
-        >
-          <TitleContainer>
-            <div className="sub">
-              <Avatar
-                alt="user"
-                // src={gravatar.url(course ? course.writer : "default", {
-                //   s: "28px",
-                //   d: "retro",
-                // })}
-                className="avatar"
-              />
-              <div className="title">{course?.title}</div>
-            </div>
-            <div className="btns">
-              <span className="heartLabel"> {course.writer}</span>
-              <Button className="heart" onClick={onClickLike}>
-                <span className="heartLabel"> &nbsp;{likeCnt}</span>
-                {like ? (
-                  <FavoriteIcon
-                    className="fillHeart"
-                    sx={{
-                      width: 18,
-                      height: 18,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    className="fillNotHeart"
-                    sx={{
-                      width: 18,
-                      height: 18,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                )}
-              </Button>
-              {/* <Button className="share" onClick={onClickShare}>
+        <ProgramHeader title="테마여행">
+          <EditorDetailLeftLayout
+            tags={course.tags}
+            season={course.season}
+            region={course.region}
+          >
+            <TitleContainer>
+              <div className="sub">
+                <Avatar
+                  alt="user"
+                  // src={gravatar.url(course ? course.writer : "default", {
+                  //   s: "28px",
+                  //   d: "retro",
+                  // })}
+                  className="avatar"
+                />
+                <div className="title">{course?.title}</div>
+              </div>
+              <div className="btns">
+                <span className="heartLabel"> {course.writer}</span>
+                <Button className="heart" onClick={onClickLike}>
+                  <span className="heartLabel"> &nbsp;{likeCnt}</span>
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="fillNotHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  )}
+                </Button>
+                {/* <Button className="share" onClick={onClickShare}>
                   <ShareIcon
                     sx={{
                       width: 18,
@@ -192,51 +194,54 @@ const ThemeDetail = () => {
                     }}
                   />
                 </Button> */}
-              <ShareButton
-                url={window.location.href}
-                user={loggedInId}
-                des={course.title}
+                <ShareButton
+                  url={window.location.href}
+                  user={loggedInId}
+                  des={course.title}
+                />
+              </div>
+            </TitleContainer>
+            {course && (
+              <ContentContainer
+                dangerouslySetInnerHTML={{ __html: course.content }}
               />
-            </div>
-          </TitleContainer>
-          {course && (
-            <ContentContainer
-              dangerouslySetInnerHTML={{ __html: course.content }}
-            />
-          )}
-          {course && course.writer === loggedInId && (
-            // <ButtonContainer>
-            //   <Button variant="contained">수정</Button>
-            //   <Button variant="contained" color="error">
-            //     삭제
-            //   </Button>
-            // </ButtonContainer>
-            <ReviseDeleteButtons url="theme" id={loggedInId} idx={idx} />
-          )}
+            )}
+            {course && course.writer === loggedInId && (
+              // <ButtonContainer>
+              //   <Button variant="contained">수정</Button>
+              //   <Button variant="contained" color="error">
+              //     삭제
+              //   </Button>
+              // </ButtonContainer>
+              <ReviseDeleteButtons url="theme" id={loggedInId} idx={idx} />
+            )}
 
-          <ReplyContainer>
-            <div className="replylabel">{`댓글  ${comments.length}`}</div>
+            <ReplyContainer>
+              <div className="replylabel">{`댓글  ${comments.length}`}</div>
 
-            <form className="write" onSubmit={onSubmitComment}>
-              <TextField
-                value={comment}
-                onChange={onChangeComment}
-                fullWidth
-                placeholder={
-                  loggedInId.length ? "" : "댓글을 작성하려면 로그인 해주세요."
-                }
-              />
-              <Button type="submit" className="btn" variant="contained">
-                등록
-              </Button>
-            </form>
-            <div className="reply">
-              {comments.map((item, index) => (
-                <ReplyContent key={index} {...item} />
-              ))}
-            </div>
-          </ReplyContainer>
-        </EditorDetailLeftLayout>
+              <form className="write" onSubmit={onSubmitComment}>
+                <TextField
+                  value={comment}
+                  onChange={onChangeComment}
+                  fullWidth
+                  placeholder={
+                    loggedInId.length
+                      ? ""
+                      : "댓글을 작성하려면 로그인 해주세요."
+                  }
+                />
+                <Button type="submit" className="btn" variant="contained">
+                  등록
+                </Button>
+              </form>
+              <div className="reply">
+                {comments.map((item, index) => (
+                  <ReplyContent key={index} {...item} />
+                ))}
+              </div>
+            </ReplyContainer>
+          </EditorDetailLeftLayout>
+        </ProgramHeader>
       )}
     </Container>
   );
