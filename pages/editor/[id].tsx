@@ -161,6 +161,12 @@ const EditorDetail = () => {
             </div>
             <div className="btns">
               <span className="heartLabel"> {course.writer}</span>
+
+              <ShareButton
+                url={window.location.href}
+                user={loggedInId}
+                des={course.title}
+              />
               <Button className="heart" onClick={onClickLike}>
                 <span className="heartLabel"> &nbsp;{likeCnt}</span>
                 {like ? (
@@ -195,11 +201,6 @@ const EditorDetail = () => {
                     }}
                   />
                 </Button> */}
-              <ShareButton
-                url={window.location.href}
-                user={loggedInId}
-                des={course.title}
-              />
             </div>
           </TitleContainer>
           {course && (
@@ -249,6 +250,11 @@ const TitleContainer = styled.div`
   border-bottom: 1px solid #3e3e3e;
   justify-content: space-between;
   align-items: center;
+  font-family: paybooc-Bold;
+
+  & .btns {
+    font-family: paybooc-Light;
+  }
 
   & .sub {
     display: flex;
