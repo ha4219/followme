@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 
-
 export const SignupContainer = styled("div")`
   display: flex;
   padding: 1rem;
-  width: 100vw;
+  // width: 100%;
 
   & .label {
     font-family: paybooc-Bold;

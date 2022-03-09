@@ -156,6 +156,13 @@ const Signin = () => {
   //       console.log(err);
   //     });
   // };
+  function onSignIn(googleUser) {
+    const profile = googleUser.getBasicProfile();
+    console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log("Name: " + profile.getName());
+    console.log("Image URL: " + profile.getImageUrl());
+    console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  }
 
   const init = async () => {
     try {
@@ -174,8 +181,15 @@ const Signin = () => {
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
   const url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
 
+  const naverUrl = "http://localhost:3000/signin/naver";
+  const naver_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVERID}&redirect_uri=${naverUrl}&state=code`;
+
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
+      <meta
+        name="google-signin-client_id"
+        content={process.env.NEXT_PUBLIC_GOOGLEID}
+      />
       <Box py={5}>
         <Typography variant="h6" py={5}>
           로그인
@@ -238,7 +252,7 @@ const Signin = () => {
           >
             SNS 계정으로 로그인
           </Box>
-          <div
+          {/* <div
             id="naverIdLogin"
             // sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
             // fullWidth
@@ -246,7 +260,8 @@ const Signin = () => {
             // size="large"
           >
             네이버 로그인
-          </div>
+          </div> */}
+          <a href={naver_url}>네이버 로그인</a>
           <Button
             onClick={kakaoLogin}
             sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}
@@ -275,6 +290,9 @@ const Signin = () => {
             Google 로그인
           </Button>
           <a href={url}>kakao test</a>
+          <div className="g-signin2" data-onsuccess="onSignIn">
+            l
+          </div>
         </Box>
       </Box>
     </Container>

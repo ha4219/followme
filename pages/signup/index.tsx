@@ -16,7 +16,6 @@ import {
 } from "firebase/auth";
 
 import { useCallback, useEffect, useState } from "react";
-import { routes } from "../../src/routes";
 import { API } from "src/API";
 import Head from "next/head";
 import { phoneVerifyAndPass } from "@helpers/signUpHelper";
@@ -28,6 +27,7 @@ import {
   checkNickName,
   checkPhone,
 } from "@helpers/checkReg";
+import styled from "@emotion/styled";
 
 declare global {
   interface Window {
@@ -259,120 +259,124 @@ const Signup = () => {
 
   return (
     <>
-      <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
+      <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
-            <Box>
-              <Typography variant="h6" color="initial" pl={2}>
-                회원가입
-              </Typography>
-              <SignupTextField
-                id="name"
-                label="이름"
-                value={name}
-                onChange={onChangeName}
-                placeholder="홍길동"
-                btnLabel=""
-                btnActive={true}
-              />
-              <SignupTextField
-                id="nickName"
-                label="닉네임"
-                value={nickName}
-                onChange={onChangeNickName}
-                placeholder="홍길동"
-                btnLabel="중복확인"
-                btnActive={!nickNameV}
-                onClickBtn={onNickNameDuplication}
-              />
-              <SignupTextField
-                id="id"
-                label="아이디"
-                value={id}
-                onChange={onChangeId}
-                placeholder="아이디를 입력해주세요."
-                btnLabel="중복확인"
-                btnActive={!idV}
-                onClickBtn={onIdDuplication}
-              />
-              <SignupTextField
-                id="password"
-                type="password"
-                label="비밀번호"
-                value={password}
-                onChange={onChangePassword}
-                placeholder="비밀번호를 입력해주세요."
-                helperText="(8~16자/영문과 숫자, 특수문자를 포함하여 입력해주세요)"
-              />
-              <SignupTextField
-                id="passwordCh"
-                type="password"
-                label="비밀번호 확인"
-                value={passwordCh}
-                onChange={onChangePasswordCh}
-                placeholder="비밀번호 확인"
-                helperText="(다시 한 번 비밀번호를 입력해주세요)"
-              />
-              <SignupTextField
-                id="email"
-                type="email"
-                label="이메일"
-                value={email}
-                onChange={onChangeEmail}
-                placeholder="이메일을 입력해주세요."
-                btnLabel="중복확인"
-                btnActive={!emailV}
-                onClickBtn={onEmailDuplication}
-              />
-              <SignupTextField
-                id="phone"
-                label="휴대폰"
-                value={phone}
-                onChange={onChangePhone}
-                placeholder="휴대폰 번호 확인"
-                btnLabel="인증번호 받기"
-                btnActive={!phoneV}
-                onClickBtn={onSendSMS}
-              />
-              <SignupTextField
-                id="phoneCh"
-                label="인증번호"
-                value={verified}
-                onChange={onChangeVerified}
-                placeholder="인증번호 확인"
-                btnLabel="확인"
-                btnActive={!phoneV}
-                onClickBtn={onVerifySMS}
-              />
-            </Box>
+            <SignupCenterBox>
+              <Box className="signupCenterBoxCenter">
+                <Typography variant="h6" color="initial" pl={2}>
+                  회원가입
+                </Typography>
+                <SignupTextField
+                  id="name"
+                  label="이름"
+                  value={name}
+                  onChange={onChangeName}
+                  placeholder="홍길동"
+                  btnLabel=""
+                  btnActive={true}
+                />
+                <SignupTextField
+                  id="nickName"
+                  label="닉네임"
+                  value={nickName}
+                  onChange={onChangeNickName}
+                  placeholder="홍길동"
+                  btnLabel="중복확인"
+                  btnActive={!nickNameV}
+                  onClickBtn={onNickNameDuplication}
+                />
+                <SignupTextField
+                  id="id"
+                  label="아이디"
+                  value={id}
+                  onChange={onChangeId}
+                  placeholder="아이디를 입력해주세요."
+                  btnLabel="중복확인"
+                  btnActive={!idV}
+                  onClickBtn={onIdDuplication}
+                />
+                <SignupTextField
+                  id="password"
+                  type="password"
+                  label="비밀번호"
+                  value={password}
+                  onChange={onChangePassword}
+                  placeholder="비밀번호를 입력해주세요."
+                  helperText="(8~16자/영문과 숫자, 특수문자를 포함하여 입력해주세요)"
+                />
+                <SignupTextField
+                  id="passwordCh"
+                  type="password"
+                  label="비밀번호 확인"
+                  value={passwordCh}
+                  onChange={onChangePasswordCh}
+                  placeholder="비밀번호 확인"
+                  helperText="(다시 한 번 비밀번호를 입력해주세요)"
+                />
+                <SignupTextField
+                  id="email"
+                  type="email"
+                  label="이메일"
+                  value={email}
+                  onChange={onChangeEmail}
+                  placeholder="이메일을 입력해주세요."
+                  btnLabel="중복확인"
+                  btnActive={!emailV}
+                  onClickBtn={onEmailDuplication}
+                />
+                <SignupTextField
+                  id="phone"
+                  label="휴대폰"
+                  value={phone}
+                  onChange={onChangePhone}
+                  placeholder="휴대폰 번호 확인"
+                  btnLabel="인증번호 받기"
+                  btnActive={!phoneV}
+                  onClickBtn={onSendSMS}
+                />
+                <SignupTextField
+                  id="phoneCh"
+                  label="인증번호"
+                  value={verified}
+                  onChange={onChangeVerified}
+                  placeholder="인증번호 확인"
+                  btnLabel="확인"
+                  btnActive={!phoneV}
+                  onClickBtn={onVerifySMS}
+                />
+              </Box>
+            </SignupCenterBox>
             <Divider
               sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
             />
-            <Box px={5} py={4}>
-              <Box px={2} pb={2}>
-                <div>
-                  <Checkbox checked={checked[0]} onChange={handleChange2} />
-                  <span>회원약관 (필수)</span>
-                </div>
-                <div>
-                  <Checkbox checked={checked[1]} onChange={handleChange3} />
-                  <span>개인정보 처리방침 (필수)</span>
-                </div>
-                <div>
-                  <Checkbox checked={checked[2]} onChange={handleChange4} />
-                  <span>개인정보 제 3자 이용동의 (필수)</span>
-                </div>
+            <SignupCenterBox>
+              <Box py={4} className="signupCenterBoxCenterR">
+                <Box px={2} pb={2}>
+                  <div>
+                    <Checkbox checked={checked[0]} onChange={handleChange2} />
+                    <span>회원약관 (필수)</span>
+                  </div>
+                  <div>
+                    <Checkbox checked={checked[1]} onChange={handleChange3} />
+                    <span>개인정보 처리방침 (필수)</span>
+                  </div>
+                  <div>
+                    <Checkbox checked={checked[2]} onChange={handleChange4} />
+                    <span>개인정보 제 3자 이용동의 (필수)</span>
+                  </div>
+                </Box>
+                <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
+                <Box mt={2}>
+                  <Checkbox
+                    checked={checked[0] && checked[1] && checked[2]}
+                    // indeterminate={checked[0] !== checked[1]}
+                    onChange={handleChange1}
+                  />
+                  <span>모든 약관에 동의합니다</span>
+                </Box>
               </Box>
-              <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
-              <Box mt={2}>
-                <Checkbox
-                  checked={checked[0] && checked[1] && checked[2]}
-                  // indeterminate={checked[0] !== checked[1]}
-                  onChange={handleChange1}
-                />
-                <span>모든 약관에 동의합니다</span>
-              </Box>
-            </Box>
+            </SignupCenterBox>
             <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
             <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
               <Button
@@ -405,5 +409,16 @@ const Signup = () => {
     </>
   );
 };
+
+const SignupCenterBox = styled(Box)`
+  display: flex;
+  justify-content: center;
+  & .signupCenterBoxCenter {
+    display: inline-block;
+  }
+
+  & .signupCenterBoxCenterR {
+  }
+`;
 
 export default Signup;
