@@ -30,8 +30,11 @@ declare global {
   interface Window {
     naver: any;
     Kakao: any;
+    gapi: any;
   }
 }
+
+const GOOGLE_BUTTON_ID = "google_btn";
 
 const Signin = () => {
   const router = useRouter();
@@ -114,17 +117,6 @@ const Signin = () => {
     }
   }, [loggedIn]);
 
-  useEffect(() => {
-    console.log(
-      naver?.getLoginStatus((status) => {
-        console.log(status);
-        if (status) {
-          console.log(naver.user);
-        }
-      })
-    );
-  }, [naver]);
-
   const onClickGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
@@ -156,13 +148,22 @@ const Signin = () => {
   //       console.log(err);
   //     });
   // };
-  function onSignIn(googleUser) {
-    const profile = googleUser.getBasicProfile();
-    console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log("Name: " + profile.getName());
-    console.log("Image URL: " + profile.getImageUrl());
-    console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
-  }
+  const googleSend = async (id_token: string) => {
+    try {
+      const res = await API.get(`/user/google/oauth/${id_token}`);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onSignIn = (googleUser) => {
+    if (googleUser) {
+      const id_token = googleUser.getAuthResponse().id_token;
+      googleSend(id_token);
+    }
+    console.log(googleUser);
+  };
 
   const init = async () => {
     try {
@@ -175,7 +176,12 @@ const Signin = () => {
 
   useEffect(() => {
     // console.log(naver, Kakao);
-    init();
+    // init();
+    window.gapi.signin2.render(GOOGLE_BUTTON_ID, {
+      width: 200,
+      height: 50,
+      onsuccess: onSignIn,
+    });
   }, []);
 
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
@@ -290,9 +296,8 @@ const Signin = () => {
             Google 로그인
           </Button>
           <a href={url}>kakao test</a>
-          <div className="g-signin2" data-onsuccess="onSignIn">
-            l
-          </div>
+          <div id={GOOGLE_BUTTON_ID} />
+          {/* <div id="g-signin2" data-onsuccess="onSignIn"></div> */}
         </Box>
       </Box>
     </Container>
