@@ -1,12 +1,18 @@
 import { API } from "@src/API";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const KakaoLogin = () => {
   const router = useRouter();
+  const [data, setData] = useState();
 
   const test = async (code) => {
-    const res = await API.get(`/user/kakao/oauth/${code}`);
+    try {
+      const res = await API.get(`/user/kakao/oauth/${code}`);
+      setData(res.data);
+    } catch (e) {
+      console.log("naver send error", e);
+    }
   };
   useEffect(() => {
     try {
@@ -16,7 +22,12 @@ const KakaoLogin = () => {
       console.log(e, "kakao login error");
     }
   }, [router.isReady]);
-  return <div>kakao</div>;
+  return (
+    <div>
+      kakao
+      {data}
+    </div>
+  );
 };
 
 export default KakaoLogin;
