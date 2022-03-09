@@ -187,7 +187,7 @@ const Signin = () => {
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
   const url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
 
-  const naverUrl = "http://localhost:3000/signin/naver";
+  const naverUrl = "https://followme1.vercel.app/signin/naver";
   const naver_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVERID}&redirect_uri=${naverUrl}&state=code`;
 
   return (
