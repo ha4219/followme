@@ -25,6 +25,7 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { doKakaoSignin } from "api/auth";
+import styled from "@emotion/styled";
 
 declare global {
   interface Window {
@@ -205,11 +206,17 @@ const Signin = () => {
           >
             SNS 계정으로 로그인
           </Box>
-          <a href={kakao_url} className="kakao">
-            카카오 로그인
-          </a>
-          <a href={naver_url}>네이버 로그인</a>
-          <a href={google_url}>GOOGLE 로그인</a>
+          <ShareLoginContainer>
+            <a href={naver_url} className="naver">
+              네이버 로그인
+            </a>
+            <a href={kakao_url} className="kakao">
+              카카오 로그인
+            </a>
+            <a href={google_url} className="google">
+              GOOGLE 로그인
+            </a>
+          </ShareLoginContainer>
           {/* <div id={GOOGLE_BUTTON_ID} className="google">
             google 로그인
           </div> */}
@@ -219,5 +226,29 @@ const Signin = () => {
     </Container>
   );
 };
+
+const ShareLoginContainer = styled.div`
+  & a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: red;
+    padding: 0.5rem;
+    margin: 0.7rem 0;
+  }
+  & .kakao {
+    background-color: #fee500;
+  }
+
+  & .naver {
+    background-color: #03c75a;
+    color: #ffffff;
+  }
+
+  & .google {
+    background-color: #e74133;
+    color: #ffffff;
+  }
+`;
 
 export default Signin;
