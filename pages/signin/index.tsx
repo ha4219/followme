@@ -136,7 +136,7 @@ const Signin = () => {
   const naver_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVERID}&redirect_uri=${naverUrl}&state=code`;
 
   const googleUrl = "https://followme1.vercel.app/signin/google";
-  const google_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLEID}&scope=name&redirect_uri=${googleUrl}&response_type=code`;
+  const google_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLEID}&scope=https://www.googleapis.com/auth/userinfo.profile&redirect_uri=${googleUrl}&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
