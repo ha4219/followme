@@ -66,51 +66,6 @@ const Signin = () => {
     [id, password]
   );
 
-  // naver
-  const initNaverLogin = () => {
-    console.log(window.naver);
-
-    const naverLogin = new window.naver.LoginWithNaverId({
-      clientId: process.env.NEXT_PUBLIC_NAVERID,
-      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin/naver`,
-      isPopup: false,
-      loginButton: { color: "green", type: 3, height: 44, width: 352 },
-      callbackHandle: true,
-    });
-    naverLogin.init();
-    setNaver(naverLogin);
-  };
-
-  const initKakao = () => {
-    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
-  };
-
-  // kakao
-  const kakaoLogin = () => {
-    // try {
-    //   window.Kakao.Auth.login({
-    //     success: (response) => {
-    //       console.log(111, response);
-    //       doKakaoSignin(response.access_token);
-    //       // window.Kakao.API.request({
-    //       //   url: "/v2/user/me",
-    //       //   success: (response) => {
-    //       //     console.log(response, "kakao suc");
-    //       //   },
-    //       //   fail: (err) => {
-    //       //     console.log(err, "kakao err");
-    //       //   },
-    //       // });
-    //     },
-    //     fail: (err) => {
-    //       console.log(err, "kakao err out");
-    //     },
-    //   });
-    // } catch (e) {
-    //   alert("현재 도입 중입니다.");
-    // }
-  };
-
   useEffect(() => {
     if (loggedIn) {
       router.push("/");
@@ -165,30 +120,22 @@ const Signin = () => {
     console.log(googleUser);
   };
 
-  const init = async () => {
-    try {
-      initNaverLogin();
-      initKakao();
-    } catch (e) {
-      console.log("init social", e);
-    }
-  };
-
   useEffect(() => {
     // console.log(naver, Kakao);
     // init();
     window.gapi.signin2.render(GOOGLE_BUTTON_ID, {
-      width: 200,
-      height: 50,
       onsuccess: onSignIn,
     });
   }, []);
 
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
-  const url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
+  const kakao_url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
 
   const naverUrl = "https://followme1.vercel.app/signin/naver";
   const naver_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVERID}&redirect_uri=${naverUrl}&state=code`;
+
+  const googleUrl = "https://followme1.vercel.app/signin/google";
+  const google_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLEID}&scope=name&redirect_uri=${googleUrl}&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
@@ -258,45 +205,14 @@ const Signin = () => {
           >
             SNS 계정으로 로그인
           </Box>
-          {/* <div
-            id="naverIdLogin"
-            // sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
-            // fullWidth
-            // variant="contained"
-            // size="large"
-          >
-            네이버 로그인
-          </div> */}
-          <a href={naver_url}>네이버 로그인</a>
-          <Button
-            onClick={kakaoLogin}
-            sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
+          <a href={kakao_url} className="kakao">
             카카오 로그인
-          </Button>
-          {/* <Button
-            onClick={onClickFacebook}
-            sx={{ marginTop: "1rem", backgroundColor: "#3a5ca9" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
-            Facebook 로그인
-          </Button> */}
-          <Button
-            onClick={onClickGoogle}
-            sx={{ marginTop: "1rem", backgroundColor: "#e74133" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
-            Google 로그인
-          </Button>
-          <a href={url}>kakao test</a>
-          <div id={GOOGLE_BUTTON_ID} />
+          </a>
+          <a href={naver_url}>네이버 로그인</a>
+          <a href={google_url}>GOOGLE 로그인</a>
+          {/* <div id={GOOGLE_BUTTON_ID} className="google">
+            google 로그인
+          </div> */}
           {/* <div id="g-signin2" data-onsuccess="onSignIn"></div> */}
         </Box>
       </Box>
