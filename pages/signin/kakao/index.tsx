@@ -17,21 +17,20 @@ const KakaoLogin = () => {
   const setProfile = async () => {
     try {
       const { data } = await getUserProfile();
-      setData(data.success);
       toast.success("로그인 성공");
-      setLoggedIn(data.accessToken);
-      setToken(data.accessToken);
-
-      setProfile();
-      // setLoggedInId(id);
+      setLoggedIn(data.id);
     } catch (e) {
       console.log(e);
     }
   };
   const test = async (code) => {
     try {
-      const res = await API.get(`/user/kakao/oauth/${code}`);
-      setData(res.data.success);
+      const { data } = await API.get(`/user/kakao/oauth/${code}`);
+      setData(data.success);
+      if (data.success && data) {
+        setToken(data.accessToken);
+        setProfile();
+      }
     } catch (e: any) {
       console.log("naver send error", e);
       setError(e.message);

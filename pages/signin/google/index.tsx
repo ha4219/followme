@@ -17,8 +17,8 @@ const GoogleLogin = () => {
   const setProfile = async () => {
     try {
       const { data } = await getUserProfile();
-      console.log(data);
-      setLoggedInId(data.id);
+      toast.success("로그인 성공");
+      setLoggedIn(data.id);
     } catch (e) {
       console.log(e);
     }
@@ -29,12 +29,10 @@ const GoogleLogin = () => {
         token: code,
       });
       setData(data.success);
-      toast.success("로그인 성공");
-      setLoggedIn(data.accessToken);
-      setToken(data.accessToken);
-
-      setProfile();
-      // setLoggedInId(id);
+      if (data.success && data) {
+        setToken(data.accessToken);
+        setProfile();
+      }
     } catch (e: any) {
       console.log("send server error", e);
       setError(e.message);
