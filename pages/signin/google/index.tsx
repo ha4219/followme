@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 
 const GoogleLogin = () => {
   const router = useRouter();
+  const [data, setData] = useState();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const test = async (code) => {
     try {
-      const res = await API.get(`/user/google/oauth/${code}`);
+      const res = await API.post(`/user/google/oauth`, {
+        token: code,
+      });
+      setData(res.data.success);
     } catch (e: any) {
       console.log("send server error", e);
       setError(e.message);

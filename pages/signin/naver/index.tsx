@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 
 const Naver = () => {
   const router = useRouter();
+  const [data, setData] = useState();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const test = async (code) => {
     try {
       const res = await API.get(`/user/naver/oauth/${code}`);
+      setData(res.data.success);
     } catch (e: any) {
       console.log("send server error", e);
       setError(e.message);
@@ -32,6 +34,7 @@ const Naver = () => {
       <span>{code}</span>
       <br />
       <span>{error}</span>
+      {data}
     </div>
   );
 };
