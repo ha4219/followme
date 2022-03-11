@@ -73,22 +73,6 @@ const Signin = () => {
     }
   }, [loggedIn]);
 
-  const onClickGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((res) => {
-        const credential = GoogleAuthProvider.credentialFromResult(res);
-        const token = credential?.accessToken;
-        const user = res.user;
-        console.log(res, credential, token, user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // return auth.signInWithPopup(provider);
-  };
-
   // const onClickFacebook = () => {
   //   const provider = new FacebookAuthProvider();
   //   signInWithPopup(auth, provider)
@@ -104,30 +88,6 @@ const Signin = () => {
   //       console.log(err);
   //     });
   // };
-  const googleSend = async (id_token: string) => {
-    try {
-      const res = await API.get(`/user/google/oauth/${id_token}`);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const onSignIn = (googleUser) => {
-    if (googleUser) {
-      const id_token = googleUser.getAuthResponse().id_token;
-      googleSend(id_token);
-    }
-    console.log(googleUser);
-  };
-
-  useEffect(() => {
-    // console.log(naver, Kakao);
-    // init();
-    window.gapi.signin2.render(GOOGLE_BUTTON_ID, {
-      onsuccess: onSignIn,
-    });
-  }, []);
 
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
   const kakao_url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
