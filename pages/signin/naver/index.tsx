@@ -25,7 +25,7 @@ const Naver = () => {
   };
   const test = async (code) => {
     try {
-      const { data } = await API.get(`/user/naver/oauth/${code}`);
+      const { data } = await API.get(`/user/naver/oauth/${code}/state=code`);
       setData(data.success);
       toast.success("로그인 성공");
       setLoggedIn(data.accessToken);
