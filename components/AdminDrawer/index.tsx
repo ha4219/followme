@@ -7,12 +7,14 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MenuIcon from "@mui/icons-material/Menu";
-import MailIcon from "@mui/icons-material/Mail";
+import Dashboard from "@mui/icons-material/Dashboard";
+import Quiz from "@mui/icons-material/Quiz";
+import Notes from "@mui/icons-material/Notes";
+import ViewCarousel from "@mui/icons-material/ViewCarousel";
 import Drawer from "@mui/material/Drawer";
 
-import React, { VFC } from "react";
+import React, { FC, VFC } from "react";
+import { copyFile } from "fs";
 
 const drawerWidth = 240;
 
@@ -25,10 +27,10 @@ interface Props {
 }
 
 const ADMINLEFTLAYOUTDETAIL = [
-  { name: "Editor's Pick", value: "" },
-  { name: "공지사항", value: "" },
-  { name: "FAQ", value: "" },
-  { name: "BANNER", value: "" },
+  { name: "Editor's Pick", value: "", icon: <Dashboard /> },
+  { name: "공지사항", value: "", icon: <Notes /> },
+  { name: "FAQ", value: "", icon: <Quiz /> },
+  { name: "BANNER", value: "", icon: <ViewCarousel /> },
 ];
 
 const drawer = (
@@ -37,9 +39,10 @@ const drawer = (
     <Divider />
     <List>
       {ADMINLEFTLAYOUTDETAIL.map((text, index) => (
-        <ListItem button key={text.value}>
+        <ListItem button key={text.name}>
           <ListItemIcon>
-            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+            {text.icon}
           </ListItemIcon>
           <ListItemText primary={text.name} />
         </ListItem>
@@ -59,7 +62,7 @@ const drawer = (
   </div>
 );
 
-const AdminDrawer: VFC<Props> = (props) => {
+const AdminDrawer: FC<Props> = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -109,6 +112,7 @@ const AdminDrawer: VFC<Props> = (props) => {
         >
           {drawer}
         </Drawer>
+        {props.children}
       </Box>
     </div>
   );

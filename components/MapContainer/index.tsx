@@ -97,6 +97,7 @@ const MapContainer = () => {
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
+          mapTypeId: window.kakao.maps.MapTypeId.SKYVIEW,
         };
         const map = new window.kakao.maps.Map(container, options);
 
@@ -114,7 +115,7 @@ const MapContainer = () => {
           }" />${mapTitleSummary(data[i].title)}</div>`;
 
           const infowindow = new window.kakao.maps.CustomOverlay({
-            // position: latlon,
+            // position: latlon,w
             content: iwContent,
             removable: true,
           });

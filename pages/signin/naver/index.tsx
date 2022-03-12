@@ -1,7 +1,6 @@
 import { API, setToken } from "@src/API";
 import { authState, idState } from "@store/auth";
 import { getUserProfile } from "api/auth";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
