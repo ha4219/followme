@@ -24,22 +24,29 @@ interface Props {
   window?: () => Window;
 }
 
+const ADMINLEFTLAYOUTDETAIL = [
+  { name: "Editor's Pick", value: "" },
+  { name: "공지사항", value: "" },
+  { name: "FAQ", value: "" },
+  { name: "BANNER", value: "" },
+];
+
 const drawer = (
   <div>
     <Toolbar />
     <Divider />
     <List>
-      {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-        <ListItem button key={text}>
+      {ADMINLEFTLAYOUTDETAIL.map((text, index) => (
+        <ListItem button key={text.value}>
           <ListItemIcon>
             {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
           </ListItemIcon>
-          <ListItemText primary={text} />
+          <ListItemText primary={text.name} />
         </ListItem>
       ))}
     </List>
     <Divider />
-    <List>
+    {/* <List>
       {["All mail", "Trash", "Spam"].map((text, index) => (
         <ListItem button key={text}>
           <ListItemIcon>
@@ -48,7 +55,7 @@ const drawer = (
           <ListItemText primary={text} />
         </ListItem>
       ))}
-    </List>
+    </List> */}
   </div>
 );
 
