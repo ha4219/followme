@@ -3,7 +3,7 @@ import AdminDrawer from "@components/admin/AdminDrawer";
 import AdminHeader from "@components/admin/AdminHeader";
 import styled from "@emotion/styled";
 
-const Admin = () => {
+const AdminBanner = () => {
   return (
     <AdminDrawer>
       <AdminMain>
@@ -18,4 +18,4 @@ const AdminMain = styled.div`
   margin-left: 240px;
 `;
 
-export default Admin;
+export default AdminBanner;

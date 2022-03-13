@@ -97,7 +97,6 @@ const MapContainer = () => {
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
-          mapTypeId: window.kakao.maps.MapTypeId.SKYVIEW,
         };
         const map = new window.kakao.maps.Map(container, options);
 

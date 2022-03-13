@@ -64,6 +64,7 @@ const drawer = (
 
 const AdminDrawer: FC<Props> = (props) => {
   const { window } = props;
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -76,7 +77,7 @@ const AdminDrawer: FC<Props> = (props) => {
   return (
     <div>
       <Box
-        component="nav"
+        // component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
@@ -112,8 +113,8 @@ const AdminDrawer: FC<Props> = (props) => {
         >
           {drawer}
         </Drawer>
-        {props.children}
       </Box>
+      {props.children}
     </div>
   );
 };

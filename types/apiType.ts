@@ -52,3 +52,10 @@ export interface ICourseDetail {
   writer: string;
   likeClicked?: number;
 }
+
+export interface IBannerType {
+  idx: number;
+  urlTo: string;
+  endDate: string;
+  imgURL: string;
+}

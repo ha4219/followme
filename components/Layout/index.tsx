@@ -1,4 +1,4 @@
-import AdminDrawer from "@components/AdminDrawer";
+import AdminDrawer from "@components/admin/AdminDrawer";
 import Footer from "@components/Footer";
 import MainSearchContaier from "@components/main/MainSearchContainer";
 import Navbar from "@components/Navbar";
@@ -13,7 +13,7 @@ const Layout: FC = ({ children }) => {
   return (
     <Box sx={{ padding: 0 }}>
       {router?.pathname === "/" && <BackPhoto src={"/back.jpeg"} />}
-      {router?.pathname.includes("admin") ? <AdminDrawer /> : <Navbar />}
+      {!router?.pathname.includes("admin") && <Navbar />}
       {children}
       {!router?.pathname.includes("admin") && <Footer />}
     </Box>
