@@ -25,6 +25,8 @@ const GoogleLogin = () => {
   };
   const test = async (code) => {
     try {
+      console.log(code);
+
       const { data } = await API.post(`/user/google/oauth`, {
         token: code,
       });
