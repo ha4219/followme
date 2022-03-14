@@ -49,7 +49,7 @@ const Naver = () => {
     } catch (e) {
       console.log(e, "naver token not");
     }
-  }, [router.isReady]);
+  }, []);
   return (
     <div>
       <span>{code}</span>

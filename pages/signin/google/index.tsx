@@ -47,7 +47,7 @@ const GoogleLogin = () => {
     } catch (e) {
       console.log(e, "naver token not");
     }
-  }, [router.isReady]);
+  }, []);
 
   return (
     <div>
