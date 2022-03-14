@@ -40,7 +40,7 @@ const drawer = (
     <Divider />
     <List>
       {ADMINLEFTLAYOUTDETAIL.map((text, index) => (
-        <Link href={text.value}>
+        <Link href={text.value} key={index}>
           <ListItem button key={text.name}>
             <ListItemIcon>
               {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}

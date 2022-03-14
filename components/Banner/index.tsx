@@ -87,7 +87,7 @@ const Banner = () => {
               <Link href={bg.urlTo}>
                 <img
                   src={`${bg.imgURL}`}
-                  layout="fill"
+                  alt={`${bg.imgURL}}`}
                   // onClick={() => onClick(bg.urlTo)}
                 />
               </Link>
