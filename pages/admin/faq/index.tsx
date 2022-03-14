@@ -1,7 +1,7 @@
 import AdminLayout from "@components/admin/AdminLayout";
 
-const AdminEditor = () => {
+const AdminFaq = () => {
   return <AdminLayout></AdminLayout>;
 };
 
-export default AdminEditor;
+export default AdminFaq;

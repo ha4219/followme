@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
+import { useRecoilState } from "recoil";
+import { mapState } from "@store/map";
 
 declare global {
   interface Window {
@@ -24,6 +26,7 @@ const MapContainer = () => {
   const [page, setPage] = useState(0);
   const [clickList, setClickList] = useState([]);
   const perPage = 3;
+  const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
 
   const mapInit = async () => {
     try {
@@ -82,6 +85,17 @@ const MapContainer = () => {
   const onPrevPage = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);
   }, [page, data.length]);
+
+  useEffect(() => {
+    if (window.kakao) {
+      const moveLatLon = new window.kakao.maps.LatLng(
+        mapLatLonState[0],
+        mapLatLonState[1]
+      );
+
+      window.kakao.map.panTo(moveLatLon);
+    }
+  }, [mapLatLonState]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");

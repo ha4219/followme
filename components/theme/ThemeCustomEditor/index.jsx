@@ -234,9 +234,9 @@ const ThemeCustomEditor = () => {
   return (
     <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "400px", height: "400px" }}>
+        <Box sx={{ width: "100%", height: "400px" }}>
           <MapEditor />
-          <img />
+          {/* <img /> */}
           <input type="file" accept="image/*" onChange={onChangeDialog} />
           <div>
             <TextField placeholder="title" />
@@ -329,7 +329,7 @@ const ThemeCustomEditor = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <MapAddContainer>
-        <div className="label">
+        {/* <div className="label">
           <Button className="btn" size="small" onClick={() => setDay(day + 1)}>
             +
           </Button>
@@ -337,11 +337,12 @@ const ThemeCustomEditor = () => {
           <Button className="btn" size="small" onClick={() => setDay(day - 1)}>
             -
           </Button>
-        </div>
+        </div> */}
 
         <Button
           onClick={() => {
-            toast.info("추가 예정입니다.");
+            // toast.info("추가 예정입니다.");
+            setOpen(true);
           }}
         >
           <AddLocationIcon />

@@ -1,4 +1,5 @@
 import ShadowTag from "@components/ShadowTag";
+import { MapDataType } from "@data/MapData";
 import styled from "@emotion/styled";
 import {
   mapContentSummary,
@@ -6,15 +7,17 @@ import {
   titleSummary,
 } from "@helpers/programHelper";
 import { Button } from "@mui/material";
+import { mapState } from "@store/map";
 import { VFC } from "react";
+import { useRecoilState } from "recoil";
 
-interface Props {
-  url: string;
-  title: string;
-  content: string;
-  tags: string[];
-  distance: number;
-}
+// interface Props {
+//   url: string;
+//   title: string;
+//   content: string;
+//   tags: string[];
+//   distance: number;
+// }
 
 const TagContainer: VFC<{ tags: string[] }> = ({ tags }) => {
   return (
@@ -47,9 +50,22 @@ const TagDiv = styled.div`
   }
 `;
 
-const MapDiv: VFC<Props> = ({ url, title, content, tags, distance }) => {
+const MapDiv: VFC<MapDataType> = ({
+  url,
+  title,
+  content,
+  tags,
+  distance,
+  lat,
+  lon,
+}) => {
+  const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
+
+  const onClick = () => {
+    setMapLatLonState([lat, lon]);
+  };
   return (
-    <Container>
+    <Container onClick={onClick}>
       <ImgContainer src={url} alt={title} />
       <DesContainer>
         <div className="title">{mapTitleSummary(title)}</div>
