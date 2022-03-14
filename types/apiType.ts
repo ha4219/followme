@@ -59,3 +59,10 @@ export interface IBannerType {
   endDate: string;
   imgURL: string;
 }
+
+export interface IPointType {
+  content: string;
+  createdAt: string;
+  point: number;
+  type: string;
+}

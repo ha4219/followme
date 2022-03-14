@@ -4,7 +4,7 @@ import { Avatar, Box, Button, Container } from "@mui/material";
 import { getUserBoard, getUserProfile } from "api/auth";
 import { useState, useEffect } from "react";
 import gravatar from "gravatar";
-import { ICourse, IUser } from "types/apiType";
+import { ICourse, IPointType, IUser } from "types/apiType";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import Link from "next/link";
@@ -18,12 +18,14 @@ import CourseBoard from "@components/course/CourseBoard";
 import CourseTable from "@components/course/CourseTable";
 import { COURSES } from "@data/CourseData";
 import ProfilePointHistory from "@components/profile/PointHistory";
+import { getUserPointHistory } from "api/profile";
 
 const ProfileHome = () => {
   const router = useRouter();
   const [user, setUser] = useState<IUser>();
   const [myBoards, setMyBoards] = useState<ICourse[]>([]);
   const [likeBoards, setLikeBoards] = useState<ICourse[]>([]);
+  const [pointHistory, setPointHistory] = useState<IPointType[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
   const loggedInId = useRecoilValue(idState);
   const [isLoading, setLoading] = useState(true);
@@ -69,9 +71,23 @@ const ProfileHome = () => {
     }
   };
 
+  const getPointHistory = async () => {
+    if (user) {
+      try {
+        const data = await getUserPointHistory(loggedInId);
+        console.log(data);
+
+        setPointHistory(data.slice(-3));
+      } catch (e) {
+        console.log("profile getPOintHistory", e);
+      }
+    }
+  };
+
   useEffect(() => {
     getMyBoard();
     getLikeBoard();
+    getPointHistory();
   }, [user]);
 
   useEffect(() => {
@@ -122,7 +138,7 @@ const ProfileHome = () => {
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
               <Box>
-                <ProfilePointHistory />
+                <ProfilePointHistory pointHistory={pointHistory} />
               </Box>
             </div>
             <div className="mycourse">

@@ -37,7 +37,7 @@ const CourseTable: VFC<IProps> = ({ courses }) => {
         <TableBody>
           {courses.map((item, index) => (
             <TableRow
-              key={index}
+              key={item.idx}
               // onClick={() => onClickRow(item.idx - 1)}
               className="cursor"
             >

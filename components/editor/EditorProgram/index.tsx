@@ -146,6 +146,7 @@ const EditorContainer = styled(Grid)`
   & .editorProgramBody {
     & .editorProgramProps {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 0;
@@ -159,6 +160,7 @@ const EditorContainer = styled(Grid)`
 
       & .editorProgramRight {
         display: flex;
+        padding-right: 1rem;
         justify-content: space-between;
         align-items: center;
         padding: 1rem 0;
