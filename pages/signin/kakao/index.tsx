@@ -44,7 +44,7 @@ const KakaoLogin = () => {
     } catch (e) {
       console.log(e, "kakao login error");
     }
-  }, [router.isReady]);
+  }, []);
   return (
     <div>
       <span>{code}</span>
