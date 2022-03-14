@@ -1,4 +1,3 @@
-import AdminDrawer from "@components/admin/AdminDrawer";
 import AdminLayout from "@components/admin/AdminLayout";
 import AdminBannerWriter from "@components/admin/banner/AdminBannerWriter";
 

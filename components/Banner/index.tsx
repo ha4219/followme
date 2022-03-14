@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { API } from "@src/API";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Banner = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const Banner = () => {
 
   const getBanner = async () => {
     const { data } = await API.get("/main/swipers", {});
-    setImgs(data.slice(7));
+    setImgs(data);
     // setBgs(data.map(item => ));
   };
 
@@ -83,11 +84,13 @@ const Banner = () => {
         {imgs.map((bg, index) => {
           return (
             <SwiperSlide key={index}>
-              <Image
-                src={`${process.env.NEXT_PUBLIC_S3URL}${bg.imgURL}`}
-                layout="fill"
-                onClick={() => onClick(bg.urlTo)}
-              />
+              <Link href={bg.urlTo}>
+                <img
+                  src={`${bg.imgURL}`}
+                  layout="fill"
+                  // onClick={() => onClick(bg.urlTo)}
+                />
+              </Link>
             </SwiperSlide>
           );
         })}

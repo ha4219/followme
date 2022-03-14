@@ -22,9 +22,13 @@ const AdminBannerItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
     <TableRow>
       <TableCell>{idx}</TableCell>
       <TableCell>
-        <img src={imgURL} alt={urlTo} />
+        <ImgContainer src={imgURL} alt={urlTo} />
       </TableCell>
-      <TableCell>{urlTo}</TableCell>
+      <TableCell>
+        <Link href={urlTo}>
+          <a>{urlTo}</a>
+        </Link>
+      </TableCell>
       <TableCell>{endDate}</TableCell>
       <TableCell>
         <Button onClick={onClickDel} variant="contained">
@@ -34,6 +38,12 @@ const AdminBannerItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
     </TableRow>
   );
 };
+
+const ImgContainer = styled.img`
+  width: 200px;
+  hieght: 200px;
+  background-size: cover;
+`;
 
 const AdminBannerList = () => {
   const [bannerData, setBannerData] = useState<IBannerType[]>([]);

@@ -15,6 +15,7 @@ import Drawer from "@mui/material/Drawer";
 
 import React, { FC, VFC } from "react";
 import { copyFile } from "fs";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -27,10 +28,10 @@ interface Props {
 }
 
 const ADMINLEFTLAYOUTDETAIL = [
-  { name: "Editor's Pick", value: "", icon: <Dashboard /> },
-  { name: "공지사항", value: "", icon: <Notes /> },
-  { name: "FAQ", value: "", icon: <Quiz /> },
-  { name: "BANNER", value: "", icon: <ViewCarousel /> },
+  { name: "Editor's Pick", value: "/admin/editor", icon: <Dashboard /> },
+  { name: "공지사항", value: "/admin/notice", icon: <Notes /> },
+  { name: "FAQ", value: "/admin/faq", icon: <Quiz /> },
+  { name: "BANNER", value: "/admin/banner", icon: <ViewCarousel /> },
 ];
 
 const drawer = (
@@ -39,13 +40,15 @@ const drawer = (
     <Divider />
     <List>
       {ADMINLEFTLAYOUTDETAIL.map((text, index) => (
-        <ListItem button key={text.name}>
-          <ListItemIcon>
-            {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-            {text.icon}
-          </ListItemIcon>
-          <ListItemText primary={text.name} />
-        </ListItem>
+        <Link href={text.value}>
+          <ListItem button key={text.name}>
+            <ListItemIcon>
+              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              {text.icon}
+            </ListItemIcon>
+            <ListItemText primary={text.name} />
+          </ListItem>
+        </Link>
       ))}
     </List>
     <Divider />

@@ -1,13 +1,13 @@
 import { API } from "@src/API";
 
-export const addBanner = async ({ imgURL, urlTo, endTo }) => {
+export const addBanner = async ({ imgURL, urlTo, endDate }) => {
   try {
     const { data } = await API.post("/main/insertSwipers", {
       imgURL: imgURL,
       urlTo: urlTo,
-      endTo: endTo,
+      endDate: endDate,
     });
-    console.log(data);
+    return data;
   } catch (e) {
     console.log("add baner ", e);
   }

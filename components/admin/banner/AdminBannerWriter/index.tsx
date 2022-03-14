@@ -4,11 +4,14 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Button, TextField } from "@mui/material";
 import { addBanner } from "api/admin";
+import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 const AdminBannerWriter = () => {
+  const router = useRouter();
   const [url, setUrl] = useState("");
-  const [endTo, setEndTo] = useState();
+  const [endDate, setEndDate] = useState();
   const [urlTo, setUrlTo] = useState("");
   const onChangeUrlTo = useCallback(
     (e) => {
@@ -18,9 +21,9 @@ const AdminBannerWriter = () => {
   );
   const onChangeEndTo = useCallback(
     (newValue) => {
-      setEndTo(newValue);
+      setEndDate(newValue);
     },
-    [endTo]
+    [endDate]
   );
 
   const onSubmit = useCallback(
@@ -30,13 +33,20 @@ const AdminBannerWriter = () => {
         addBanner({
           imgURL: url,
           urlTo: urlTo,
-          endTo: endTo,
+          endDate: endDate,
+        }).then((res: any) => {
+          if (res.data === "success") {
+            toast.success("작성완료");
+            router.back();
+          } else {
+            toast.error("작성실패");
+          }
         });
       } catch (e) {
         console.log(e);
       }
     },
-    [url, endTo, urlTo]
+    [url, endDate, urlTo]
   );
 
   return (
@@ -53,8 +63,8 @@ const AdminBannerWriter = () => {
           <div className="subContainer">
             <DesktopDatePicker
               // label="출발 예정일"
-              inputFormat="MM/dd/yyyy"
-              value={endTo}
+              inputFormat="yyyy/MM/dd"
+              value={endDate}
               onChange={onChangeEndTo}
               renderInput={(params) => <TextField {...params} />}
             />

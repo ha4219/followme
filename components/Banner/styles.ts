@@ -24,6 +24,12 @@ export const BannerContainer = styled.div`
     --swiper-theme-color: white;
   }
 
+  & img {
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }
+
   & img:hover {
     cursor: pointer;
   }
