@@ -24,7 +24,11 @@ const Naver = () => {
   };
   const test = async (code) => {
     try {
-      const { data } = await API.get(`/user/naver/oauth/${code}/code`);
+      console.log(code);
+
+      const { data } = await API.post(`/user/naver/oauth`, {
+        token: code,
+      });
       setData(data.success);
       if (data.success && data) {
         setToken(data.accessToken);
