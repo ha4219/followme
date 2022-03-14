@@ -10,6 +10,7 @@ const PROFILE = [
   { label: "내 작성글", to: "/profile/board" },
   { label: "내 좋아요", to: "/profile/like" },
   { label: "코스를 부탁해", to: "/profile/course" },
+  { label: "포인트내역", to: "/profile/point" },
   { label: "내 정보 수정", to: "/profile/revise" },
   { label: "회원탈퇴", to: "/profile/out" },
 ];
@@ -32,7 +33,7 @@ const ProfileLeftLayout: FC = ({ children }) => {
   }, []);
 
   return (
-    <Grid container>
+    <Grid container py={5}>
       <Grid xs={3} item>
         <ProfileLeftContainer>
           <div className="title">MyPage</div>

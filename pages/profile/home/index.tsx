@@ -71,23 +71,23 @@ const ProfileHome = () => {
     }
   };
 
-  const getPointHistory = async () => {
-    if (user) {
-      try {
-        const data = await getUserPointHistory(loggedInId);
-        console.log(data);
+  // const getPointHistory = async () => {
+  //   if (user) {
+  //     try {
+  //       const data = await getUserPointHistory(loggedInId);
+  //       console.log(data);
 
-        setPointHistory(data.slice(-3));
-      } catch (e) {
-        console.log("profile getPOintHistory", e);
-      }
-    }
-  };
+  //       setPointHistory(data.slice(-3));
+  //     } catch (e) {
+  //       console.log("profile getPOintHistory", e);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     getMyBoard();
     getLikeBoard();
-    getPointHistory();
+    // getPointHistory();
   }, [user]);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const ProfileHome = () => {
                 <FavoriteBorderOutlinedIcon className="like" />
                 <div>{`좋아요: ${user.likeCnts}개`}</div>
                 <AttachMoneyOutlinedIcon className="money" />
-                <div>{`포인트: ${user.points}p`}</div>
+                <div>{`포인트: ${user.points ? user.points : 0}p`}</div>
               </div>
             </div>
             <div className="myboard">
@@ -135,10 +135,10 @@ const ProfileHome = () => {
             <div className="mypoint">
               <div className="sub">
                 <div className="subTitle">포인트 내역</div>
-                <Link href="/profile/board">{"더보기 >"}</Link>
+                <Link href="/profile/point">{"더보기 >"}</Link>
               </div>
               <Box>
-                <ProfilePointHistory pointHistory={pointHistory} />
+                <ProfilePointHistory length={3} pagination={false} />
               </Box>
             </div>
             <div className="mycourse">

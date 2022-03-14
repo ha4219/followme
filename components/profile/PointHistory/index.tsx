@@ -8,15 +8,44 @@ import {
   TableRow,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { VFC } from "react";
+import { idState } from "@store/auth";
+import { getUserPointHistory } from "api/profile";
+import { useEffect, useState, VFC } from "react";
+import { useRecoilValue } from "recoil";
 import { IPointType } from "types/apiType";
 
 interface IProps {
-  pointHistory: IPointType[];
+  length?: number;
+  pagination: boolean;
 }
 
-const ProfilePointHistory: VFC<IProps> = ({ pointHistory }) => {
-  console.log(pointHistory);
+const ProfilePointHistory: VFC<IProps> = ({ length, pagination }) => {
+  const [pointHistory, setPointHistory] = useState<IPointType[]>([]);
+
+  // const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage] = useState(10);
+  const [size, setSize] = useState(0);
+  const loggedInId = useRecoilValue(idState);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage - 1);
+  };
+
+  const getPointHistory = async () => {
+    // setCourses(COURSES);
+    try {
+      const data = await getUserPointHistory(loggedInId);
+      setPointHistory(length ? data.slice(0, length) : data);
+      setSize(Math.ceil(data.length / rowsPerPage));
+    } catch (e) {
+      console.log("pointHistory 받아오기 에러", e);
+    }
+  };
+
+  useEffect(() => {
+    getPointHistory();
+  }, []);
 
   return (
     <ProfilePointHistoryContainer>
