@@ -76,7 +76,7 @@ const AdminBannerList = () => {
         </TableBody>
       </Table>
       <div className="btns">
-        <Link href="banner/write">
+        <Link href="/admin/banner/write">
           <Button variant="contained">add</Button>
         </Link>
       </div>

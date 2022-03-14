@@ -41,6 +41,7 @@ const Naver = () => {
     try {
       const code = router.asPath
         .split("?")[1]
+        .split("&")[0]
         .replace("code=", "")
         .replace("&state=", "");
       setCode(code);

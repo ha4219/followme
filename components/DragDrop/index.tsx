@@ -155,7 +155,7 @@ const DragDropContainer = styled.div`
   width: 400px;
   height: 200px;
   text-align: center;
-  border: 1px solid #000000;
+  border: 1px dashed #000000;
 
   & img {
     width: 400px;

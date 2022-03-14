@@ -52,27 +52,34 @@ const AdminBannerWriter = () => {
   return (
     <AdminBannerWriterContainer>
       <form onSubmit={onSubmit}>
-        <DragDrop url={url} setUrl={setUrl} />
+        <div className="dropDownSubContainer">
+          <DragDrop url={url} setUrl={setUrl} />
+        </div>
         <TextField
+          className="AdminBannerWriterUrl"
           size="small"
+          label="url"
           placeholder="https://"
           value={urlTo}
+          fullWidth
           onChange={onChangeUrlTo}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <div className="subContainer">
+          <div className="AdminBannerWriterDate">
             <DesktopDatePicker
-              // label="출발 예정일"
+              label="종료일"
               inputFormat="yyyy/MM/dd"
               value={endDate}
               onChange={onChangeEndTo}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField fullWidth {...params} />}
             />
           </div>
         </LocalizationProvider>
-        <Button variant="contained" type="submit">
-          write
-        </Button>
+        <div className="AdminBannerWriterBtn">
+          <Button variant="contained" type="submit">
+            write
+          </Button>
+        </div>
       </form>
     </AdminBannerWriterContainer>
   );
@@ -82,9 +89,24 @@ const AdminBannerWriterContainer = styled.div`
   padding: 1rem;
   & form {
     display: block;
+    margin-left: auto;
+    margin-right: auto;
 
-    & div {
-      display: block;
+    & .dropDownSubContainer {
+      padding: 1rem 0;
+    }
+
+    & .AdminBannerWriterUrl {
+      padding: 1rem 0;
+    }
+
+    & .AdminBannerWriterDate {
+      padding: 1rem 0;
+    }
+
+    & .AdminBannerWriterBtn {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 `;
