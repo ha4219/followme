@@ -18,8 +18,9 @@ const OutStarItem = () => {
   );
 };
 
-const StarGenerator = ({ count: number }) => {
-  const fill = Math.floor(number);
+const StarGenerator = ({ count }) => {
+  const fill = Math.floor(count);
+
   const out = 5 - fill;
 
   return (

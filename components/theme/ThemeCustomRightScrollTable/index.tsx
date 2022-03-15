@@ -11,6 +11,7 @@ import {
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
 import { mapState, mapSelectedState } from "@store/map";
+// import { editorState } from "@store/editor";
 
 const ThemeCustomRightScrollTableItem: VFC<MapDataType> = ({
   url,
@@ -24,6 +25,7 @@ const ThemeCustomRightScrollTableItem: VFC<MapDataType> = ({
 }) => {
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const [mapSelectState, setMapSelectState] = useRecoilState(mapSelectedState);
+  // const [editorSelectState, setEditorSelectState] = useRecoilState(editorState);
 
   const onClick = () => {
     setMapLatLonState([lat, lon]);

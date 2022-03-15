@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
+import { editorState } from "@store/editor";
 import CustomEditorTag from "@components/CustomEditorTag";
 import QuillCSR, { Quill } from "react-quill";
 
@@ -41,21 +42,104 @@ const myBucket = new AWS.S3({
 });
 
 const Inline = Quill.import("blots/inline");
+const BlockEmbed = Quill.import("blots/block/embed");
 
-class SpanBlock extends Inline {
-  static create() {
+class MapContainerClass extends Inline {
+  static create(params) {
     const node = super.create();
-    node.setAttribute("class", "spanblock");
-    node.setAttribute("id", 1);
+    // node.setAttribute("class", val.className);
+    // node.setAttribute("id", val.id);
+    console.log(node, typeof node);
+    node.setAttribute("style", "display: flex");
     return node;
   }
 }
-SpanBlock.blotName = "boldbold";
-SpanBlock.tagName = "div";
-Quill.register("formats/boldbold", SpanBlock);
+
+MapContainerClass.blotName = "map";
+MapContainerClass.tagName = "div";
+
+class MapContainerImgClass extends BlockEmbed {
+  static create(params) {
+    const node = super.create();
+    // node.setAttribute("class", val.className);
+    // node.setAttribute("id", val.id);
+    // console.log(node, typeof node);
+    node.setAttribute("alt", params);
+    node.setAttribute("src", params);
+    console.log(params);
+    // node.innerHTML = `<div style='display:flex'><div><img src='${params[0]}'/></div></div>`;
+    // node.setAttribute("style", "display: flex");
+    return node;
+  }
+  static value(node) {
+    return {
+      alt: node.getAttribute("alt"),
+      url: node.getAttribute("src"),
+    };
+  }
+}
+MapContainerImgClass.tagName = "img";
+MapContainerImgClass.blotName = "mapImg";
+
+class MapContainerTestClass extends BlockEmbed {
+  static create(params) {
+    const node = super.create();
+    const count = Math.ceil(params[3]);
+    const fillStar = `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        style="fill: #f3c221;"
+      >
+        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+      </svg>
+    `;
+    const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
+    const starsBody = "";
+    for (let i = 0; i < 5; i++) {
+      if (count - 1 >= i) {
+        starsBody += fillStar;
+      } else {
+        starsBody += outlineStar;
+      }
+    }
+    const stars = `<div style="display: flex;">${starsBody}</div>`;
+    const tag = (value) => `<div style="display: inline-block;
+  color: #b69775;
+  font-family: paybooc-Bold;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  margin-right: 5px;
+  border: 1px solid #b69775;
+  border-radius: 12px;">${value}</div>`;
+    const tags = "";
+    for (let i = 0; i < params[4].length; i++) {
+      tags += tag(params[4][i]);
+    }
+    node.innerHTML = `<div style='display:flex; padding: 1rem;'><img src='${params[0]}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${params[0]}/><div style="font-family: paybooc-Light;"><div style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${params[1]}</div><div style="height: 4rem;">${params[2]}</div><div style="height: 2rem">${stars}</div><div style="height: 2rem">${tags}</div></div></div>`;
+    return node;
+  }
+  // static value(node) {
+  //   return {
+  //     alt: node.getAttribute("alt"),
+  //     url: node.getAttribute("src"),
+  //   };
+  // }
+}
+
+MapContainerTestClass.tagName = "div";
+MapContainerTestClass.blotName = "test";
+
+// MapContainerClass.tagName = "div";
+Quill.register("formats/map", MapContainerClass);
+Quill.register("formats/mapImg", MapContainerImgClass);
+Quill.register("formats/test", MapContainerTestClass);
 
 const formats = [
-  "boldbold",
+  "map",
+  "mapImg",
+  "test",
   "bold",
   "color",
   "size",
@@ -127,25 +211,6 @@ const ThemeCustomEditor = () => {
     }
   };
 
-  const createElementWithClassName = () => {
-    const div = document.createElement("div");
-    var quill = new Quill(div);
-    console.log(quill);
-    quill.setContents([
-      {
-        insert: "hello",
-        attributes: {
-          spanblock: true,
-        },
-      },
-    ]);
-    console.log(quill, editor);
-
-    const result = quill.root.innerHTML;
-    console.log(result);
-    return result;
-  };
-
   const onSubmitDialog = () => {
     // console.log(Inline);
     // QuillCSR.register(Block);
@@ -155,7 +220,9 @@ const ThemeCustomEditor = () => {
       : 0;
     // console.log(editor, ref.current.getEditorConfig());
     // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
-    editor.insertText(range, "Test", { boldbold: true });
+    // editor.insertText(range, " ", { map: mapSelectState });
+    editor.insertEmbed(range, "test", mapSelectState, Quill.sources.USER);
+    // editor.insertEmbed(range + 1, "mapImg", mapSelectState[0]);
     // console.log(createElementWithClassName());
     // setValue(value + createElementWithClassName());
   };
@@ -313,6 +380,7 @@ const ThemeCustomEditor = () => {
               <div className="themeCustomEditorDialogContainer">
                 <img
                   src={mapSelectState[0]}
+                  alt={mapSelectState[0]}
                   className="themeCustomEditorDialogContainerImg"
                 />
                 <div className="themeCustomEditorDialogContainerBody">
