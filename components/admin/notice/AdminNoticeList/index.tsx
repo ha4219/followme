@@ -90,7 +90,7 @@ const AdminNoticeList = () => {
         </TableBody>
       </Table>
       <div className="btns">
-        <Link href="/admin/banner/write">
+        <Link href="/admin/notice/write">
           <Button variant="contained">add</Button>
         </Link>
       </div>

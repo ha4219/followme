@@ -22,3 +22,17 @@ export const delBanner = async ({ idx }) => {
     console.log("del banner", e);
   }
 };
+
+export const addNotice = async ({ id, title, content, createdAt }) => {
+  try {
+    const { data } = await API.post(`/admin/notice/insert`, {
+      title: title,
+      content: content,
+      writer: id,
+      createdAt: createdAt,
+    });
+    return data;
+  } catch (e) {
+    console.log("add notice", e);
+  }
+};
