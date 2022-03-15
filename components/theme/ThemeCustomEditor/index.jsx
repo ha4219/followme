@@ -28,10 +28,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
-<<<<<<< HEAD
 import CustomEditorTag from "@components/CustomEditorTag";
-=======
->>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
