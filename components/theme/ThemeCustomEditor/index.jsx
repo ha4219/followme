@@ -5,8 +5,6 @@ import {
   Button,
   Dialog,
   DialogActions,
-  Input,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -27,6 +25,8 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
+import { mapSelectedState } from "@store/map";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -64,6 +64,7 @@ const ThemeCustomEditor = () => {
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([true, false]);
   const isLoggedInId = useRecoilValue(idState);
+  const mapSelectState = useRecoilValue(mapSelectedState);
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -234,20 +235,49 @@ const ThemeCustomEditor = () => {
   return (
     <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "100%", height: "400px" }}>
-          <MapEditor />
-          {/* <img /> */}
-          <input type="file" accept="image/*" onChange={onChangeDialog} />
-          <div>
-            <TextField placeholder="title" />
-          </div>
-          <div>
-            <TextField placeholder="content" />
-          </div>
-          <DialogActions>
-            <Button onClick={onSubmitDialog}>submit</Button>
-            <Button onClick={onCloseDialog}>close</Button>
-          </DialogActions>
+        <Box>
+          <ThemeCustomEditorDialog>
+            <div className="themeCustomEditorDialogLayout">
+              <div className="themeCustomEditorDialogBody">
+                <MapEditor />
+                {/* <img /> */}
+                {/* <input type="file" accept="image/*" onChange={onChangeDialog} /> */}
+                <div className="themeCustomEditorDialogContainer">
+                  <img
+                    src={mapSelectState[0]}
+                    className="themeCustomEditorDialogContainerImg"
+                  />
+                  <div className="themeCustomEditorDialogContainerBody">
+                    <div className="themeCustomEditorDialogTitle">
+                      {/* 식당명칭이 들어갈 자 */}
+                      {mapSelectState[1]}
+                    </div>
+                    <div className="themeCustomEditorDialogContent">
+                      {/* 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심
+                      문장을 인용하여 이용자에게 보여줄 수 있습니다. 본문에 있는
+                      내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을
+                      인용하여 이용자에게 보여줄 수 있습니다. */}
+                      {mapSelectState[2]}
+                    </div>
+                    <div className="themeCustomEditorDialogScore">
+                      {mapSelectState[3]}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="themeCustomEditorDialogRightScroll">
+                <ThemeCustomRightScrollTable />
+              </div>
+            </div>
+            <DialogActions>
+              <Button onClick={onSubmitDialog} variant="contained">
+                submit
+              </Button>
+              <Button onClick={onCloseDialog} variant="contained" color="error">
+                close
+              </Button>
+            </DialogActions>
+          </ThemeCustomEditorDialog>
         </Box>
       </Dialog>
       <OptionContainer>
@@ -393,6 +423,35 @@ const ThemeCustomEditor = () => {
 const MainContainer = styled.div`
   & .center {
     text-align: center;
+  }
+`;
+
+const ThemeCustomEditorDialog = styled.div`
+  display: block;
+  width: 100%;
+
+  & .themeCustomEditorDialogLayout {
+    display: flex;
+
+    & .themeCustomEditorDialogContainer {
+      display: flex;
+
+      & .themeCustomEditorDialogContainerImg {
+        width: 200px;
+        height: 200px;
+        backround-color: black;
+        border-radius: 20px;
+      }
+    }
+
+    & .themeCustomEditorDialogRightScroll {
+      // overflow: auto;
+      // background-color: black;
+      width: 200px;
+      overflow: hidden;
+      // overflow: auto;
+      // border-left: 1px solid #000000;
+    }
   }
 `;
 

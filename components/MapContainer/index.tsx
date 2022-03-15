@@ -7,7 +7,7 @@ import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
-import { mapState } from "@store/map";
+import { mapSelectedState, mapState } from "@store/map";
 
 declare global {
   interface Window {
