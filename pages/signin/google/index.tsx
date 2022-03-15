@@ -18,7 +18,7 @@ const GoogleLogin = () => {
     try {
       const { data } = await getUserProfile();
       toast.success("로그인 성공");
-      setLoggedIn(data.id);
+      setLoggedIn(data[0].id);
     } catch (e) {
       console.log(e);
     }
@@ -34,6 +34,7 @@ const GoogleLogin = () => {
       if (data.success && data) {
         setToken(data.accessToken);
         setProfile();
+        router.push("/");
       }
     } catch (e: any) {
       console.log("send server error", e);
