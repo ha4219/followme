@@ -10,7 +10,6 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import useInput from "@hooks/useInput";
@@ -29,6 +28,7 @@ import { toast } from "react-toastify";
 import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
 import CustomEditorTag from "@components/CustomEditorTag";
+import QuillCSR, { Quill } from "react-quill";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -40,19 +40,60 @@ const myBucket = new AWS.S3({
   region: config.region,
 });
 
+const Inline = Quill.import("blots/inline");
+
+class SpanBlock extends Inline {
+  static create() {
+    const node = super.create();
+    node.setAttribute("class", "spanblock");
+    node.setAttribute("id", 1);
+    return node;
+  }
+}
+SpanBlock.blotName = "boldbold";
+SpanBlock.tagName = "div";
+Quill.register("formats/boldbold", SpanBlock);
+
+const formats = [
+  "boldbold",
+  "bold",
+  "color",
+  "size",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "image",
+  "list",
+  "indent",
+];
+
 // const Quill = dynamic(import("react-quill"), {
 //   ssr: false,
 //   loading: () => <p>Loading ...</p>,
 // });
-const Quill = dynamic(
-  async () => {
-    const { default: RQ } = await import("react-quill");
-    return function comp({ forwardedRef, ...props }) {
-      return <RQ ref={forwardedRef} {...props} />;
-    };
-  },
-  { ssr: false }
-);
+// const QuillCSR = dynamic(
+//   async () => {
+//     const { default: RQ } = await import("react-quill");
+//     // console.log(RQ.Quill.import("blots/inline"));
+
+//     return function comp({ forwardedRef, ...props }) {
+//       return <RQ ref={forwardedRef} {...props} />;
+//     };
+//   },
+//   { ssr: false }
+// );
+
+// const Inline = dynamic(
+//   async () => {
+//     const inlineChild = await Quill.import("blots/inline");
+//     return inlineChild;
+//   },
+//   {
+//     ssr: false,
+//   }
+// );
+// const Inline = Quill.import("blots/inline");
 
 const ThemeCustomEditor = () => {
   const ref = useRef();
@@ -86,17 +127,44 @@ const ThemeCustomEditor = () => {
     }
   };
 
+  const createElementWithClassName = () => {
+    const div = document.createElement("div");
+    var quill = new Quill(div);
+    console.log(quill);
+    quill.setContents([
+      {
+        insert: "hello",
+        attributes: {
+          spanblock: true,
+        },
+      },
+    ]);
+    console.log(quill, editor);
+
+    const result = quill.root.innerHTML;
+    console.log(result);
+    return result;
+  };
+
   const onSubmitDialog = () => {
-    console.log();
+    // console.log(Inline);
+    // QuillCSR.register(Block);
+    const editor = ref.current.getEditor();
+    const range = ref.current.getEditorSelection()?.index
+      ? ref.current.getEditorSelection()?.index
+      : 0;
+    // console.log(editor, ref.current.getEditorConfig());
+    // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
+    editor.insertText(range, "Test", { boldbold: true });
+    // console.log(createElementWithClassName());
+    // setValue(value + createElementWithClassName());
   };
 
-  useEffect(() => {
-    console.log();
-  }, [dialogImg]);
+  // useEffect(() => {}, [dialogImg]);
 
-  const onChangeDialog = (e) => {
-    setDialogImg(e.target.files[0]);
-  };
+  // const onChangeDialog = (e) => {
+  //   setDialogImg(e.target.files[0]);
+  // };
 
   const onTagKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -146,7 +214,6 @@ const ThemeCustomEditor = () => {
         Key: fileName,
       })
         .then((res) => {
-          console.log(res);
           const range = ref.current.getEditorSelection();
           ref.current
             .getEditor()
@@ -393,7 +460,12 @@ const ThemeCustomEditor = () => {
           modules={modules}
           formats={formats}
         /> */}
-        <Quill forwardedRef={ref} onChange={setValue} modules={modules} />
+        <QuillCSR
+          ref={ref}
+          formats={formats}
+          onChange={setValue}
+          modules={modules}
+        />
       </div>
       <TagContainer>
         <TextField
@@ -434,17 +506,10 @@ const MainContainer = styled.div`
 
 const ThemeCustomEditorDialog = styled.div`
   display: block;
-<<<<<<< HEAD
   padding: 1rem;
 
   & .themeCustomEditorDialogLayout {
     display: block;
-=======
-  width: 100%;
-
-  & .themeCustomEditorDialogLayout {
-    display: flex;
->>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
 
     & .themeCustomEditorDialogContainer {
       display: flex;
@@ -453,7 +518,6 @@ const ThemeCustomEditorDialog = styled.div`
         width: 200px;
         height: 200px;
         backround-color: black;
-<<<<<<< HEAD
         border-radius: 200px;
       }
 
@@ -473,22 +537,14 @@ const ThemeCustomEditorDialog = styled.div`
         & .themeCustomEditorDialogContent {
           height: 4rem;
         }
-=======
-        border-radius: 20px;
->>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
       }
     }
 
     & .themeCustomEditorDialogRightScroll {
       // overflow: auto;
       // background-color: black;
-<<<<<<< HEAD
       // width: 200px;
       // overflow: hidden;
-=======
-      width: 200px;
-      overflow: hidden;
->>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
       // overflow: auto;
       // border-left: 1px solid #000000;
     }

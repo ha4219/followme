@@ -14,7 +14,7 @@ import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
 import { IBannerType } from "types/apiType";
 
-const AdminBannerItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
+const AdminFaqItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
   const onClickDel = async () => {
     try {
       const data = await delBanner({ idx: idx });
@@ -59,7 +59,7 @@ const ImgContainer = styled.img`
   background-size: cover;
 `;
 
-const AdminBannerList = () => {
+const AdminFaqList = () => {
   const [bannerData, setBannerData] = useState<IBannerType[]>([]);
 
   const getData = async () => {
@@ -77,15 +77,15 @@ const AdminBannerList = () => {
         <TableHead>
           <TableRow>
             <TableCell>Idx</TableCell>
-            <TableCell>Image</TableCell>
-            <TableCell>UrlTo</TableCell>
-            <TableCell>EndDate</TableCell>
+            <TableCell>title</TableCell>
+            <TableCell>content</TableCell>
+            <TableCell>createAt</TableCell>
             <TableCell>Del</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {bannerData.map((item) => (
-            <AdminBannerItem key={item.idx} {...item} />
+            <AdminFaqItem key={item.idx} {...item} />
           ))}
         </TableBody>
       </Table>
@@ -108,4 +108,4 @@ const AdminBannerListContaner = styled.div`
   }
 `;
 
-export default AdminBannerList;
+export default AdminFaqList;

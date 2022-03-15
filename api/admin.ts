@@ -13,3 +13,12 @@ export const addBanner = async ({ imgURL, urlTo, endDate }) => {
   }
   return;
 };
+
+export const delBanner = async ({ idx }) => {
+  try {
+    const { data } = await API.post(`/main/deleteSwipers/${idx}`);
+    return data;
+  } catch (e) {
+    console.log("del banner", e);
+  }
+};

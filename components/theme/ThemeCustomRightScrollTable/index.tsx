@@ -70,14 +70,9 @@ const ThemeCustomRightScrollTableItemContainer = styled(TableRow)`
   cursor: pointer;
 
   & .themeCustomRightScrollTableItemImg {
-<<<<<<< HEAD
     width: 50px;
     height: 50px;
     border-radius: 50px;
-=======
-    width: 200px;
-    height: 200px;
->>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
   }
 `;
 
