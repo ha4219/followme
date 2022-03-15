@@ -16,6 +16,7 @@ import Drawer from "@mui/material/Drawer";
 import React, { FC, VFC } from "react";
 import { copyFile } from "fs";
 import Link from "next/link";
+import Logo from "@components/Logo";
 
 const drawerWidth = 240;
 
@@ -36,7 +37,14 @@ const ADMINLEFTLAYOUTDETAIL = [
 
 const drawer = (
   <div>
-    <Toolbar />
+    <Toolbar>
+      <Link href={"/"}>
+        <a>
+          <Logo />
+        </a>
+      </Link>
+    </Toolbar>
+
     <Divider />
     <List>
       {ADMINLEFTLAYOUTDETAIL.map((text, index) => (

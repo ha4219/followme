@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
 import { getUserProfile } from "api/auth";
+import Link from "next/link";
 // import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useEffect } from "react";
@@ -39,17 +40,16 @@ const ProfileLeftLayout: FC = ({ children }) => {
           <div className="title">MyPage</div>
           <div className="btns">
             {PROFILE.map((item, index) => (
-              <div key={index}>
+              <Link href={item.to} key={index}>
                 <Button
                   key={index}
-                  href={item.to}
                   className={
                     router.pathname === item.to ? "active" : "deactivate"
                   }
                 >
                   #{item.label}
                 </Button>
-              </div>
+              </Link>
             ))}
           </div>
         </ProfileLeftContainer>
@@ -75,9 +75,12 @@ const ProfileLeftContainer = styled(Box)`
       color: #0068ff;
       border-radius: 1rem;
       margin-top: 1rem;
+      display: block;
     }
 
     & .deactivate {
+      display: block;
+
       border: 1px solid #b8c3d1;
       border-radius: 1rem;
       margin-top: 1rem;

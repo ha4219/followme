@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, Button, Grid } from "@mui/material";
-// import Link from "next/link";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
 
@@ -23,17 +23,16 @@ const HelpLeftLayout: FC = ({ children }) => {
           <div className="title">고객센터</div>
           <div className="btns">
             {PROFILE.map((item, index) => (
-              <div key={index}>
+              <Link className="helpLeftLayoutLink" href={item.to} key={index}>
                 <Button
                   key={index}
-                  href={item.to}
                   className={
                     router.pathname === item.to ? "active" : "deactivate"
                   }
                 >
                   #{item.label}
                 </Button>
-              </div>
+              </Link>
             ))}
           </div>
         </ProfileLeftContainer>
@@ -53,8 +52,14 @@ const ProfileLeftContainer = styled(Box)`
 
   & .btns {
     font-size: 0.8rem;
+    display: block;
 
+    & .helpLeftLayoutLink {
+      display: block;
+    }
     & .active {
+      display: block;
+
       border: 1px solid #0068ff;
       color: #0068ff;
       border-radius: 1rem;
@@ -65,6 +70,7 @@ const ProfileLeftContainer = styled(Box)`
       border: 1px solid #b8c3d1;
       border-radius: 1rem;
       margin-top: 1rem;
+      display: block;
     }
   }
 `;
