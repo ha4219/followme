@@ -18,7 +18,7 @@ const KakaoLogin = () => {
     try {
       const { data } = await getUserProfile();
       toast.success("로그인 성공");
-      setLoggedIn(data[0].id);
+      setLoggedIn(data.userData[0].id);
     } catch (e) {
       console.log(e);
     }
