@@ -125,7 +125,7 @@ const MapEditor = () => {
   };
 
   useEffect(() => {
-    if (window.kakao) {
+    if (window.kakao?.map && window.kakao?.maps) {
       const moveLatLon = new window.kakao.maps.LatLng(
         mapLatLonState[0],
         mapLatLonState[1]
