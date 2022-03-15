@@ -16,6 +16,7 @@ import ShareButton from "@components/ShareButton";
 import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
+import { doRecommendLike } from "api/theme";
 
 const RecommendDetail = () => {
   const router = useRouter();
@@ -36,10 +37,10 @@ const RecommendDetail = () => {
 
       if (id) {
         const { data } = await API.post<ICourseDetail[]>(
-          `/recommend/postDetail/${id}`
-          // {
-          //   id: loggedInId,
-          // }
+          `/recommend/postDetail/${id}`,
+          {
+            id: loggedInId,
+          }
         );
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
@@ -85,27 +86,15 @@ const RecommendDetail = () => {
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/recommend/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          if (course) {
-            if (like) {
-              setLikeCnt(course.likeCnts - 1);
-            } else {
-              setLikeCnt(course.likeCnts);
-            }
-          }
-
-          setLike(1 ^ like);
-        })
-        .catch((err) => {
-          console.log(err.message);
-          if (err.response.status === 403) {
-            router.push("/logout");
-          }
-        });
+      if (loggedInId) {
+        doRecommendLike({ idx: idx, id: loggedInId });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
     [like, idx]
   );
