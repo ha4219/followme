@@ -21,6 +21,7 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { ICourse } from "types/apiType";
 import { API } from "@src/API";
+import { doRecommendLike } from "api/theme";
 
 const ThemeProgram: VFC<ICourse> = ({
   idx,
@@ -39,24 +40,24 @@ const ThemeProgram: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const [like, setLike] = useState(likeClicked === 1);
-  const loggedInId = useRecoilValue(idState);
-
+  const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
+  const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);
+  const id = useRecoilValue(idState);
   const router = useRouter();
 
   const onClickLike = useCallback(
-    async (e) => {
+    (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      API.post(`/recommend/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          setLike(!like);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (id) {
+        doRecommendLike({ idx, id });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
     [like]
   );

@@ -5,8 +5,6 @@ import {
   Button,
   Dialog,
   DialogActions,
-  Input,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -16,6 +14,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import useInput from "@hooks/useInput";
+import StarGenerator from "@components/StarGenerator";
 import { v1 } from "uuid";
 // import S3 from "react-aws-s3";
 // import S3FileUpload from "react-s3";
@@ -27,6 +26,9 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
+import { mapSelectedState } from "@store/map";
+import CustomEditorTag from "@components/CustomEditorTag";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -64,6 +66,7 @@ const ThemeCustomEditor = () => {
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([true, false]);
   const isLoggedInId = useRecoilValue(idState);
+  const mapSelectState = useRecoilValue(mapSelectedState);
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -233,22 +236,55 @@ const ThemeCustomEditor = () => {
   );
   return (
     <MainContainer>
-      <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "100%", height: "400px" }}>
-          <MapEditor />
-          {/* <img /> */}
-          <input type="file" accept="image/*" onChange={onChangeDialog} />
-          <div>
-            <TextField placeholder="title" />
-          </div>
-          <div>
-            <TextField placeholder="content" />
+      <Dialog open={open} onClose={onCloseDialog} fullWidth>
+        <ThemeCustomEditorDialog>
+          <div className="themeCustomEditorDialogLayout">
+            <div className="themeCustomEditorDialogBody">
+              <MapEditor />
+              {/* <img /> */}
+              {/* <input type="file" accept="image/*" onChange={onChangeDialog} /> */}
+              <div className="themeCustomEditorDialogContainer">
+                <img
+                  src={mapSelectState[0]}
+                  className="themeCustomEditorDialogContainerImg"
+                />
+                <div className="themeCustomEditorDialogContainerBody">
+                  <div className="themeCustomEditorDialogTitle">
+                    {/* 식당명칭이 들어갈 자 */}
+                    {mapSelectState[1]}
+                  </div>
+                  <div className="themeCustomEditorDialogContent">
+                    {/* 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심
+                      문장을 인용하여 이용자에게 보여줄 수 있습니다. 본문에 있는
+                      내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을
+                      인용하여 이용자에게 보여줄 수 있습니다. */}
+                    {mapSelectState[2]}
+                  </div>
+                  <div className="themeCustomEditorDialogScore">
+                    {/* {mapSelectState[3]} */}
+                    <StarGenerator count={mapSelectState[3]} />
+                  </div>
+                  <div className="themeCustomEditorDialogTags">
+                    {mapSelectState[4].map((item, index) => {
+                      return <CustomEditorTag tag={item} key={index} />;
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="themeCustomEditorDialogRightScroll">
+              <ThemeCustomRightScrollTable />
+            </div>
           </div>
           <DialogActions>
-            <Button onClick={onSubmitDialog}>submit</Button>
-            <Button onClick={onCloseDialog}>close</Button>
+            <Button onClick={onSubmitDialog} variant="contained">
+              submit
+            </Button>
+            <Button onClick={onCloseDialog} variant="contained" color="error">
+              close
+            </Button>
           </DialogActions>
-        </Box>
+        </ThemeCustomEditorDialog>
       </Dialog>
       <OptionContainer>
         <div className="checkContainer">
@@ -393,6 +429,53 @@ const ThemeCustomEditor = () => {
 const MainContainer = styled.div`
   & .center {
     text-align: center;
+  }
+`;
+
+const ThemeCustomEditorDialog = styled.div`
+  display: block;
+  padding: 1rem;
+
+  & .themeCustomEditorDialogLayout {
+    display: block;
+
+    & .themeCustomEditorDialogContainer {
+      display: flex;
+
+      & .themeCustomEditorDialogContainerImg {
+        width: 200px;
+        height: 200px;
+        backround-color: black;
+        border-radius: 200px;
+      }
+
+      & .themeCustomEditorDialogContainerBody {
+        // width: 100px;
+        width: 100%;
+        font-family: paybooc-Light;
+        padding: 1rem;
+        padding-left: 2rem;
+
+        & .themeCustomEditorDialogTitle {
+          font-family: paybooc-Bold;
+          height: 2rem;
+          font-size: 1.2rem;
+        }
+
+        & .themeCustomEditorDialogContent {
+          height: 4rem;
+        }
+      }
+    }
+
+    & .themeCustomEditorDialogRightScroll {
+      // overflow: auto;
+      // background-color: black;
+      // width: 200px;
+      // overflow: hidden;
+      // overflow: auto;
+      // border-left: 1px solid #000000;
+    }
   }
 `;
 

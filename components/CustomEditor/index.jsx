@@ -206,21 +206,21 @@ const CustomEditor = () => {
   return (
     <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "400px", height: "400px" }}>
-          <MapEditor />
-          <img />
-          <input type="file" accept="image/*" onChange={onChangeDialog} />
-          <div>
-            <TextField placeholder="title" />
-          </div>
-          <div>
-            <TextField placeholder="content" />
-          </div>
-          <DialogActions>
-            <Button onClick={onSubmitDialog}>submit</Button>
-            <Button onClick={onCloseDialog}>close</Button>
-          </DialogActions>
-        </Box>
+        {/* <Box sx={{ width: "400px", height: "400px" }}> */}
+        <MapEditor />
+        <img />
+        <input type="file" accept="image/*" onChange={onChangeDialog} />
+        <div>
+          <TextField placeholder="title" />
+        </div>
+        <div>
+          <TextField placeholder="content" />
+        </div>
+        <DialogActions>
+          <Button onClick={onSubmitDialog}>submit</Button>
+          <Button onClick={onCloseDialog}>close</Button>
+        </DialogActions>
+        {/* </Box> */}
       </Dialog>
       <OptionContainer>
         <div className="checkContainer">

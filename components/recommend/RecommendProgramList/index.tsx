@@ -17,7 +17,7 @@ import { useCallback, useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
-import RecommendProgram from "../RecommendProgram";
+import RecommendProgramDif from "../RecommendProgramDif";
 
 const SORT = [
   { name: "추천순", value: 0 },
@@ -196,7 +196,7 @@ const RecommendProgramList: VFC = () => {
           {courses
             .slice(page * perPageSize, (page + 1) * perPageSize)
             .map((item, index) => {
-              return <EditorProgram key={index} {...item} />;
+              return <RecommendProgramDif key={index} {...item} />;
             })}
         </Grid>
         <EditorProgramListPagination

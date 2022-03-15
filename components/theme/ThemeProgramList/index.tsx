@@ -196,7 +196,7 @@ const ThemeProgramList: VFC = () => {
           {courses
             .slice(page * perPageSize, (page + 1) * perPageSize)
             .map((item, index) => {
-              return <EditorProgram key={index} {...item} />;
+              return <ThemeProgram key={index} {...item} />;
             })}
         </Grid>
         <EditorProgramListPagination

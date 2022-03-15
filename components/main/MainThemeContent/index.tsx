@@ -2,7 +2,6 @@ import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
 import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useCallback, useState, VFC } from "react";
-import gravatar from "gravatar";
 import { contentSummary, titleSummary } from "@helpers/programHelper";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -12,6 +11,7 @@ import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
+import { doThemeLike } from "api/theme";
 
 const MainThemeContent: VFC<ICourse> = ({
   idx,
@@ -30,8 +30,9 @@ const MainThemeContent: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const [like, setLike] = useState(likeClicked);
-  const loggedInId = useRecoilValue(idState);
+  const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
+  const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);
+  const id = useRecoilValue(idState);
   const router = useRouter();
 
   const onClickProgram = useCallback((id) => {
@@ -39,17 +40,18 @@ const MainThemeContent: VFC<ICourse> = ({
   }, []);
 
   const onClickLike = useCallback(
-    async (e) => {
+    (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      API.post(`/theme/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          setLike(like ? 0 : 1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (id) {
+        doThemeLike({ idx, id });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
     [like]
   );

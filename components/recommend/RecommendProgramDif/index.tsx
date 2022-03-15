@@ -9,9 +9,9 @@ import { contentSummary, titleSummary } from "@helpers/programHelper";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { doThemeLike } from "api/theme";
+import { doRecommendLike } from "api/theme";
 
-const ThemeProgram: VFC<ICourse> = ({
+const RecommendProgramDif: VFC<ICourse> = ({
   idx,
   mainImg,
   writer,
@@ -28,7 +28,7 @@ const ThemeProgram: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
+  const [like, setLike] = useState(likeClicked ? likeClicked : 0);
   const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);
   const id = useRecoilValue(idState);
   const onClickLike = useCallback(
@@ -36,7 +36,7 @@ const ThemeProgram: VFC<ICourse> = ({
       e.preventDefault();
       e.stopPropagation();
       if (id) {
-        doThemeLike({ idx, id });
+        doRecommendLike({ idx, id });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
@@ -49,7 +49,7 @@ const ThemeProgram: VFC<ICourse> = ({
   );
   const router = useRouter();
   const onClickProgram = useCallback((id) => {
-    router.push(`/theme/${idx}`);
+    router.push(`/recommend/${idx}`);
   }, []);
 
   const toBase64 = (arr) => {
@@ -224,4 +224,4 @@ const EditorContainer = styled(Grid)`
   }
 `;
 
-export default ThemeProgram;
+export default RecommendProgramDif;

@@ -10,11 +10,11 @@ const Recommend = () => {
         <HomeOutlinedIcon />
         <span>
           홈<span className="dividor">|</span>
-          {"추천코스"}
+          {"Ulife 추천코스"}
         </span>
       </Box>
 
-      <Box className="editorTitle">{"추천코스"}</Box>
+      <Box className="editorTitle">{"Ulife 추천코스"}</Box>
       <Box py={2}>
         <RecommendProgramList />
       </Box>

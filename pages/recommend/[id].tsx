@@ -4,7 +4,6 @@ import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import gravatar from "gravatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
@@ -52,22 +51,6 @@ const RecommendDetail = () => {
     }
   };
 
-  const getComments = async () => {
-    const { id } = router.query;
-    try {
-      if (id) {
-        const { data } = await API.get<IComment[]>(
-          `/recommend/recommendBoards/reply/${id}`,
-          {}
-        );
-        setComments(data);
-      }
-    } catch (e) {
-      console.log("router not ready", e);
-    }
-    setIdx(id);
-  };
-
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
@@ -96,13 +79,13 @@ const RecommendDetail = () => {
         setComment("");
       }
     },
-    [comment]
+    [comment, idx]
   );
 
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/main/postLike/${idx}`, {
+      API.post(`/recommend/postLike/${idx}`, {
         id: loggedInId,
       })
         .then(({ data }) => {
@@ -124,7 +107,7 @@ const RecommendDetail = () => {
           }
         });
     },
-    [like]
+    [like, idx]
   );
 
   useEffect(() => {

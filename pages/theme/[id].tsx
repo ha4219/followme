@@ -4,7 +4,6 @@ import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import gravatar from "gravatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
@@ -96,13 +95,13 @@ const ThemeDetail = () => {
         setComment("");
       }
     },
-    [comment]
+    [comment, idx]
   );
 
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/main/postLike/${idx}`, {
+      API.post(`/theme/postLike/${idx}`, {
         id: loggedInId,
       })
         .then(({ data }) => {
@@ -124,7 +123,7 @@ const ThemeDetail = () => {
           }
         });
     },
-    [like]
+    [like, idx]
   );
 
   useEffect(() => {
