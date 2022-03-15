@@ -18,7 +18,8 @@ const KakaoLogin = () => {
     try {
       const { data } = await getUserProfile();
       toast.success("로그인 성공");
-      setLoggedIn(data.userData[0].id);
+      setLoggedInId(data.userData[0].id);
+      router.push("/");
     } catch (e) {
       console.log(e);
     }
@@ -29,8 +30,8 @@ const KakaoLogin = () => {
       setData(data.success);
       if (data.success && data) {
         setToken(data.accessToken);
+        setLoggedIn(data.accessToken);
         setProfile();
-        router.push("/");
       }
     } catch (e: any) {
       console.log("naver send error", e);
