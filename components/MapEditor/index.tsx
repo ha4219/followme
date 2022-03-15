@@ -145,9 +145,13 @@ const MapEditor = () => {
 export const MapContent = styled.div`
   // aspect-ratio: 1;
   width: 100%;
+<<<<<<< HEAD
   // width: 300px;
   height: 200px;
   margin-bottom: 1rem;
+=======
+  height: 200px;
+>>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
 `;
 
 export default MapEditor;

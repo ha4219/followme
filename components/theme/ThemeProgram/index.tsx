@@ -5,7 +5,6 @@ import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

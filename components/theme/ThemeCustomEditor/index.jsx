@@ -28,7 +28,10 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
+<<<<<<< HEAD
 import CustomEditorTag from "@components/CustomEditorTag";
+=======
+>>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -434,10 +437,17 @@ const MainContainer = styled.div`
 
 const ThemeCustomEditorDialog = styled.div`
   display: block;
+<<<<<<< HEAD
   padding: 1rem;
 
   & .themeCustomEditorDialogLayout {
     display: block;
+=======
+  width: 100%;
+
+  & .themeCustomEditorDialogLayout {
+    display: flex;
+>>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
 
     & .themeCustomEditorDialogContainer {
       display: flex;
@@ -446,6 +456,7 @@ const ThemeCustomEditorDialog = styled.div`
         width: 200px;
         height: 200px;
         backround-color: black;
+<<<<<<< HEAD
         border-radius: 200px;
       }
 
@@ -465,14 +476,22 @@ const ThemeCustomEditorDialog = styled.div`
         & .themeCustomEditorDialogContent {
           height: 4rem;
         }
+=======
+        border-radius: 20px;
+>>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
       }
     }
 
     & .themeCustomEditorDialogRightScroll {
       // overflow: auto;
       // background-color: black;
+<<<<<<< HEAD
       // width: 200px;
       // overflow: hidden;
+=======
+      width: 200px;
+      overflow: hidden;
+>>>>>>> 77f538a6293fb8fe3edf13c864196f04c703d8e6
       // overflow: auto;
       // border-left: 1px solid #000000;
     }
