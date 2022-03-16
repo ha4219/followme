@@ -8,6 +8,9 @@ import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { mapSelectedState, mapState } from "@store/map";
+import { Mms } from "@mui/icons-material";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 declare global {
   interface Window {
@@ -27,6 +30,7 @@ const MapContainer = () => {
   const [clickList, setClickList] = useState([]);
   const perPage = 3;
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
+  const [markers, setMarkers] = useState<any[]>([]);
 
   const mapInit = async () => {
     try {
@@ -97,6 +101,12 @@ const MapContainer = () => {
     }
   }, [mapLatLonState]);
 
+  useEffect(() => {
+    markers.forEach((item) => {
+      item.setMap(map);
+    });
+  }, [map, markers]);
+
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
 
@@ -108,7 +118,7 @@ const MapContainer = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
-
+        const data = mapDummyData;
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
         };
@@ -116,28 +126,17 @@ const MapContainer = () => {
 
         window.kakao.map = map;
         setMap(map);
+        const mms: any[] = [];
         for (let i = 0; i < data.length; i++) {
           const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].title,
           });
-          marker.setMap(map);
-          const iwContent = `<div style="display:flex;padding:5px;"><img src="${
-            data[i].url
-          }" />${mapTitleSummary(data[i].title)}</div>`;
-
-          const infowindow = new window.kakao.maps.CustomOverlay({
-            // position: latlon,w
-            content: iwContent,
-            removable: true,
-          });
-          // infowindow.open(map, marker);
-          window.kakao.maps.event.addListener(marker, "click", function () {
-            // 마커 위에 인포윈도우를 표시합니다
-            infowindow.open(map, marker);
-          });
+          mms.push(marker);
+          // marker.setMap(map);
         }
+        setMarkers(mms);
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
@@ -155,8 +154,12 @@ const MapContainer = () => {
         <div className="head">
           <div className="label">장소</div>
           <div className="bts">
-            <button onClick={onPrevPage}>{"<"}</button>
-            <button onClick={onNextPage}>{">"}</button>
+            <button onClick={onPrevPage}>
+              <KeyboardArrowLeftIcon />
+            </button>
+            <button onClick={onNextPage}>
+              <ChevronRightIcon />
+            </button>
           </div>
         </div>
         {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (

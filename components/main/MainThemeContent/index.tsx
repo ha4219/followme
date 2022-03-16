@@ -100,7 +100,7 @@ const MainThemeContent: VFC<ICourse> = ({
               }}
             />
           )}
-          <div className="heartTxt">{likeCnts}</div>
+          <div className="heartTxt">{likeCnt}</div>
         </Button>
         <ShareButton
           url={`${process.env.NEXT_PUBLIC_DEPLOYURL}/theme/${idx}`}

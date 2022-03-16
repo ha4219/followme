@@ -27,6 +27,7 @@ const MapContainerNoDiv = () => {
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const [markers, setMarkers] = useState<any[]>([]);
   const [infos, setInfos] = useState<any[]>([]);
+  const [sortedType, setSortedType] = useState(0);
 
   const mapInit = async () => {
     try {
@@ -75,7 +76,6 @@ const MapContainerNoDiv = () => {
       //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
       // );
     }
-    setData(mapDummyData);
   }, []);
 
   useEffect(() => {
@@ -102,18 +102,19 @@ const MapContainerNoDiv = () => {
       //   //     infowindow.open(window.kakao.map, marker);
       //   //   });
       // }
-      for (let i = 0; i < data.length; i++) {
-        markers[i].setMap(map);
-        window.kakao.maps.event.addListener(markers[i], "click", function () {
-          infos[i].open(map, markers[i]);
-        });
+      if (map && markers.length === infos.length) {
+        for (let i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+          window.kakao.maps.event.addListener(markers[i], "click", function () {
+            infos[i].open(map, markers[i]);
+          });
+        }
       }
     }
   }, [infos, markers, map]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
-
     mapScript.async = true;
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API}&autoload=false`;
 
@@ -122,6 +123,7 @@ const MapContainerNoDiv = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
+        const data = mapDummyData;
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
@@ -194,6 +196,7 @@ const MapContainerNoDiv = () => {
           //   infowindow?.open(window.kakao.map, marker);
           // });
         }
+
         setMarkers(mms);
         setInfos(ins);
       });
@@ -206,6 +209,28 @@ const MapContainerNoDiv = () => {
   return (
     <MainMapContainer>
       {/* <Grid item md={9}> */}
+      <HeadContainer>
+        <SortedContainer>
+          <CustomButton
+            className={sortedType === 0 ? "active" : ""}
+            onClick={() => setSortedType(0)}
+          >
+            5km이내
+          </CustomButton>
+          <CustomButton
+            className={sortedType === 1 ? "active" : ""}
+            onClick={() => setSortedType(1)}
+          >
+            10km이내
+          </CustomButton>
+          <CustomButton
+            className={sortedType === 2 ? "active" : ""}
+            onClick={() => setSortedType(2)}
+          >
+            20km이내
+          </CustomButton>
+        </SortedContainer>
+      </HeadContainer>
       <MapContent id="map" />
       {/* </Grid> */}
       {/* <Grid item md={3}> */}
@@ -227,29 +252,28 @@ const MapContainerNoDiv = () => {
 };
 
 const MainMapContainer = styled.div`
-  display: flex;
+  display: block;
 `;
 
-const BottomDiv = styled.div`
-  // display: block;
-  height: 500px;
-  // width: 500px;
-  display: inline-block;
-  flex-direction: column;
-  // overflow: hidden;
-  font-family: paybooc-Medium;
-  padding: 1rem;
-  background-color: #edeef8;
+const HeadContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 2.5rem;
+`;
+const SortedContainer = styled.div`
+  display: flex;
+  padding-top: 2rem;
 
-  & .head {
-    padding-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-
-    & .label {
-      font-weight: bold;
-    }
+  & .active {
+    color: #ffffff;
+    background-color: #000000;
   }
+`;
+
+const CustomButton = styled(Button)`
+  border: 1px solid black;
+  margin-left: 5px;
+  height: 30px;
 `;
 
 export const MapContent = styled.div`

@@ -10,7 +10,7 @@ import MainThemeContent from "../MainThemeContent";
 const MainThemeContainer = () => {
   const [travels, setTravels] = useState<ICourse[]>([]);
   const [themes, setThemes] = useState<ICourse[]>([]);
-  const [sortedType, setSortedType] = useState(0);
+  const [sortedType, setSortedType] = useState(2);
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
@@ -22,8 +22,23 @@ const MainThemeContainer = () => {
           }
         : {}
     );
-    setTravels(data.slice(-16));
-    setThemes(data.slice(-16));
+
+    setTravels(
+      data.slice(-16).sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
+    setThemes(
+      data.slice(-16).sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
   };
 
   useEffect(() => {

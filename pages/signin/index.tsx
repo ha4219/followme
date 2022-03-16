@@ -59,6 +59,12 @@ const Signin = () => {
           setLoggedIn(data.accessToken);
           setLoggedInId(id);
           setToken(data.accessToken);
+          setTimeout(() => {
+            setLoggedIn("");
+            setLoggedInId("");
+            setToken("");
+            router.push("/logout");
+          }, 30 * 60 * 1000);
         }
       } catch (e) {
         toast.error("로그인 실패");
