@@ -11,7 +11,7 @@ export interface IUser {
   nickName: string;
   phoneNum: string;
   email: string;
-  points: number;
+  point: string;
   likeCnts: number;
 }
 
