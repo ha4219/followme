@@ -58,12 +58,6 @@ const AdminNoticeItem: VFC<INoticeType> = ({
   );
 };
 
-const ImgContainer = styled.img`
-  width: 200px;
-  hieght: 200px;
-  background-size: cover;
-`;
-
 const AdminNoticeList = () => {
   const [noticeData, setNoticeData] = useState<INoticeType[]>([]);
 
