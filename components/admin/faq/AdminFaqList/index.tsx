@@ -8,16 +8,18 @@ import {
   TableRow,
   Link,
 } from "@mui/material";
-import { API } from "@src/API";
-import { delBanner } from "api/admin";
+import { idState } from "@store/auth";
+import { delFaq, getFaq } from "api/admin";
 import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
-import { IBannerType } from "types/apiType";
+import { useRecoilValue } from "recoil";
+import { IFaqType } from "types/apiType";
 
-const AdminFaqItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
+const AdminFaqItem: VFC<IFaqType> = ({ title, answer, idx, createdAt }) => {
+  const id = useRecoilValue(idState);
   const onClickDel = async () => {
     try {
-      const data = await delBanner({ idx: idx });
+      const data = await delFaq({ idx: idx, id: id });
       if (data.data === "success") {
         toast.success("삭제 성공");
         setShow(false);
@@ -35,15 +37,10 @@ const AdminFaqItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
   return (
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
-      <TableCell>
-        <ImgContainer src={imgURL} alt={urlTo} />
-      </TableCell>
-      <TableCell>
-        <Link href={urlTo}>
-          <a>{urlTo}</a>
-        </Link>
-      </TableCell>
-      <TableCell>{endDate}</TableCell>
+      <TableCell>{title}</TableCell>
+      <TableCell>{answer}</TableCell>
+      {/* <TableCell>{views}</TableCell> */}
+      <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
         <Button onClick={onClickDel} variant="contained" color="error">
           del
@@ -60,11 +57,11 @@ const ImgContainer = styled.img`
 `;
 
 const AdminFaqList = () => {
-  const [bannerData, setBannerData] = useState<IBannerType[]>([]);
+  const [faqData, setFaqData] = useState<IFaqType[]>([]);
 
   const getData = async () => {
-    const { data } = await API.get("/main/swipers");
-    setBannerData(data);
+    const data = await getFaq();
+    setFaqData(data);
   };
 
   useEffect(() => {
@@ -84,13 +81,13 @@ const AdminFaqList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {bannerData.map((item) => (
+          {faqData.map((item) => (
             <AdminFaqItem key={item.idx} {...item} />
           ))}
         </TableBody>
       </Table>
       <div className="btns">
-        <Link href="/admin/banner/write">
+        <Link href="/admin/faq/write">
           <Button variant="contained">add</Button>
         </Link>
       </div>

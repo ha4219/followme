@@ -66,3 +66,20 @@ export interface IPointType {
   point: number;
   type: string;
 }
+
+export interface INoticeType {
+  title: string;
+  createdAt: string;
+  idx: number;
+  content: string;
+  views: number;
+  writer: string;
+}
+
+export interface IFaqType {
+  idx: number;
+  title: string;
+  answer: string;
+  writer: string;
+  createdAt: string;
+}

@@ -9,6 +9,7 @@ import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { doThemeLike } from "api/theme";
+import { contentSummary, titleSummary } from "@helpers/programHelper";
 
 const ThemeProgram: VFC<ICourse> = ({
   idx,
@@ -123,8 +124,10 @@ const ThemeProgram: VFC<ICourse> = ({
             </IconButton>
           </div>
         </div>
-        <div className="editorProgramTitle">{title}</div>
-        <div className="editorProgramContent">{shortContent}</div>
+        <div className="editorProgramTitle">{titleSummary(title)}</div>
+        <div className="editorProgramContent">
+          {contentSummary(shortContent)}
+        </div>
         <div className="editorProgramTags">
           {tags.map((item, index) => (
             <span className="editorProgramTag" key={index}>

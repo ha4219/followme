@@ -64,7 +64,7 @@ const Signin = () => {
             setLoggedInId("");
             setToken("");
             router.push("/logout");
-          }, 30 * 60 * 1000);
+          }, 30 * 60 * 1000); // 30 * 60 * 1000
         }
       } catch (e) {
         toast.error("로그인 실패");

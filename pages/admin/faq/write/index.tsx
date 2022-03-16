@@ -1,5 +1,5 @@
 import AdminLayout from "@components/admin/AdminLayout";
-import AdminNoticeWriteEditor from "@components/admin/notice/AdminNoticeWriteEditor";
+import AdminFaqWriteEditor from "@components/admin/faq/AdminFaqWriteEditor";
 import Head from "next/head";
 
 const AdminFaqWrite = () => {
@@ -9,7 +9,7 @@ const AdminFaqWrite = () => {
         <title>admin faq write</title>
       </Head>
       <AdminLayout>
-        <AdminNoticeWriteEditor />
+        <AdminFaqWriteEditor />
       </AdminLayout>
     </>
   );

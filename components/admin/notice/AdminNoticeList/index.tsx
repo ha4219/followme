@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { dateHelper } from "@helpers/programHelper";
 import {
   Button,
   Table,
@@ -8,16 +9,25 @@ import {
   TableRow,
   Link,
 } from "@mui/material";
-import { API } from "@src/API";
-import { delBanner } from "api/admin";
+import { idState } from "@store/auth";
+import { delNotice, getNotice } from "api/admin";
 import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
-import { IBannerType } from "types/apiType";
+import { useRecoilValue } from "recoil";
+import { IBannerType, INoticeType } from "types/apiType";
 
-const AdminNoticeItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
+const AdminNoticeItem: VFC<INoticeType> = ({
+  title,
+  createdAt,
+  idx,
+  content,
+  views,
+  writer,
+}) => {
+  const id = useRecoilValue(idState);
   const onClickDel = async () => {
     try {
-      const data = await delBanner({ idx: idx });
+      const data = await delNotice({ idx: idx, id: id });
       if (data.data === "success") {
         toast.success("삭제 성공");
         setShow(false);
@@ -35,15 +45,10 @@ const AdminNoticeItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
   return (
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
-      <TableCell>
-        <ImgContainer src={imgURL} alt={urlTo} />
-      </TableCell>
-      <TableCell>
-        <Link href={urlTo}>
-          <a>{urlTo}</a>
-        </Link>
-      </TableCell>
-      <TableCell>{endDate}</TableCell>
+      <TableCell>{title}</TableCell>
+      <TableCell>{content}</TableCell>
+      <TableCell>{views}</TableCell>
+      <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
         <Button onClick={onClickDel} variant="contained" color="error">
           del
@@ -60,11 +65,12 @@ const ImgContainer = styled.img`
 `;
 
 const AdminNoticeList = () => {
-  const [bannerData, setBannerData] = useState<IBannerType[]>([]);
+  const [noticeData, setNoticeData] = useState<INoticeType[]>([]);
 
   const getData = async () => {
-    const { data } = await API.get("/main/swipers");
-    setBannerData(data);
+    const data = await getNotice();
+
+    setNoticeData(data);
   };
 
   useEffect(() => {
@@ -76,15 +82,16 @@ const AdminNoticeList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Idx</TableCell>
+            <TableCell>idx</TableCell>
             <TableCell>title</TableCell>
             <TableCell>content</TableCell>
+            <TableCell>views</TableCell>
             <TableCell>createAt</TableCell>
             <TableCell>Del</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {bannerData.map((item) => (
+          {noticeData.map((item) => (
             <AdminNoticeItem key={item.idx} {...item} />
           ))}
         </TableBody>

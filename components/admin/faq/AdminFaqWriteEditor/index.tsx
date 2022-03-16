@@ -27,7 +27,7 @@ const AdminFaqWriteEditor = () => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="adminNoticeWriteEditorContainerSubContainer">
               <DesktopDatePicker
-                label="공지사항 작성일"
+                label="faq 작성일"
                 inputFormat="MM/dd/yyyy"
                 value={date}
                 onChange={onChangeDate}
@@ -37,14 +37,14 @@ const AdminFaqWriteEditor = () => {
           </LocalizationProvider>
         </div>
         <TextField
-          label="제목"
+          label="질문"
           className="adminNoticeWriteEditorContainerField"
           value={title}
           fullWidth
           onChange={onChangeTitle}
         />
         <TextField
-          label="내용"
+          label="답변"
           multiline
           className="adminNoticeWriteEditorContainerField adminNoticeWriteEditorContainerArea"
           value={content}

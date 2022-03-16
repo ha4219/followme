@@ -124,8 +124,10 @@ const RecommendProgramDif: VFC<ICourse> = ({
             </IconButton>
           </div>
         </div>
-        <div className="editorProgramTitle">{title}</div>
-        <div className="editorProgramContent">{shortContent}</div>
+        <div className="editorProgramTitle">{titleSummary(title)}</div>
+        <div className="editorProgramContent">
+          {contentSummary(shortContent)}
+        </div>
         <div className="editorProgramTags">
           {tags.map((item, index) => (
             <span className="editorProgramTag" key={index}>
