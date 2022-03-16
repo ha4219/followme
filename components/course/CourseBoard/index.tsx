@@ -70,7 +70,7 @@ const CourseBoard = () => {
         <TableHead className="head">
           <TableRow className="head">
             <TableCell align="center">제목</TableCell>
-            <TableCell align="center">좋아요</TableCell>
+            <TableCell align="center">답글</TableCell>
             <TableCell align="center">작성일</TableCell>
           </TableRow>
         </TableHead>

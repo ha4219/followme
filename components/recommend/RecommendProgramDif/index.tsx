@@ -208,7 +208,7 @@ const EditorContainer = styled(Grid)`
     }
 
     & .editorProgramContent {
-      height: 3rem;
+      height: 4rem;
       line-height: 1.33;
       letter-spacing: -0.83;
     }

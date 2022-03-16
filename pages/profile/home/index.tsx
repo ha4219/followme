@@ -1,9 +1,8 @@
 import ProfileLeftLayout from "@components/profile/ProfileLeftLayout";
 import styled from "@emotion/styled";
-import { Avatar, Box, Button, Container } from "@mui/material";
-import { getUserBoard, getUserProfile } from "api/auth";
+import { Avatar, Box, Container } from "@mui/material";
+import { getUserProfile } from "api/auth";
 import { useState, useEffect } from "react";
-import gravatar from "gravatar";
 import { ICourse, IPointType, IUser } from "types/apiType";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
@@ -14,11 +13,9 @@ import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState, idState } from "@store/auth";
 import { useRouter } from "next/router";
-import CourseBoard from "@components/course/CourseBoard";
 import CourseTable from "@components/course/CourseTable";
 import { COURSES } from "@data/CourseData";
 import ProfilePointHistory from "@components/profile/PointHistory";
-import { getUserPointHistory } from "api/profile";
 
 const ProfileHome = () => {
   const router = useRouter();
@@ -115,7 +112,7 @@ const ProfileHome = () => {
                 <FavoriteBorderOutlinedIcon className="like" />
                 <div>{`좋아요: ${user.likeCnts}개`}</div>
                 <AttachMoneyOutlinedIcon className="money" />
-                <div>{`포인트: ${user.points ? user.points : 0}p`}</div>
+                <div>{`포인트: ${user.point}p`}</div>
               </div>
             </div>
             <div className="myboard">

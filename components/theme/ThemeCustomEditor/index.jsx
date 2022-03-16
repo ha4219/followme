@@ -217,7 +217,6 @@ const ThemeCustomEditor = () => {
     // QuillCSR.register(Block);
     if (ref.current) {
       const editor = ref.current.getEditor();
-      console.log(index);
       // const range = editor.getSelection().index;
       // // ? editor.getSelection()?.index
       // // : 0;
