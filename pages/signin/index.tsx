@@ -16,15 +16,6 @@ import { authState, idState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { auth } from "@config/firebaseConfig";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  GoogleAuthProvider,
-  signInWithPopup,
-  FacebookAuthProvider,
-} from "firebase/auth";
-import { doKakaoSignin } from "api/auth";
 import styled from "@emotion/styled";
 
 declare global {

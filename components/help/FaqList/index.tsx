@@ -37,7 +37,7 @@ const HelpFaqItem: VFC<INoticeType> = ({
   //   }
   // };
 
-  // const [show, setShow] = useState(true);
+  const [show, setShow] = useState(true);
 
   return (
     <Link href={`/help/notice/${idx}`}>
@@ -53,6 +53,7 @@ const HelpFaqItem: VFC<INoticeType> = ({
         </Button>
       </TableCell> */}
       </TableRow>
+      <TableRow sx={{ display: show ? "table-row" : "none" }}></TableRow>
     </Link>
   );
 };
@@ -81,17 +82,18 @@ const HelpFaqList = () => {
         <TableHead className="helpFaqListHead">
           <TableRow>
             {/* <TableCell>idx</TableCell> */}
-            <TableCell>제목</TableCell>
+            <TableCell>{"Q&A"}</TableCell>
             {/* <TableCell>content</TableCell> */}
-            <TableCell>조회수</TableCell>
-            <TableCell>작성일</TableCell>
+            <TableCell>제목</TableCell>
             {/* <TableCell>Del</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
-          {noticeData.map((item) => (
-            <HelpFaqItem key={item.idx} {...item} />
-          ))}
+          {noticeData
+            .slice(page * PERPAGE, (page + 1) * PERPAGE)
+            .map((item) => (
+              <HelpFaqItem key={item.idx} {...item} />
+            ))}
         </TableBody>
         <TableRow>
           <TableCell

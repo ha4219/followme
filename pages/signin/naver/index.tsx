@@ -18,6 +18,12 @@ const Naver = () => {
       const { data } = await getUserProfile();
       toast.success("로그인 성공");
       setLoggedInId(data.userData[0].id);
+      setTimeout(() => {
+        setLoggedIn("");
+        setLoggedInId("");
+        setToken("");
+        router.push("/logout");
+      }, 30 * 60 * 1000); // 30 * 60 * 1000
       router.push("/");
     } catch (e) {
       console.log(e);

@@ -48,6 +48,17 @@ export const getNotice = async () => {
   }
 };
 
+export const getNoticeDetail = async ({ idx }) => {
+  try {
+    const { data } = await API.get(`/notice/${idx}`);
+
+    return data;
+  } catch (e) {
+    console.log("all notcie", e);
+    return [];
+  }
+};
+
 export const delNotice = async ({ idx, id }) => {
   try {
     const { data } = await API.post(`/notice/delete/${idx}`, {

@@ -40,8 +40,8 @@ const MapContainerNoDiv = () => {
         },
         errorMessage,
         {
-          enableHighAccuracy: true,
-          maximumAge: 300000,
+          // enableHighAccuracy: true,
+          // maximumAge: 300000,
           timeout: 10000,
         }
       );

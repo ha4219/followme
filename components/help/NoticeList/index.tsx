@@ -37,8 +37,6 @@ const HelpNoticeItem: VFC<INoticeType> = ({
   //   }
   // };
 
-  // const [show, setShow] = useState(true);
-
   return (
     <Link href={`/help/notice/${idx}`}>
       <TableRow hover={true} sx={{ cursor: "pointer" }}>
@@ -89,9 +87,11 @@ const HelpNoticeList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {noticeData.map((item) => (
-            <HelpNoticeItem key={item.idx} {...item} />
-          ))}
+          {noticeData
+            .slice(page * PERPAGE, (page + 1) * PERPAGE)
+            .map((item) => (
+              <HelpNoticeItem key={item.idx} {...item} />
+            ))}
         </TableBody>
         <TableRow>
           <TableCell
