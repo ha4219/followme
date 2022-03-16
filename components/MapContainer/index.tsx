@@ -45,7 +45,7 @@ const MapContainer = () => {
         {
           // enableHighAccuracy: true,
           // maximumAge: 300000,
-          timeout: 10000,
+          // timeout: 10000,
         }
       );
     } catch (e) {
