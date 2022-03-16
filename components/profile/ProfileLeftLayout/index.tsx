@@ -40,16 +40,18 @@ const ProfileLeftLayout: FC = ({ children }) => {
           <div className="title">MyPage</div>
           <div className="btns">
             {PROFILE.map((item, index) => (
-              <Link href={item.to} key={index}>
-                <Button
-                  key={index}
-                  className={
-                    router.pathname === item.to ? "active" : "deactivate"
-                  }
-                >
-                  #{item.label}
-                </Button>
-              </Link>
+              <div key={index}>
+                <Link href={item.to}>
+                  <Button
+                    key={index}
+                    className={
+                      router.pathname === item.to ? "active" : "deactivate"
+                    }
+                  >
+                    #{item.label}
+                  </Button>
+                </Link>
+              </div>
             ))}
           </div>
         </ProfileLeftContainer>

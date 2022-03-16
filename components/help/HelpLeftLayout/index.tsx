@@ -23,16 +23,18 @@ const HelpLeftLayout: FC = ({ children }) => {
           <div className="title">고객센터</div>
           <div className="btns">
             {PROFILE.map((item, index) => (
-              <Link className="helpLeftLayoutLink" href={item.to} key={index}>
-                <Button
-                  key={index}
-                  className={
-                    router.pathname === item.to ? "active" : "deactivate"
-                  }
-                >
-                  #{item.label}
-                </Button>
-              </Link>
+              <div key={index}>
+                <Link href={item.to}>
+                  <Button
+                    key={index}
+                    className={
+                      router.pathname === item.to ? "active" : "deactivate"
+                    }
+                  >
+                    #{item.label}
+                  </Button>
+                </Link>
+              </div>
             ))}
           </div>
         </ProfileLeftContainer>
