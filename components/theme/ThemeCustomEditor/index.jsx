@@ -95,7 +95,7 @@ class MapContainerTestClass extends BlockEmbed {
         <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
       </svg>
     `;
-    const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
+    const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" style="fill: #f3c221;"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
     const starsBody = "";
     for (let i = 0; i < 5; i++) {
       if (count - 1 >= i) {
@@ -190,6 +190,7 @@ const ThemeCustomEditor = () => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([true, false]);
+  const [index, setIndex] = useState(0);
   const isLoggedInId = useRecoilValue(idState);
   const mapSelectState = useRecoilValue(mapSelectedState);
 
@@ -214,14 +215,18 @@ const ThemeCustomEditor = () => {
   const onSubmitDialog = () => {
     // console.log(Inline);
     // QuillCSR.register(Block);
-    const editor = ref.current.getEditor();
-    const range = ref.current.getEditorSelection()?.index
-      ? ref.current.getEditorSelection()?.index
-      : 0;
-    // console.log(editor, ref.current.getEditorConfig());
-    // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
-    // editor.insertText(range, " ", { map: mapSelectState });
-    editor.insertEmbed(range, "test", mapSelectState, Quill.sources.USER);
+    if (ref.current) {
+      const editor = ref.current.getEditor();
+      console.log(index);
+      // const range = editor.getSelection().index;
+      // // ? editor.getSelection()?.index
+      // // : 0;
+      // console.log(editor.getSelection(), editor, range);
+      // console.log(editor, ref.current.getEditorConfig());
+      // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
+      // editor.insertText(range, " ", { map: mapSelectState });
+      editor.insertEmbed(index, "test", mapSelectState, Quill.sources.USER);
+    }
     // editor.insertEmbed(range + 1, "mapImg", mapSelectState[0]);
     // console.log(createElementWithClassName());
     // setValue(value + createElementWithClassName());
@@ -249,9 +254,9 @@ const ThemeCustomEditor = () => {
   const [region2, setRegion2, onChangeRegion2] = useInput("서울");
   const [date1, setDate1, onChangeDate1] = useInput(1);
   const [date2, setDate2, onChangeDate2] = useInput(2);
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
 
   useEffect(() => {
     setRegion2(region1 ? DOMESTIC[0].value : OVERSEAS[0].value);
@@ -299,6 +304,10 @@ const ThemeCustomEditor = () => {
         });
     });
   }
+
+  useEffect(() => {
+    setIndex(ref.current?.getEditor().getSelection()?.index);
+  }, [value]);
 
   const onSubmit = async () => {
     if (checked[0] + checked[1] !== 1) {
