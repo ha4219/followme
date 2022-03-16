@@ -8,6 +8,7 @@ import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { mapSelectedState, mapState } from "@store/map";
+import { inflateSync } from "zlib";
 
 declare global {
   interface Window {
@@ -23,10 +24,9 @@ const MapContainerNoDiv = () => {
   });
   const [data, setData] = useState<MapDataType[]>([]);
   const [map, setMap] = useState();
-  const [page, setPage] = useState(0);
-  const [clickList, setClickList] = useState([]);
-  const perPage = 3;
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
+  const [markers, setMarkers] = useState<any[]>([]);
+  const [infos, setInfos] = useState<any[]>([]);
 
   const mapInit = async () => {
     try {
@@ -78,24 +78,38 @@ const MapContainerNoDiv = () => {
     setData(mapDummyData);
   }, []);
 
-  const onNextPage = useCallback(() => {
-    setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
-  }, [page, data.length]);
-
-  const onPrevPage = useCallback(() => {
-    setPage(page > 0 ? page - 1 : page);
-  }, [page, data.length]);
-
   useEffect(() => {
-    if (window.kakao?.maps && window.kakao?.map) {
-      const moveLatLon = new window.kakao.maps.LatLng(
-        mapLatLonState[0],
-        mapLatLonState[1]
-      );
-
-      window.kakao.map.panTo(moveLatLon);
+    if (map) {
+      // for (let i = 0; i < data.length; i++) {
+      //   //   const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
+      //   //   const marker = new window.kakao.maps.Marker({
+      //   //     position: latlon,
+      //   //     title: data[i].title,
+      //   //   });
+      //   //   marker.setMap(window.kakao.map);
+      //   //   const iwContent = `<div style="display:flex;padding:5px;"><img src="${
+      //   //     data[i].url
+      //   //   }" />${mapTitleSummary(data[i].title)}</div>`;
+      //   //   const infowindow = new window.kakao.maps.CustomOverlay({
+      //   //     // position: latlon,w
+      //   //     content: iwContent,
+      //   //     removable: true,
+      //   //   });
+      //   //   // infowindow.open(map, marker);
+      //   //   window.kakao.maps.event.addListener(marker, "click", function (e) {
+      //   //     // 마커 위에 인포윈도우를 표시합니다
+      //   //     console.log(e);
+      //   //     infowindow.open(window.kakao.map, marker);
+      //   //   });
+      // }
+      for (let i = 0; i < data.length; i++) {
+        markers[i].setMap(map);
+        window.kakao.maps.event.addListener(markers[i], "click", function () {
+          infos[i].open(map, markers[i]);
+        });
+      }
     }
-  }, [mapLatLonState]);
+  }, [infos, markers, map]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
@@ -111,33 +125,77 @@ const MapContainerNoDiv = () => {
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
+          level: 10,
         };
         const map = new window.kakao.maps.Map(container, options);
 
         window.kakao.map = map;
         setMap(map);
+        const mms: any[] = [];
+        const ins: any[] = [];
         for (let i = 0; i < data.length; i++) {
           const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].title,
           });
-          marker.setMap(map);
-          const iwContent = `<div style="display:flex;padding:5px;"><img src="${
-            data[i].url
-          }" />${mapTitleSummary(data[i].title)}</div>`;
+          mms.push(marker);
+          // marker.setMap(map);
+          // const iwContent = `<div style="display:flex;padding:5px;"><img style="width: 100px; height: 100px;" src="${
+          //   data[i].url
+          // }" />${mapTitleSummary(data[i].title)}</div>`;
+          const count = Math.ceil(data[i].score);
+          const fillStar = `<svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              style="fill: #f3c221;"
+            >
+              <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+            </svg>
+          `;
+          const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" style="fill: #f3c221;"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
+          let starsBody = "";
+          for (let i = 0; i < 5; i++) {
+            if (count - 1 >= i) {
+              starsBody += fillStar;
+            } else {
+              starsBody += outlineStar;
+            }
+          }
+          const stars = `<div style="display: flex;">${starsBody}</div>`;
+          const tag = (value) => `<div style="display: inline-block;
+        color: #b69775;
+        font-family: paybooc-Bold;
+        font-size: 0.8rem;
+        padding: 0.2rem;
+        margin-right: 5px;
+        border: 1px solid #b69775;
+        border-radius: 12px;">${value}</div>`;
+          let tags = "";
+          for (let j = 0; j < data[i].tags.length; j++) {
+            tags += tag(data[i].tags[j]);
+          }
 
-          const infowindow = new window.kakao.maps.CustomOverlay({
+          const iwContent = `<div style='display:flex; padding: 1rem;'><img src='${data[i].url}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${data[i].url}/><div style="font-family: paybooc-Light;"><div style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${data[i].title}</div><div style="height: 4rem;">${data[i].content}</div><div style="height: 2rem">${stars}</div><div style="height: 2rem">${tags}</div></div></div>`;
+
+          const infowindow = new window.kakao.maps.InfoWindow({
             // position: latlon,w
             content: iwContent,
             removable: true,
           });
+          ins.push(infowindow);
+
           // infowindow.open(map, marker);
-          window.kakao.maps.event.addListener(marker, "click", function () {
-            // 마커 위에 인포윈도우를 표시합니다
-            infowindow.open(map, marker);
-          });
+          // window.kakao.maps.event.addListener(marker, "click", function () {
+          //   // 마커 위에 인포윈도우를 표시합니다
+
+          //   infowindow?.open(window.kakao.map, marker);
+          // });
         }
+        setMarkers(mms);
+        setInfos(ins);
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);

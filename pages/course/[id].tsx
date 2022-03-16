@@ -111,18 +111,6 @@ const CourseDetail = () => {
                   />
                   <div className="subContainer">
                     <div className="title">{course.title}</div>
-                    <div className="dateContainer">
-                      <div className="start">
-                        <span className="bold">출발 예정일</span>
-                        {/* {course.start} */}
-                        <DateRangeIcon />
-                      </div>
-                      <div className="end">
-                        <span className="bold">도착 예정일</span>
-                        {/* {course.end} */}
-                        <DateRangeIcon />
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div className="btns">
@@ -158,6 +146,18 @@ const CourseDetail = () => {
                     des={course.title}
                     user={loggedInId}
                   />
+                </div>
+              </div>
+              <div className="dateContainer">
+                <div className="start">
+                  <span className="bold">출발 예정일</span>
+                  {/* {course.start} */}
+                  <DateRangeIcon />
+                </div>
+                <div className="end">
+                  <span className="bold">도착 예정일</span>
+                  {/* {course.end} */}
+                  <DateRangeIcon />
                 </div>
               </div>
               <div
@@ -205,6 +205,18 @@ const CourseDetail = () => {
 };
 
 const MainContainer = styled(Box)`
+  & .dateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    & div {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+  }
+
   & .titleContainer {
     display: flex;
     padding: 2rem 0;
@@ -219,23 +231,16 @@ const MainContainer = styled(Box)`
       margin-right: 1rem;
     }
     & .subContainer {
-      display: block;
+      display: flex;
+      flex-direction: column;
       & .title {
         font-size: 1.2rem;
         font-weight: bold;
-        margin-bottom: 1rem;
-      }
-      & .dateContainer {
-        display: flex;
-        align-items: center;
-
-        & div {
-          display: flex;
-          align-items: center;
-          margin-right: 1rem;
-        }
+        margin-bottom: auto;
+        margin-top: auto;
       }
     }
+
     & .btns {
       display: flex;
       align-items: end;
