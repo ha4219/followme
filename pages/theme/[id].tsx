@@ -17,6 +17,7 @@ import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
 import { doRecommendLike } from "api/theme";
+import { getThemeDetailBoard, likeThemeBoard } from "api/board";
 
 const ThemeDetail = () => {
   const router = useRouter();
@@ -36,12 +37,16 @@ const ThemeDetail = () => {
       setIdx(id);
 
       if (id) {
-        const { data } = await API.post<ICourseDetail[]>(
-          `/theme/postDetail/${id}`,
-          {
-            id: loggedInId,
-          }
-        );
+        // const { data } = await API.post<ICourseDetail[]>(
+        //   `/theme/postDetail/${id}`,
+        //   {
+        //     id: loggedInId,
+        //   }
+        // );
+        const data = await getThemeDetailBoard({
+          id: loggedInId,
+          idx: id,
+        });
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
@@ -103,7 +108,7 @@ const ThemeDetail = () => {
     async (e) => {
       e.stopPropagation();
       if (loggedInId) {
-        doRecommendLike({ idx: idx, id: loggedInId });
+        likeThemeBoard({ idx: idx, id: loggedInId });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
@@ -112,7 +117,7 @@ const ThemeDetail = () => {
         setLike(like ^ 1);
       }
     },
-    [like, idx]
+    [like, idx, likeCnt]
   );
 
   useEffect(() => {

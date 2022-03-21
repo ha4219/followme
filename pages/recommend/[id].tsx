@@ -17,6 +17,7 @@ import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
 import { doRecommendLike } from "api/theme";
+import { getRecommendDetailBoard, likeRecommendBoard } from "api/board";
 
 const RecommendDetail = () => {
   const router = useRouter();
@@ -36,12 +37,16 @@ const RecommendDetail = () => {
       setIdx(id);
 
       if (id) {
-        const { data } = await API.post<ICourseDetail[]>(
-          `/recommend/postDetail/${id}`,
-          {
-            id: loggedInId,
-          }
-        );
+        // const { data } = await API.post<ICourseDetail[]>(
+        //   `/recommend/postDetail/${id}`,
+        //   {
+        //     id: loggedInId,
+        //   }
+        // );
+        const data = await getRecommendDetailBoard({
+          id: loggedInId,
+          idx: id,
+        });
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
@@ -87,7 +92,7 @@ const RecommendDetail = () => {
     async (e) => {
       e.stopPropagation();
       if (loggedInId) {
-        doRecommendLike({ idx: idx, id: loggedInId });
+        likeRecommendBoard({ idx: idx, id: loggedInId });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
@@ -96,7 +101,7 @@ const RecommendDetail = () => {
         setLike(like ^ 1);
       }
     },
-    [like, idx]
+    [like, idx, likeCnt]
   );
 
   useEffect(() => {

@@ -19,15 +19,15 @@ const MainEditorPickContainer = () => {
   // const [width, setWidth] = useRecoilState(windowState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>(
-      "/theme/themeBoards",
-      loggedInId.length
-        ? {
-            id: loggedInId,
-          }
-        : {}
-    );
-    setPicks(data.slice(-9));
+    // const { data } = await API.post<ICourse[]>(
+    //   "/theme/themeBoards",
+    //   loggedInId.length
+    //     ? {
+    //         id: loggedInId,
+    //       }
+    //     : {}
+    // );
+    // setPicks(data.slice(-9));
   };
 
   const onRightClick = useCallback(() => {

@@ -12,6 +12,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { getRecommendAllBoard } from "api/board";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
@@ -42,7 +43,7 @@ const RecommendProgramList: VFC = () => {
   const [perPageSize, setPerPageSize] = useState(24);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>("/recommend/recommendBoards", {
+    const data = await getRecommendAllBoard({
       id: loggedInId,
     });
     setTravels(

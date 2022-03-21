@@ -13,6 +13,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { getThemeAllBoard } from "api/board";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
@@ -42,9 +43,10 @@ const ThemeProgramList: VFC = () => {
   const [perPageSize, setPerPageSize] = useState(24);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
-      id: loggedInId,
-    });
+    // const data = await API.post<ICourse[]>("/theme/themeBoards", {
+    //   id: loggedInId,
+    // });
+    const data = await getThemeAllBoard({ id: loggedInId });
     setTravels(
       data.sort((l, r) => {
         if (r.createdAt > l.createdAt) {

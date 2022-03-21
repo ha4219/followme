@@ -10,6 +10,7 @@ import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { doRecommendLike } from "api/theme";
+import { likeRecommendBoard } from "api/board";
 
 const RecommendProgramDif: VFC<ICourse> = ({
   idx,
@@ -36,7 +37,7 @@ const RecommendProgramDif: VFC<ICourse> = ({
       e.preventDefault();
       e.stopPropagation();
       if (id) {
-        doRecommendLike({ idx, id });
+        likeRecommendBoard({ idx, id });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
@@ -45,7 +46,7 @@ const RecommendProgramDif: VFC<ICourse> = ({
         setLike(like ^ 1);
       }
     },
-    [like]
+    [like, likeCnt]
   );
   const router = useRouter();
   const onClickProgram = useCallback((id) => {

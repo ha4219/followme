@@ -10,6 +10,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { doThemeLike } from "api/theme";
 import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { likeThemeBoard } from "api/board";
 
 const ThemeProgram: VFC<ICourse> = ({
   idx,
@@ -36,7 +37,7 @@ const ThemeProgram: VFC<ICourse> = ({
       e.preventDefault();
       e.stopPropagation();
       if (id) {
-        doThemeLike({ idx, id });
+        likeThemeBoard({ idx, id });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {

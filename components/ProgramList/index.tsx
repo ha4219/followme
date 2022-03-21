@@ -10,6 +10,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { getRecommendAllBoard } from "api/board";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
@@ -26,10 +27,13 @@ const ProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>(
-      "/recommend/recommendBoards",
-      loggedInId !== "" ? { id: loggedInId } : {}
-    );
+    // const { data } = await API.post<ICourse[]>(
+    //   "/recommend/recommendBoards",
+    //   loggedInId !== "" ? { id: loggedInId } : {}
+    // );
+    const data = await getRecommendAllBoard({
+      id: loggedInId,
+    });
     setTravels(
       data.slice(-9).sort((l, r) => {
         if (r.createdAt > l.createdAt) {

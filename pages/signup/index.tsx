@@ -240,6 +240,7 @@ const Signup = () => {
           password: password,
           email: email,
           phoneNum: phone,
+          type: 0,
         });
         if (data?.data === "success") {
           toast.success("회원가입 성공");

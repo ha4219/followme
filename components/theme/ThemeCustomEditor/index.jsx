@@ -30,6 +30,7 @@ import { mapSelectedState } from "@store/map";
 import { editorState } from "@store/editor";
 import CustomEditorTag from "@components/CustomEditorTag";
 import QuillCSR, { Quill } from "react-quill";
+import { insertThemeBoard, insertRecommendBoard } from "api/board";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -327,31 +328,77 @@ const ThemeCustomEditor = () => {
       console.log("not main image");
       mainImage = "";
     }
-    API.post(
-      checked[0]
-        ? "recommend/insertRecommendBoards"
-        : "/theme/insertThemeBoards",
-      {
-        title: title,
-        tags: tags,
-        shortContent: shortContent,
-        content: value,
-        mainImg: mainImage,
-        isLocal: region1,
-        schedule: `${date1}박${date2}일`,
-        region: region2,
-        season: season,
-        writer: isLoggedInId,
+    // API.post(
+    //   checked[0]
+    //     ? "recommend/insertRecommendBoards"
+    //     : "/theme/insertThemeBoards",
+    //   {
+    //     title: title,
+    //     tags: tags,
+    //     shortContent: shortContent,
+    //     content: value,
+    //     mainImg: mainImage,
+    //     isLocal: region1,
+    //     schedule: `${date1}박${date2}일`,
+    //     region: region2,
+    //     season: season,
+    //     writer: isLoggedInId,
+    //   }
+    // )
+    //   .then((res) => {
+    //     toast.success("등록완료");
+    //     router.back();
+    //   })
+    //   .catch((err) => {
+    //     toast.error("에러");
+    //     console.log(err);
+    //   });
+    try {
+      if (checked[1]) {
+        const data = await insertThemeBoard({
+          title: title,
+          tags: tags,
+          shortContent: shortContent,
+          content: value,
+          mainImg: mainImage,
+          isLocal: region1,
+          schedule: `${date1}박${date2}일`,
+          region: region2,
+          season: season,
+          id: isLoggedInId,
+        });
+        if (data.data) {
+          toast.success("등록완료");
+          router.back();
+        } else {
+          toast.error("에러");
+          console.log(err);
+        }
+      } else {
+        const data = await insertRecommendBoard({
+          title: title,
+          tags: tags,
+          shortContent: shortContent,
+          content: value,
+          mainImg: mainImage,
+          isLocal: region1,
+          schedule: `${date1}박${date2}일`,
+          region: region2,
+          season: season,
+          id: isLoggedInId,
+        });
+        if (data.data) {
+          toast.success("등록완료");
+          router.back();
+        } else {
+          toast.error("에러");
+          console.log(err);
+        }
       }
-    )
-      .then((res) => {
-        toast.success("등록완료");
-        router.back();
-      })
-      .catch((err) => {
-        toast.error("에러");
-        console.log(err);
-      });
+    } catch (e) {
+      toast.error("에러");
+      console.log("write error", e);
+    }
   };
 
   const modules = useMemo(

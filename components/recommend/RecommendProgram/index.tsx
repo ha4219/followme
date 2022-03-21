@@ -22,6 +22,7 @@ import { idState } from "@store/auth";
 import { ICourse } from "types/apiType";
 import { API } from "@src/API";
 import { doRecommendLike } from "api/theme";
+import { likeRecommendBoard } from "api/board";
 
 const ThemeProgram: VFC<ICourse> = ({
   idx,
@@ -50,7 +51,7 @@ const ThemeProgram: VFC<ICourse> = ({
       e.preventDefault();
       e.stopPropagation();
       if (id) {
-        doRecommendLike({ idx, id });
+        likeRecommendBoard({ idx, id });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
@@ -59,7 +60,7 @@ const ThemeProgram: VFC<ICourse> = ({
         setLike(like ^ 1);
       }
     },
-    [like]
+    [like, likeCnt]
   );
 
   const onClickProgram = useCallback((id) => {

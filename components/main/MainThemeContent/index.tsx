@@ -12,6 +12,7 @@ import { idState } from "@store/auth";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import { doThemeLike } from "api/theme";
+import { likeThemeBoard } from "api/board";
 
 const MainThemeContent: VFC<ICourse> = ({
   idx,
@@ -44,7 +45,7 @@ const MainThemeContent: VFC<ICourse> = ({
       e.preventDefault();
       e.stopPropagation();
       if (id) {
-        doThemeLike({ idx, id });
+        likeThemeBoard({ idx, id });
         if (like) {
           setLikeCnt(likeCnt - 1);
         } else {
