@@ -51,7 +51,7 @@ export const insertThemeBoard = async ({
 }) => {
   try {
     const { data } = await API.post(`/board/1/insert`, {
-      writer: id,
+      id: id,
       title: title,
       shortContent: shortContent,
       content: content,
@@ -208,7 +208,7 @@ export const insertRecommendBoard = async ({
 }) => {
   try {
     const { data } = await API.post(`/board/0/insert`, {
-      writer: id,
+      id: id,
       title: title,
       shortContent: shortContent,
       content: content,

@@ -23,6 +23,7 @@ export interface IUser {
 
 export interface ICourse {
   idx: number;
+  type: number;
   mainImg: any;
   writer: string;
   title: string;

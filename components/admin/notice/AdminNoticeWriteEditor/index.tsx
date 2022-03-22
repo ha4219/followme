@@ -15,7 +15,7 @@ const AdminNoticeWriteEditor = () => {
   const id = useRecoilValue(idState);
   const [title, setTitle, onChangeTitle] = useInput("");
   const [content, setContent, onChangeContent] = useInput("");
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date().toISOString());
   const router = useRouter();
   const onChangeDate = (newValue) => {
     setDate(newValue);

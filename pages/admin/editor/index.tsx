@@ -1,4 +1,6 @@
 import AdminLayout from "@components/admin/AdminLayout";
+import AdminEditorChoices from "@components/admin/editor/AdminEditorChoices";
+import AdminEnbaleEditorChoies from "@components/admin/editor/AdminEnblaEditorChoices";
 import Head from "next/head";
 
 const AdminEditor = () => {
@@ -7,7 +9,10 @@ const AdminEditor = () => {
       <Head>
         <title>admin editor</title>
       </Head>
-      <AdminLayout></AdminLayout>
+      <AdminLayout>
+        <AdminEditorChoices />
+        <AdminEnbaleEditorChoies />
+      </AdminLayout>
     </>
   );
 };

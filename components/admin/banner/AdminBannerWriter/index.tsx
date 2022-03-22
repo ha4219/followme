@@ -13,7 +13,7 @@ import { useRecoilValue } from "recoil";
 const AdminBannerWriter = () => {
   const router = useRouter();
   const [url, setUrl] = useState("");
-  const [endDate, setEndDate] = useState();
+  const [endDate, setEndDate] = useState(new Date().toISOString());
   const [urlTo, setUrlTo] = useState("");
   const id = useRecoilValue(idState);
   const onChangeUrlTo = useCallback(
@@ -41,7 +41,7 @@ const AdminBannerWriter = () => {
         }).then((res: any) => {
           if (res?.data === "success") {
             toast.success("작성완료");
-            router.back();
+            // router.back();
           } else {
             toast.error("작성실패");
           }
