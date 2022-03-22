@@ -13,7 +13,7 @@ export const deleteBoard = async ({ url, id, idx }) => {
   }
 };
 
-export const reportComment = async ({ id }) => {
+export const getReportedComments = async ({ id }) => {
   try {
     const { data } = await API.post(`/reply/reported`, {
       id: id,
@@ -174,6 +174,18 @@ export const reportThemeCommentBoard = async ({ idx, commentIdx }) => {
     return data;
   } catch (e) {
     console.log("report theme comment board", e);
+  }
+};
+
+export const reportRecommendCommentBoard = async ({ idx, commentIdx }) => {
+  try {
+    const { data } = await API.post(`/board/0/reply/report/${idx}`, {
+      // id: id,
+      commentIdx: commentIdx,
+    });
+    return data;
+  } catch (e) {
+    console.log("report recommend comment board", e);
   }
 };
 
@@ -340,5 +352,58 @@ export const insertCourseBoard = async ({ id, title, content }) => {
     return data;
   } catch (e) {
     console.log("insert course board", e);
+  }
+};
+
+export const insertCourseComment = async ({ id, idx, content }) => {
+  try {
+    const { data } = await API.post(`/board/2/reply/insert/${idx}`, {
+      id: id,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert theme comment board", e);
+  }
+};
+
+export const insertCourseChildComment = async ({
+  id,
+  idx,
+  content,
+  parentIdx,
+}) => {
+  try {
+    const { data } = await API.post(`/board/2/reply/insert/${idx}`, {
+      id: id,
+      parent: parentIdx,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert course child comment board", e);
+  }
+};
+
+export const reportCourseCommentBoard = async ({ idx, commentIdx }) => {
+  try {
+    const { data } = await API.post(`/board/2/reply/report/${idx}`, {
+      // id: id,
+      commentIdx: commentIdx,
+    });
+    return data;
+  } catch (e) {
+    console.log("report course comment board", e);
+  }
+};
+
+export const getCourseCommentsLength = async ({ idx }) => {
+  try {
+    const { data } = await API.get(`/board/2/reply/${idx}`);
+
+    return data.length;
+  } catch (e) {
+    console.log("get course comments", e);
+    return 0;
   }
 };

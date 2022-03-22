@@ -2,6 +2,7 @@ import HelpLeftLayout from "@components/help/HelpLeftLayout";
 import NoticeDetail from "@components/help/NoticeDetail";
 import { Container } from "@mui/material";
 import { getNoticeDetail } from "api/admin";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { INoticeType } from "types/apiType";
@@ -13,8 +14,12 @@ const HelpNoticeDetail = () => {
 
   const getData = async () => {
     if (id) {
-      const res = await getNoticeDetail({ idx: id });
-      setData(res[0]);
+      try {
+        const res = await getNoticeDetail({ idx: id });
+        setData(res[0]);
+      } catch (e) {
+        console.log("notice detail", e);
+      }
     }
   };
 
@@ -24,6 +29,9 @@ const HelpNoticeDetail = () => {
 
   return (
     <Container maxWidth="lg">
+      <Head>
+        <title>{data?.title ? data?.title : "notice"}</title>
+      </Head>
       <HelpLeftLayout>
         {data && (
           <NoticeDetail

@@ -6,18 +6,16 @@ import { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
-import { IComment, ICourse, ICourseDetail } from "types/apiType";
+import { ICourseDetail } from "types/apiType";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { API } from "@src/API";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
-import { getCourseDetailBoard, insertRecommentComment } from "api/board";
+import { getCourseDetailBoard, insertCourseComment } from "api/board";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -32,7 +30,7 @@ const CourseDetail = () => {
     async (e) => {
       e.preventDefault();
       try {
-        const data = await insertRecommentComment({
+        const data = await insertCourseComment({
           id: loggedInId,
           content: comment,
           idx: idx,
@@ -46,7 +44,7 @@ const CourseDetail = () => {
               fk_user_comments_id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
-              children: [],
+              childrenReply: [],
             },
           ]);
         }
@@ -77,9 +75,11 @@ const CourseDetail = () => {
         idx: id,
       });
       setCourse(data[0]);
-      if (data[0].comments) {
-        setComments(data[0].comments);
-      }
+      // if (data[0].comments) {
+      //   setComments(data[0].comments);
+      // }
+      // setLike(data[0].)
+      getComments(data[0].comments);
       // setComments(data[0].comments);
     }
 
@@ -90,6 +90,31 @@ const CourseDetail = () => {
     //TODO
     toast.info("추가 예정입니다");
     setLike(!like);
+  };
+
+  const getComments = (comments) => {
+    const parent = comments.filter((item) => !item.recomment);
+    const child = comments.filter((item) => item.recomment);
+    const res = parent.map((item) => {
+      const resTmp = child.filter((item1) => item.idx === item1.recomment);
+      return { ...item, childrenReply: resTmp };
+    });
+
+    setComments(res);
+
+    // const { id } = router.query;
+    // try {
+    //   if (id) {
+    //     const { data } = await API.get<IComment[]>(
+    //       `/theme/themeBoards/reply/${id}`,
+    //       {}
+    //     );
+    //     setComments(data);
+    //   }
+    // } catch (e) {
+    //   console.log("router not ready", e);
+    // }
+    // setIdx(id);
   };
 
   useEffect(() => {
@@ -118,6 +143,7 @@ const CourseDetail = () => {
                   </div>
                 </div>
                 <div className="btns">
+                  {/*
                   <span className="heartLabel"> {course.writer}</span>
                   <Button className="heart" onClick={onClickHeart}>
                     {like ? (
@@ -142,7 +168,7 @@ const CourseDetail = () => {
                       />
                     )}
                   </Button>
-                  {/* <Button className="share" onClick={onClickShare}>
+                   <Button className="share" onClick={onClickShare}>
                     <ShareIcon />
                   </Button> */}
                   <ShareButton
@@ -152,18 +178,7 @@ const CourseDetail = () => {
                   />
                 </div>
               </div>
-              <div className="dateContainer">
-                <div className="start">
-                  <span className="bold">출발 예정일</span>
-                  {/* {course.start} */}
-                  <DateRangeIcon />
-                </div>
-                <div className="end">
-                  <span className="bold">도착 예정일</span>
-                  {/* {course.end} */}
-                  <DateRangeIcon />
-                </div>
-              </div>
+
               <div
                 className="detailContent"
                 dangerouslySetInnerHTML={{ __html: course.content }}
@@ -196,7 +211,12 @@ const CourseDetail = () => {
                 </form>
                 <div className="reply">
                   {comments.map((item, index) => (
-                    <ReplyContent key={index} {...item} />
+                    <ReplyContent
+                      key={index}
+                      type={2}
+                      {...item}
+                      boardIdx={idx}
+                    />
                   ))}
                 </div>
               </ReplyContainer>
@@ -207,6 +227,19 @@ const CourseDetail = () => {
     </Container>
   );
 };
+
+// <div className="dateContainer">
+//   <div className="start">
+//     <span className="bold">출발 예정일</span>
+//     {/* {course.start} */}
+//     <DateRangeIcon />
+//   </div>
+//   <div className="end">
+//     <span className="bold">도착 예정일</span>
+//     {/* {course.end} */}
+//     <DateRangeIcon />
+//   </div>
+// </div>;
 
 const MainContainer = styled(Box)`
   & .dateContainer {

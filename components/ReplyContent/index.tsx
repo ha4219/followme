@@ -9,12 +9,16 @@ import { idState } from "@store/auth";
 import {
   insertThemeChildComment,
   insertRecommendChildComment,
+  insertCourseChildComment,
   reportThemeCommentBoard,
+  reportCourseCommentBoard,
+  reportRecommendCommentBoard,
 } from "api/board";
 import { toast } from "react-toastify";
 
 interface IProps {
   idx: string;
+  id: string;
   content: string;
   createdAt: string;
   fk_user_comments_id: string;
@@ -25,6 +29,7 @@ interface IProps {
 
 const ReplyChildContent = ({
   idx,
+  id,
   content,
   createdAt,
   fk_user_comments_id,
@@ -76,6 +81,14 @@ const ReplyChildContent = ({
           <div className="replyContentContainerReport" onClick={onClickReport}>
             신고하기
           </div>
+          {id === fk_user_comments_id && (
+            <div
+              className="replyContentContainerReport"
+              onClick={onClickReport}
+            >
+              삭제하기
+            </div>
+          )}
         </div>
       </div>
       <div className="replyContentContainerContent">{content}</div>
@@ -101,6 +114,19 @@ const ReplyContent = ({
     setChildrenState(childrenReply);
   }, []);
 
+  const onClickDel = async () => {
+    const check = confirm(
+      // "신고하기",
+      `댓글을 지우시겠습니까?`
+    );
+    try {
+      if (check) {
+      }
+    } catch (e) {
+      console.log("del comment", e);
+    }
+  };
+
   const onClickReport = async () => {
     const check = confirm(
       // "신고하기",
@@ -109,8 +135,25 @@ const ReplyContent = ({
     try {
       if (check) {
         if (type === 0) {
+          const data = await reportRecommendCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
         } else if (type === 1) {
           const data = await reportThemeCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        } else if (type === 2) {
+          const data = await reportCourseCommentBoard({
             // id: id,
             idx: boardIdx,
             commentIdx: idx,
@@ -170,6 +213,26 @@ const ReplyContent = ({
             setValue("");
             toast.success("작성완료");
           }
+        } else if (type === 2) {
+          const data = await insertCourseChildComment({
+            id: id,
+            idx: boardIdx,
+            content: value,
+            parentIdx: idx,
+          });
+          if (data.data === "success") {
+            setChildrenState([
+              ...childrenState,
+              {
+                idx: "9999",
+                content: value,
+                createdAt: new Date().toISOString(),
+                fk_user_comments_id: id,
+              },
+            ]);
+            setValue("");
+            toast.success("작성완료");
+          }
         }
       } catch (e) {}
       // insertThemeChildComment
@@ -202,10 +265,16 @@ const ReplyContent = ({
           <div className="report" onClick={onClickReport}>
             신고하기
           </div>
+          {id === fk_user_comments_id && (
+            <div className="report" onClick={onClickDel}>
+              삭제하기
+            </div>
+          )}
         </div>
         <div>
           {childrenState.map((item, index) => (
             <ReplyChildContent
+              id={id}
               childrenReply={[]}
               key={item.idx}
               boardIdx={boardIdx}

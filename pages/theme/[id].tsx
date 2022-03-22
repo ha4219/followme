@@ -110,7 +110,7 @@ const ThemeDetail = () => {
               fk_user_comments_id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
-              children: [],
+              childrenReply: [],
             },
           ]);
         }

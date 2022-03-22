@@ -14,6 +14,7 @@ import {
 import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { courseTagState } from "@store/tag";
+import { getCourseCommentsLength } from "api/board";
 import { getMyCourseBoard } from "api/profile";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -26,12 +27,27 @@ const MyCourseBoard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
   const [size, setSize] = useState(0);
-  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
   const loggedInId = useRecoilValue(idState);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
+  };
+
+  const mergeCourses = async (data) => {
+    const arr = await Promise.all(
+      data.map(async (item) => {
+        const cs = await getCourseCommentsLength({ idx: item.idx });
+        return { replyCnt: cs, ...item };
+      })
+    );
+    return arr;
+  };
+
+  const getCurCourses = async (data) => {
+    const arr = await mergeCourses(data);
+    setCourses(arr);
   };
 
   const getCourses = async () => {
@@ -48,7 +64,8 @@ const MyCourseBoard = () => {
       const data = await getMyCourseBoard({
         id: loggedInId,
       });
-      setCourses(data);
+      getCurCourses(data);
+      // setCourses(data);
       setSize(Math.ceil(data.length / rowsPerPage));
     } catch (e) {
       console.log("course 받아오기 에러", e);
@@ -106,7 +123,7 @@ const MyCourseBoard = () => {
               </TableCell>
               <TableCell align="center">
                 {/* {item?.comments ? item.comments.length : 0} */}
-                {item.likeCnts}
+                {item.replyCnt}
               </TableCell>
               <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
             </TableRow>

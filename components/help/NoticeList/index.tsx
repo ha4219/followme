@@ -81,8 +81,8 @@ const HelpNoticeList = () => {
             {/* <TableCell>idx</TableCell> */}
             <TableCell>제목</TableCell>
             {/* <TableCell>content</TableCell> */}
-            <TableCell>조회수</TableCell>
-            <TableCell>작성일</TableCell>
+            <TableCell width={100}>조회수</TableCell>
+            <TableCell width={150}>작성일</TableCell>
             {/* <TableCell>Del</TableCell> */}
           </TableRow>
         </TableHead>

@@ -5,14 +5,16 @@ import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Link from "next/link";
 
 const EditorProgram: VFC<ICourse> = ({
   idx,
   mainImg,
+  type,
   writer,
   title,
   shortContent,
@@ -32,97 +34,71 @@ const EditorProgram: VFC<ICourse> = ({
     (e) => {
       e.preventDefault();
       e.stopPropagation();
-      setLike(like ? like ^ 1 : 0);
+      // setLike(like ? like ^ 1 : 0);
     },
     [like]
   );
-  const router = useRouter();
-  const onClickProgram = useCallback((id) => {
-    router.push(`/editor/${idx}`);
-  }, []);
-
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
-  // return (
-  //   <MainContainer
-  //     xs={6}
-  //     sm={6}
-  //     md={4}
-  //     lg={4}
-  //     src={`${toBase64(mainImg.data)}`}
-  //     onClick={onClickProgram}
-  //   >
-  //     <div className="tag">
-  //       <span>{region}</span>
-  //     </div>
-  //     <div className="title">
-  //       <span>{titleSummary(title)}</span>
-  //     </div>
-  //     <div className="content">
-  //       <span>{contentSummary(shortContent)}</span>
-  //     </div>
-  //     <CustomButton>바로가기</CustomButton>
-  //   </MainContainer>
-  // );
 
   return (
-    <EditorContainer item xs={6} sm={6} md={4} lg={4} onClick={onClickProgram}>
-      <div className="editorProgramPhotoWrapper">
-        <img
-          className="editorProgramPhoto"
-          src={`${toBase64(mainImg.data)}`}
-          alt={title}
-        />
-      </div>
-      <div className="editorProgramBody">
-        <div className="editorProgramProps">
-          <div className="editorProgramLeft">
-            <IconButton>
-              <Avatar
-                alt="user"
-                // src={gravatar.url(user, { s: "28px", d: "retro" })}
-                className="avatar"
-              />
-            </IconButton>
-            <span className="editorProgramWriter">{writer}</span>
-          </div>
-          <div className="editorProgramRight">
-            <ShareButton
-              url={window.location.href}
-              // user={loggedInId}
-              // des={course.title}
+    <EditorContainer item xs={6} sm={6} md={4} lg={4}>
+      <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
+        <div>
+          <div className="editorProgramPhotoWrapper">
+            <img
+              className="editorProgramPhoto"
+              src={`${toBase64(mainImg)}`}
+              alt={title}
             />
-            <span className="editorProgramLikeCnt">{likeCnts}</span>
-            <IconButton onClick={onClickLike}>
-              {like ? (
-                <FavoriteIcon
-                  className="fillHeart"
-                  sx={{
-                    width: 20,
-                    height: 20,
-                  }}
+          </div>
+          <div className="editorProgramBody">
+            <div className="editorProgramProps">
+              <div className="editorProgramLeft">
+                <IconButton>
+                  <Avatar
+                    alt="user"
+                    // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                    className="avatar"
+                  />
+                </IconButton>
+                <span className="editorProgramWriter">{writer}</span>
+              </div>
+              <div className="editorProgramRight">
+                <ShareButton
+                  url={window.location.href}
+                  // user={loggedInId}
+                  // des={course.title}
                 />
-              ) : (
-                <FavoriteBorderIcon
-                  className="heart"
-                  sx={{ width: 20, height: 20 }}
-                />
-              )}
-            </IconButton>
+                <span className="editorProgramLikeCnt">{likeCnts}</span>
+                <IconButton onClick={onClickLike}>
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="heart"
+                      sx={{ width: 20, height: 20 }}
+                    />
+                  )}
+                </IconButton>
+              </div>
+            </div>
+            <div className="editorProgramTitle">{title}</div>
+            <div className="editorProgramContent">{shortContent}</div>
+            <div className="editorProgramTags">
+              {(tags ? tags : []).map((item, index) => (
+                <span className="editorProgramTag" key={index}>
+                  #{item}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="editorProgramTitle">{title}</div>
-        <div className="editorProgramContent">{shortContent}</div>
-        <div className="editorProgramTags">
-          {tags.map((item, index) => (
-            <span className="editorProgramTag" key={index}>
-              #{item}
-            </span>
-          ))}
-        </div>
-      </div>
+      </Link>
     </EditorContainer>
   );
 };

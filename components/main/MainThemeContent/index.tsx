@@ -2,7 +2,7 @@ import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
 import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useCallback, useState, VFC } from "react";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ICourse } from "types/apiType";
@@ -57,14 +57,10 @@ const MainThemeContent: VFC<ICourse> = ({
     [like]
   );
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
   return (
     <MainContainer md={3} sm={6} xs={6} lg={3} item>
       <Box sx={{ cursor: "pointer" }} onClick={onClickProgram}>
-        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
+        <PhotoContainer src={`${toBase64(mainImg)}`}>
           <span className="title">{titleSummary(title)}</span>
         </PhotoContainer>
         {tags ? <TagContainer tags={tags} /> : <div className="noTags" />}

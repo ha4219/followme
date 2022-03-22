@@ -48,6 +48,8 @@ const EditorProgramList: VFC = () => {
     // });
     const tmp: IMergeCourse = await getEditorAllBoard({});
     const data = [...tmp.recommend, ...tmp.theme];
+    console.log(data);
+
     setSize(data.length / perPageSize);
     setTravels(
       data.sort((l, r) => {

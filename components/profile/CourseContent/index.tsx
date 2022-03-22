@@ -18,7 +18,11 @@ const CourseContent: VFC<IProp> = ({ course }) => {
   const loggedInId = useRecoilValue(idState);
   const [like, setLike] = useState(course.likeClicked ? true : false);
   const toBase64 = (arr) => {
-    return Buffer.from(arr);
+    if (arr) {
+      return Buffer.from(arr);
+    } else {
+      return "/noImg.png";
+    }
   };
 
   const onClickLike = useCallback(
@@ -41,7 +45,7 @@ const CourseContent: VFC<IProp> = ({ course }) => {
   return (
     <Grid item xs={4} md={4} lg={4}>
       <MainContainer>
-        <PhotoContainer src={`${toBase64(course.mainImg.data)}`}>
+        <PhotoContainer src={`${toBase64(course.mainImg?.data)}`}>
           {like && (
             <div className="topContainer">
               <IconButton

@@ -10,7 +10,7 @@ import {
   TopContainer,
   MainContainer,
 } from "./styles";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -67,10 +67,6 @@ const ThemeProgram: VFC<ICourse> = ({
     router.push(`/recommend/${id}`);
   }, []);
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
   return (
     <Grid item lg={4} xs={6} md={4} sm={6}>
       <MainContainer
@@ -117,7 +113,7 @@ const ThemeProgram: VFC<ICourse> = ({
             borderRadius: "10px",
           }}
         >
-          <PhotoContainer src={`${toBase64(mainImg.data)}`}>
+          <PhotoContainer src={`${toBase64(mainImg)}`}>
             <div className="hoverImg" />
           </PhotoContainer>
           <Box sx={{ padding: "0 1rem" }}>

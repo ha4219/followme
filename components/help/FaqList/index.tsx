@@ -7,11 +7,13 @@ import {
   TableHead,
   TableRow,
   Pagination,
+  Box,
 } from "@mui/material";
 import { getFaq, getNotice } from "api/admin";
 import Link from "next/link";
 import { useEffect, useState, VFC } from "react";
 import { INoticeType } from "types/apiType";
+import SearchIcon from "@mui/icons-material/Search";
 
 const HelpFaqItem: VFC<INoticeType> = ({
   title,
@@ -37,26 +39,59 @@ const HelpFaqItem: VFC<INoticeType> = ({
   //   }
   // };
 
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   return (
-    <Link href={`/help/notice/${idx}`}>
-      <TableRow hover={true} sx={{ cursor: "pointer" }}>
+    <>
+      <TableRow
+        hover={true}
+        onClick={() => setShow(!show)}
+        sx={{ cursor: "pointer" }}
+      >
         {/* <TableCell>{idx}</TableCell> */}
-        <TableCell>{title}</TableCell>
+        <TableCell width={110}>
+          <div className="faqQueIcon">
+            <SearchIcon sx={{ width: 20, height: 20 }} />
+          </div>
+        </TableCell>
         {/* <TableCell>{content}</TableCell> */}
-        <TableCell>{views}</TableCell>
-        <TableCell>{dateHelper(createdAt)}</TableCell>
+        <TableCell>{title}</TableCell>
         {/* <TableCell>
         <Button onClick={onClickDel} variant="contained" color="error">
           del
         </Button>
       </TableCell> */}
       </TableRow>
-      <TableRow sx={{ display: show ? "table-row" : "none" }}></TableRow>
-    </Link>
+      <TableRow sx={{ display: show ? "table-row" : "none" }}>
+        <TableCell width={50}>
+          <div className="faqReplyContainer">
+            <span>↳</span>
+            <div className="faqReplyIcon">
+              <SearchIcon sx={{ width: 20, height: 20 }} />
+            </div>
+          </div>
+        </TableCell>
+        {/* <TableCell>{content}</TableCell> */}
+        <TableCell>{content}</TableCell>
+      </TableRow>
+    </>
   );
 };
+
+// <TableRow>
+//   <TableRow hover={true} sx={{ cursor: "pointer" }}>
+//     {/* <TableCell>{idx}</TableCell> */}
+//     <TableCell>{title}</TableCell>
+//     {/* <TableCell>{content}</TableCell> */}
+//     <TableCell>{dateHelper(createdAt)}</TableCell>
+//     {/* <TableCell>
+//         <Button onClick={onClickDel} variant="contained" color="error">
+//           del
+//         </Button>
+//       </TableCell> */}
+//   </TableRow>
+//   <TableRow sx={{ display: show ? "table-row" : "none" }}></TableRow>
+// </TableRow>;
 
 const HelpFaqList = () => {
   const [noticeData, setNoticeData] = useState<INoticeType[]>([]);
@@ -82,7 +117,7 @@ const HelpFaqList = () => {
         <TableHead className="helpFaqListHead">
           <TableRow>
             {/* <TableCell>idx</TableCell> */}
-            <TableCell>{"Q&A"}</TableCell>
+            <TableCell width={50}>{"Q&A"}</TableCell>
             {/* <TableCell>content</TableCell> */}
             <TableCell>제목</TableCell>
             {/* <TableCell>Del</TableCell> */}
@@ -134,6 +169,34 @@ const HelpFaqListContainer = styled.div`
       justify-content: center;
     }
     border: 0;
+  }
+
+  & .faqQueIcon {
+    background-color: #dcdce6;
+    width: 30px;
+    height: 30px;
+    padding-top: 5px;
+    border-radius: 30px;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  & .faqReplyContainer {
+    display: flex;
+
+    & span {
+      padding: 0 1rem;
+    }
+    & .faqReplyIcon {
+      width: 30px;
+      text-align: center;
+      padding-top: 5px;
+
+      height: 30px;
+      color: #ffffff;
+      border-radius: 30px;
+      background-color: #3386ff;
+    }
   }
 `;
 

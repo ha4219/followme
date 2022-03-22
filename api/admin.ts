@@ -29,7 +29,7 @@ export const addNotice = async ({ writer, title, content, createdAt }) => {
     const { data } = await API.post(`/board/3/insert`, {
       title: title,
       content: content,
-      writer: writer,
+      id: writer,
       createdAt: createdAt,
       type: 3,
     });
@@ -52,7 +52,7 @@ export const getNotice = async () => {
 
 export const getNoticeDetail = async ({ idx }) => {
   try {
-    const { data } = await API.get(`/board/3/detail/${idx}`);
+    const { data } = await API.post(`/board/3/detail/${idx}`);
 
     return data;
   } catch (e) {
@@ -64,7 +64,7 @@ export const getNoticeDetail = async ({ idx }) => {
 export const delNotice = async ({ idx, id }) => {
   try {
     const { data } = await API.post(`/board/3/delete/${idx}`, {
-      writer: id,
+      id: id,
     });
     return data;
   } catch (e) {
@@ -98,9 +98,10 @@ export const addFaq = async ({ writer, title, content, createdAt }) => {
   try {
     const { data } = await API.post(`/board/4/insert`, {
       title: title,
-      answer: content,
-      writer: writer,
+      content: content,
+      id: writer,
       createdAt: createdAt,
+      type: 4,
     });
     return data;
   } catch (e) {
@@ -115,5 +116,17 @@ export const getEditorPickEnalbleList = async ({}) => {
   } catch (e) {
     console.log("enbale picks", e);
     return [];
+  }
+};
+
+export const updateEditorPick = async ({ theme, recommend }) => {
+  try {
+    const { data } = await API.post(`/main/update/pick`, {
+      themePicks: theme,
+      recommendPicks: recommend,
+    });
+    return data;
+  } catch (e) {
+    console.log("enbale picks", e);
   }
 };

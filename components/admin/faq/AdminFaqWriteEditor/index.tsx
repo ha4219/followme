@@ -7,23 +7,44 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { toast } from "react-toastify";
+import { addFaq } from "api/admin";
+import { useRouter } from "next/router";
 
 const AdminFaqWriteEditor = () => {
   const id = useRecoilValue(idState);
   const [title, setTitle, onChangeTitle] = useInput("");
   const [content, setContent, onChangeContent] = useInput("");
+  const router = useRouter();
   const [date, setDate] = useState();
   const onChangeDate = (newValue) => {
     setDate(newValue);
   };
   const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const data = await addFaq({
+        title: title,
+        content: content,
+        writer: id,
+        createdAt: date,
+      });
+      if (data.data === "success") {
+        toast.success("작성완료");
+        router.back();
+      } else {
+        toast.error("작성실패");
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error("작성에러");
+    }
   };
   return (
     <AdminNoticeWriteEditorContainer>
       <form onSubmit={onSubmit}>
         <div className="adminNoticeWriteEditorContainerMain">
-          <TextField value={id} label="작성자" size="small" />
+          <TextField value={id} size="small" />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="adminNoticeWriteEditorContainerSubContainer">
               <DesktopDatePicker

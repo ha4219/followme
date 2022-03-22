@@ -1,40 +1,21 @@
 import styled from "@emotion/styled";
-import { Box, Button, Grid } from "@mui/material";
-import { useRouter } from "next/router";
-import { useCallback, useState, VFC } from "react";
+import { Button, Grid } from "@mui/material";
 import { ICourse } from "types/apiType";
-import { useRecoilValue } from "recoil";
-import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
+import Link from "next/link";
+import { VFC } from "react";
 
 const MainEditorContent: VFC<ICourse> = ({
   idx,
   mainImg,
-  writer,
+  type,
   title,
   shortContent,
-  tags,
-  likeCnts,
-  views,
-  createdAt,
-  isLocal,
-  likeClicked,
   region,
-  schedule,
-  season,
-  updatedAt,
 }) => {
-  const router = useRouter();
-  const onClickProgram = useCallback((id) => {
-    router.push(`/editor/${idx}`);
-  }, []);
-
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
   return (
     <Grid item xs={12} sm={12} md={4}>
-      <WrapperContainer src={`${toBase64(mainImg.data)}`}>
+      <WrapperContainer src={`${toBase64(mainImg)}`}>
         <MainContainer>
           <div className="tag">
             <span>{region}</span>
@@ -45,7 +26,9 @@ const MainEditorContent: VFC<ICourse> = ({
           <div className="content">
             <span>{contentSummary(shortContent)}</span>
           </div>
-          <CustomButton onClick={onClickProgram}>바로가기</CustomButton>
+          <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
+            <CustomButton>바로가기</CustomButton>
+          </Link>
         </MainContainer>
       </WrapperContainer>
     </Grid>

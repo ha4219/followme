@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { IFaqType } from "types/apiType";
 
-const AdminFaqItem: VFC<IFaqType> = ({ title, answer, idx, createdAt }) => {
+const AdminFaqItem: VFC<IFaqType> = ({ title, content, idx, createdAt }) => {
   const id = useRecoilValue(idState);
   const onClickDel = async () => {
     try {
@@ -39,7 +39,7 @@ const AdminFaqItem: VFC<IFaqType> = ({ title, answer, idx, createdAt }) => {
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
       <TableCell>{title}</TableCell>
-      <TableCell>{answer}</TableCell>
+      <TableCell>{content}</TableCell>
       {/* <TableCell>{views}</TableCell> */}
       <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>

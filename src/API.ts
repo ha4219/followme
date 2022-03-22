@@ -1,5 +1,5 @@
 import { tokenState } from "@store/auth";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -34,14 +34,17 @@ export const getPayload = () => {
 
 API.interceptors.request.use((request) => {
   const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
-  // console.log(loggedIn, checkToken());
-  try {
-    if (data["loggedIn"] && !checkToken()) {
-      setToken(data["loggedIn"]);
-    }
-  } catch (e) {
-    console.log(e);
+  if (data["loggedIn"] && request) {
+    request.headers!["Access-Token"] = data["loggedIn"];
   }
+  // // console.log(loggedIn, checkToken());
+  // try {
+  //   if (data["loggedIn"] && !checkToken()) {
+  //     setToken(data["loggedIn"]);
+  //   }
+  // } catch (e) {
+  //   console.log(e);
+  // }
 
   // console.log(data['loggedIn']);
   console.log("request: ", request);

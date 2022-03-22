@@ -22,17 +22,22 @@ const AdminNoticeWriteEditor = () => {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    const data = await addNotice({
-      title: title,
-      content: content,
-      writer: id,
-      createdAt: date,
-    });
-    if (data === "success") {
-      toast.success("작성완료");
-      router.back();
-    } else {
-      toast.error("작성실패");
+    try {
+      const data = await addNotice({
+        title: title,
+        content: content,
+        writer: id,
+        createdAt: date,
+      });
+      if (data.data === "success") {
+        toast.success("작성완료");
+        router.back();
+      } else {
+        toast.error("작성실패");
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error("작성에러");
     }
   };
   return (

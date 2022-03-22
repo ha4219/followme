@@ -86,7 +86,7 @@ export interface INoticeType {
 export interface IFaqType {
   idx: number;
   title: string;
-  answer: string;
+  content: string;
   writer: string;
   createdAt: string;
 }

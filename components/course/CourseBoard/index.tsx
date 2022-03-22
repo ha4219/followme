@@ -15,7 +15,7 @@ import {
 import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { courseTagState } from "@store/tag";
-import { getCourseAllBoard } from "api/board";
+import { getCourseAllBoard, getCourseCommentsLength } from "api/board";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -28,11 +28,27 @@ const CourseBoard = () => {
   const [rowsPerPage] = useState(10);
   const [size, setSize] = useState(0);
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [curCourses, setCurCourses] = useState<any[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
   const loggedInId = useRecoilValue(idState);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
+  };
+
+  const mergeCourses = async (courses) => {
+    const arr = await Promise.all(
+      courses.map(async (item) => {
+        const cs = await getCourseCommentsLength({ idx: item.idx });
+        return { replyCnt: cs, ...item };
+      })
+    );
+    return arr;
+  };
+
+  const getCurCourses = async (courses) => {
+    const arr = await mergeCourses(courses);
+    setCurCourses(arr);
   };
 
   const getCourses = async () => {
@@ -49,7 +65,8 @@ const CourseBoard = () => {
       const data = await getCourseAllBoard({
         id: loggedInId,
       });
-      setCourses(data);
+      // setCourses(data);
+      getCurCourses(data);
       setSize(Math.ceil(data.length / rowsPerPage));
     } catch (e) {
       console.log("course 받아오기 에러", e);
@@ -86,11 +103,11 @@ const CourseBoard = () => {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? courses.slice(
+            ? curCourses.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
               )
-            : courses
+            : curCourses
           ).map((item, index) => (
             <TableRow
               key={item.idx}
@@ -107,7 +124,7 @@ const CourseBoard = () => {
               </TableCell>
               <TableCell align="center">
                 {/* {item?.comments ? item.comments.length : 0} */}
-                {item.likeCnts}
+                {item.replyCnt}
               </TableCell>
               <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
             </TableRow>

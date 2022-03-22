@@ -17,7 +17,7 @@ const HelpLeftLayout: FC = ({ children }) => {
   const router = useRouter();
 
   return (
-    <Grid container>
+    <Grid container sx={{ padding: "1rem 0" }}>
       <Grid xs={3} item>
         <ProfileLeftContainer>
           <div className="title">고객센터</div>
@@ -39,7 +39,7 @@ const HelpLeftLayout: FC = ({ children }) => {
           </div>
         </ProfileLeftContainer>
       </Grid>
-      <Grid xs={9} item>
+      <Grid xs={9} item sx={{ padding: "2rem 0" }}>
         {children}
       </Grid>
     </Grid>

@@ -96,9 +96,12 @@ const ProfileHome = () => {
   // };
 
   useEffect(() => {
-    getMyBoard();
-    getLikeBoard();
-    getCourses();
+    if (user) {
+      getMyBoard();
+      getLikeBoard();
+      getCourses();
+    }
+
     // getPointHistory();
   }, [user]);
 
@@ -127,7 +130,7 @@ const ProfileHome = () => {
                 <FavoriteBorderOutlinedIcon className="like" />
                 <div>{`좋아요: ${user.likeCnts}개`}</div>
                 <AttachMoneyOutlinedIcon className="money" />
-                <div>{`포인트: ${user.point}p`}</div>
+                <div>{`포인트: ${user.point ? user.point : 0}p`}</div>
               </div>
             </div>
             <div className="myboard">

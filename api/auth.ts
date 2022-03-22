@@ -13,6 +13,17 @@ export const getUserProfile = async () => {
   return res;
 };
 
+export const getUserProfileById = async ({ id }) => {
+  try {
+    const { data } = await API.post(`/user/profile`, {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("get profile err", e);
+  }
+};
+
 export const getUserBoard = async () => {
   const { memberId } = getPayload();
   const res = await API.get(`/user/board/${memberId}`, {});
