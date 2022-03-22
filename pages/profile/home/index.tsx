@@ -138,14 +138,14 @@ const ProfileHome = () => {
                 <div className="subTitle">내 작성글</div>
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={myBoards} like={false} />
+              <CourseContainer courses={myBoards} like={true} />
             </div>
             <div className="myboard">
               <div className="sub">
                 <div className="subTitle">내 좋아요</div>
                 <Link href="/profile/like">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={likeBoards} like={true} />
+              <CourseContainer courses={likeBoards} like={false} />
             </div>
             <div className="mypoint">
               <div className="sub">

@@ -1,5 +1,5 @@
 import { API, getPayload, getToken } from "@src/API";
-import { IMergeCourse } from "types/apiType";
+import { IMergeCourse, IReportCommentType } from "types/apiType";
 
 export const deleteBoard = async ({ url, id, idx }) => {
   const urlTo = url[0].toUpperCase() + url.slice(1);
@@ -15,11 +15,16 @@ export const deleteBoard = async ({ url, id, idx }) => {
 
 export const getReportedComments = async ({ id }) => {
   try {
-    const { data } = await API.post(`/reply/reported`, {
-      id: id,
-    });
+    const { data }: { data: IReportCommentType[] } = await API.post(
+      `/board/reply/reported`,
+      {
+        id: id,
+      }
+    );
+    return data;
   } catch (e) {
     console.log("get reported comment", e);
+    return [];
   }
 };
 
@@ -284,7 +289,7 @@ export const insertRecommentComment = async ({ id, idx, content }) => {
     });
     return data;
   } catch (e) {
-    console.log("insert theme comment board", e);
+    console.log("insert recommend comment board", e);
   }
 };
 

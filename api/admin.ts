@@ -130,3 +130,14 @@ export const updateEditorPick = async ({ theme, recommend }) => {
     console.log("enbale picks", e);
   }
 };
+
+export const delComment = async ({ type, idx, id }) => {
+  try {
+    const { data } = await API.post(`/board/${type}/reply/delete/${idx}`, {
+      writer: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("del comment", e);
+  }
+};

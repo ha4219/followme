@@ -90,3 +90,15 @@ export interface IFaqType {
   writer: string;
   createdAt: string;
 }
+
+export interface IReportCommentType {
+  idx: number;
+  content: string;
+  createdAt: string;
+  fk_board_idx: number;
+  fk_user_comments_id: string;
+  recomment: number | null;
+  reported: number;
+  type: number;
+  updatedAt: string;
+}

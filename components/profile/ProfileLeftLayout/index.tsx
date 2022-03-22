@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
-import { Box, Button, Grid } from "@mui/material";
-import { getUserProfile } from "api/auth";
+import { Box, Divider, Button, Grid } from "@mui/material";
+import { idState } from "@store/auth";
+import { getUserProfileById } from "api/auth";
 import Link from "next/link";
 // import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 const PROFILE = [
   { label: "홈", to: "/profile/home" },
@@ -16,17 +18,22 @@ const PROFILE = [
   { label: "회원탈퇴", to: "/profile/out" },
 ];
 
+const ENTER = [{ label: "기업홈", to: "/profile/enterprise" }];
+
 const ProfileLeftLayout: FC = ({ children }) => {
   const router = useRouter();
+  const id = useRecoilValue(idState);
+  const [type, setType] = useState(0);
   const getUser = async () => {
-    getUserProfile()
-      .then((res) => {
-        // setUser(res.data.userData[0]);
-        // setLoading(false);
-      })
-      .catch((e) => {
-        router.push("/logout");
+    try {
+      const data = await getUserProfileById({
+        id: id,
       });
+
+      setType(data.userData[0].type);
+    } catch (e) {
+      router.push("/logout");
+    }
   };
 
   useEffect(() => {
@@ -53,6 +60,21 @@ const ProfileLeftLayout: FC = ({ children }) => {
                 </Link>
               </div>
             ))}
+            {type !== 0 &&
+              ENTER.map((item, index) => (
+                <div key={index}>
+                  <Link href={item.to}>
+                    <Button
+                      key={index}
+                      className={
+                        router.pathname === item.to ? "active" : "deactivate"
+                      }
+                    >
+                      #{item.label}
+                    </Button>
+                  </Link>
+                </div>
+              ))}
           </div>
         </ProfileLeftContainer>
       </Grid>

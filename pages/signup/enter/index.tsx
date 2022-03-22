@@ -242,7 +242,7 @@ const Signup = () => {
           phoneNum: phone,
           type: 1,
         });
-        if (data?.data === "success") {
+        if (data.data === "success") {
           toast.success("회원가입 성공");
           router.push("/signup/success");
         }
@@ -260,6 +260,9 @@ const Signup = () => {
 
   return (
     <>
+      <Head>
+        <title>기업용 회원가입</title>
+      </Head>
       <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>

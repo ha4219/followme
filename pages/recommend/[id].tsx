@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Avatar, Button, Container, TextField } from "@mui/material";
-import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
-import { IComment, ICourseDetail } from "types/apiType";
+import { ICourseDetail } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
@@ -16,7 +15,6 @@ import ShareButton from "@components/ShareButton";
 import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
-import { doRecommendLike } from "api/theme";
 import {
   getRecommendDetailBoard,
   insertRecommentComment,
@@ -67,7 +65,7 @@ const RecommendDetail = () => {
     const child = comments.filter((item) => item.recomment);
     const res = parent.map((item) => {
       const resTmp = child.filter((item1) => item.idx === item1.recomment);
-      return { ...item, childrenReply: resTmp };
+      return { childrenReply: resTmp, ...item };
     });
     setComments(res);
 

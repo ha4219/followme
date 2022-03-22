@@ -29,7 +29,7 @@ const ProfileOutSuccess = () => {
           <Link href="/">
             <a className="main">메인으로</a>
           </Link>
-          <Link href="/user/signin">
+          <Link href="/logout">
             <a className="login">로그인</a>
           </Link>
         </div>

@@ -12,9 +12,9 @@ import Quiz from "@mui/icons-material/Quiz";
 import Notes from "@mui/icons-material/Notes";
 import ViewCarousel from "@mui/icons-material/ViewCarousel";
 import Drawer from "@mui/material/Drawer";
+import ReportIcon from "@mui/icons-material/Report";
 
-import React, { FC, VFC } from "react";
-import { copyFile } from "fs";
+import React, { FC } from "react";
 import Link from "next/link";
 import Logo from "@components/Logo";
 
@@ -33,6 +33,7 @@ const ADMINLEFTLAYOUTDETAIL = [
   { name: "공지사항", value: "/admin/notice", icon: <Notes /> },
   { name: "FAQ", value: "/admin/faq", icon: <Quiz /> },
   { name: "BANNER", value: "/admin/banner", icon: <ViewCarousel /> },
+  { name: "신고", value: "/admin/report", icon: <ReportIcon /> },
 ];
 
 const drawer = (

@@ -149,7 +149,7 @@ const Signin = () => {
               }}
             >
               <Link href="/find">아이디 / 비밀번호 찾기</Link>
-              <Link href="/signup">회원가입하기</Link>
+              <Link href="/signup/before">회원가입하기</Link>
             </Box>
 
             <Button type="submit" fullWidth variant="contained" size="large">
