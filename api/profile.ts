@@ -24,3 +24,15 @@ export const getMyCourseBoard = async ({ id }) => {
     return [];
   }
 };
+
+export const getMyLikeBoard = async ({ id }) => {
+  try {
+    const { data } = await API.post("/user/likeList", {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("my like list", e);
+    return [];
+  }
+};

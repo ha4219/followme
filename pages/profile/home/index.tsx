@@ -15,7 +15,7 @@ import { authState, idState } from "@store/auth";
 import { useRouter } from "next/router";
 import CourseTable from "@components/course/CourseTable";
 import ProfilePointHistory from "@components/profile/PointHistory";
-import { getMyCourseBoard } from "api/profile";
+import { getMyCourseBoard, getMyLikeBoard } from "api/profile";
 
 const ProfileHome = () => {
   const router = useRouter();
@@ -57,12 +57,11 @@ const ProfileHome = () => {
   const getLikeBoard = async () => {
     if (user) {
       try {
-        const { data } = await API.post("/user/likeList", {
+        const data = await getMyLikeBoard({
           id: loggedInId,
         });
 
-        const arr = [...data.theme, ...data.recommend];
-        setLikeBoards(arr.slice(-3));
+        setLikeBoards(data.slice(-3));
       } catch (e) {
         console.log("likeBoard", e);
       }

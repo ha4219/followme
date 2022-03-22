@@ -7,6 +7,7 @@ import { idState } from "@store/auth";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse, ICourseDetail } from "types/apiType";
+import { getMyLikeBoard } from "api/profile";
 
 const ProfileLike = () => {
   const [boards, setBoards] = useState<ICourse[]>([]);
@@ -17,12 +18,15 @@ const ProfileLike = () => {
 
   const getBoard = async () => {
     // const { data } = await getUserBoard();
-    const { data } = await API.post("/user/likeList", {
+    // const { data } = await API.post("/user/likeList", {
+    //   id: loggedInId,
+    // });
+    // const arr = [...data.theme, ...data.recommend];
+    const data = await getMyLikeBoard({
       id: loggedInId,
     });
-    const arr = [...data.theme, ...data.recommend];
-    setSize(Math.ceil(arr.length / perPage));
-    setBoards(arr);
+    setSize(Math.ceil(data.length / perPage));
+    setBoards(data);
   };
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
