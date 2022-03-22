@@ -82,7 +82,8 @@ const EditorDetail = () => {
           setComments([
             ...comments,
             {
-              id: loggedInId,
+              idx: "9999",
+              fk_user_comments_id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
             },
@@ -218,26 +219,6 @@ const EditorDetail = () => {
             </Button>
           </ButtonContainer>
         )} */}
-
-            <ReplyContainer>
-              <form className="write" onSubmit={onSubmitComment}>
-                <TextField
-                  id=""
-                  label=""
-                  value={comment}
-                  onChange={onChangeComment}
-                  fullWidth
-                />
-                <Button type="submit" className="btn" variant="contained">
-                  등록
-                </Button>
-              </form>
-              <div className="reply">
-                {comments.map((item, index) => (
-                  <ReplyContent key={index} {...item} />
-                ))}
-              </div>
-            </ReplyContainer>
           </EditorDetailLeftLayout>
         </ProgramHeader>
       )}

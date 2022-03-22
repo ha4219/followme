@@ -127,7 +127,25 @@ export const likeThemeBoard = async ({ id, idx }) => {
 export const insertThemeComment = async ({ id, idx, content }) => {
   try {
     const { data } = await API.post(`/board/1/reply/insert/${idx}`, {
-      writer: id,
+      id: id,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert theme comment board", e);
+  }
+};
+
+export const insertThemeChildComment = async ({
+  id,
+  idx,
+  content,
+  parentIdx,
+}) => {
+  try {
+    const { data } = await API.post(`/board/1/reply/insert/${idx}`, {
+      id: id,
+      parent: parentIdx,
       content: content,
     });
     return data;
@@ -242,6 +260,36 @@ export const likeRecommendBoard = async ({ id, idx }) => {
     return data;
   } catch (e) {
     console.log("like recommend board", e);
+  }
+};
+
+export const insertRecommentComment = async ({ id, idx, content }) => {
+  try {
+    const { data } = await API.post(`/board/0/reply/insert/${idx}`, {
+      id: id,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert theme comment board", e);
+  }
+};
+
+export const insertRecommendChildComment = async ({
+  id,
+  idx,
+  content,
+  parentIdx,
+}) => {
+  try {
+    const { data } = await API.post(`/board/0/reply/insert/${idx}`, {
+      id: id,
+      parent: parentIdx,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert theme comment board", e);
   }
 };
 

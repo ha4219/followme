@@ -1,7 +1,8 @@
 export interface IComment {
-  id: string;
+  idx: string;
   content: string;
   fk_user_id?: string;
+  fk_user_comments_id: string;
   createdAt: string;
 }
 

@@ -28,7 +28,7 @@ const ThemeDetail = () => {
   // const { memberId } = getPayload();
   const [course, setCourse] = useState<ICourseDetail>();
   const [isLoading, setLoading] = useState(true);
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [idx, setIdx] = useState<any>();
   const [like, setLike] = useState(0);
@@ -54,27 +54,36 @@ const ThemeDetail = () => {
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
-        setComments(data[0].comments);
+        getComments(data[0].comments);
+        // setComments(data[0].comments);
       }
     } catch (e) {
       console.log("router not ready", e);
     }
   };
 
-  const getComments = async () => {
-    const { id } = router.query;
-    try {
-      if (id) {
-        const { data } = await API.get<IComment[]>(
-          `/theme/themeBoards/reply/${id}`,
-          {}
-        );
-        setComments(data);
-      }
-    } catch (e) {
-      console.log("router not ready", e);
-    }
-    setIdx(id);
+  const getComments = (comments) => {
+    const parent = comments.filter((item) => !item.recomment);
+    const child = comments.filter((item) => item.recomment);
+    const res = parent.map((item) => {
+      const resTmp = child.filter((item1) => item.idx === item1.recomment);
+      return { ...item, children: resTmp };
+    });
+    setComments(res);
+
+    // const { id } = router.query;
+    // try {
+    //   if (id) {
+    //     const { data } = await API.get<IComment[]>(
+    //       `/theme/themeBoards/reply/${id}`,
+    //       {}
+    //     );
+    //     setComments(data);
+    //   }
+    // } catch (e) {
+    //   console.log("router not ready", e);
+    // }
+    // setIdx(id);
   };
 
   const onSubmitComment = useCallback(
@@ -97,9 +106,11 @@ const ThemeDetail = () => {
           setComments([
             ...comments,
             {
-              id: loggedInId,
+              idx: "999",
+              fk_user_comments_id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
+              children: [],
             },
           ]);
         }
@@ -238,7 +249,7 @@ const ThemeDetail = () => {
               </form>
               <div className="reply">
                 {comments.map((item, index) => (
-                  <ReplyContent key={index} {...item} />
+                  <ReplyContent type={1} key={index} {...item} boardIdx={idx} />
                 ))}
               </div>
             </ReplyContainer>

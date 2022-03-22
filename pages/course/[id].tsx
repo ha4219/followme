@@ -1,5 +1,4 @@
 import CourseLeftLayout from "@components/course/CourseLeftLayout";
-import { COURSES, ICourseData, REPLYDATA } from "@data/CourseData";
 import { Avatar, Box, Button, Container, TextField } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -18,13 +17,13 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { API } from "@src/API";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
-import { getCourseDetailBoard } from "api/board";
+import { getCourseDetailBoard, insertRecommentComment } from "api/board";
 
 const CourseDetail = () => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
   const [idx, setIdx] = useState<any>();
@@ -33,21 +32,21 @@ const CourseDetail = () => {
     async (e) => {
       e.preventDefault();
       try {
-        const { data }: { data: { data: string } } = await API.post(
-          `course/insertCourseComments/${idx}`,
-          {
-            id: loggedInId,
-            content: comment,
-          }
-        );
+        const data = await insertRecommentComment({
+          id: loggedInId,
+          content: comment,
+          idx: idx,
+        });
         if (data.data === "success") {
           toast.success("댓글 작성 성공");
           setComments([
             ...comments,
             {
-              id: "admin",
+              idx: "999",
+              fk_user_comments_id: loggedInId,
               content: comment,
               createdAt: new Date().toISOString(),
+              children: [],
             },
           ]);
         }

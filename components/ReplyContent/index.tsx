@@ -2,17 +2,124 @@ import styled from "@emotion/styled";
 import { dateHelper } from "@helpers/programHelper";
 import useInput from "@hooks/useInput";
 import { Avatar, Button, TextField } from "@mui/material";
-import gravatar from "gravatar";
 import { IComment } from "types/apiType";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { idState } from "@store/auth";
+import {
+  insertThemeChildComment,
+  insertRecommendChildComment,
+} from "api/board";
+import { toast } from "react-toastify";
 
-const ReplyContent = ({ id, content, createdAt, fk_user_id }: IComment) => {
+interface IProps {
+  idx: string;
+  content: string;
+  createdAt: string;
+  fk_user_comments_id: string;
+  boardIdx: number;
+  children: IComment[];
+  type: number;
+}
+
+const ReplyChildContent = ({
+  idx,
+  content,
+  createdAt,
+  fk_user_comments_id,
+}: IComment) => {
+  return (
+    <ReplyContentContainer>
+      <div className="replyContentContainerProfile">
+        <div>
+          <Avatar
+            alt="user"
+            // src={gravatar.url(id ? id : "default", {
+            //   s: "28px",
+            //   d: "retro",
+            // })}
+            className="avatar"
+          />
+        </div>
+        <div className="replyContentContainerProfileIdDate">
+          <div className="replyId">{fk_user_comments_id}</div>
+          <div className="replyContentContainerDate">
+            {dateHelper(createdAt)}
+          </div>
+          <div className="replyContentContainerReport">신고하기</div>
+        </div>
+      </div>
+      <div className="replyContentContainerContent">{content}</div>
+    </ReplyContentContainer>
+  );
+};
+
+const ReplyContent = ({
+  idx,
+  type,
+  content,
+  createdAt,
+  fk_user_comments_id,
+  boardIdx,
+  children,
+}: IProps) => {
   const [value, setValue, onChangeValue] = useInput("");
   const [open, setOpen] = useState(false);
+  const [childrenState, setChildrenState] = useState<IComment[]>([]);
+  const id = useRecoilValue(idState);
+
+  useEffect(() => {
+    setChildrenState(children);
+  }, []);
 
   const onSubmitValue = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
+      try {
+        if (type === 0) {
+          const data = await insertRecommendChildComment({
+            id: id,
+            idx: boardIdx,
+            content: value,
+            parentIdx: idx,
+          });
+
+          if (data.data === "success") {
+            setChildrenState([
+              ...children,
+              {
+                idx: "9999",
+                content: value,
+                createdAt: new Date().toISOString(),
+                fk_user_comments_id: id,
+              },
+            ]);
+            setValue("");
+            toast.success("작성완료");
+          }
+        } else if (type === 1) {
+          const data = await insertThemeChildComment({
+            id: id,
+            idx: boardIdx,
+            content: value,
+            parentIdx: idx,
+          });
+          if (data.data === "success") {
+            setChildrenState([
+              ...children,
+              {
+                idx: "9999",
+                content: value,
+                createdAt: new Date().toISOString(),
+                fk_user_comments_id: id,
+              },
+            ]);
+            setValue("");
+            toast.success("작성완료");
+          }
+        }
+      } catch (e) {}
+      // insertThemeChildComment
       // TODO recomment
     },
     [value]
@@ -29,7 +136,7 @@ const ReplyContent = ({ id, content, createdAt, fk_user_id }: IComment) => {
         className="avatar"
       />
       <div className="content">
-        <div className="replyId">{id ? id : fk_user_id}</div>
+        <div className="replyId">{fk_user_comments_id}</div>
         <div className="replyContent">{content}</div>
         <div className="replyContentFlex">
           <div className="replyDate">{dateHelper(createdAt)}</div>
@@ -40,6 +147,11 @@ const ReplyContent = ({ id, content, createdAt, fk_user_id }: IComment) => {
             답글쓰기
           </div>
           <div className="report">신고하기</div>
+        </div>
+        <div>
+          {childrenState.map((item, index) => (
+            <ReplyChildContent key={item.idx} {...item} />
+          ))}
         </div>
         {open && (
           <form className="write" onSubmit={onSubmitValue}>
@@ -120,15 +232,55 @@ const MainContainer = styled.div`
       }
     }
 
-    // & .write {
-    //   display: flex;
+    & .write {
+      margin-top: 1rem;
+      display: flex;
 
-    //   & .btn {
-    //     height: 44px;
-    //     margin-left: 2rem;
-    //   }
-    // }
+      & .btn {
+        height: 44px;
+        margin-left: 2rem;
+      }
+    }
+  }
+`;
+
+const ReplyContentContainer = styled.div`
+  display: flex;
+  background-color: #f3f3f3;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  & .replyContentContainerProfile {
+    width: 15rem;
+    // height: 4rem;
+    display: flex;
+
+    & .replyContentContainerProfileIdDate {
+      display: block;
+      & .replyContentContainerDate {
+        color: #888888;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  & .replyContentContainerContent {
+    // height: 4rem;
+    width: 100%;
+  }
+
+  & .replyContentContainerReport {
+    cursor: pointer;
+    color: #888888;
+    font-size: 0.8rem;
   }
 `;
 
 export default ReplyContent;
+function insertRecommentChildComment(arg0: {
+  id: any;
+  idx: number;
+  content: any;
+  parentIdx: string;
+}): any {
+  throw new Error("Function not implemented.");
+}
