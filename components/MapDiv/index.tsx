@@ -1,15 +1,16 @@
 import ShadowTag from "@components/ShadowTag";
 import { MapDataType } from "@data/MapData";
 import styled from "@emotion/styled";
+import { getDistance } from "@helpers/mapHelper";
 import {
   mapContentSummary,
   mapTitleSummary,
   titleSummary,
 } from "@helpers/programHelper";
 import { Button } from "@mui/material";
-import { mapState } from "@store/map";
+import { curMapState, mapState } from "@store/map";
 import { VFC } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // interface Props {
 //   url: string;
@@ -60,6 +61,7 @@ const MapDiv: VFC<MapDataType> = ({
   lon,
 }) => {
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
+  const curMapLatLonState = useRecoilValue(curMapState);
 
   const onClick = () => {
     setMapLatLonState([lat, lon]);
@@ -71,7 +73,9 @@ const MapDiv: VFC<MapDataType> = ({
         <div className="title">{mapTitleSummary(title)}</div>
         <div className="content">{mapContentSummary(content)}</div>
         <TagContainer tags={tags.slice(-3)} />
-        <div className="dis">{distance}m</div>
+        <div className="dis">
+          {getDistance(curMapLatLonState[0], curMapLatLonState[1], lat, lon)}m
+        </div>
       </DesContainer>
     </Container>
   );

@@ -6,11 +6,17 @@ import { toast } from "react-toastify";
 import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
-import { useRecoilState } from "recoil";
-import { mapSelectedState, mapState } from "@store/map";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  curLimitDis,
+  curMapState,
+  mapSelectedState,
+  mapState,
+} from "@store/map";
 import { Mms } from "@mui/icons-material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import { getDistance } from "@helpers/mapHelper";
 
 declare global {
   interface Window {
@@ -30,16 +36,17 @@ const MapContainer = () => {
   const [clickList, setClickList] = useState([]);
   const perPage = 3;
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
+  const [curMapLatLonState, setCurMapLatLonState] = useRecoilState(curMapState);
   const [markers, setMarkers] = useState<any[]>([]);
+  const limitDis = useRecoilValue(curLimitDis);
 
   const mapInit = async () => {
     try {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          console.log(pos);
-
           kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
           setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+          setCurMapLatLonState([pos.coords.latitude, pos.coords.longitude]);
         },
         errorMessage,
         {
@@ -79,8 +86,18 @@ const MapContainer = () => {
       //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
       // );
     }
-    setData(mapDummyData);
-  }, []);
+    const arr = mapDummyData.filter(
+      (item) =>
+        getDistance(
+          curMapLatLonState[0],
+          curMapLatLonState[1],
+          item.lat,
+          item.lon
+        ) <= limitDis
+    );
+    setData(arr);
+    // setData(mapDummyData);
+  }, [curMapLatLonState, limitDis]);
 
   const onNextPage = useCallback(() => {
     setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
@@ -150,22 +167,26 @@ const MapContainer = () => {
       <MapContent id="map" />
       {/* </Grid> */}
       {/* <Grid item md={3}> */}
-      <BottomDiv>
-        <div className="head">
-          <div className="label">장소</div>
-          <div className="bts">
-            <button onClick={onPrevPage}>
-              <KeyboardArrowLeftIcon />
-            </button>
-            <button onClick={onNextPage}>
-              <ChevronRightIcon />
-            </button>
+      {data.length && (
+        <BottomDiv>
+          <div className="head">
+            <div className="label">장소</div>
+            <div className="bts">
+              <button onClick={onPrevPage}>
+                <KeyboardArrowLeftIcon />
+              </button>
+              <button onClick={onNextPage}>
+                <ChevronRightIcon />
+              </button>
+            </div>
           </div>
-        </div>
-        {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
-          <MapDiv key={index} {...item} />
-        ))}
-      </BottomDiv>
+          {data
+            .slice(page * perPage, (page + 1) * perPage)
+            .map((item, index) => (
+              <MapDiv key={index} {...item} />
+            ))}
+        </BottomDiv>
+      )}
       {/* </Grid> */}
     </MainMapContainer>
   );

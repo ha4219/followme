@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 export const mapState = atom({
   key: "latlon",
@@ -8,4 +8,14 @@ export const mapState = atom({
 export const mapSelectedState = atom({
   key: "mapSelect",
   default: ["", "", "", 0, [""]],
+});
+
+export const curMapState = atom({
+  key: "curLatlon",
+  default: [33.452613, 126.570888],
+});
+
+export const curLimitDis = atom({
+  key: "limitDis",
+  default: 5000,
 });

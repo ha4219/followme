@@ -1,10 +1,13 @@
 import MapContainer from "@components/MapContainer";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import { curLimitDis } from "@store/map";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
 
 const MainMapContainer = () => {
   const [sortedType, setSortedType] = useState(0);
+  const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
   return (
     <div>
       <HeadContainer>
@@ -14,20 +17,20 @@ const MainMapContainer = () => {
         </TitleContainer>
         <SortedContainer>
           <CustomButton
-            className={sortedType === 0 ? "active" : ""}
-            onClick={() => setSortedType(0)}
+            className={limitDis === 5000 ? "active" : ""}
+            onClick={() => setLimitDis(5000)}
           >
             5km이내
           </CustomButton>
           <CustomButton
-            className={sortedType === 1 ? "active" : ""}
-            onClick={() => setSortedType(1)}
+            className={limitDis === 10000 ? "active" : ""}
+            onClick={() => setLimitDis(10000)}
           >
             10km이내
           </CustomButton>
           <CustomButton
-            className={sortedType === 2 ? "active" : ""}
-            onClick={() => setSortedType(2)}
+            className={limitDis === 20000 ? "active" : ""}
+            onClick={() => setLimitDis(20000)}
           >
             20km이내
           </CustomButton>

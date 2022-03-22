@@ -7,7 +7,7 @@ import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
-import { mapSelectedState, mapState } from "@store/map";
+import { curLimitDis, mapSelectedState, mapState } from "@store/map";
 import { inflateSync } from "zlib";
 
 declare global {
@@ -28,6 +28,7 @@ const MapContainerNoDiv = () => {
   const [markers, setMarkers] = useState<any[]>([]);
   const [infos, setInfos] = useState<any[]>([]);
   const [sortedType, setSortedType] = useState(0);
+  const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
 
   const mapInit = async () => {
     try {
@@ -212,20 +213,20 @@ const MapContainerNoDiv = () => {
       <HeadContainer>
         <SortedContainer>
           <CustomButton
-            className={sortedType === 0 ? "active" : ""}
-            onClick={() => setSortedType(0)}
+            className={limitDis === 5000 ? "active" : ""}
+            onClick={() => setLimitDis(5000)}
           >
             5km이내
           </CustomButton>
           <CustomButton
-            className={sortedType === 1 ? "active" : ""}
-            onClick={() => setSortedType(1)}
+            className={limitDis === 10000 ? "active" : ""}
+            onClick={() => setLimitDis(10000)}
           >
             10km이내
           </CustomButton>
           <CustomButton
-            className={sortedType === 2 ? "active" : ""}
-            onClick={() => setSortedType(2)}
+            className={limitDis === 20000 ? "active" : ""}
+            onClick={() => setLimitDis(20000)}
           >
             20km이내
           </CustomButton>

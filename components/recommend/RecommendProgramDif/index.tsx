@@ -5,7 +5,7 @@ import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -53,10 +53,6 @@ const RecommendProgramDif: VFC<ICourse> = ({
     router.push(`/recommend/${idx}`);
   }, []);
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
   // return (
   //   <MainContainer
   //     xs={6}
@@ -84,7 +80,7 @@ const RecommendProgramDif: VFC<ICourse> = ({
       <div className="editorProgramPhotoWrapper">
         <img
           className="editorProgramPhoto"
-          src={`${toBase64(mainImg.data)}`}
+          src={`${toBase64(mainImg)}`}
           alt={title}
         />
       </div>
