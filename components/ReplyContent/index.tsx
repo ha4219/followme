@@ -9,6 +9,7 @@ import { idState } from "@store/auth";
 import {
   insertThemeChildComment,
   insertRecommendChildComment,
+  reportThemeCommentBoard,
 } from "api/board";
 import { toast } from "react-toastify";
 
@@ -18,7 +19,7 @@ interface IProps {
   createdAt: string;
   fk_user_comments_id: string;
   boardIdx: number;
-  children: IComment[];
+  childrenReply: IComment[];
   type: number;
 }
 
@@ -27,7 +28,33 @@ const ReplyChildContent = ({
   content,
   createdAt,
   fk_user_comments_id,
-}: IComment) => {
+  boardIdx,
+  type,
+}: IProps) => {
+  const onClickReport = async () => {
+    const check = confirm(
+      // "신고하기",
+      `${fk_user_comments_id}님을 신고하시겠습니까?`
+    );
+    try {
+      if (check) {
+        if (type === 0) {
+        } else if (type === 1) {
+          const data = await reportThemeCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        }
+      }
+    } catch (e) {
+      console.log("report error", e);
+    }
+  };
+
   return (
     <ReplyContentContainer>
       <div className="replyContentContainerProfile">
@@ -46,7 +73,9 @@ const ReplyChildContent = ({
           <div className="replyContentContainerDate">
             {dateHelper(createdAt)}
           </div>
-          <div className="replyContentContainerReport">신고하기</div>
+          <div className="replyContentContainerReport" onClick={onClickReport}>
+            신고하기
+          </div>
         </div>
       </div>
       <div className="replyContentContainerContent">{content}</div>
@@ -61,7 +90,7 @@ const ReplyContent = ({
   createdAt,
   fk_user_comments_id,
   boardIdx,
-  children,
+  childrenReply,
 }: IProps) => {
   const [value, setValue, onChangeValue] = useInput("");
   const [open, setOpen] = useState(false);
@@ -69,8 +98,32 @@ const ReplyContent = ({
   const id = useRecoilValue(idState);
 
   useEffect(() => {
-    setChildrenState(children);
+    setChildrenState(childrenReply);
   }, []);
+
+  const onClickReport = async () => {
+    const check = confirm(
+      // "신고하기",
+      `${fk_user_comments_id}님을 신고하시겠습니까?`
+    );
+    try {
+      if (check) {
+        if (type === 0) {
+        } else if (type === 1) {
+          const data = await reportThemeCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        }
+      }
+    } catch (e) {
+      console.log("report error", e);
+    }
+  };
 
   const onSubmitValue = useCallback(
     async (e) => {
@@ -86,7 +139,7 @@ const ReplyContent = ({
 
           if (data.data === "success") {
             setChildrenState([
-              ...children,
+              ...childrenState,
               {
                 idx: "9999",
                 content: value,
@@ -106,7 +159,7 @@ const ReplyContent = ({
           });
           if (data.data === "success") {
             setChildrenState([
-              ...children,
+              ...childrenState,
               {
                 idx: "9999",
                 content: value,
@@ -146,11 +199,19 @@ const ReplyContent = ({
           >
             답글쓰기
           </div>
-          <div className="report">신고하기</div>
+          <div className="report" onClick={onClickReport}>
+            신고하기
+          </div>
         </div>
         <div>
           {childrenState.map((item, index) => (
-            <ReplyChildContent key={item.idx} {...item} />
+            <ReplyChildContent
+              childrenReply={[]}
+              key={item.idx}
+              boardIdx={boardIdx}
+              type={type}
+              {...item}
+            />
           ))}
         </div>
         {open && (

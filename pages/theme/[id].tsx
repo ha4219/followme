@@ -67,7 +67,7 @@ const ThemeDetail = () => {
     const child = comments.filter((item) => item.recomment);
     const res = parent.map((item) => {
       const resTmp = child.filter((item1) => item.idx === item1.recomment);
-      return { ...item, children: resTmp };
+      return { ...item, childrenReply: resTmp };
     });
     setComments(res);
 

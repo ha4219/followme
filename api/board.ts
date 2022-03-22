@@ -165,14 +165,15 @@ export const delThemeComment = async ({ id, idx }) => {
   }
 };
 
-export const reportThemeCommentBoard = async ({ id, idx }) => {
+export const reportThemeCommentBoard = async ({ idx, commentIdx }) => {
   try {
     const { data } = await API.post(`/board/1/reply/report/${idx}`, {
-      id: id,
+      // id: id,
+      commentIdx: commentIdx,
     });
     return data;
   } catch (e) {
-    console.log("get theme comment board", e);
+    console.log("report theme comment board", e);
   }
 };
 
@@ -331,13 +332,13 @@ export const getCourseDetailBoard = async ({ id, idx }) => {
 export const insertCourseBoard = async ({ id, title, content }) => {
   try {
     const { data } = await API.post(`/board/2/insert`, {
-      writer: id,
+      id: id,
       title: title,
       content: content,
       type: 2,
     });
     return data;
   } catch (e) {
-    console.log("insert recommend board", e);
+    console.log("insert course board", e);
   }
 };

@@ -1,11 +1,6 @@
-import EditorProgram from "@components/editor/EditorProgram";
 import LeftLayout from "@components/LeftLayout";
-import MainThemeContent from "@components/main/MainThemeContent";
-import Program from "@components/Program";
-import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
 import { Box, Button, Grid, MenuItem, Pagination, Select } from "@mui/material";
-import { API } from "@src/API";
 import { idState } from "@store/auth";
 import {
   domesticState,

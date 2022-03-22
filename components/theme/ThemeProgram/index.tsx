@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Avatar, Box, Button, Grid, IconButton } from "@mui/material";
+import { Avatar, Grid, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
@@ -8,7 +8,6 @@ import { idState } from "@store/auth";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { doThemeLike } from "api/theme";
 import { contentSummary, titleSummary } from "@helpers/programHelper";
 import { likeThemeBoard } from "api/board";
 
@@ -20,14 +19,7 @@ const ThemeProgram: VFC<ICourse> = ({
   shortContent,
   tags,
   likeCnts,
-  views,
-  createdAt,
-  isLocal,
   likeClicked,
-  region,
-  schedule,
-  season,
-  updatedAt,
 }) => {
   const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
   const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);

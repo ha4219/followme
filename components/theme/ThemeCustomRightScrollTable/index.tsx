@@ -21,10 +21,9 @@ const ThemeCustomRightScrollTableItem: VFC<MapDataType> = ({
   lon,
   tags,
   score,
-  distance,
 }) => {
-  const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
-  const [mapSelectState, setMapSelectState] = useRecoilState(mapSelectedState);
+  const [, setMapLatLonState] = useRecoilState(mapState);
+  const [, setMapSelectState] = useRecoilState(mapSelectedState);
   // const [editorSelectState, setEditorSelectState] = useRecoilState(editorState);
 
   const onClick = () => {
