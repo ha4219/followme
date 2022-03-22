@@ -1,4 +1,3 @@
-import { COURSES, ICourseData } from "@data/CourseData";
 import styled from "@emotion/styled";
 import { dateHelper, tableTitleSummary } from "@helpers/programHelper";
 import {
@@ -15,14 +14,14 @@ import {
 import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { courseTagState } from "@store/tag";
-import { getCourseAllBoard } from "api/board";
+import { getMyCourseBoard } from "api/profile";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
 
-const CourseBoard = () => {
+const MyCourseBoard = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(10);
@@ -46,7 +45,7 @@ const CourseBoard = () => {
     //     console.log("course 받아오기 에러", e);
     //   });
     try {
-      const data = await getCourseAllBoard({
+      const data = await getMyCourseBoard({
         id: loggedInId,
       });
       setCourses(data);
@@ -113,25 +112,7 @@ const CourseBoard = () => {
             </TableRow>
           ))}
         </TableBody>
-        <TableRow className="rightButton">
-          {/* <TableCell></TableCell>
-          <TableCell></TableCell> */}
-          <TableCell align="right" colSpan={3}>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => {
-                if (loggedInId.length) {
-                  router.push("/course/write");
-                } else {
-                  toast.error("로그인 후 이용해주세요.");
-                }
-              }}
-            >
-              글쓰기
-            </Button>
-          </TableCell>
-        </TableRow>
+
         <TableRow>
           <TableCell className="pagination" colSpan={3} align="center">
             <Pagination
@@ -188,4 +169,4 @@ const MainContainer = styled(Container)`
   }
 `;
 
-export default CourseBoard;
+export default MyCourseBoard;

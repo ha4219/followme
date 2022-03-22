@@ -5,6 +5,11 @@ export interface IComment {
   createdAt: string;
 }
 
+export interface IMergeCourse {
+  theme: ICourse[];
+  recommend: ICourse[];
+}
+
 export interface IUser {
   id: string;
   name: string;

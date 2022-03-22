@@ -18,6 +18,7 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { API } from "@src/API";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
+import { getCourseDetailBoard } from "api/board";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -66,12 +67,16 @@ const CourseDetail = () => {
     setIdx(id);
 
     if (id) {
-      const { data } = await API.get<ICourseDetail[]>(
-        `/course/courseBoards/${id}`,
-        {
-          // id: loggedInId,
-        }
-      );
+      // const { data } = await API.get<ICourseDetail[]>(
+      //   `/course/courseBoards/${id}`,
+      //   {
+      //     // id: loggedInId,
+      //   }
+      // );
+      const data = await getCourseDetailBoard({
+        id: loggedInId,
+        idx: id,
+      });
       setCourse(data[0]);
       if (data[0].comments) {
         setComments(data[0].comments);
@@ -91,7 +96,7 @@ const CourseDetail = () => {
   useEffect(() => {
     getCourse();
     // getComments();
-  }, [router.isReady]);
+  }, []);
 
   return (
     <Container maxWidth="lg">

@@ -1,5 +1,4 @@
-import CourseBoard from "@components/course/CourseBoard";
-import CourseContainer from "@components/profile/CourseContainer";
+import MyCourseBoard from "@components/profile/MyCourseBoard";
 import ProfileLeftLayout from "@components/profile/ProfileLeftLayout";
 import { Box, Container } from "@mui/material";
 
@@ -11,7 +10,7 @@ const ProfileCourse = () => {
           <Box p={4} sx={{ fontWeight: "bold" }}>
             코스를 부탁해
           </Box>
-          <CourseBoard />
+          <MyCourseBoard />
         </Box>
       </ProfileLeftLayout>
     </Container>

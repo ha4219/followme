@@ -12,3 +12,15 @@ export const getUserPointHistory = async (id) => {
     return [];
   }
 };
+
+export const getMyCourseBoard = async ({ id }) => {
+  try {
+    const { data } = await API.post<any[]>("/user/course/mypost", {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("getmycourse", e);
+    return [];
+  }
+};

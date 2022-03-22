@@ -1,4 +1,5 @@
 import { API, getPayload, getToken } from "@src/API";
+import { IMergeCourse } from "types/apiType";
 
 export const deleteBoard = async ({ url, id, idx }) => {
   const urlTo = url[0].toUpperCase() + url.slice(1);
@@ -22,6 +23,18 @@ export const reportComment = async ({ id }) => {
   }
 };
 
+// editor
+
+export const getEditorAllBoard = async ({}) => {
+  try {
+    const { data } = await API.get(`/main/editorsPick`, {});
+    return data;
+  } catch (e) {
+    console.log("get editorspick comment", e);
+    return { recommend: [], theme: [] };
+  }
+};
+
 // Theme
 
 export const insertThemeBoard = async ({
@@ -37,7 +50,7 @@ export const insertThemeBoard = async ({
   tags,
 }) => {
   try {
-    const { data } = await API.post(`board/1/insert`, {
+    const { data } = await API.post(`/board/1/insert`, {
       writer: id,
       title: title,
       shortContent: shortContent,
@@ -111,10 +124,11 @@ export const likeThemeBoard = async ({ id, idx }) => {
   }
 };
 
-export const insertThemeComment = async ({ id, idx, parent }) => {
+export const insertThemeComment = async ({ id, idx, content }) => {
   try {
     const { data } = await API.post(`/board/1/reply/insert/${idx}`, {
-      id: id,
+      writer: id,
+      content: content,
     });
     return data;
   } catch (e) {
@@ -124,7 +138,7 @@ export const insertThemeComment = async ({ id, idx, parent }) => {
 
 export const delThemeComment = async ({ id, idx }) => {
   try {
-    const { data } = await API.post(`board/1/reply/delete/${idx}`, {
+    const { data } = await API.post(`/board/1/reply/delete/${idx}`, {
       id: id,
     });
     return data;
@@ -174,7 +188,7 @@ export const insertRecommendBoard = async ({
   tags,
 }) => {
   try {
-    const { data } = await API.post(`board/0/insert`, {
+    const { data } = await API.post(`/board/0/insert`, {
       writer: id,
       title: title,
       shortContent: shortContent,
@@ -228,5 +242,54 @@ export const likeRecommendBoard = async ({ id, idx }) => {
     return data;
   } catch (e) {
     console.log("like recommend board", e);
+  }
+};
+
+// course
+
+export const getCourseAllBoard = async ({ id }) => {
+  try {
+    if (id) {
+      const { data } = await API.post(`/board/2/allPosts`, {
+        id: id,
+      });
+      return data;
+    } else {
+      const { data } = await API.post(`/board/2/allPosts`, {});
+      return data;
+    }
+  } catch (e) {
+    console.log("get course all board", e);
+    return [];
+  }
+};
+
+export const getCourseDetailBoard = async ({ id, idx }) => {
+  try {
+    if (id) {
+      const { data } = await API.post(`/board/2/detail/${idx}`, {
+        id: id,
+      });
+      return data;
+    } else {
+      const { data } = await API.post(`/board/2/detail/${idx}`, {});
+      return data;
+    }
+  } catch (e) {
+    console.log("get course detail board", e);
+  }
+};
+
+export const insertCourseBoard = async ({ id, title, content }) => {
+  try {
+    const { data } = await API.post(`/board/2/insert`, {
+      writer: id,
+      title: title,
+      content: content,
+      type: 2,
+    });
+    return data;
+  } catch (e) {
+    console.log("insert recommend board", e);
   }
 };

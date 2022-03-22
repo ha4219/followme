@@ -14,8 +14,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { authState, idState } from "@store/auth";
 import { useRouter } from "next/router";
 import CourseTable from "@components/course/CourseTable";
-import { COURSES } from "@data/CourseData";
 import ProfilePointHistory from "@components/profile/PointHistory";
+import { getMyCourseBoard } from "api/profile";
 
 const ProfileHome = () => {
   const router = useRouter();
@@ -26,6 +26,7 @@ const ProfileHome = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
   const loggedInId = useRecoilValue(idState);
   const [isLoading, setLoading] = useState(true);
+  const [courses, setCourses] = useState<any[]>([]);
 
   const getUser = async () => {
     getUserProfile()
@@ -45,8 +46,8 @@ const ProfileHome = () => {
           id: loggedInId,
         });
 
-        const arr = [...data.theme, ...data.recommend];
-        setMyBoards(arr.slice(-3));
+        // const arr = [...data.theme, ...data.recommend];
+        setMyBoards(data.slice(-3));
       } catch (e) {
         console.log("myBoard", e);
       }
@@ -68,6 +69,20 @@ const ProfileHome = () => {
     }
   };
 
+  const getCourses = async () => {
+    if (user) {
+      try {
+        const data = await getMyCourseBoard({
+          id: loggedInId,
+        });
+
+        setCourses(data.slice(-3));
+      } catch (e) {
+        console.log("mycourse", e);
+      }
+    }
+  };
+
   // const getPointHistory = async () => {
   //   if (user) {
   //     try {
@@ -84,6 +99,7 @@ const ProfileHome = () => {
   useEffect(() => {
     getMyBoard();
     getLikeBoard();
+    getCourses();
     // getPointHistory();
   }, [user]);
 
@@ -144,7 +160,7 @@ const ProfileHome = () => {
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
               <Box py={2}>
-                <CourseTable courses={COURSES.slice(-1)} />
+                <CourseTable courses={courses} />
               </Box>
             </div>
           </ProfileContainer>

@@ -4,9 +4,10 @@ import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { windowState } from "@store/window";
 import theme from "@styles/theme";
+import { getEditorAllBoard } from "api/board";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { ICourse } from "types/apiType";
+import { ICourse, IMergeCourse } from "types/apiType";
 import MainEditorContent from "../MainEditorContent";
 
 const MainEditorPickContainer = () => {
@@ -28,6 +29,9 @@ const MainEditorPickContainer = () => {
     //     : {}
     // );
     // setPicks(data.slice(-9));
+    const tmp: IMergeCourse = await getEditorAllBoard({});
+    const data = [...tmp.recommend, ...tmp.theme];
+    setPicks(data.slice(-9));
   };
 
   const onRightClick = useCallback(() => {

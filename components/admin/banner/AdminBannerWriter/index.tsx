@@ -3,16 +3,19 @@ import styled from "@emotion/styled";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Button, TextField } from "@mui/material";
+import { idState } from "@store/auth";
 import { addBanner } from "api/admin";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 
 const AdminBannerWriter = () => {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [endDate, setEndDate] = useState();
   const [urlTo, setUrlTo] = useState("");
+  const id = useRecoilValue(idState);
   const onChangeUrlTo = useCallback(
     (e) => {
       setUrlTo(e.target.value);
@@ -34,8 +37,9 @@ const AdminBannerWriter = () => {
           imgURL: url,
           urlTo: urlTo,
           endDate: endDate,
+          id: id,
         }).then((res: any) => {
-          if (res.data === "success") {
+          if (res?.data === "success") {
             toast.success("작성완료");
             router.back();
           } else {

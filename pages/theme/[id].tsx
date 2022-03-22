@@ -17,7 +17,11 @@ import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
 import { doRecommendLike } from "api/theme";
-import { getThemeDetailBoard, likeThemeBoard } from "api/board";
+import {
+  getThemeDetailBoard,
+  insertThemeComment,
+  likeThemeBoard,
+} from "api/board";
 
 const ThemeDetail = () => {
   const router = useRouter();
@@ -77,13 +81,18 @@ const ThemeDetail = () => {
     async (e) => {
       e.preventDefault();
       try {
-        const { data }: { data: { data: string } } = await API.post(
-          `theme/themeBoards/insertReply/${idx}`,
-          {
-            id: loggedInId,
-            content: comment,
-          }
-        );
+        // const { data }: { data: { data: string } } = await API.post(
+        //   `theme/themeBoards/insertReply/${idx}`,
+        //   {
+        //     id: loggedInId,
+        //     content: comment,
+        //   }
+        // );
+        const data = await insertThemeComment({
+          id: loggedInId,
+          idx: idx,
+          content: comment,
+        });
         if (data.data === "success") {
           setComments([
             ...comments,
