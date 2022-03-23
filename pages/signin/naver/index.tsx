@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import { API, setToken } from "@src/API";
 import { authState, idState } from "@store/auth";
 import { getUserProfile } from "api/auth";
@@ -31,14 +32,17 @@ const Naver = () => {
   };
   const test = async (code) => {
     try {
-      console.log(code);
-
       const { data } = await API.get(`/user/naver/oauth/${code}/code`);
-      setData(data.success);
-      if (data.success && data) {
-        setToken(data.accessToken);
-        setLoggedIn(data.accessToken);
-        setProfile();
+      if (data.success === "success") {
+        setData(data.success);
+        if (data.success && data) {
+          setToken(data.accessToken);
+          setLoggedIn(data.accessToken);
+          setProfile();
+        }
+      } else {
+        toast.error("해당 계정으로 로그인할 수 없습니다");
+        router.back();
       }
 
       // setLoggedInId(id);
@@ -62,10 +66,11 @@ const Naver = () => {
   }, []);
   return (
     <div>
-      <span>{code}</span>
-      <br />
-      <span>{error}</span>
-      {data}
+      // <span>{code}</span>
+      // <br />
+      // <span>{error}</span>
+      // {data}
+      <LinearProgress />
     </div>
   );
 };

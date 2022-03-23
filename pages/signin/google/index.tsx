@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import { API, setToken } from "@src/API";
 import { authState, idState } from "@store/auth";
 import { getUserProfile } from "api/auth";
@@ -32,16 +33,19 @@ const GoogleLogin = () => {
   };
   const test = async (code) => {
     try {
-      console.log(code);
-
       const { data } = await API.post(`/user/google/oauth`, {
         token: code,
       });
-      setData(data.success);
-      if (data.success && data) {
-        setToken(data.accessToken);
-        setLoggedIn(data.accessToken);
-        setProfile();
+      if (data.success === "success") {
+        setData(data.success);
+        if (data.success && data) {
+          setToken(data.accessToken);
+          setLoggedIn(data.accessToken);
+          setProfile();
+        }
+      } else {
+        toast.error("해당 계정으로 로그인할 수 없습니다");
+        router.back();
       }
     } catch (e: any) {
       console.log("send server error", e);
@@ -61,9 +65,10 @@ const GoogleLogin = () => {
 
   return (
     <div>
-      <span>{code}</span>
-      <br />
-      <span>{error}</span>
+      // <span>{code}</span>
+      // <br />
+      // <span>{error}</span>
+      <LinearProgress />
     </div>
   );
 };
