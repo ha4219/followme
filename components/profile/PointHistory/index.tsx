@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { dateHelper } from "@helpers/programHelper";
 import {
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -53,12 +54,22 @@ const ProfilePointHistory: VFC<IProps> = ({ length, pagination }) => {
         <TableHead className="head">
           <TableRow className="head">
             <TableCell align="center">내역</TableCell>
-            <TableCell align="center">포인트</TableCell>
-            <TableCell align="center">적립일</TableCell>
+            <TableCell align="center" width={100}>
+              포인트
+            </TableCell>
+            <TableCell align="center" width={150}>
+              적립일
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {pointHistory.map((item, index) => (
+          {(rowsPerPage > 0
+            ? pointHistory.slice(
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage
+              )
+            : pointHistory
+          ).map((item, index) => (
             <TableRow
               key={index}
               // onClick={() => onClickRow(item.idx - 1)}
@@ -73,6 +84,17 @@ const ProfilePointHistory: VFC<IProps> = ({ length, pagination }) => {
             </TableRow>
           ))}
         </TableBody>
+        {pagination && (
+          <TableRow>
+            <TableCell className="pagination" colSpan={3} align="center">
+              <Pagination
+                className="paginationIn"
+                count={size}
+                onChange={handleChangePage}
+              />
+            </TableCell>
+          </TableRow>
+        )}
       </Table>
     </ProfilePointHistoryContainer>
   );

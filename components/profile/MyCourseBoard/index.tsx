@@ -96,8 +96,12 @@ const MyCourseBoard = () => {
         <TableHead className="head">
           <TableRow className="head">
             <TableCell align="center">제목</TableCell>
-            <TableCell align="center">답글</TableCell>
-            <TableCell align="center">작성일</TableCell>
+            <TableCell align="center" width={100}>
+              답글
+            </TableCell>
+            <TableCell align="center" width={150}>
+              작성일
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
