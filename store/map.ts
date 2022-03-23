@@ -24,3 +24,8 @@ export const enterSignupState = atom({
   key: "enterSignup",
   default: [33.452613, 126.570888],
 });
+
+export const enterPickState = atom({
+  key: "enterkey",
+  default: -1,
+});

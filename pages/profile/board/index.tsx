@@ -20,9 +20,9 @@ const ProfileBoard = () => {
     const { data } = await API.post("/user/board", {
       id: loggedInId,
     });
-    // const arr = [...data.theme, ...data.recommend];
-    setSize(Math.ceil(data.length / perPage));
-    setBoards(data);
+    const arr = [...data.theme, ...data.recommend];
+    setSize(Math.ceil(arr.length / perPage));
+    setBoards(arr);
   };
 
   useEffect(() => {

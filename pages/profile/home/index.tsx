@@ -60,8 +60,9 @@ const ProfileHome = () => {
         const data = await getMyLikeBoard({
           id: loggedInId,
         });
+        const arr = [...data.theme, ...data.recommend];
 
-        setLikeBoards(data.slice(-3));
+        setLikeBoards(arr.slice(-3));
       } catch (e) {
         console.log("likeBoard", e);
       }

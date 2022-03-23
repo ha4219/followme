@@ -102,3 +102,33 @@ export interface IReportCommentType {
   type: number;
   updatedAt: string;
 }
+
+export interface IEnterpriseType {
+  category: string;
+  content: string;
+  id: string;
+  idx: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  profileImage: string;
+  score: number;
+  tags: string[];
+}
+
+export interface IEnterpriseMenuType {
+  idx: number;
+  fk_user_enterMenus_id: string;
+  name: string;
+  explanation: string;
+  menuImg: string;
+}
+
+export interface IEnterpriseReviewType {
+  idx: number;
+
+  score: number;
+  enterId: string;
+  writer: string;
+  content: string;
+}

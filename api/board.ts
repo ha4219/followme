@@ -40,6 +40,18 @@ export const getEditorAllBoard = async ({}) => {
   }
 };
 
+export const getEditorAllBoardById = async ({ id: id }) => {
+  try {
+    const { data } = await API.post(`/main/editorsPick`, {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("get editorspick comment", e);
+    return { recommend: [], theme: [] };
+  }
+};
+
 // Theme
 
 export const insertThemeBoard = async ({
