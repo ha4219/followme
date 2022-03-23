@@ -9,6 +9,8 @@ import {
 } from "api/enterprise";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import MapDialogMenus from "../MapDialogMenus";
+import MapDialogReviews from "../MapDialogReviews";
 import MapDialogStars from "../MapDialogStars";
 import MapDialogTags from "../MapDialogTags";
 
@@ -26,6 +28,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [score, setScore] = useState(0);
+  const [enterId, setEnterId] = useState("");
   const [tags, setTags] = useState([]);
   const [profileImage, setProfileImage] = useState("");
 
@@ -38,6 +41,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
       setContent(data[0].content);
       setCategory(data[0].category);
       setScore(data[0].score);
+      setEnterId(data[0].id);
       setTags(data[0].tags);
       setProfileImage(`${toBase64(data[0].profileImage)}`);
     } catch (e) {
@@ -86,6 +90,8 @@ const MapDialog = ({ onClose, show }: IProps) => {
           </div>
         </div>
       </MapDialogContainer>
+      <MapDialogMenus menus={menus} />
+      <MapDialogReviews reviews={reviews} enterId={enterId} />
     </Dialog>
   );
 };
@@ -94,6 +100,9 @@ const MapDialogContainer = styled.div`
   font-family: paybooc-Light;
   display: flex;
   padding: 1rem;
+  width: 50rem;
+
+  border-bottom: 5px solid #000000;
 
   & .mapDialogContainerImg {
     width: 200px;

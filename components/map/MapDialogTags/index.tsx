@@ -22,6 +22,11 @@ const MapDialogTagsContainer = styled.div`
     margin-right: 5px;
     border: 1px solid #b69775;
     border-radius: 12px;
+    cursor: pointer;
+    :hover {
+      color: #ffffff;
+      background-color: #b69775;
+    }
   }
 `;
 

@@ -48,7 +48,6 @@ const EditorProgramList: VFC = () => {
     // });
     const tmp: IMergeCourse = await getEditorAllBoard({});
     const data = [...tmp.recommend, ...tmp.theme];
-    console.log(data);
 
     setSize(data.length / perPageSize);
     setTravels(
@@ -111,7 +110,7 @@ const EditorProgramList: VFC = () => {
     let arr = [...travels];
 
     if (selectedTag !== "ALL" && selectedTag !== "") {
-      arr = arr.filter((item) => item.tags.includes(selectedTag));
+      // arr = arr.filter((item) => item.tags.includes(selectedTag));
     }
     if (selectedSeason.length) {
       arr = arr.filter((item) => selectedSeason.includes(item.season));

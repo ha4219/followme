@@ -164,7 +164,7 @@ const CourseCustomEditor = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <div className="dateContainer">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
           <div className="subContainer">
             <span className="label">출발 예정일</span>
             <DesktopDatePicker
@@ -185,7 +185,7 @@ const CourseCustomEditor = () => {
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
-        </LocalizationProvider>
+        </LocalizationProvider> */}
       </div>
       <div className="quill">
         {/* <QuillToolbar />

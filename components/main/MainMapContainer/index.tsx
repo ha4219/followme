@@ -55,6 +55,7 @@ const HeadContainer = styled.div`
   display: flex;
   justify-content: space-around;
   padding-bottom: 2.5rem;
+  margin-top: 2.5rem;
 `;
 const SortedContainer = styled.div`
   display: flex;
