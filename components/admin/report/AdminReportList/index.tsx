@@ -24,6 +24,7 @@ const AdminReportItem = ({
   type,
 }: IReportCommentType) => {
   const id = useRecoilValue(idState);
+  const [show, setShow] = useState(true);
   const onClick = async () => {
     try {
       const data = await delComment({
@@ -31,13 +32,15 @@ const AdminReportItem = ({
         idx: idx,
         id: fk_user_comments_id,
       });
-      console.log(data);
+      if (data.data === "success") {
+        setShow(false);
+      }
     } catch (e) {
       console.log("com del comment", e);
     }
   };
   return (
-    <TableRow>
+    <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
       <TableCell>{fk_user_comments_id}</TableCell>
       <TableCell>{content}</TableCell>

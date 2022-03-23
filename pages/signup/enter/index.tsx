@@ -26,25 +26,19 @@ import {
   checkPhone,
 } from "@helpers/checkReg";
 import styled from "@emotion/styled";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { enterSignupState } from "@store/map";
 import MapOneMarker from "@components/signup/MapOneMarker";
 import DragDrop from "@components/DragDrop";
+import DaumPostcode from "react-daum-postcode";
 
 declare global {
   interface Window {
     recaptchaVerifier: any;
     confirmationResult: any;
+    kakao: any;
   }
 }
-
-const EnterSignupDialog = ({ onClose }) => {
-  return (
-    <Dialog open={true} onClose={onClose}>
-      <MapOneMarker />
-    </Dialog>
-  );
-};
 
 const Signup = () => {
   const router = useRouter();
@@ -61,8 +55,8 @@ const Signup = () => {
   const [emailV, setEmailV] = useState(false);
   const [nickNameV, setNickNameV] = useState(false);
   const [phoneV, setPhoneV] = useState(false);
-  const enterPos = useRecoilValue(enterSignupState);
-  const [show, setShow] = useState(true);
+  const [enterPos, setEnterPos] = useRecoilState(enterSignupState);
+  const [show, setShow] = useState(false);
   const [address, setAddress, onChangeAddress] = useInput("");
   const [content, setContent, onChangeContent] = useInput("");
   // const [provider, setProvider, onChangeProvider] = useInput("");
@@ -70,6 +64,39 @@ const Signup = () => {
   const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [showTag, setShowTag] = useState(false);
+  // const [a, setA] = useState('');
+  // const [b, setB]
+
+  const kakaoMapInit = async () => {
+    const mapScript = document.createElement("script");
+
+    mapScript.async = true;
+    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API}&libraries=services&autoload=false`;
+
+    document.head.appendChild(mapScript);
+
+    const onLoadKakaoMap = () => {
+      window.kakao.maps.load(() => {
+        const container = document.getElementById("map");
+        const options = {};
+        const map = new window.kakao.maps.Map(container, options);
+        window.kakao.map = map;
+      });
+    };
+    mapScript.addEventListener("load", onLoadKakaoMap);
+
+    return () => mapScript.removeEventListener("load", onLoadKakaoMap);
+  };
+
+  const onChangeShow = () => {
+    setShow(!show);
+  };
+
+  const onCompletePost = (data) => {
+    setAddress(data.roadAddress);
+    setShow(false);
+  };
 
   const initilizeCaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -89,6 +116,22 @@ const Signup = () => {
       auth
     );
   };
+
+  useEffect(() => {
+    if (address && window.kakao.maps) {
+      try {
+        console.log(window.kakao.maps);
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        geocoder.addressSearch(address, function (result, status) {
+          if (status === window.kakao.maps.services.Status.OK) {
+            setEnterPos([result[0].y, result[0].x]);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [address]);
 
   const onChangeId = useCallback(
     (e) => {
@@ -161,7 +204,7 @@ const Signup = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("nickname check error");
+        toast.error("email check error");
       });
   }, [email]);
 
@@ -183,7 +226,7 @@ const Signup = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("email check error");
+        toast.error("nickname check error");
       });
   }, [nickName]);
 
@@ -294,6 +337,10 @@ const Signup = () => {
   );
 
   useEffect(() => {
+    kakaoMapInit();
+  }, []);
+
+  useEffect(() => {
     initilizeCaptcha();
   }, []);
 
@@ -302,7 +349,32 @@ const Signup = () => {
       <Head>
         <title>기업용 회원가입</title>
       </Head>
-      {show && <EnterSignupDialog onClose={() => setShow(false)} />}
+      {show && (
+        <Dialog open={show}>
+          <DaumPostcode autoClose onComplete={onCompletePost} />
+        </Dialog>
+      )}
+      {showTag && (
+        <Dialog onClose={() => setShowTag(false)} open={showTag}>
+          <>
+            <TextField
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  setTags(Array.from(new Set([tag, ...tags])));
+                  setTag("");
+                }
+              }}
+            />
+            <div>
+              {tags.map((item, index) => (
+                <span key={index}>#{item},</span>
+              ))}
+            </div>
+          </>
+        </Dialog>
+      )}
       <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
@@ -390,6 +462,15 @@ const Signup = () => {
                   onClickBtn={onVerifySMS}
                 />
                 <SignupTextField
+                  id="address"
+                  label="주소"
+                  value={address}
+                  placeholder="주소"
+                  btnLabel="검색"
+                  btnActive={true}
+                  onClickBtn={() => setShow(true)}
+                />
+                <SignupTextField
                   id="lat"
                   label="위도"
                   value={enterPos[0]}
@@ -401,14 +482,6 @@ const Signup = () => {
                   label="경도"
                   value={enterPos[1]}
                   placeholder="경도"
-                  btnLabel=""
-                />
-                <SignupTextField
-                  id="address"
-                  label="주소"
-                  value={address}
-                  onChange={onChangeAddress}
-                  placeholder="주소"
                   btnLabel=""
                 />
                 <SignupTextField
@@ -427,21 +500,18 @@ const Signup = () => {
                   placeholder="카테고리"
                   btnLabel=""
                 />
-                <DragDrop url={profileImage} setUrl={setProfileImage} />
-                <TextField
-                  value={tag}
-                  onChange={(e) => setTag(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.keyCode === 13) {
-                      setTags([tag, ...tags]);
-                    }
-                  }}
+                <SignupTextField
+                  id="tags"
+                  label="tags"
+                  value={tags.toString()}
+                  // onChange={onChangeCategory}
+                  placeholder="카테고리"
+                  btnLabel="add"
+                  btnActive={true}
+                  onClickBtn={() => setShowTag(true)}
                 />
-                <div>
-                  {tags.map((item, index) => (
-                    <span key={index}>#{item}</span>
-                  ))}
-                </div>
+
+                <DragDrop url={profileImage} setUrl={setProfileImage} />
               </Box>
             </SignupCenterBox>
             <Divider
@@ -502,6 +572,7 @@ const Signup = () => {
           data-callback="sendForm"
           data-size="invisible"
         ></div>
+        <div id="map" />
       </Container>
     </>
   );

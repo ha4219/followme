@@ -134,7 +134,7 @@ export const updateEditorPick = async ({ theme, recommend }) => {
 export const delComment = async ({ type, idx, id }) => {
   try {
     const { data } = await API.post(`/board/${type}/reply/delete/${idx}`, {
-      writer: id,
+      id: id,
     });
     return data;
   } catch (e) {

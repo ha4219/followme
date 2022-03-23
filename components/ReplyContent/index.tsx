@@ -13,8 +13,10 @@ import {
   reportThemeCommentBoard,
   reportCourseCommentBoard,
   reportRecommendCommentBoard,
+  reportComment,
 } from "api/board";
 import { toast } from "react-toastify";
+import { delComment } from "api/admin";
 
 interface IProps {
   idx: string;
@@ -43,20 +45,34 @@ const ReplyChildContent = ({
     );
     try {
       if (check) {
-        if (type === 0) {
-        } else if (type === 1) {
-          const data = await reportThemeCommentBoard({
-            // id: id,
-            idx: boardIdx,
-            commentIdx: idx,
-          });
-          if (data.data === "success") {
-            toast.success("신고완료");
-          }
+        const data = await reportComment({
+          idx: boardIdx,
+          type: type,
+          commentIdx: idx,
+        });
+        if (data.data === "success") {
+          toast.success("신고완료");
         }
       }
     } catch (e) {
       console.log("report error", e);
+    }
+  };
+
+  const onClickDel = async () => {
+    const check = confirm(
+      // "신고하기",
+      `해당 댓글을 삭제하시겠습니까?`
+    );
+    try {
+      if (check) {
+        const data = await delComment({ id: id, type: type, idx: idx });
+        if (data.data === "success") {
+          toast.success("삭제");
+        }
+      }
+    } catch (e) {
+      console.log("del comment", e);
     }
   };
 
@@ -78,16 +94,23 @@ const ReplyChildContent = ({
           <div className="replyContentContainerDate">
             {dateHelper(createdAt)}
           </div>
-          <div className="replyContentContainerReport" onClick={onClickReport}>
-            신고하기
-          </div>
-          {id === fk_user_comments_id && (
-            <div
-              className="replyContentContainerReport"
-              onClick={onClickReport}
-            >
-              삭제하기
-            </div>
+          {idx !== "-1" && (
+            <>
+              <div
+                className="replyContentContainerReport"
+                onClick={onClickReport}
+              >
+                신고하기
+              </div>
+              {id === fk_user_comments_id && (
+                <div
+                  className="replyContentContainerReport"
+                  onClick={onClickDel}
+                >
+                  삭제하기
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -117,10 +140,14 @@ const ReplyContent = ({
   const onClickDel = async () => {
     const check = confirm(
       // "신고하기",
-      `댓글을 지우시겠습니까?`
+      `해당 댓글을 삭제하시겠습니까?`
     );
     try {
       if (check) {
+        const data = await delComment({ id: id, type: type, idx: idx });
+        if (data.data === "success") {
+          toast.success("삭제");
+        }
       }
     } catch (e) {
       console.log("del comment", e);
@@ -184,7 +211,7 @@ const ReplyContent = ({
             setChildrenState([
               ...childrenState,
               {
-                idx: "9999",
+                idx: "-1",
                 content: value,
                 createdAt: new Date().toISOString(),
                 fk_user_comments_id: id,
@@ -204,7 +231,7 @@ const ReplyContent = ({
             setChildrenState([
               ...childrenState,
               {
-                idx: "9999",
+                idx: "-1",
                 content: value,
                 createdAt: new Date().toISOString(),
                 fk_user_comments_id: id,
@@ -224,7 +251,7 @@ const ReplyContent = ({
             setChildrenState([
               ...childrenState,
               {
-                idx: "9999",
+                idx: "-1",
                 content: value,
                 createdAt: new Date().toISOString(),
                 fk_user_comments_id: id,
@@ -256,19 +283,24 @@ const ReplyContent = ({
         <div className="replyContent">{content}</div>
         <div className="replyContentFlex">
           <div className="replyDate">{dateHelper(createdAt)}</div>
-          <div
-            className={open ? "recomment recommentActive" : "recomment"}
-            onClick={() => setOpen(!open)}
-          >
-            답글쓰기
-          </div>
-          <div className="report" onClick={onClickReport}>
-            신고하기
-          </div>
-          {id === fk_user_comments_id && (
-            <div className="report" onClick={onClickDel}>
-              삭제하기
-            </div>
+
+          {idx != "-1" && (
+            <>
+              <div
+                className={open ? "recomment recommentActive" : "recomment"}
+                onClick={() => setOpen(!open)}
+              >
+                답글쓰기
+              </div>
+              <div className="report" onClick={onClickReport}>
+                신고하기
+              </div>
+              {id === fk_user_comments_id && (
+                <div className="report" onClick={onClickDel}>
+                  삭제하기
+                </div>
+              )}
+            </>
           )}
         </div>
         <div>

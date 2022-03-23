@@ -170,6 +170,18 @@ export const delThemeComment = async ({ id, idx }) => {
   }
 };
 
+export const reportComment = async ({ idx, commentIdx, type }) => {
+  try {
+    const { data } = await API.post(`/board/${type}/reply/report/${idx}`, {
+      // id: id,
+      commentIdx: commentIdx,
+    });
+    return data;
+  } catch (e) {
+    console.log("report all type comment board", e);
+  }
+};
+
 export const reportThemeCommentBoard = async ({ idx, commentIdx }) => {
   try {
     const { data } = await API.post(`/board/1/reply/report/${idx}`, {
