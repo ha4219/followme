@@ -11,6 +11,7 @@ import { Button } from "@mui/material";
 import { curMapState, mapState } from "@store/map";
 import { VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { IEnterpriseType } from "types/apiType";
 
 // interface Props {
 //   url: string;
@@ -51,30 +52,37 @@ const TagDiv = styled.div`
   }
 `;
 
-const MapDiv: VFC<MapDataType> = ({
-  url,
-  title,
+const MapDiv: VFC<IEnterpriseType> = ({
+  profileImage,
+  name,
   content,
   tags,
-  distance,
-  lat,
-  lon,
+  latitude,
+  longitude,
 }) => {
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const curMapLatLonState = useRecoilValue(curMapState);
 
   const onClick = () => {
-    setMapLatLonState([lat, lon]);
+    setMapLatLonState([Number(latitude), Number(longitude)]);
   };
   return (
     <Container onClick={onClick}>
-      <ImgContainer src={url} alt={title} />
+      <ImgContainer src={profileImage} alt={name} />
       <DesContainer>
-        <div className="title">{mapTitleSummary(title)}</div>
+        <div className="title">{mapTitleSummary(name)}</div>
         <div className="content">{mapContentSummary(content)}</div>
-        <TagContainer tags={tags.slice(-3)} />
+        <div className="mapDivTags">
+          <TagContainer tags={tags.slice(-3)} />
+        </div>
         <div className="dis">
-          {getDistance(curMapLatLonState[0], curMapLatLonState[1], lat, lon)}m
+          {getDistance(
+            curMapLatLonState[0],
+            curMapLatLonState[1],
+            Number(latitude),
+            Number(longitude)
+          )}
+          m
         </div>
       </DesContainer>
     </Container>
@@ -112,6 +120,10 @@ const DesContainer = styled.div`
   }
   & .content {
     font-size: 0.8rem;
+  }
+
+  & .mapDivTags {
+    height: 3rem;
   }
   & .dis {
     color: #00a0e0;

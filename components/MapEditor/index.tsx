@@ -4,6 +4,9 @@ import { useRecoilState } from "recoil";
 import { mapState } from "@store/map";
 import { toast } from "react-toastify";
 import { MapDataType, mapDummyData } from "@data/MapData";
+import { toBase64 } from "@helpers/programHelper";
+import { getEnterprises } from "api/enterprise";
+import { IEnterpriseType } from "types/apiType";
 // declare global {
 //   interface Window {
 //     kakao: any;
@@ -14,19 +17,18 @@ const MapEditor = () => {
     lat: 37.62933576573074,
     lon: 127.08152009841304,
   });
-  const [data, setData] = useState<MapDataType[]>([]);
-
-  useEffect(() => {
-    setData(mapDummyData);
-  }, []);
+  const [data, setData] = useState<IEnterpriseType[]>([]);
 
   useEffect(() => {
     if (window.kakao?.maps && window.kakao.map) {
       for (let i = 0; i < data.length; i++) {
-        const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
+        const latlon = new window.kakao.maps.LatLng(
+          Number(data[i].latitude),
+          Number(data[i].longitude)
+        );
         const marker = new window.kakao.maps.Marker({
           position: latlon,
-          title: data[i].title,
+          title: data[i].name,
         });
 
         marker.setMap(window.kakao.map);
@@ -73,12 +75,14 @@ const MapEditor = () => {
         window.kakao.map = map;
         setMap(map);
         for (let i = 0; i < data.length; i++) {
-          const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
+          const latlon = new window.kakao.maps.LatLng(
+            Number(data[i].latitude),
+            Number(data[i].longitude)
+          );
           const marker = new window.kakao.maps.Marker({
             position: latlon,
-            title: data[i].title,
+            title: data[i].name,
           });
-          console.log(marker);
 
           marker.setMap(map);
           // const iwContent = `<div style="display:flex;padding:5px;"><img src="${
@@ -105,18 +109,23 @@ const MapEditor = () => {
 
   const mapInit = async () => {
     try {
+      const dataTmp2 = await getEnterprises();
+      const dataTmp = dataTmp2.map((item) => ({
+        ...item,
+        profileImage: `${toBase64(item.profileImage)}`,
+      }));
+
+      setData(dataTmp);
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          console.log(pos);
-
           kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
           setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
         },
         errorMessage,
         {
-          enableHighAccuracy: true,
-          maximumAge: 300000,
-          timeout: 10000,
+          // enableHighAccuracy: true,
+          // maximumAge: 300000,
+          // timeout: 10000,
         }
       );
     } catch (e) {

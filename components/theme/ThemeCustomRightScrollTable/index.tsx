@@ -8,45 +8,62 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 import { mapState, mapSelectedState } from "@store/map";
+import { IEnterpriseType } from "types/apiType";
+import { toBase64 } from "@helpers/programHelper";
+import { getEnterprises } from "api/enterprise";
 // import { editorState } from "@store/editor";
 
-const ThemeCustomRightScrollTableItem: VFC<MapDataType> = ({
-  url,
-  title,
+const ThemeCustomRightScrollTableItem = ({
+  profileImage,
+  name,
   content,
-  lat,
-  lon,
+  latitude,
+  longitude,
   tags,
   score,
-}) => {
+}: IEnterpriseType) => {
   const [, setMapLatLonState] = useRecoilState(mapState);
   const [, setMapSelectState] = useRecoilState(mapSelectedState);
   // const [editorSelectState, setEditorSelectState] = useRecoilState(editorState);
 
   const onClick = () => {
-    setMapLatLonState([lat, lon]);
-    setMapSelectState([url, title, content, score, tags]);
+    setMapLatLonState([Number(latitude), Number(longitude)]);
+    setMapSelectState([profileImage, name, content, score, tags]);
   };
 
   return (
     <ThemeCustomRightScrollTableItemContainer hover={true} onClick={onClick}>
       <TableCell>
         <img
-          src={url}
-          alt={title}
+          src={profileImage}
+          alt={name}
           className="themeCustomRightScrollTableItemImg"
         />
       </TableCell>
-      <TableCell>{title}</TableCell>
+      <TableCell>{name}</TableCell>
       <TableCell>{score}</TableCell>
     </ThemeCustomRightScrollTableItemContainer>
   );
 };
 
 const ThemeCustomRightScrollTable = () => {
+  const [data, setData] = useState<IEnterpriseType[]>([]);
+  const getEnter = async () => {
+    const dataTmp2 = await getEnterprises();
+    const dataTmp = dataTmp2.map((item) => ({
+      ...item,
+      profileImage: `${toBase64(item.profileImage)}`,
+    }));
+    setData(dataTmp);
+  };
+
+  useEffect(() => {
+    getEnter();
+  }, []);
+
   return (
     <TableContainer sx={{ maxHeight: 440 }}>
       <ThemeCustomRightScrollTableContainer>
@@ -58,7 +75,7 @@ const ThemeCustomRightScrollTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {mapDummyData.map((item, index) => (
+          {data.map((item, index) => (
             <ThemeCustomRightScrollTableItem key={index} {...item} />
           ))}
         </TableBody>

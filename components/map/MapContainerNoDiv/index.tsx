@@ -4,12 +4,19 @@ import MapDiv from "@components/MapDiv";
 import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
 import { mapDummyData, MapDataType } from "@data/MapData";
-import { mapTitleSummary } from "@helpers/programHelper";
+import { mapTitleSummary, toBase64 } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
-import { curLimitDis, mapSelectedState, mapState } from "@store/map";
-import { inflateSync } from "zlib";
+import {
+  curLimitDis,
+  enterPickState,
+  mapSelectedState,
+  mapState,
+} from "@store/map";
 import { getDistance } from "@helpers/mapHelper";
+import MapDialog from "../MapDialog";
+import { getEnterprises } from "api/enterprise";
+import { IEnterpriseType } from "types/apiType";
 
 declare global {
   interface Window {
@@ -23,20 +30,35 @@ const MapContainerNoDiv = () => {
     lat: 37.0933576573074,
     lon: 127.1852009841304,
   });
-  const [data, setData] = useState<MapDataType[]>([]);
+  const [data, setData] = useState<IEnterpriseType[]>([]);
   const [map, setMap] = useState();
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const [markers, setMarkers] = useState<any[]>([]);
   const [sortedType, setSortedType] = useState(0);
+  const [show, setShow] = useState(false);
   const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
+  const [enterPick, setEnterPick] = useRecoilState(enterPickState);
+
+  const onClose = useCallback(() => {
+    setShow(false);
+  }, [show]);
 
   const mapInit = async () => {
     try {
+      const dataTmp2 = await getEnterprises();
+      const dataTmp = dataTmp2.map((item) => ({
+        ...item,
+        profileImage: `${toBase64(item.profileImage)}`,
+      }));
+
+      setData(dataTmp);
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          console.log(pos);
-
-          kakaoMapInit({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+          kakaoMapInit({
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            dataTmp: dataTmp,
+          });
           setCurPos({ lat: pos.coords.latitude, lon: pos.coords.longitude });
         },
         errorMessage,
@@ -72,14 +94,6 @@ const MapContainerNoDiv = () => {
   }, []);
 
   useEffect(() => {
-    if (window.kakao) {
-      // window.kakao.map.setCenter(
-      //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
-      // );
-    }
-  }, []);
-
-  useEffect(() => {
     if (map) {
       for (let i = 0; i < markers.length; i++) {
         if (
@@ -87,6 +101,14 @@ const MapContainerNoDiv = () => {
           limitDis
         ) {
           markers[i].marker.setMap(map);
+          window.kakao.maps.event.addListener(
+            markers[i].marker,
+            "click",
+            function (e) {
+              setShow(true);
+              setEnterPick(markers[i].idx);
+            }
+          );
         } else {
           markers[i].marker.setMap(null);
         }
@@ -94,7 +116,7 @@ const MapContainerNoDiv = () => {
     }
   }, [markers, map, limitDis]);
 
-  const kakaoMapInit = async ({ lat, lon }) => {
+  const kakaoMapInit = async ({ lat, lon, dataTmp }) => {
     const mapScript = document.createElement("script");
     mapScript.async = true;
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API}&autoload=false`;
@@ -104,11 +126,11 @@ const MapContainerNoDiv = () => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById("map");
-        const data = mapDummyData;
+        const data = dataTmp;
 
         const options = {
           center: new window.kakao.maps.LatLng(lat, lon),
-          level: 10,
+          // level: 10,
         };
         const map = new window.kakao.maps.Map(container, options);
 
@@ -116,7 +138,10 @@ const MapContainerNoDiv = () => {
         setMap(map);
         const mms: any[] = [];
         for (let i = 0; i < data.length; i++) {
-          const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
+          const latlon = new window.kakao.maps.LatLng(
+            Number(data[i].latitude),
+            Number(data[i].longitude)
+          );
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].title,
@@ -171,8 +196,9 @@ const MapContainerNoDiv = () => {
           mms.push({
             marker: marker,
             info: infowindow,
-            lat: data[i].lat,
-            lon: data[i].lon,
+            lat: Number(data[i].latitude),
+            lon: Number(data[i].longitude),
+            idx: data[i].idx,
           });
 
           // infowindow.open(map, marker);
@@ -182,7 +208,6 @@ const MapContainerNoDiv = () => {
           //   infowindow?.open(window.kakao.map, marker);
           // });
         }
-
         setMarkers(mms);
         // setInfos(ins);
       });
@@ -195,6 +220,7 @@ const MapContainerNoDiv = () => {
   return (
     <MainMapContainer>
       {/* <Grid item md={9}> */}
+      {show && <MapDialog onClose={onClose} show={show} />}
       <HeadContainer>
         <SortedContainer>
           <CustomButton
