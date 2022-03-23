@@ -5,15 +5,13 @@ import {
   Button,
   Divider,
   Checkbox,
+  Dialog,
+  TextField,
 } from "@mui/material";
 import useInput from "@hooks/useInput";
 import SignupTextField from "@components/SignupTextField";
 import { auth } from "@config/firebaseConfig";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 import { useCallback, useEffect, useState } from "react";
 import { API } from "src/API";
@@ -28,6 +26,10 @@ import {
   checkPhone,
 } from "@helpers/checkReg";
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
+import { enterSignupState } from "@store/map";
+import MapOneMarker from "@components/signup/MapOneMarker";
+import DragDrop from "@components/DragDrop";
 
 declare global {
   interface Window {
@@ -35,6 +37,14 @@ declare global {
     confirmationResult: any;
   }
 }
+
+const EnterSignupDialog = ({ onClose }) => {
+  return (
+    <Dialog open={true} onClose={onClose}>
+      <MapOneMarker />
+    </Dialog>
+  );
+};
 
 const Signup = () => {
   const router = useRouter();
@@ -51,6 +61,15 @@ const Signup = () => {
   const [emailV, setEmailV] = useState(false);
   const [nickNameV, setNickNameV] = useState(false);
   const [phoneV, setPhoneV] = useState(false);
+  const enterPos = useRecoilValue(enterSignupState);
+  const [show, setShow] = useState(true);
+  const [address, setAddress, onChangeAddress] = useInput("");
+  const [content, setContent, onChangeContent] = useInput("");
+  // const [provider, setProvider, onChangeProvider] = useInput("");
+  const [category, setCategory, onChangeCategory] = useInput("");
+  const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
 
   const initilizeCaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -241,6 +260,13 @@ const Signup = () => {
           email: email,
           phoneNum: phone,
           type: 1,
+          tags: tags,
+          category: category,
+          content: content,
+          profileImage: profileImage,
+          latitude: enterPos[0].toString(),
+          longitude: enterPos[1].toString(),
+          address: address,
         });
         if (data.data === "success") {
           toast.success("회원가입 성공");
@@ -251,7 +277,20 @@ const Signup = () => {
         console.log(e);
       }
     },
-    [email, id, name, nickName, password, phone]
+    [
+      address,
+      category,
+      content,
+      email,
+      enterPos,
+      id,
+      name,
+      nickName,
+      password,
+      phone,
+      profileImage,
+      tags,
+    ]
   );
 
   useEffect(() => {
@@ -263,6 +302,7 @@ const Signup = () => {
       <Head>
         <title>기업용 회원가입</title>
       </Head>
+      {show && <EnterSignupDialog onClose={() => setShow(false)} />}
       <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
@@ -273,7 +313,7 @@ const Signup = () => {
                 </Typography>
                 <SignupTextField
                   id="name"
-                  label="이름"
+                  label="기업이름"
                   value={name}
                   onChange={onChangeName}
                   placeholder="홍길동"
@@ -349,6 +389,59 @@ const Signup = () => {
                   btnActive={!phoneV}
                   onClickBtn={onVerifySMS}
                 />
+                <SignupTextField
+                  id="lat"
+                  label="위도"
+                  value={enterPos[0]}
+                  placeholder="위도"
+                  btnLabel=""
+                />
+                <SignupTextField
+                  id="lon"
+                  label="경도"
+                  value={enterPos[1]}
+                  placeholder="경도"
+                  btnLabel=""
+                />
+                <SignupTextField
+                  id="address"
+                  label="주소"
+                  value={address}
+                  onChange={onChangeAddress}
+                  placeholder="주소"
+                  btnLabel=""
+                />
+                <SignupTextField
+                  id="content"
+                  label="소개"
+                  value={content}
+                  onChange={onChangeContent}
+                  placeholder="소개"
+                  btnLabel=""
+                />
+                <SignupTextField
+                  id="category"
+                  label="카테고리"
+                  value={category}
+                  onChange={onChangeCategory}
+                  placeholder="카테고리"
+                  btnLabel=""
+                />
+                <DragDrop url={profileImage} setUrl={setProfileImage} />
+                <TextField
+                  value={tag}
+                  onChange={(e) => setTag(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      setTags([tag, ...tags]);
+                    }
+                  }}
+                />
+                <div>
+                  {tags.map((item, index) => (
+                    <span key={index}>#{item}</span>
+                  ))}
+                </div>
               </Box>
             </SignupCenterBox>
             <Divider

@@ -7,8 +7,8 @@ interface Props {
   id?: string;
   type?: string;
   label: string;
-  value: string;
-  onChange: Dispatch<any>;
+  value: string | number;
+  onChange?: Dispatch<any>;
   placeholder: string;
   helperText?: string;
   btnLabel?: string;

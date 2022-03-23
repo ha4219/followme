@@ -1,7 +1,6 @@
 import MapEditor from "@components/MapEditor";
 import styled from "@emotion/styled";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -19,7 +18,6 @@ import { v1 } from "uuid";
 // import S3FileUpload from "react-s3";
 import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
-import { API, getPayload } from "@src/API";
 import { DOMESTIC, OVERSEAS, SEASON } from "data/OptionData";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
@@ -27,7 +25,6 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
-import { editorState } from "@store/editor";
 import CustomEditorTag from "@components/CustomEditorTag";
 import QuillCSR, { Quill } from "react-quill";
 import { insertThemeBoard, insertRecommendBoard } from "api/board";

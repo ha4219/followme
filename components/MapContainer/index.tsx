@@ -13,7 +13,6 @@ import {
   mapSelectedState,
   mapState,
 } from "@store/map";
-import { Mms } from "@mui/icons-material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { getDistance } from "@helpers/mapHelper";

@@ -19,3 +19,8 @@ export const curLimitDis = atom({
   key: "limitDis",
   default: 5000,
 });
+
+export const enterSignupState = atom({
+  key: "enterSignup",
+  default: [33.452613, 126.570888],
+});

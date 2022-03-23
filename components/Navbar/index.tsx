@@ -21,7 +21,6 @@ import { useRecoilState } from "recoil";
 import { authState, idState } from "@store/auth";
 import { checkToken, setToken } from "@src/API";
 import { toast } from "react-toastify";
-import useInput from "@hooks/useInput";
 import SearchIcon from "@mui/icons-material/Search";
 import { tagState } from "@store/tag";
 
@@ -229,7 +228,7 @@ const Navbar = () => {
                 ) : (
                   <div className={isMain ? "topSub whiteTxt" : "topSub"}>
                     <Link href="/signin">Login</Link>|
-                    <Link href="/signup">Join us</Link>|
+                    <Link href="/signup/before">Join us</Link>|
                     <Link href="/help/faq">고객센터</Link>
                   </div>
                 )}
