@@ -18,7 +18,7 @@ const PROFILE = [
   { label: "회원탈퇴", to: "/profile/out" },
 ];
 
-const ENTER = [{ label: "기업홈", to: "/profile/enterprise" }];
+const ENTER = [{ label: "기업", to: "/profile/enterprise" }];
 
 const ProfileLeftLayout: FC = ({ children }) => {
   const router = useRouter();
@@ -42,7 +42,7 @@ const ProfileLeftLayout: FC = ({ children }) => {
 
   return (
     <Grid container py={5}>
-      <Grid xs={3} item>
+      <Grid xs={12} sm={12} md={3} item>
         <ProfileLeftContainer>
           <div className="title">MyPage</div>
           <div className="btns">
@@ -78,7 +78,7 @@ const ProfileLeftLayout: FC = ({ children }) => {
           </div>
         </ProfileLeftContainer>
       </Grid>
-      <Grid xs={9} item>
+      <Grid xs={12} sm={12} md={9} item>
         {children}
       </Grid>
     </Grid>
@@ -86,6 +86,7 @@ const ProfileLeftLayout: FC = ({ children }) => {
 };
 
 const ProfileLeftContainer = styled(Box)`
+  margin-bottom: 1rem;
   & .title {
     font-size: 1.5rem;
     font-weight: bold;

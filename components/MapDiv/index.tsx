@@ -42,7 +42,8 @@ const TagDiv = styled.div`
     font-weight: bold;
     border: solid 1px #b69775;
     margin: 11px 5px;
-    padding: 3px 6px 6px 10px;
+    // padding: 3px 6px 6px 10px;
+    padding: 3px 6px;
     border-radius: 12px;
   }
 

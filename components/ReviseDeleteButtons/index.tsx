@@ -61,9 +61,9 @@ const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
 
   return (
     <ButtonContainer>
-      <Button variant="contained" onClick={onClickRevise}>
+      {/*<Button variant="contained" onClick={onClickRevise}>
         수정
-      </Button>
+  </Button>*/}
       <Button variant="contained" color="error" onClick={onClickDelete}>
         삭제
       </Button>

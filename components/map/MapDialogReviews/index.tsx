@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import useInput from "@hooks/useInput";
 import { Avatar, Button, TextField } from "@mui/material";
 import { idState } from "@store/auth";
-import { insertEnterpriseReview } from "api/enterprise";
+import { delEnterpriseReview, insertEnterpriseReview } from "api/enterprise";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -19,7 +19,15 @@ const MapDialogReviewItem = ({
   const id = useRecoilValue(idState);
 
   const onClickDel = async () => {
-    toast.info("추후 진행");
+    // toast.info("추후 진행");
+    try {
+      const data = await delEnterpriseReview({ idx: idx, writer: id });
+      if (data.data === "success") {
+        toast.success("삭제");
+      }
+    } catch (e) {
+      console.log("delEnterpriseReview", e);
+    }
   };
   return (
     <MapDialogReviewItemContainer>

@@ -12,7 +12,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
-import { getEditorAllBoard } from "api/board";
+import { getEditorAllBoard, getEditorAllBoardById } from "api/board";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
@@ -46,26 +46,32 @@ const EditorProgramList: VFC = () => {
     // const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
     //   id: loggedInId,
     // });
-    const tmp: IMergeCourse = await getEditorAllBoard({});
-    const data = [...tmp.recommend, ...tmp.theme];
+    try {
+      const tmp: IMergeCourse = await getEditorAllBoardById({
+        id: loggedInId,
+      });
+      const data = [...tmp.recommend, ...tmp.theme];
 
-    setSize(data.length / perPageSize);
-    setTravels(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
-    setCourses(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
+      setSize(data.length / perPageSize);
+      setTravels(
+        data.sort((l, r) => {
+          if (r.createdAt > l.createdAt) {
+            return 1;
+          }
+          return -1;
+        })
+      );
+      setCourses(
+        data.sort((l, r) => {
+          if (r.createdAt > l.createdAt) {
+            return 1;
+          }
+          return -1;
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onChangeSortedType = useCallback(
