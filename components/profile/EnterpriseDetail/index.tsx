@@ -11,6 +11,8 @@ import {
 } from "api/enterprise";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import EnterpriseMenus from "../EnterpriseMenus";
+import EnterpriseReviews from "../EnterpriseReviews";
 
 const ProfileEnterpriseDetail = () => {
   const id = useRecoilValue(idState);
@@ -92,6 +94,9 @@ const ProfileEnterpriseDetail = () => {
         />
         {name}
       </div>
+      <EnterpriseMenus menus={menus} />
+
+      <EnterpriseReviews reviews={reviews} />
     </ProfileEnterpriseDetailContainer>
   );
 };
