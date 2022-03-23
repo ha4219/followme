@@ -46,8 +46,8 @@ const ProfileHome = () => {
           id: loggedInId,
         });
 
-        // const arr = [...data.theme, ...data.recommend];
-        setMyBoards(data.slice(-3));
+        const arr = [...data.theme, ...data.recommend];
+        setMyBoards(arr.slice(-3));
       } catch (e) {
         console.log("myBoard", e);
       }

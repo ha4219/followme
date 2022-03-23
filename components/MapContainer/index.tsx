@@ -117,11 +117,25 @@ const MapContainer = () => {
     }
   }, [mapLatLonState]);
 
+  // useEffect(() => {
+  //   markers.forEach((item) => {
+  //     item.setMap(map);
+  //   });
+  // }, [map, markers]);
   useEffect(() => {
-    markers.forEach((item) => {
-      item.setMap(map);
-    });
-  }, [map, markers]);
+    if (map) {
+      for (let i = 0; i < markers.length; i++) {
+        if (
+          getDistance(markers[i].lat, markers[i].lon, curPos.lat, curPos.lon) <
+          limitDis
+        ) {
+          markers[i].marker.setMap(map);
+        } else {
+          markers[i].marker.setMap(null);
+        }
+      }
+    }
+  }, [markers, map, limitDis]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
@@ -149,7 +163,7 @@ const MapContainer = () => {
             position: latlon,
             title: data[i].title,
           });
-          mms.push(marker);
+          mms.push({ marker: marker, lat: data[i].lat, lon: data[i].lon });
           // marker.setMap(map);
         }
         setMarkers(mms);

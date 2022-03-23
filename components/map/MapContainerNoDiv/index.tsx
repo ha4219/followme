@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { curLimitDis, mapSelectedState, mapState } from "@store/map";
 import { inflateSync } from "zlib";
+import { getDistance } from "@helpers/mapHelper";
 
 declare global {
   interface Window {
@@ -26,7 +27,6 @@ const MapContainerNoDiv = () => {
   const [map, setMap] = useState();
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const [markers, setMarkers] = useState<any[]>([]);
-  const [infos, setInfos] = useState<any[]>([]);
   const [sortedType, setSortedType] = useState(0);
   const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
 
@@ -81,38 +81,18 @@ const MapContainerNoDiv = () => {
 
   useEffect(() => {
     if (map) {
-      // for (let i = 0; i < data.length; i++) {
-      //   //   const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
-      //   //   const marker = new window.kakao.maps.Marker({
-      //   //     position: latlon,
-      //   //     title: data[i].title,
-      //   //   });
-      //   //   marker.setMap(window.kakao.map);
-      //   //   const iwContent = `<div style="display:flex;padding:5px;"><img src="${
-      //   //     data[i].url
-      //   //   }" />${mapTitleSummary(data[i].title)}</div>`;
-      //   //   const infowindow = new window.kakao.maps.CustomOverlay({
-      //   //     // position: latlon,w
-      //   //     content: iwContent,
-      //   //     removable: true,
-      //   //   });
-      //   //   // infowindow.open(map, marker);
-      //   //   window.kakao.maps.event.addListener(marker, "click", function (e) {
-      //   //     // 마커 위에 인포윈도우를 표시합니다
-      //   //     console.log(e);
-      //   //     infowindow.open(window.kakao.map, marker);
-      //   //   });
-      // }
-      if (map && markers.length === infos.length) {
-        for (let i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
-          window.kakao.maps.event.addListener(markers[i], "click", function () {
-            infos[i].open(map, markers[i]);
-          });
+      for (let i = 0; i < markers.length; i++) {
+        if (
+          getDistance(markers[i].lat, markers[i].lon, curPos.lat, curPos.lon) <
+          limitDis
+        ) {
+          markers[i].marker.setMap(map);
+        } else {
+          markers[i].marker.setMap(null);
         }
       }
     }
-  }, [infos, markers, map]);
+  }, [markers, map, limitDis]);
 
   const kakaoMapInit = async ({ lat, lon }) => {
     const mapScript = document.createElement("script");
@@ -135,14 +115,12 @@ const MapContainerNoDiv = () => {
         window.kakao.map = map;
         setMap(map);
         const mms: any[] = [];
-        const ins: any[] = [];
         for (let i = 0; i < data.length; i++) {
           const latlon = new window.kakao.maps.LatLng(data[i].lat, data[i].lon);
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].title,
           });
-          mms.push(marker);
           // marker.setMap(map);
           // const iwContent = `<div style="display:flex;padding:5px;"><img style="width: 100px; height: 100px;" src="${
           //   data[i].url
@@ -188,7 +166,14 @@ const MapContainerNoDiv = () => {
             content: iwContent,
             removable: true,
           });
-          ins.push(infowindow);
+          // mms.push(marker);
+          // ins.push(infowindow);
+          mms.push({
+            marker: marker,
+            info: infowindow,
+            lat: data[i].lat,
+            lon: data[i].lon,
+          });
 
           // infowindow.open(map, marker);
           // window.kakao.maps.event.addListener(marker, "click", function () {
@@ -199,7 +184,7 @@ const MapContainerNoDiv = () => {
         }
 
         setMarkers(mms);
-        setInfos(ins);
+        // setInfos(ins);
       });
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
