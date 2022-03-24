@@ -36,6 +36,8 @@ const GoogleLogin = () => {
       const { data } = await API.post(`/user/google/oauth`, {
         token: code,
       });
+      console.log(data);
+
       if (data.success) {
         setData(data.success);
         if (data.success && data) {
@@ -45,7 +47,7 @@ const GoogleLogin = () => {
         }
       } else {
         toast.error("해당 계정으로 로그인할 수 없습니다");
-        router.back();
+        // router.back();
       }
     } catch (e: any) {
       console.log("send server error", e);

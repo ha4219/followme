@@ -34,6 +34,8 @@ const KakaoLogin = () => {
   const test = async (code) => {
     try {
       const { data } = await API.get(`/user/kakao/oauth/${code}`);
+      console.log(data);
+
       if (data.data === "success") {
         setData(data.success);
         if (data.success && data) {
@@ -43,7 +45,7 @@ const KakaoLogin = () => {
         }
       } else {
         toast.error("해당 계정으로 로그인할 수 없습니다");
-        router.back();
+        // router.back();
       }
     } catch (e: any) {
       console.log("naver send error", e);
