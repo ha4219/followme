@@ -171,6 +171,12 @@ const ThemeDetail = () => {
               </div>
               <div className="btns">
                 <span className="heartLabel"> {course.writer}</span>
+
+                <ShareButton
+                  url={window.location.href}
+                  user={loggedInId}
+                  des={course.title}
+                />
                 <Button className="heart" onClick={onClickLike}>
                   <span className="heartLabel"> &nbsp;{likeCnt}</span>
                   {like ? (
@@ -205,11 +211,6 @@ const ThemeDetail = () => {
                     }}
                   />
                 </Button> */}
-                <ShareButton
-                  url={window.location.href}
-                  user={loggedInId}
-                  des={course.title}
-                />
               </div>
             </TitleContainer>
             {course && (

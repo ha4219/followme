@@ -33,17 +33,19 @@ const Naver = () => {
   const test = async (code) => {
     try {
       const { data } = await API.get(`/user/naver/oauth/${code}/code`);
-      if (data.success === "success") {
-        setData(data.success);
-        if (data.success && data) {
-          setToken(data.accessToken);
-          setLoggedIn(data.accessToken);
-          setProfile();
-        }
-      } else {
-        toast.error("해당 계정으로 로그인할 수 없습니다");
-        router.back();
-      }
+      console.log(data);
+
+      // if (data.success === "success") {
+      //   setData(data.success);
+      //   if (data.success && data) {
+      //     setToken(data.accessToken);
+      //     setLoggedIn(data.accessToken);
+      //     setProfile();
+      //   }
+      // } else {
+      //   toast.error("해당 계정으로 로그인할 수 없습니다");
+      //   router.back();
+      // }
 
       // setLoggedInId(id);
     } catch (e: any) {
