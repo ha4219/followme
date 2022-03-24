@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
 import { toBase64 } from "@helpers/programHelper";
 import { Button } from "@mui/material";
+import { idState } from "@store/auth";
+import { delEnterpriseMenu } from "api/enterprise";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 import { IEnterpriseMenuType } from "types/apiType";
 
 const MapDialogMenuItem = ({
@@ -11,18 +15,41 @@ const MapDialogMenuItem = ({
   idx,
   fk_user_enterMenus_id,
 }: IEnterpriseMenuType) => {
+  const id = useRecoilValue(idState);
+  const [show, setShow] = useState(true);
+
+  const onClickDel = async () => {
+    // toast.info("추후 진행");
+    try {
+      const data = await delEnterpriseMenu({ idx: idx, writer: id });
+      if (data.data === "success") {
+        toast.success("삭제");
+        setShow(false);
+      }
+    } catch (e) {
+      console.log("delEnterpriseReview", e);
+    }
+  };
+
   return (
-    <MapDialogMenuItemContainer>
-      <img
-        className="mapDialogMenuItemImg"
-        src={`${toBase64(menuImg)}`}
-        alt={name}
-      />
-      <div className="mapDialogMenuItemBody">
-        <div className="mapDialogMenuItemBodyName">{name}</div>
-        <div className="mapDialogMenuItemBodyExp">{explanation}</div>
-      </div>
-    </MapDialogMenuItemContainer>
+    <>
+      {show && (
+        <MapDialogMenuItemContainer>
+          <img
+            className="mapDialogMenuItemImg"
+            src={`${toBase64(menuImg)}`}
+            alt={name}
+          />
+          <div className="mapDialogMenuItemBody">
+            <div className="mapDialogMenuItemBodyName">{name}</div>
+            <div className="mapDialogMenuItemBodyExp">{explanation}</div>
+            <Button onClick={onClickDel} variant="contained" color="error">
+              삭제
+            </Button>
+          </div>
+        </MapDialogMenuItemContainer>
+      )}
+    </>
   );
 };
 
@@ -88,7 +115,7 @@ const MapDialogMenuItemContainer = styled.div`
     }
 
     & .mapDialogMenuItemBodyExp {
-      height: 10rem;
+      height: 9rem;
     }
   }
 `;

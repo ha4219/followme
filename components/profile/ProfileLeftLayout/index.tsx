@@ -60,7 +60,7 @@ const ProfileLeftLayout: FC = ({ children }) => {
                 </Link>
               </div>
             ))}
-            {type !== 0 &&
+            {type === 1 &&
               ENTER.map((item, index) => (
                 <div key={index}>
                   <Link href={item.to}>

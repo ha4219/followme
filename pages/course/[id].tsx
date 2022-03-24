@@ -199,13 +199,17 @@ const CourseDetail = () => {
                 <form className="write" onSubmit={onSubmitComment}>
                   <TextField
                     id=""
-                    label=""
                     placeholder="내용을 입력해주세요."
                     value={comment}
                     onChange={onChangeComment}
                     fullWidth
                   />
-                  <Button type="submit" className="btn" variant="contained">
+                  <Button
+                    disabled={!loggedInId || !comment}
+                    type="submit"
+                    className="btn"
+                    variant="contained"
+                  >
                     등록
                   </Button>
                 </form>

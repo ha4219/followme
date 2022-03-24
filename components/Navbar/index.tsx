@@ -55,8 +55,13 @@ const Navbar = () => {
   );
 
   const onSubmitValue = useCallback(() => {
-    setSelectedTag(value);
-    router.push("/editor");
+    // setSelectedTag(value);
+    router.push({
+      pathname: "/search",
+      query: {
+        value: value,
+      },
+    });
   }, [value]);
 
   useEffect(() => {

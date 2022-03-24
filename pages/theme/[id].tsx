@@ -242,7 +242,12 @@ const ThemeDetail = () => {
                       : "댓글을 작성하려면 로그인 해주세요."
                   }
                 />
-                <Button type="submit" className="btn" variant="contained">
+                <Button
+                  disabled={!loggedInId || !comment}
+                  type="submit"
+                  className="btn"
+                  variant="contained"
+                >
                   등록
                 </Button>
               </form>

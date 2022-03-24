@@ -1,3 +1,4 @@
+import MapDialogStars from "@components/map/MapDialogStars";
 import styled from "@emotion/styled";
 import { toBase64 } from "@helpers/programHelper";
 import { Avatar } from "@mui/material";
@@ -11,6 +12,7 @@ import {
 } from "api/enterprise";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import EnterpriseMenuInsert from "../EnterpriseMenuInsert";
 import EnterpriseMenus from "../EnterpriseMenus";
 import EnterpriseReviews from "../EnterpriseReviews";
 
@@ -95,9 +97,13 @@ const ProfileEnterpriseDetail = () => {
         <div className="profileEnterpriseDetailContainerProfileTitle">
           {name}
         </div>
+        <div>
+          <MapDialogStars score={Math.ceil(score)} />
+        </div>
       </div>
       <EnterpriseReviews reviews={reviews} />
       <EnterpriseMenus menus={menus} />
+      <EnterpriseMenuInsert />
     </ProfileEnterpriseDetailContainer>
   );
 };

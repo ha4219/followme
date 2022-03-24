@@ -65,3 +65,33 @@ export const delEnterpriseReview = async ({ idx: idx, writer: writer }) => {
     console.log("delEnterpriseReview", e);
   }
 };
+
+export const delEnterpriseMenu = async ({ idx: idx, writer: writer }) => {
+  try {
+    const { data } = await API.post(`/enterprise/menu/delete/${idx}`, {
+      enterId: writer,
+    });
+    return data;
+  } catch (e) {
+    console.log("delEnterpriseMenu", e);
+  }
+};
+
+export const insertEnterpriseMenu = async ({
+  enterId: enterId,
+  name: name,
+  explanation: explanation,
+  menuImg: menuImg,
+}) => {
+  try {
+    const { data } = await API.post(`/enterprise/menu/insert`, {
+      enterId,
+      name,
+      explanation,
+      menuImg,
+    });
+    return data;
+  } catch (e) {
+    console.log("insertEnterprisereview", e);
+  }
+};

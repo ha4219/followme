@@ -236,7 +236,12 @@ const RecommendDetail = () => {
                   onChange={onChangeComment}
                   fullWidth
                 />
-                <Button type="submit" className="btn" variant="contained">
+                <Button
+                  type="submit"
+                  className="btn"
+                  variant="contained"
+                  disabled={!loggedInId || !comment}
+                >
                   등록
                 </Button>
               </form>

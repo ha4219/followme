@@ -15,10 +15,10 @@ const AdminHeader = () => {
     try {
       const data = await getUserProfileById({ id });
       setUser(data);
-      console.log(data);
 
       if (data.userData[0].type !== 2) {
         toast.error("권한이 없습니다");
+        router.push("/");
       }
     } catch (e) {
       console.log(e);

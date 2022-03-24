@@ -27,13 +27,13 @@ const MainSearchContaier = () => {
   };
 
   const onSubmitValue = useCallback(() => {
-    setSelectedTag(value);
-    router.push("/editor");
+    // setSelectedTag(value);
+    router.push({ pathname: "/search", query: { value: value } });
   }, [value]);
 
   const onClickTag = useCallback((tag) => {
-    setSelectedTag(tag);
-    router.push("/editor");
+    // setSelectedTag(tag);
+    router.push({ pathname: "/search", query: { value: tag } });
   }, []);
 
   return (

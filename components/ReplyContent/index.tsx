@@ -318,7 +318,12 @@ const ReplyContent = ({
         {open && (
           <form className="write" onSubmit={onSubmitValue}>
             <TextField id="" value={value} onChange={onChangeValue} fullWidth />
-            <Button type="submit" className="btn" variant="contained">
+            <Button
+              disabled={!id || !value}
+              type="submit"
+              className="btn"
+              variant="contained"
+            >
               등록
             </Button>
           </form>

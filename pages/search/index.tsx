@@ -1,16 +1,19 @@
+import LeftLayout from "@components/LeftLayout";
+import SearchProgramList from "@components/search/SearchProgramList";
+import { Container } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 const Search = () => {
   const router = useRouter();
-
+  const { value } = router.query;
   return (
-    <>
+    <Container maxWidth="lg">
       <Head>
-        <title>{`무언가 검색 결과`}</title>
+        <title>{`${value} 검색 결과`}</title>
       </Head>
-      <div></div>
-    </>
+      <SearchProgramList value={value as string} />
+    </Container>
   );
 };
 

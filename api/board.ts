@@ -441,3 +441,13 @@ export const getCourseCommentsLength = async ({ idx }) => {
     return 0;
   }
 };
+
+export const searchCourse = async ({ value }) => {
+  try {
+    const { data } = await API.get(`/main/search/${value}`);
+    return data;
+  } catch (e) {
+    console.log("search e", e);
+    return [];
+  }
+};

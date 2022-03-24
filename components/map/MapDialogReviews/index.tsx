@@ -95,6 +95,10 @@ const MapDialogReviews = ({
   const id = useRecoilValue(idState);
 
   const onClick = async () => {
+    if (!id) {
+      toast.info("로그인 후 이용해주세요");
+      return;
+    }
     try {
       const data = await insertEnterpriseReview({
         enterId: enterId,
@@ -130,6 +134,7 @@ const MapDialogReviews = ({
           <Button
             variant="contained"
             onClick={onClick}
+            disabled={!id || !content}
             className="mapDialogReviewsInsertContainerBtn"
           >
             write
