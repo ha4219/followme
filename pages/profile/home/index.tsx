@@ -119,7 +119,7 @@ const ProfileHome = () => {
               <div className="sub">
                 <Avatar
                   alt="user"
-                  // src={gravatar.url(user.id, { s: "28px", d: "retro" })}
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${loggedInId}`}
                   className="avatar"
                 />
                 <div className="titleContent">

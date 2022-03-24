@@ -78,7 +78,7 @@ const Signup = () => {
       setName(data.userData[0].name);
       setNickName(data.userData[0].nickName);
       setEmail(data.userData[0].email);
-      setphone(data.userData[0].phoneNum);
+      setPhone(data.userData[0].phoneNum);
       setNickName(data.userData[0].nickName);
       setNickName(data.userData[0].nickName);
       setNickName(data.userData[0].nickName);

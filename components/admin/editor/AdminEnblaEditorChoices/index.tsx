@@ -145,6 +145,7 @@ const AdminEnbaleEditorChoices = () => {
           }
         }
       });
+      console.log(theme, recommend);
 
       const data = await updateEditorPick({
         theme: theme,

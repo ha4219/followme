@@ -161,6 +161,7 @@ const RecommendDetail = () => {
               <div className="sub">
                 <Avatar
                   alt="user"
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${course.writer}`}
                   // src={gravatar.url(course ? course.writer : "default", {
                   //   s: "28px",
                   //   d: "retro",

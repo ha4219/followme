@@ -142,7 +142,11 @@ const DragDrop = ({ url, setUrl }) => {
         className={isDragging ? "DragDrop-File-Dragging" : "DragDrop-File"}
         htmlFor="fileUpload"
       >
-        {url ? <img src={url} alt="test" /> : <div>upload</div>}
+        {url ? (
+          <img src={url} alt="test" />
+        ) : (
+          <div className="dragdropLabel">DragDrop-File-Dragging or Click</div>
+        )}
       </label>
       {/* <img src={file} /> */}
     </DragDropContainer>
@@ -160,6 +164,10 @@ const DragDropContainer = styled.div`
   & img {
     width: 400px;
     height: 200px;
+  }
+
+  & .dragdropLabel {
+    margin-top: 90px;
   }
 `;
 

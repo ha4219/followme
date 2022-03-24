@@ -65,6 +65,9 @@ const Signup = () => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [showTag, setShowTag] = useState(false);
+
+  const [geo, setGeo] = useState<any>();
+  const [isLoading, setLoading] = useState(true);
   // const [a, setA] = useState('');
   // const [b, setB]
 
@@ -83,11 +86,20 @@ const Signup = () => {
         const map = new window.kakao.maps.Map(container, options);
         window.kakao.map = map;
       });
+      setLoading(false);
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
+
+  useEffect(() => {
+    if (window.kakao?.maps?.services?.Geocoder) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+
+      setGeo(geocoder);
+    }
+  }, [isLoading]);
 
   const onChangeShow = () => {
     setShow(!show);
@@ -118,11 +130,9 @@ const Signup = () => {
   };
 
   useEffect(() => {
-    if (address && window.kakao.maps) {
+    if (address && window.kakao.maps && geo) {
       try {
-        console.log(window.kakao.maps);
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.addressSearch(address, function (result, status) {
+        geo.addressSearch(address, function (result, status) {
           if (status === window.kakao.maps.services.Status.OK) {
             setEnterPos([result[0].y, result[0].x]);
           }
@@ -469,20 +479,6 @@ const Signup = () => {
                   btnLabel="검색"
                   btnActive={true}
                   onClickBtn={() => setShow(true)}
-                />
-                <SignupTextField
-                  id="lat"
-                  label="위도"
-                  value={enterPos[0]}
-                  placeholder="위도"
-                  btnLabel=""
-                />
-                <SignupTextField
-                  id="lon"
-                  label="경도"
-                  value={enterPos[1]}
-                  placeholder="경도"
-                  btnLabel=""
                 />
                 <SignupTextField
                   id="content"

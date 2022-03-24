@@ -18,6 +18,7 @@ interface IProps {
   idx: string;
   title: string;
   replyCnt: number;
+  writer: string;
   createdAt: string;
 }
 
@@ -72,6 +73,7 @@ const CourseTable = ({ courses }) => {
               <TableCell className="cellTitle">
                 <Avatar
                   alt="user"
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${item.writer}`}
                   // src={gravatar.url(user, { s: "28px", d: "retro" })}
                   className="avatar"
                 />

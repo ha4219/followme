@@ -68,6 +68,7 @@ const MainThemeContent: VFC<ICourse> = ({
           <div className="avatar">
             <Avatar
               alt="user"
+              src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
               // src={gravatar.url(writer, { s: "28px", d: "retro" })}
             />
           </div>

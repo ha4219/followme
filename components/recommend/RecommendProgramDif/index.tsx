@@ -90,6 +90,7 @@ const RecommendProgramDif: VFC<ICourse> = ({
             <IconButton>
               <Avatar
                 alt="user"
+                src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
                 // src={gravatar.url(user, { s: "28px", d: "retro" })}
                 className="avatar"
               />

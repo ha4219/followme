@@ -128,7 +128,6 @@ const CustomEditor = () => {
         Key: fileName,
       })
         .then((res) => {
-          console.log(res);
           const range = ref.current.getEditorSelection();
           ref.current
             .getEditor()
