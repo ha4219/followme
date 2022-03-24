@@ -32,6 +32,14 @@ export const ContainerFooter = styled.div`
     font-size: 0.85rem;
     line-height: 2rem;
     font-family: paybooc-Medium;
+    & .help-des-between {
+      display: flex;
+      justify-content: space-between;
+
+      & b {
+        font-family: paybooc-Bold;
+      }
+    }
     & div {
       display: block;
       justify-content: center;
@@ -87,6 +95,14 @@ export const ItemR = styled.div`
   }
 
   & .help-des {
+    & .help-des-between {
+      display: flex;
+      justify-content: space-between;
+
+      & b {
+        font-family: paybooc-Bold;
+      }
+    }
   }
 
   & .help-icons {

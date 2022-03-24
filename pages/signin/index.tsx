@@ -195,6 +195,7 @@ const ShareLoginContainer = styled.div`
   }
   & .kakao {
     background-color: #fee500;
+    color: #3b1c1e;
   }
 
   & .naver {

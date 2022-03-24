@@ -333,6 +333,7 @@ const MainContainer = styled.div`
   width: 100%;
   margin: 1rem;
   padding: 1rem 0;
+  font-family: paybooc-Light;
   // align-items: center;
   border-bottom: 1px solid #d8d8d8;
   & .avatar {
@@ -342,7 +343,7 @@ const MainContainer = styled.div`
     width: 100%;
 
     & .replyId {
-      font-weight: bold;
+      font-family: paybooc-Bold;
     }
     & .replyContent {
       padding: 1rem 0;
@@ -411,6 +412,7 @@ const ReplyContentContainer = styled.div`
   background-color: #f3f3f3;
   padding: 1rem;
   margin-bottom: 1rem;
+  font-family: paybooc-Light;
 
   & .replyContentContainerProfile {
     width: 15rem;
