@@ -33,9 +33,8 @@ const Naver = () => {
   const test = async (code) => {
     try {
       const { data } = await API.get(`/user/naver/oauth/${code}/code`);
-      console.log(data);
 
-      if (data.data === "success") {
+      if (data?.success) {
         setData(data.success);
         if (data.success && data) {
           setToken(data.accessToken);
@@ -44,7 +43,7 @@ const Naver = () => {
         }
       } else {
         toast.error("해당 계정으로 로그인할 수 없습니다");
-        // router.back();
+        router.back();
       }
 
       // setLoggedInId(id);
