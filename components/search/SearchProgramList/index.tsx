@@ -204,20 +204,6 @@ const SearchProgramList = ({ value }: { value: string }) => {
           count={size}
           onChange={handleChangePage}
         />
-        <RightButton>
-          <Button
-            variant="contained"
-            onClick={() => {
-              if (loggedInId.length) {
-                router.push("/theme/write");
-              } else {
-                toast.error("로그인 후 이용해주세요.");
-              }
-            }}
-          >
-            글쓰기
-          </Button>
-        </RightButton>
       </LeftLayout>
     </Box>
   );

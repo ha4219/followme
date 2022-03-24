@@ -3,11 +3,12 @@ import useInput from "@hooks/useInput";
 import { Avatar, Button, TextField } from "@mui/material";
 import { idState } from "@store/auth";
 import { delEnterpriseReview, insertEnterpriseReview } from "api/enterprise";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { IEnterpriseReviewType } from "types/apiType";
 import MapDialogReviewStar from "../MapDialogReviewStar";
+import CommentEditor from "../CommentEditor";
 
 const MapDialogReviewItem = ({
   idx,
@@ -114,6 +115,10 @@ const MapDialogReviews = ({
     }
   };
 
+  useEffect(() => {
+    console.log(content, typeof content);
+  }, [content]);
+
   return (
     <MapDialogReviewsContainer>
       {show && (
@@ -130,7 +135,10 @@ const MapDialogReviews = ({
         <span>리뷰작성</span>
         <MapDialogReviewStar score={score} setScore={setScore} />
         <div className="mapDialogReviewsInsertContainer">
-          <TextField fullWidth value={content} onChange={onChangeContent} />
+          <div>
+            <CommentEditor setValue={setContent} />
+          </div>
+          {/*<TextField fullWidth value={content} onChange={onChangeContent} />*/}
           <Button
             variant="contained"
             onClick={onClick}
@@ -153,10 +161,10 @@ const MapDialogReviewsContainer = styled.div`
     font-family: paybooc-Light;
 
     & .mapDialogReviewsInsertContainer {
-      display: flex;
+      display: block;
 
       & .mapDialogReviewsInsertContainerBtn {
-        margin-left: 1rem;
+        margin-top: 1rem;
       }
     }
   }

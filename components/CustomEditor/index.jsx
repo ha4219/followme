@@ -96,9 +96,9 @@ const CustomEditor = () => {
   const [region2, setRegion2, onChangeRegion2] = useInput("서울");
   const [date1, setDate1, onChangeDate1] = useInput(1);
   const [date2, setDate2, onChangeDate2] = useInput(2);
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
 
   useEffect(() => {
     setRegion2(region1 ? DOMESTIC[0].value : OVERSEAS[0].value);
