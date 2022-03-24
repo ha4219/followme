@@ -36,7 +36,7 @@ const GoogleLogin = () => {
       const { data } = await API.post(`/user/google/oauth`, {
         token: code,
       });
-      if (data.data === "success") {
+      if (data.success) {
         setData(data.success);
         if (data.success && data) {
           setToken(data.accessToken);
