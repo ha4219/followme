@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { toBase64 } from "@helpers/programHelper";
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { IEnterpriseMenuType } from "types/apiType";
@@ -12,7 +13,11 @@ const MapDialogMenuItem = ({
 }: IEnterpriseMenuType) => {
   return (
     <MapDialogMenuItemContainer>
-      <img className="mapDialogMenuItemImg" src={menuImg} alt={name} />
+      <img
+        className="mapDialogMenuItemImg"
+        src={`${toBase64(menuImg)}`}
+        alt={name}
+      />
       <div className="mapDialogMenuItemBody">
         <div className="mapDialogMenuItemBodyName">{name}</div>
         <div className="mapDialogMenuItemBodyExp">{explanation}</div>

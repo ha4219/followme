@@ -74,8 +74,8 @@ const ProfileEnterpriseDetail = () => {
       const data = await getEnterprises();
       const target = data.find((item) => item.id === id);
       getEnterDetail(target.idx);
-      getEnterReview(target.idx);
-      getEnterMenu(target.idx);
+      getEnterReview(id);
+      getEnterMenu(id);
     } catch (e) {
       console.log(e);
     }
@@ -92,11 +92,12 @@ const ProfileEnterpriseDetail = () => {
           src={profileImage}
           className="profileEnterpriseDetailContainerProfileAvatar"
         />
-        {name}
+        <div className="profileEnterpriseDetailContainerProfileTitle">
+          {name}
+        </div>
       </div>
-      <EnterpriseMenus menus={menus} />
-
       <EnterpriseReviews reviews={reviews} />
+      <EnterpriseMenus menus={menus} />
     </ProfileEnterpriseDetailContainer>
   );
 };
@@ -104,10 +105,16 @@ const ProfileEnterpriseDetail = () => {
 const ProfileEnterpriseDetailContainer = styled.div`
   & .profileEnterpriseDetailContainerProfile {
     border-bottom: 1px solid #3e3e3e;
+    display: flex;
 
     & .profileEnterpriseDetailContainerProfileAvatar {
       width: 5rem;
       height: 5rem;
+      margin-right: 1rem;
+    }
+
+    & .profileEnterpriseDetailContainerProfileTitle {
+      font-family: paybooc-Bold;
     }
   }
 `;

@@ -27,5 +27,5 @@ export const enterSignupState = atom({
 
 export const enterPickState = atom({
   key: "enterkey",
-  default: -1,
+  default: [-1, ""],
 });

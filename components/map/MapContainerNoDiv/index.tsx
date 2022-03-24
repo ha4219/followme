@@ -106,7 +106,7 @@ const MapContainerNoDiv = () => {
             "click",
             function (e) {
               setShow(true);
-              setEnterPick(markers[i].idx);
+              setEnterPick([markers[i].idx, markers[i].id]);
             }
           );
         } else {
@@ -199,6 +199,7 @@ const MapContainerNoDiv = () => {
             lat: Number(data[i].latitude),
             lon: Number(data[i].longitude),
             idx: data[i].idx,
+            id: data[i].id,
           });
 
           // infowindow.open(map, marker);

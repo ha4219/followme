@@ -17,6 +17,7 @@ const MapDialogReviewItem = ({
   enterId,
 }: IEnterpriseReviewType) => {
   const id = useRecoilValue(idState);
+  const [show, setShow] = useState(true);
 
   const onClickDel = async () => {
     // toast.info("추후 진행");
@@ -24,38 +25,43 @@ const MapDialogReviewItem = ({
       const data = await delEnterpriseReview({ idx: idx, writer: id });
       if (data.data === "success") {
         toast.success("삭제");
+        setShow(false);
       }
     } catch (e) {
       console.log("delEnterpriseReview", e);
     }
   };
   return (
-    <MapDialogReviewItemContainer>
-      <div className="mapDialogReviewItemProfile">
-        <div className="mapDialogReviewItemProfileAvatarContainer">
-          <Avatar
-            alt="user"
-            // src={gravatar.url(id ? id : "default", {
-            //   s: "28px",
-            //   d: "retro",
-            // })}
-            className="mapDialogReviewItemProfileAvatar"
-          />
-          <div>
-            <div>{writer}</div>
-            {id === writer && (
-              <div
-                className="mapDialogReviewItemProfileDelBtn"
-                onClick={onClickDel}
-              >
-                삭제하기
+    <>
+      {show && (
+        <MapDialogReviewItemContainer>
+          <div className="mapDialogReviewItemProfile">
+            <div className="mapDialogReviewItemProfileAvatarContainer">
+              <Avatar
+                alt="user"
+                // src={gravatar.url(id ? id : "default", {
+                //   s: "28px",
+                //   d: "retro",
+                // })}
+                className="mapDialogReviewItemProfileAvatar"
+              />
+              <div>
+                <div>{writer}</div>
+                {id === writer && (
+                  <div
+                    className="mapDialogReviewItemProfileDelBtn"
+                    onClick={onClickDel}
+                  >
+                    삭제하기
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="mapDialogReviewItemContent">{content}</div>
-    </MapDialogReviewItemContainer>
+          <div className="mapDialogReviewItemContent">{content}</div>
+        </MapDialogReviewItemContainer>
+      )}
+    </>
   );
 };
 

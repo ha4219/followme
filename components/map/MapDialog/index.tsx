@@ -34,7 +34,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
 
   const getEnterDetail = async () => {
     try {
-      const data = await getEnterpriseDetail({ idx: enterPick });
+      const data = await getEnterpriseDetail({ idx: enterPick[0] });
 
       setEnterPrise(data[0]);
       setName(data[0].name);
@@ -51,7 +51,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
 
   const getEnterMenu = async () => {
     try {
-      const data = await getEnterpriseMenu({ idx: enterPick });
+      const data = await getEnterpriseMenu({ idx: enterPick[1] });
       setMenu(data);
     } catch (e) {
       console.log("enter detail error ", e);
@@ -60,7 +60,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
 
   const getEnterReview = async () => {
     try {
-      const data = await getEnterpriseReview({ idx: enterPick });
+      const data = await getEnterpriseReview({ idx: enterPick[1] });
       setReview(data);
     } catch (e) {
       console.log("enter detail error ", e);
@@ -68,7 +68,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
   };
 
   useEffect(() => {
-    if (enterPick !== -1) {
+    if (enterPick[0] !== -1) {
       getEnterDetail();
       getEnterMenu();
       getEnterReview();

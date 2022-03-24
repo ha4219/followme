@@ -16,7 +16,6 @@ const MapDialogReviewItem = ({
   enterId,
 }: IEnterpriseReviewType) => {
   const id = useRecoilValue(idState);
-
   const onClickDel = async () => {
     // toast.info("추후 진행");
     try {
@@ -42,14 +41,6 @@ const MapDialogReviewItem = ({
           />
           <div>
             <div>{writer}</div>
-            {id === writer && (
-              <div
-                className="mapDialogReviewItemProfileDelBtn"
-                onClick={onClickDel}
-              >
-                삭제하기
-              </div>
-            )}
           </div>
         </div>
       </div>
