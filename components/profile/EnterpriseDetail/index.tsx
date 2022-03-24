@@ -110,8 +110,10 @@ const ProfileEnterpriseDetail = () => {
 
 const ProfileEnterpriseDetailContainer = styled.div`
   & .profileEnterpriseDetailContainerProfile {
+    padding: 1rem;
     border-bottom: 1px solid #3e3e3e;
     display: flex;
+    justify-content: space-between;
 
     & .profileEnterpriseDetailContainerProfileAvatar {
       width: 5rem;
@@ -121,6 +123,7 @@ const ProfileEnterpriseDetailContainer = styled.div`
 
     & .profileEnterpriseDetailContainerProfileTitle {
       font-family: paybooc-Bold;
+      font-size: 1.5rem;
     }
   }
 `;

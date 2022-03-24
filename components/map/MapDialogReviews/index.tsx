@@ -59,7 +59,10 @@ const MapDialogReviewItem = ({
               </div>
             </div>
           </div>
-          <div className="mapDialogReviewItemContent">{content}</div>
+          <div
+            className="mapDialogReviewItemContent"
+            dangerouslySetInnerHTML={{ __html: content }}
+          ></div>
         </MapDialogReviewItemContainer>
       )}
     </>
@@ -114,10 +117,6 @@ const MapDialogReviews = ({
       console.log("insert enter review ", e);
     }
   };
-
-  useEffect(() => {
-    console.log(content, typeof content);
-  }, [content]);
 
   return (
     <MapDialogReviewsContainer>
@@ -178,6 +177,7 @@ const MapDialogReviewItemContainer = styled.div`
 
   & .mapDialogReviewItemProfile {
     margin-right: 1rem;
+    width: 13rem;
     & .mapDialogReviewItemProfileAvatarContainer {
       display: flex;
 
@@ -200,6 +200,11 @@ const MapDialogReviewItemContainer = styled.div`
     font-family: paybooc-Light;
     width: 100%;
     font-size: 0.7rem;
+
+    & img {
+      width: 200px;
+      height: 200px;
+    }
   }
 `;
 
