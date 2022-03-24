@@ -34,7 +34,7 @@ const KakaoLogin = () => {
   const test = async (code) => {
     try {
       const { data } = await API.get(`/user/kakao/oauth/${code}`);
-      if (data.success === "success") {
+      if (data.data === "success") {
         setData(data.success);
         if (data.success && data) {
           setToken(data.accessToken);
