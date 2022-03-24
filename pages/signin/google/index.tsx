@@ -65,9 +65,6 @@ const GoogleLogin = () => {
 
   return (
     <div>
-      // <span>{code}</span>
-      // <br />
-      // <span>{error}</span>
       <LinearProgress />
     </div>
   );

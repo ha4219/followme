@@ -77,31 +77,13 @@ const DATA: IEnterpriseReviewType[] = [
 
 const MapDialogReviews = ({
   reviews,
-  enterId,
 }: {
   reviews: IEnterpriseReviewType[];
-  enterId: string;
 }) => {
   const [show, setShow] = useState(false);
   const [score, setScore] = useState(0);
   const [content, setContent, onChangeContent] = useInput("");
   const id = useRecoilValue(idState);
-
-  const onClick = async () => {
-    try {
-      const data = await insertEnterpriseReview({
-        enterId: enterId,
-        score: score,
-        writer: id,
-        content: content,
-      });
-      if (data.data === "success") {
-        toast.success("성공");
-      }
-    } catch (e) {
-      console.log("insert enter review ", e);
-    }
-  };
 
   return (
     <MapDialogReviewsContainer>

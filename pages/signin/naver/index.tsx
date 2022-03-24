@@ -66,10 +66,6 @@ const Naver = () => {
   }, []);
   return (
     <div>
-      // <span>{code}</span>
-      // <br />
-      // <span>{error}</span>
-      // {data}
       <LinearProgress />
     </div>
   );
