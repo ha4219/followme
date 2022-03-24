@@ -49,6 +49,8 @@ const KakaoLogin = () => {
     } catch (e: any) {
       console.log("naver send error", e);
       setError(e.message);
+      toast.error("해당 계정으로 로그인할 수 없습니다");
+      router.back();
     }
   };
   useEffect(() => {
