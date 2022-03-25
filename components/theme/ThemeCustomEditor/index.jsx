@@ -215,18 +215,23 @@ const ThemeCustomEditor = () => {
     // QuillCSR.register(Block);
     if (ref.current) {
       const editor = ref.current.getEditor();
-      // const range = editor.getSelection().index;
+      const range = editor.getSelection();
       // // ? editor.getSelection()?.index
       // // : 0;
       // console.log(editor.getSelection(), editor, range);
       // console.log(editor, ref.current.getEditorConfig());
       // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
       // editor.insertText(range, " ", { map: mapSelectState });
+      editor.insertEmbed(index, "\n");
       editor.insertEmbed(index, "test", mapSelectState, Quill.sources.USER);
+      editor.insertEmbed(index, "\n");
+
+      // ref.current.getEditor(index + 3);
     }
     // editor.insertEmbed(range + 1, "mapImg", mapSelectState[0]);
     // console.log(createElementWithClassName());
     // setValue(value + createElementWithClassName());
+    setOpen(false);
   };
 
   // useEffect(() => {}, [dialogImg]);
@@ -291,7 +296,8 @@ const ThemeCustomEditor = () => {
               "image",
               `${process.env.NEXT_PUBLIC_S3URL}/${fileName}`
             );
-          ref.current.getEditor(range.index + 1);
+          // \          ref.current.getEditor(range?.index + 1);
+          // ref.current.getEditor(range.index + 1);
         })
         .catch((err) => {
           console.log(err);
