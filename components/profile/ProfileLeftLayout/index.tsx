@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { idState } from "@store/auth";
+import { leftOpen } from "@store/tag";
 import { getUserProfileById } from "api/auth";
 import Link from "next/link";
 // import Link from "next/link";
