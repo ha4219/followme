@@ -166,6 +166,7 @@ const BottomContainer = styled.div`
 
 const ContentContainer = styled.div`
   display: inline-flex;
+  width: 100%;
   border-bottom: 1px solid #d8d8d8;
   padding: 1rem 0;
   height: 5rem;
