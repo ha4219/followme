@@ -31,6 +31,9 @@ import { enterSignupState } from "@store/map";
 import MapOneMarker from "@components/signup/MapOneMarker";
 import DragDrop from "@components/DragDrop";
 import DaumPostcode from "react-daum-postcode";
+import {submitOnProfileImage} from '@helpers/s3UploadHelper';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 declare global {
   interface Window {
@@ -60,8 +63,9 @@ const Signup = () => {
   const [address, setAddress, onChangeAddress] = useInput("");
   const [content, setContent, onChangeContent] = useInput("");
   // const [provider, setProvider, onChangeProvider] = useInput("");
-  const [category, setCategory, onChangeCategory] = useInput("");
-  const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
+  const [category, setCategory, ] = useInput("맛집");
+  // const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
+  const [profileImage, setProfileImage] = useState();
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [showTag, setShowTag] = useState(false);
@@ -80,23 +84,30 @@ const Signup = () => {
     document.head.appendChild(mapScript);
 
     const onLoadKakaoMap = () => {
-      window.kakao.maps.load(() => {
+      window.kakao.maps.load(() => {        
         const container = document.getElementById("map");
-        const options = {};
+        const options = {
+          center: new window.kakao.maps.LatLng(33, 126),
+        };
         const map = new window.kakao.maps.Map(container, options);
         window.kakao.map = map;
+        
+        setLoading(false);
       });
-      setLoading(false);
     };
     mapScript.addEventListener("load", onLoadKakaoMap);
 
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
 
-  useEffect(() => {
-    if (window.kakao?.maps?.services?.Geocoder) {
-      const geocoder = new window.kakao.maps.services.Geocoder();
+  const onChangeCategory = (event: SelectChangeEvent) => {
+    setCategory(event.target.value);
+  };
 
+  useEffect(() => {
+    if (!isLoading) {
+
+      const geocoder = new window.kakao.maps.services.Geocoder();      
       setGeo(geocoder);
     }
   }, [isLoading]);
@@ -300,9 +311,27 @@ const Signup = () => {
     setChecked([checked[0], checked[1], event.target.checked]);
   };
 
+  const onClickProfileImage = async () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.addEventListener("change", async () => {
+      if (input?.files) {
+        setProfileImage(input.files[0]);
+      }
+    });
+  }
+
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      try {
+        submitOnProfileImage({profileImage, id});
+      } catch(e) {
+        console.log('s3 upload', e);
+      }
 
       try {
         const { data } = await API.post("/user/signup", {
@@ -316,7 +345,7 @@ const Signup = () => {
           tags: tags,
           category: category,
           content: content,
-          profileImage: profileImage,
+          profileImage: `${process.env.NEXT_PUBLIC_S3URL}/profile/${id}`,
           latitude: enterPos[0].toString(),
           longitude: enterPos[1].toString(),
           address: address,
@@ -488,14 +517,24 @@ const Signup = () => {
                   placeholder="소개"
                   btnLabel=""
                 />
-                <SignupTextField
-                  id="category"
-                  label="카테고리"
-                  value={category}
-                  onChange={onChangeCategory}
-                  placeholder="카테고리"
-                  btnLabel=""
-                />
+                <div className="selectDiv">
+                  <div className="categoryLabel">
+                    카테고리
+                  </div>
+                  <Select
+                    labelId="category-label"
+                    id="category"
+                    className="categoryField"
+                    value={category}
+                    onChange={onChangeCategory}
+                    autoWidth
+                    label="카테고리"
+                  >
+                    <MenuItem value={"맛집"}>맛집</MenuItem>
+                    <MenuItem value={"여행지"}>여행지</MenuItem>
+                    <MenuItem value={"숙박지"}>숙박지</MenuItem>
+                  </Select>
+                </div>
                 <SignupTextField
                   id="tags"
                   label="tags"
@@ -506,8 +545,15 @@ const Signup = () => {
                   btnActive={true}
                   onClickBtn={() => setShowTag(true)}
                 />
-
-                <DragDrop url={profileImage} setUrl={setProfileImage} />
+                <SignupTextField
+                  id="profileImage"
+                  label="프로필 사진"
+                  value={profileImage?.name}
+                  placeholder="profile Image"
+                  btnLabel="search"
+                  btnActive={true}
+                  onClickBtn={onClickProfileImage}
+                />
               </Box>
             </SignupCenterBox>
             <Divider
@@ -582,6 +628,22 @@ const SignupCenterBox = styled(Box)`
   }
 
   & .signupCenterBoxCenterR {
+  }
+
+  & .selectDiv {
+    display: flex;
+    padding: 1rem;
+
+    & .categoryLabel {
+      font-family: paybooc-Bold;
+      font-size: 1rem;
+      align-self: center;
+      width: 130px;
+    }
+    & .categoryField {
+      width: 240px;
+      height: 40px;
+    }
   }
 `;
 

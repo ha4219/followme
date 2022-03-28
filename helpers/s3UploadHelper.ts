@@ -11,7 +11,7 @@ const myBucket = new AWS.S3({
   region: config.region,
 });
 
-const putObjectWrapper = (params) => {
+export const putObjectWrapper = (params) => {
   return new Promise((resolve, reject) => {
     myBucket.putObject(params, function (err, result) {
       if (err) reject(err);
