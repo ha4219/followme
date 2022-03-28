@@ -65,7 +65,7 @@ const Signup = () => {
   // const [provider, setProvider, onChangeProvider] = useInput("");
   const [category, setCategory, ] = useInput("맛집");
   // const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
-  const [profileImage, setProfileImage] = useState();
+  const [profileImage, setProfileImage] = useState<any>();
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [showTag, setShowTag] = useState(false);
@@ -322,7 +322,7 @@ const Signup = () => {
         setProfileImage(input.files[0]);
       }
     });
-  }
+  };
 
   const onSubmit = useCallback(
     async (e) => {
