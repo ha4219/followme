@@ -33,10 +33,13 @@ export const getPayload = () => {
 };
 
 API.interceptors.request.use((request) => {
-  const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
-  if (data["loggedIn"] && request) {
-    request.headers!["Access-Token"] = data["loggedIn"];
-  }
+  // try {
+
+  // }
+  // const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
+  // if (data["loggedIn"] && request) {
+  //   request.headers!["Access-Token"] = data["loggedIn"];
+  // }
   // // console.log(loggedIn, checkToken());
   // try {
   //   if (data["loggedIn"] && !checkToken()) {
