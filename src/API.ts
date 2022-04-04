@@ -33,21 +33,22 @@ export const getPayload = () => {
 };
 
 API.interceptors.request.use((request) => {
-  // try {
-
-  // }
-  // const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
-  // if (data["loggedIn"] && request) {
-  //   request.headers!["Access-Token"] = data["loggedIn"];
-  // }
-  // // console.log(loggedIn, checkToken());
-  // try {
-  //   if (data["loggedIn"] && !checkToken()) {
-  //     setToken(data["loggedIn"]);
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  // }
+  try {
+    const data = JSON.parse(localStorage.getItem("recoil-persist") as string);
+    if (data["loggedIn"] && request) {
+      request.headers!["Access-Token"] = data["loggedIn"];
+    }
+    // console.log(loggedIn, checkToken());
+    try {
+      if (data["loggedIn"] && !checkToken()) {
+        setToken(data["loggedIn"]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  } catch (e) {
+    console.log(e);
+  }
 
   // console.log(data['loggedIn']);
   console.log("request: ", request);
