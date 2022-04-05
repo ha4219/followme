@@ -378,10 +378,13 @@ export const getCourseDetailBoard = async ({ id, idx }) => {
 export const insertCourseBoard = async ({ id, title, content }) => {
   try {
     const { data } = await API.post(`/board/2/insert`, {
-      id: id,
+      writer: id,
       title: title,
       content: content,
-      type: 2,
+      startDate: "2022-04-05T03:53:47.990Z",
+      endDate: "2022-04-05T03:53:47.990Z",
+      tags: ["test"],
+      // type: 2,
     });
     return data;
   } catch (e) {
