@@ -1,7 +1,8 @@
 import TagContainer from "@components/TagContainer";
 import { COURSETAGS } from "@data/CourseData";
-import styled from "@emotion/styled";
-import { Box, Button, TextField } from "@mui/material";
+import estyled from "@emotion/styled";
+import { styled } from "@mui/material/styles";
+import { Box, Button, TextField, Input } from "@mui/material";
 import { tagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useState, useCallback } from "react";
@@ -21,9 +22,16 @@ const MainSearchContaier = () => {
     },
     [value]
   );
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+
   const onChangeDate = (newValue) => {
+    console.log(newValue, 1);
+
     setDate(newValue);
+  };
+  const onChangeDateEnd = (newValue) => {
+    setDateEnd(newValue);
   };
 
   const onSubmitValue = useCallback(() => {
@@ -49,7 +57,7 @@ const MainSearchContaier = () => {
         <div className="des">팔로미 여행지 검색</div>
         <div className="inputContainer">
           <div className="input">
-            <TextField
+            <BlackBorderTextField
               fullWidth
               placeholder="검색어를 입력해주세요."
               value={value}
@@ -62,19 +70,17 @@ const MainSearchContaier = () => {
                 inputFormat="MM/dd/yyyy"
                 value={date}
                 onChange={onChangeDate}
-                label="여행시작일 선택"
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="여행도착일 선택" />
-                )}
+                label="출발예정일"
+                renderInput={(params) => <BlackBorderTextField {...params} />}
               />
             </div>
             <div className="subContainer">
               <DesktopDatePicker
                 inputFormat="MM/dd/yyyy"
-                value={date}
-                onChange={onChangeDate}
-                label="여행도착일 선택"
-                renderInput={(params) => <TextField {...params} />}
+                value={dateEnd}
+                onChange={onChangeDateEnd}
+                label="도착예정일"
+                renderInput={(params) => <BlackBorderTextField {...params} />}
               />
             </div>
           </LocalizationProvider>
@@ -95,11 +101,36 @@ const MainSearchContaier = () => {
   );
 };
 
-const MainContainer = styled.div`
+const BlackBorderTextField = styled(TextField)({
+  "& MuiInputLabel-root": {
+    fontSize: 18,
+    fontFamily: "paybooc-Bold",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      border: "1px solid black",
+    },
+    "&:hover fieldset": {
+      border: "1px solid black",
+    },
+    "&.Mui-focused fieldset": {
+      border: "1px solid black",
+    },
+    "& input": {
+      fontSize: 18,
+      fontFamily: "paybooc-Bold",
+    },
+  },
+});
+const MainContainer = estyled.div`
   margin-top: 140px;
   min-width: 50%;
   padding-bottom: 5rem;
   text-align: center;
+
+  & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: black;
+  }
 
   & .mainText {
     display: flex;
@@ -123,6 +154,7 @@ const MainContainer = styled.div`
     }
   }
   & .subContainer {
+    font-family: paybooc-Bold;
     margin-left: 0.5rem;
   }
 
@@ -147,6 +179,7 @@ const MainContainer = styled.div`
 
       & .input {
         width: 560px;
+        border-radius: 5px;
       }
       & .btn {
         color: #ffffff;

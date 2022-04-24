@@ -107,12 +107,12 @@ const Navbar = () => {
   return (
     <Box
       sx={{
-        borderBottom: "1px solid #dbdbdb",
+        borderBottom: "1px solid rgba(255, 255, 255, .3)",
         padding: 0,
         paddingBottom: "1rem",
       }}
     >
-      <Container>
+      <Container maxWidth="full">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -200,6 +200,7 @@ const Navbar = () => {
             {pages.map((page, index) => (
               <Button
                 key={index}
+                className="menuItemHover"
                 onClick={(event) => onHandleNavItemClick(event, index)}
                 sx={[
                   {
@@ -212,9 +213,15 @@ const Navbar = () => {
                     paddingBottom: 0,
                     paddingTop: "1.1rem",
                     marginBottom: 0,
+                    "&:hover": {
+                      color: "#ff9016",
+                      borderRadius: 0,
+                      borderBottom: "2px solid #ff9016",
+                    },
                   },
                   selectedNavIndex === index && {
                     color: "#ff9016",
+                    borderRadius: 0,
                     borderBottom: "2px solid #ff9016",
                   },
                 ]}
