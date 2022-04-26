@@ -1,10 +1,6 @@
 import LeftLayout from "@components/LeftLayout";
-import MainEditorContent from "@components/main/MainEditorContent";
-import Program from "@components/Program";
-import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
 import { Box, Button, Grid, MenuItem, Pagination, Select } from "@mui/material";
-import { API } from "@src/API";
 import { idState } from "@store/auth";
 import {
   domesticState,
@@ -12,7 +8,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
-import { getEditorAllBoard, getEditorAllBoardById } from "api/board";
+import { getEditorAllBoardById } from "api/board";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
@@ -156,6 +152,8 @@ const EditorProgramList: VFC = () => {
           </TitleContainer>
           <SortedContainer>
             <Select
+              disableUnderline
+              variant="standard"
               className="editorProgramListSelect"
               value={sortedType}
               onChange={onChangeSortedType}
@@ -235,7 +233,7 @@ const TitleContainer = styled.div`
   font-family: paybooc-Light;
   & .sub {
     font-size: 0.8rem;
-    color: gray;
+    color: #000000;
   }
   & .main {
     font-size: 2rem;
@@ -243,8 +241,10 @@ const TitleContainer = styled.div`
   }
 
   & .orange {
+    font-family: paybooc-Bold;
     margin-left: 1rem;
     color: #ff9016;
+    font-weight: 300;
   }
 `;
 const HeadContainer = styled.div`

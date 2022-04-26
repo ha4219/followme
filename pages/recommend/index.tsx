@@ -7,9 +7,14 @@ const Recommend = () => {
   return (
     <MainContainer maxWidth="lg">
       <Box className="editorPath" py={1}>
-        <HomeOutlinedIcon />
+        <img
+          src="icons/icon.home.png"
+          alt="homeIcon"
+          className="MainContainerPathIcon"
+        />
         <span>
-          홈<span className="dividor">|</span>
+          <span className="MainContainerPathColor">홈</span>
+          <span className="dividor">|</span>
           {"Ulife 추천코스"}
         </span>
       </Box>
@@ -26,9 +31,19 @@ const MainContainer = styled(Container)`
   & .searchContainer {
     border-radius: 27px;
   }
+
+  & .MainContainerPathIcon {
+    height: 21px;
+    margin-right: 6px;
+  }
   & .editorPath {
     display: flex;
+    font-size: 0.9rem;
+    font-family: paybooc-Medium;
 
+    & .MainContainerPathColor {
+      color: #888888;
+    }
     & .dividor {
       padding: 1rem;
     }

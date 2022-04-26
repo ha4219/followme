@@ -226,8 +226,10 @@ const EditorProgramListPagination = styled(Pagination)`
 `;
 const TitleContainer = styled.div`
   margin-top: 1rem;
+  font-family: paybooc-Light;
   & .sub {
-    color: gray;
+    font-size: 0.8rem;
+    color: #000000;
   }
   & .main {
     font-size: 2rem;
@@ -235,8 +237,10 @@ const TitleContainer = styled.div`
   }
 
   & .orange {
+    font-family: paybooc-Bold;
     margin-left: 1rem;
     color: #ff9016;
+    font-weight: 300;
   }
 `;
 const HeadContainer = styled.div`

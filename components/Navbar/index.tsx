@@ -112,7 +112,7 @@ const Navbar = () => {
         paddingBottom: "1rem",
       }}
     >
-      <Container maxWidth="full">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
