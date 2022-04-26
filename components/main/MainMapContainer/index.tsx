@@ -2,11 +2,9 @@ import MapContainer from "@components/MapContainer";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import { curLimitDis } from "@store/map";
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 
 const MainMapContainer = () => {
-  const [sortedType, setSortedType] = useState(0);
   const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
   return (
     <div>

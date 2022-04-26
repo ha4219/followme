@@ -125,6 +125,7 @@ const PhotoContainer = styled.div`
   height: 327px;
   background: url(${(props: { src: string }) => props.src}) no-repeat;
   padding: 0 1rem;
+  background-size: cover;
   
 
   & .title {

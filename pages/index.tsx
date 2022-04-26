@@ -35,8 +35,8 @@ const Home: NextPage = () => {
 
           <Container>
             <ProgramList />
-            <MainThemeContainer />
             <Banner />
+            <MainThemeContainer />
           </Container>
           <MainMapContainer />
         </div>

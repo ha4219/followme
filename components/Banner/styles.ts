@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 export const BannerContainer = styled.div`
   display: flex;
   margin: 0;
+  height: 380px;
   --swiper-theme-color: white;
 
   & .swiper-slide {
@@ -28,6 +29,7 @@ export const BannerContainer = styled.div`
     background-size: cover;
     width: 100%;
     height: 100%;
+    border-radius: 10px;
   }
 
   & img:hover {

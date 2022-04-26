@@ -125,7 +125,7 @@ const BlackBorderTextField = styled(TextField)({
 const MainContainer = estyled.div`
   margin-top: 140px;
   min-width: 50%;
-  padding-bottom: 5rem;
+  padding-bottom: 8rem;
   text-align: center;
 
   & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -149,6 +149,8 @@ const MainContainer = estyled.div`
       }
 
       & .subTxt {
+        padding-top: 28px;
+        font-family: paybooc-Medium;
         font-size: 1.3rem;
       }
     }

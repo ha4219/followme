@@ -9,6 +9,7 @@ import {
   ContentContainer,
   TopContainer,
   MainContainer,
+  ParentMainContainer,
 } from "./styles";
 import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 
@@ -69,16 +70,7 @@ const ThemeProgram: VFC<ICourse> = ({
 
   return (
     <Grid item lg={4} xs={6} md={4} sm={6}>
-      <MainContainer
-        onClick={() => {
-          onClickProgram(idx);
-        }}
-        sx={{
-          paddingBottom: "2rem",
-          position: "relative",
-          cursor: "pointer",
-        }}
-      >
+      <ParentMainContainer>
         <TopContainer>
           <IconButton
             onClick={onClickLike}
@@ -104,37 +96,47 @@ const ThemeProgram: VFC<ICourse> = ({
             </div>
           </IconButton>
         </TopContainer>
-        <Box
+        <MainContainer
+          onClick={() => {
+            onClickProgram(idx);
+          }}
           sx={{
-            border: "1px solid #d8d8d8",
-            borderTop: 0,
+            paddingBottom: "2rem",
+            position: "relative",
             cursor: "pointer",
-            alignItems: "stretch",
-            borderRadius: "10px",
           }}
         >
-          <PhotoContainer src={`${toBase64(mainImg)}`}>
-            <div className="hoverImg" />
-          </PhotoContainer>
-          <Box sx={{ padding: "0 1rem" }}>
-            <TagContainer tags={tags} />
+          <Box
+            sx={{
+              // border: "1px solid #d8d8d8",
+              cursor: "pointer",
+              alignItems: "stretch",
+              // borderRadius: "10px",
+            }}
+          >
+            <PhotoContainer src={`${toBase64(mainImg)}`}>
+              <div className="hoverImg" />
+            </PhotoContainer>
+            <Box sx={{ padding: "0 1rem" }}>
+              <TagContainer tags={tags} />
+            </Box>
+            <ContentContainer>
+              <IconButton className="avatarContainer">
+                <Avatar
+                  alt="user"
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
+                  // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                  className="avatar"
+                />
+              </IconButton>
+              <DesContainer className="description">
+                <div className="title">{titleSummary(title)}</div>
+                <div className="content">{contentSummary(shortContent)}</div>
+              </DesContainer>
+            </ContentContainer>
           </Box>
-          <ContentContainer>
-            <IconButton>
-              <Avatar
-                alt="user"
-                src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
-                // src={gravatar.url(user, { s: "28px", d: "retro" })}
-                className="avatar"
-              />
-            </IconButton>
-            <DesContainer className="description">
-              <div className="title">{titleSummary(title)}</div>
-              <div className="content">{contentSummary(shortContent)}</div>
-            </DesContainer>
-          </ContentContainer>
-        </Box>
-      </MainContainer>
+        </MainContainer>
+      </ParentMainContainer>
     </Grid>
   );
 };

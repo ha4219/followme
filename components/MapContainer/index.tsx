@@ -201,31 +201,23 @@ const MapContainer = () => {
 
   return (
     <MainMapContainer>
-      {/* <Grid item md={9}> */}
       <MapContent id="map" />
-      {/* </Grid> */}
-      {/* <Grid item md={3}> */}
-      {data.length && (
-        <BottomDiv>
-          <div className="head">
-            <div className="label">장소</div>
-            <div className="bts">
-              <button onClick={onPrevPage}>
-                <KeyboardArrowLeftIcon />
-              </button>
-              <button onClick={onNextPage}>
-                <ChevronRightIcon />
-              </button>
-            </div>
+      <BottomDiv>
+        <div className="head">
+          <div className="label">장소</div>
+          <div className="bts">
+            <button onClick={onPrevPage}>
+              <KeyboardArrowLeftIcon />
+            </button>
+            <button onClick={onNextPage}>
+              <ChevronRightIcon />
+            </button>
           </div>
-          {data
-            .slice(page * perPage, (page + 1) * perPage)
-            .map((item, index) => (
-              <MapDiv key={index} {...item} />
-            ))}
-        </BottomDiv>
-      )}
-      {/* </Grid> */}
+        </div>
+        {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
+          <MapDiv key={index} {...item} />
+        ))}
+      </BottomDiv>
     </MainMapContainer>
   );
 };
@@ -237,7 +229,7 @@ const MainMapContainer = styled.div`
 const BottomDiv = styled.div`
   // display: block;
   height: 500px;
-  // width: 500px;
+  width: 500px;
   display: inline-block;
   flex-direction: column;
   // overflow: hidden;

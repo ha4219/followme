@@ -20,19 +20,21 @@ export const PhotoContainer = styled(Box)<PhotoProps>`
 `;
 
 export const TopContainer = styled.div`
-  right: 0px;
   top: -10px;
   position: absolute;
+  right: 1px;
   display: flex;
+  width: 62px;
+  height: 72px;
   justify-content: right;
-  z-index: 99;
+  z-index: 9;
 
   & .haertContainer {
     background-color: #f93b1d;
     width: 62px;
     height: 72px;
     padding: 24px 0;
-    border-radius: 5px 5px 40px 40px;
+    border-radius: 10px 10px 40px 40px;
 
     & .heart {
       fill: white;
@@ -52,12 +54,13 @@ export const DesContainer = styled.div`
   & .title {
     display: block;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   & .content {
+    font-family: paybooc-Light;
     display: block;
-    font-size: 1rem;
+    font-size: 0.9rem;
     height: 5rem;
   }
 `;
@@ -65,17 +68,28 @@ export const DesContainer = styled.div`
 export const ContentContainer = styled(Box)`
   display: inline-flex;
   padding: 0 1rem;
+  width: 100%;
+  height: 100%;
+
+  & .avatarContainer {
+    height: 44px;
+  }
 `;
 
 export const MainContainer = styled(Box)`
   padding-bottom: 2rem;
   position: relative;
   cursor: pointer;
-
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
   :hover {
     & .hoverImg {
       background: #323fb2b3;
     }
     color: #00a0e0;
   }
+`;
+
+export const ParentMainContainer = styled.div`
+  position: relative;
 `;

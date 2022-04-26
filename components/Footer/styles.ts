@@ -6,7 +6,7 @@ export const ContainerFooter = styled.div`
   padding: 1rem 0rem;
   padding-bottom: 4rem;
   // background-color: #f8f8fa;
-  color: #616161;
+  color: #000000;
   margin-top: 2rem;
 
   & .nav {
@@ -25,12 +25,25 @@ export const ContainerFooter = styled.div`
     & .dividor {
       padding: 1rem;
     }
+
+    & .footerNavIcon {
+      padding: 7px;
+      border-radius: 28px;
+      width: 28px;
+      height: 28px;
+      margin-left: 10px;
+      background: #bbbbbb;
+
+      :hover {
+        cursor: pointer;
+      }
+    }
   }
 
   & .help-des {
     display: block;
     font-size: 0.85rem;
-    line-height: 2rem;
+    line-height: 1.5rem;
     font-family: paybooc-Medium;
     & .help-des-between {
       display: flex;

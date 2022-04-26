@@ -23,7 +23,22 @@ const Footer = () => {
 
             <Link href="/help/use">이용약관</Link>
           </div>
-          <div></div>
+          <div>
+            <Link href={""} passHref>
+              <img
+                className="footerNavIcon"
+                src="icons/icon.kakao.png"
+                alt="kakaoIcon"
+              />
+            </Link>
+            <Link href={""} passHref>
+              <img
+                className="footerNavIcon"
+                src="icons/icon.naverBand.png"
+                alt="bandIcon"
+              />
+            </Link>
+          </div>
         </Container>
       </div>
       <div className="help-des">

@@ -51,6 +51,7 @@ const MainContainer = styled.div`
   text-align: center;
   padding: 5rem 1rem;
   border-radius: 5px;
+  background: rgba(0, 0, 0, 0.5);
 
   :hover {
     background: #323fb2b3;
@@ -62,7 +63,7 @@ const MainContainer = styled.div`
     & span {
       background-color: #ff9016;
       padding: 0.3rem 2rem;
-      border-radius: 14px;
+      border-radius: 20px;
     }
   }
   & .title {

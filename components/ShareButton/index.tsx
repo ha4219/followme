@@ -62,7 +62,7 @@ const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
           setOpen(true);
         }}
       >
-        <ShareIcon sx={{ width: 15, height: 15 }} />
+        <img src="icons/icon.share.png" />
       </Button>
       <OutSideContainer open={open} onClose={() => setOpen(false)}>
         <div className="container">
