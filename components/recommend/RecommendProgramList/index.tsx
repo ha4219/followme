@@ -146,6 +146,8 @@ const RecommendProgramList: VFC = () => {
           </TitleContainer>
           <SortedContainer>
             <Select
+              disableUnderline
+              variant="standard"
               className="editorProgramListSelect"
               value={sortedType}
               onChange={onChangeSortedType}

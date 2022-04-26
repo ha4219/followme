@@ -12,7 +12,7 @@ let theme = createTheme({
       light: "#757ce8",
       // light: "#191919",
       // main: "#3f50b5",
-      main: "#191919",
+      main: "#000000",
       // dark: "#002884",
       dark: "#000000",
       contrastText: "#ffffff",
