@@ -44,11 +44,12 @@ const EditorProgram: VFC<ICourse> = ({
       <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
         <div>
           <div className="editorProgramPhotoWrapper">
-            <img
+            <EditorProgramPhoto
               className="editorProgramPhoto"
               src={`${toBase64(mainImg)}`}
-              alt={title}
-            />
+            >
+              <div className="editorProgramPhotoBest">BEST</div>
+            </EditorProgramPhoto>
           </div>
           <div className="editorProgramBody">
             <div className="editorProgramProps">
@@ -103,6 +104,22 @@ const EditorProgram: VFC<ICourse> = ({
   );
 };
 
+const EditorProgramPhoto = styled.div`
+  background: url(${(props: { src: string }) => props.src}) no-repeat;
+  & .editorProgramPhotoBest {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-family: paybooc-Bold;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 11px;
+    background-color: #f93b1d;
+    padding: 5px 10px 7px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+`;
+
 const EditorContainer = styled(Grid)`
   cursor: pointer;
   font-family: paybooc-Light;
@@ -114,8 +131,13 @@ const EditorContainer = styled(Grid)`
     & .editorProgramPhoto {
       width: 100%;
       background-size: cover;
+      position: relative;
       height: 20rem;
       border-radius: 10px;
+
+      & .editorProgramPhotoBest {
+        position: absolute;
+      }
     }
   }
 
@@ -163,6 +185,7 @@ const EditorContainer = styled(Grid)`
         border-left: 1px solid #d8d8d8;
         padding: 0 1rem;
         font-size: 0.8rem;
+        line-height: 15px;
       }
     }
 

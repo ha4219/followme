@@ -194,6 +194,7 @@ const EditorContainer = styled(Grid)`
         border-left: 1px solid #d8d8d8;
         padding: 0 1rem;
         font-size: 0.8rem;
+        line-height: 15px;
       }
     }
 
