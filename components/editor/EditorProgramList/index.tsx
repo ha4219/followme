@@ -48,7 +48,7 @@ const EditorProgramList: VFC = () => {
       });
       const data = [...tmp.recommend, ...tmp.theme];
 
-      setSize(data.length / perPageSize);
+      setSize(Math.ceil(data.length / perPageSize));
       setTravels(
         data.sort((l, r) => {
           if (r.createdAt > l.createdAt) {
@@ -287,17 +287,6 @@ const EditorProgramListPagination = styled(Pagination)`
   & ul {
     justify-content: center;
   }
-`;
-
-const CustomButton = styled(Button)`
-  border: 1px solid black;
-  margin-left: 5px;
-`;
-
-const RightButton = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  justify-content: right;
 `;
 
 export default EditorProgramList;

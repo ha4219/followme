@@ -102,13 +102,7 @@ export const CheckContainerOverseas: VFC<IProps> = ({ tag, value }) => {
 
   return (
     <Box sx={{ fontFamily: "paybooc-Light" }}>
-      <Checkbox
-        style={{
-          color: "red",
-        }}
-        sx={{ padding: 0, paddingRight: 1 }}
-        onChange={onClick}
-      />
+      <Checkbox sx={{ padding: 0, paddingRight: 1 }} onChange={onClick} />
       <span>{tag}</span>
     </Box>
   );

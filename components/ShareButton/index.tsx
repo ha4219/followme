@@ -9,6 +9,7 @@ import {
   TwitterShareButton,
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Image from "next/image";
 
 interface IProps {
   url: string;
@@ -62,7 +63,12 @@ const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
           setOpen(true);
         }}
       >
-        <img src="icons/icon.share.png" />
+        <Image
+          src="/icons/icon.share.png"
+          alt="shareIcon"
+          width={18}
+          height={18}
+        />
       </Button>
       <OutSideContainer open={open} onClose={() => setOpen(false)}>
         <div className="container">

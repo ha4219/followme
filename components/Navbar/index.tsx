@@ -40,6 +40,7 @@ const pages: PageProps[] = [
 
 const Navbar = () => {
   const router = useRouter();
+
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
   const [loggedInId, setLoggedInId] = useRecoilState(idState);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -107,7 +108,9 @@ const Navbar = () => {
   return (
     <Box
       sx={{
-        borderBottom: "1px solid rgba(255, 255, 255, .3)",
+        borderBottom: isMain
+          ? "1px solid rgba(255, 255, 255, .3)"
+          : "1px solid #bdbdbd",
         padding: 0,
         paddingBottom: "1rem",
       }}

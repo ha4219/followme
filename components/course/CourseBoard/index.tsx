@@ -22,15 +22,17 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
 
+const PAGESIZE = [24, 36, 48];
+
 const CourseBoard = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(10);
   const [size, setSize] = useState(0);
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [curCourses, setCurCourses] = useState<any[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
   const loggedInId = useRecoilValue(idState);
+  const [perPageSize, setPerPageSize] = useState(24);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage - 1);
@@ -52,22 +54,13 @@ const CourseBoard = () => {
   };
 
   const getCourses = async () => {
-    // setCourses(COURSES);
-    // API.get("/course/courseBoards", {})
-    //   .then(({ data }) => {
-    //     setCourses(data);
-    //     setSize(Math.ceil(data.length / rowsPerPage));
-    //   })
-    //   .catch((e) => {
-    //     console.log("course 받아오기 에러", e);
-    //   });
     try {
       const data = await getCourseAllBoard({
         id: loggedInId,
       });
       // setCourses(data);
       getCurCourses(data);
-      setSize(Math.ceil(data.length / rowsPerPage));
+      setSize(Math.ceil(data.length / perPageSize));
     } catch (e) {
       console.log("course 받아오기 에러", e);
     }
@@ -77,15 +70,9 @@ const CourseBoard = () => {
     router.push(`/course/${id}`);
   };
 
-  // useEffect(() => {
-  //   let arr = [...COURSES];
-
-  //   if (selectedTag !== "ALL" && selectedTag !== "") {
-  //     arr = arr.filter((item) => item.tags.includes(selectedTag));
-  //   }
-  //   setSize(Math.ceil(arr.length / rowsPerPage));
-  //   setCourses(arr);
-  // }, [selectedTag]);
+  useEffect(() => {
+    setSize(Math.ceil(courses.length / perPageSize));
+  }, [perPageSize, courses]);
 
   useEffect(() => {
     getCourses();
@@ -93,6 +80,31 @@ const CourseBoard = () => {
 
   return (
     <MainContainer maxWidth="md">
+      <HeadContainer>
+        <TitleContainer>
+          <div className="sub">
+            {"Editor's Pick"}
+            <span className="orange">{courses.length}</span>개
+          </div>
+        </TitleContainer>
+        <SortedContainer>
+          <div className="editorProgramListPerPage">
+            {PAGESIZE.map((item, index) => (
+              <div
+                key={index}
+                className={
+                  item === perPageSize
+                    ? "editorProgramListPerPageItem active"
+                    : "editorProgramListPerPageItem"
+                }
+                onClick={() => setPerPageSize(item)}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </SortedContainer>
+      </HeadContainer>
       <Table>
         <TableHead className="head">
           <TableRow className="head">
@@ -106,10 +118,10 @@ const CourseBoard = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
+          {(perPageSize > 0
             ? curCourses.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
+                page * perPageSize,
+                page * perPageSize + perPageSize
               )
             : curCourses
           ).map((item, index) => (
@@ -167,6 +179,62 @@ const CourseBoard = () => {
     </MainContainer>
   );
 };
+
+const TitleContainer = styled.div`
+  margin-top: 1rem;
+  font-family: paybooc-Light;
+  & .sub {
+    font-size: 0.8rem;
+    color: #000000;
+  }
+  & .main {
+    font-size: 2rem;
+    letter-spacing: -1.76px;
+  }
+
+  & .orange {
+    font-family: paybooc-Bold;
+    margin-left: 1rem;
+    color: #ff9016;
+    font-weight: 300;
+  }
+`;
+const HeadContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2.5rem;
+`;
+
+const SortedContainer = styled.div`
+  display: flex;
+  padding-top: 2rem;
+  font-family: paybooc-Bold;
+
+  & .editorProgramListSelect {
+    height: 20px;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 0;
+    margin-right: 1rem;
+
+    & div {
+      border: 0;
+    }
+  }
+
+  & .editorProgramListPerPage {
+    display: flex;
+    font-size: 0.8rem;
+
+    & .editorProgramListPerPageItem {
+      margin: 0 0.5rem;
+      cursor: pointer;
+    }
+    & .active {
+      border-bottom: 1px solid #000000;
+    }
+  }
+`;
 
 const MainContainer = styled(Container)`
   & .head {
