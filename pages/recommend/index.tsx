@@ -1,17 +1,20 @@
 import RecommendProgramList from "@components/recommend/RecommendProgramList";
 import styled from "@emotion/styled";
 import { Box, Container } from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import Image from "next/image";
 
 const Recommend = () => {
   return (
     <MainContainer maxWidth="lg">
       <Box className="editorPath" py={1}>
-        <img
-          src="icons/icon.home.png"
-          alt="homeIcon"
-          className="MainContainerPathIcon"
-        />
+        <div className="MainContainerPathIcon">
+          <Image
+            src="/icons/icon.home.png"
+            width="18px"
+            height="18px"
+            alt="homeIcon"
+          />
+        </div>
         <span>
           <span className="MainContainerPathColor">홈</span>
           <span className="dividor">|</span>

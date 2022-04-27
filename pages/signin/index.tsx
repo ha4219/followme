@@ -17,6 +17,7 @@ import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import styled from "@emotion/styled";
+import Image from "next/image";
 
 declare global {
   interface Window {
@@ -165,19 +166,41 @@ const Signin = () => {
           </Box>
           <ShareLoginContainer>
             <a href={naver_url} className="naver">
-              네이버 로그인
+              <span className="LoginButtoniconsNaver">
+                <Image
+                  alt="naverIcon"
+                  src="/icons/icon.naver.png"
+                  width="40px"
+                  height="45px"
+                />
+              </span>
+              <span>네이버 로그인</span>
             </a>
             <a href={kakao_url} className="kakao">
-              카카오 로그인
+              <span className="LoginButtoniconsKakao">
+                <Image
+                  alt="kakaoIcon"
+                  src="/icons/icon.kakao1.png"
+                  width="18px"
+                  height="17px"
+                />
+              </span>
+
+              <span>카카오 로그인</span>
             </a>
             <a href={google_url} className="google">
-              GOOGLE 로그인
+              <span className="LoginButtoniconsGoogle">
+                <Image
+                  alt="googleIcon"
+                  src="/icons/icon.google.png"
+                  width="18px"
+                  height="18px"
+                />
+              </span>
+
+              <span>Google 로그인</span>
             </a>
           </ShareLoginContainer>
-          {/* <div id={GOOGLE_BUTTON_ID} className="google">
-            google 로그인
-          </div> */}
-          {/* <div id="g-signin2" data-onsuccess="onSignIn"></div> */}
         </Box>
       </Box>
     </Container>
@@ -186,12 +209,35 @@ const Signin = () => {
 
 const ShareLoginContainer = styled.div`
   & a {
+    position: relative;
+    font-family: paybooc-Medium;
+    line-height: 45px;
+
+    height: 45px;
+
     display: block;
     width: 100%;
     text-align: center;
-    background-color: red;
-    padding: 0.5rem;
+    // border-radius: 12px;
     margin: 0.7rem 0;
+
+    & .LoginButtoniconsNaver {
+      position: absolute;
+      left: 6px;
+      top: 0;
+    }
+
+    & .LoginButtoniconsKakao {
+      position: absolute;
+      left: 16px;
+      top: 4px;
+    }
+
+    & .LoginButtoniconsGoogle {
+      position: absolute;
+      left: 16px;
+      top: 4px;
+    }
   }
   & .kakao {
     background-color: #fee500;

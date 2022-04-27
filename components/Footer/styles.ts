@@ -27,7 +27,7 @@ export const ContainerFooter = styled.div`
     }
 
     & .footerNavIcon {
-      padding: 7px;
+      padding: 7px 7px 2px 7px;
       border-radius: 28px;
       width: 28px;
       height: 28px;

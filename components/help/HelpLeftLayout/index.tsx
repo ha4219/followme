@@ -1,10 +1,22 @@
 import styled from "@emotion/styled";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { leftOpen } from "@store/tag";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useCallback, useState } from "react";
-import { useRecoilState } from "recoil";
+import SearchIcon from "@mui/icons-material/Search";
+import LeftLayoutTag from "@components/LeftLayoutTag";
+import { COURSETAGS } from "@data/CourseData";
 
 const PROFILE = [
   { label: "FAQ", to: "/help/faq" },
@@ -17,47 +29,91 @@ const PROFILE = [
 
 const HelpLeftLayout: FC = ({ children }) => {
   const router = useRouter();
-  const [show, setShow] = useRecoilState(leftOpen);
-  // const [show, setShow] = useState(false);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const [value, setValue] = useState("");
+  const onChangeValue = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [value]
+  );
 
-  const onChangeShow = useCallback(() => {
-    setShow(!show);
-  }, [show]);
+  const onKeyDownValue = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        setValue("");
+      }
+    },
+    [value]
+  );
 
+  const onSubmitValue = useCallback(
+    (e) => {
+      setValue("");
+    },
+    [value]
+  );
   return (
     <Grid container py={5}>
       <Grid item xs={12} sm={12} md={3} sx={{ fontFamily: "paybooc-Medium" }}>
-        <ProfileLeftContainer>
-          <BoxContainer onClick={onChangeShow}>
+        <ProfileLeftContainer
+          minWidth={isSmall ? "100%" : "260px"}
+          maxWidth={isSmall ? "100%" : "260px"}
+        >
+          <Box py={2}>
+            <TextField
+              fullWidth
+              value={value}
+              onChange={onChangeValue}
+              onKeyDown={onKeyDownValue}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={onSubmitValue}>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box py={2}>
+            {COURSETAGS.map((tag, index) => (
+              <LeftLayoutTag key={index} tag={tag} />
+            ))}
+          </Box>
+          <BoxContainer>
             <Typography
-              py={1}
+              py={2}
               sx={{ fontFamily: "paybooc-Bold", fontSize: "1.5rem" }}
             >
               {"고객센터"}
             </Typography>
-            <span>{show ? "-" : "+"}</span>
           </BoxContainer>
-          {show && (
-            <div className="btns">
-              {PROFILE.map((item, index) => (
-                <div key={index}>
-                  <Link href={item.to} passHref>
-                    <Button
-                      key={index}
-                      className={
-                        router.pathname === item.to ? "active" : "deactivate"
-                      }
-                    >
-                      #{item.label}
-                    </Button>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="btns">
+            {PROFILE.map((item, index) => (
+              <BoxContainer key={index}>
+                <Link href={item.to} passHref>
+                  <Button
+                    key={index}
+                    className={
+                      router.pathname === item.to ? "active" : "deactivate"
+                    }
+                  >
+                    <span className="btnLeft">{item.label}</span>
+                    <span className="btnRight">
+                      {router.pathname === item.to ? "-" : "+"}
+                    </span>
+                  </Button>
+                </Link>
+              </BoxContainer>
+            ))}
+          </div>
+          <BoxContainer />
         </ProfileLeftContainer>
       </Grid>
-      <Grid item xs={12} sm={12} md={9}>
+      <Grid item xs={12} sm={12} md={9} pl={isSmall ? "0" : "50px"}>
         {children}
       </Grid>
     </Grid>
@@ -79,16 +135,25 @@ const ProfileLeftContainer = styled(Box)`
       display: block;
     }
     & .active {
-      display: block;
-
+      width: 260px;
+      display: flex;
+      justify-content: space-between;
       color: #0068ff;
       border-radius: 1rem;
-      margin-top: 1rem;
     }
 
     & .deactivate {
+      width: 260px;
       border-radius: 1rem;
-      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    & .btnLeft {
+      display: block;
+    }
+
+    & .btnRight {
       display: block;
     }
   }
@@ -99,13 +164,8 @@ const BoxContainer = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-right: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-
-  & span {
-    font-size: 1.3rem;
-  }
+  border-top: 1px solid #d8d8d8;
+  padding: 14px 0 15px 0;
 `;
 
 export default HelpLeftLayout;

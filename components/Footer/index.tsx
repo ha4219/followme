@@ -25,18 +25,24 @@ const Footer = () => {
           </div>
           <div>
             <Link href={""} passHref>
-              <img
-                className="footerNavIcon"
-                src="icons/icon.kakao.png"
-                alt="kakaoIcon"
-              />
+              <span className="footerNavIcon">
+                <Image
+                  width="14px"
+                  height="14px"
+                  src="/icons/icon.kakao.png"
+                  alt="kakaoIcon"
+                />
+              </span>
             </Link>
             <Link href={""} passHref>
-              <img
-                className="footerNavIcon"
-                src="icons/icon.naverBand.png"
-                alt="bandIcon"
-              />
+              <span className="footerNavIcon">
+                <Image
+                  width="14px"
+                  height="14px"
+                  src="/icons/icon.naverBand.png"
+                  alt="bandIcon"
+                />
+              </span>
             </Link>
           </div>
         </Container>

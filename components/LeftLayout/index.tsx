@@ -90,10 +90,9 @@ const LeftLayout: FC = ({ children }) => {
               ))}
             </Box>
           </Box>
-          <Box py={2}>
+          <Box>
             <BoxContainer onClick={() => setOpen1(!open1)}>
               <Typography
-                py={1}
                 sx={{ fontFamily: "paybooc-Bold", fontSize: "1.2rem" }}
               >
                 {"계절별"}
@@ -101,7 +100,7 @@ const LeftLayout: FC = ({ children }) => {
               <span>{open1 ? "-" : "+"}</span>
             </BoxContainer>
             {open1 && (
-              <Grid container>
+              <Grid container py={2}>
                 {SEASON.map((item, index) => (
                   <Grid key={index} item xs={6}>
                     <CheckContainerSeason tag={item.name} value={item.value} />
@@ -110,10 +109,9 @@ const LeftLayout: FC = ({ children }) => {
               </Grid>
             )}
           </Box>
-          <Box py={2}>
+          <Box>
             <BoxContainer onClick={() => setOpen2(!open2)}>
               <Typography
-                py={1}
                 sx={{ fontFamily: "paybooc-Bold", fontSize: "1.2rem" }}
               >
                 {"지역별(국내)"}
@@ -121,7 +119,7 @@ const LeftLayout: FC = ({ children }) => {
               <span>{open2 ? "-" : "+"}</span>
             </BoxContainer>
             {open2 && (
-              <Grid container>
+              <Grid container py={2}>
                 {DOMESTIC.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <CheckContainerDomestic
@@ -133,10 +131,9 @@ const LeftLayout: FC = ({ children }) => {
               </Grid>
             )}
           </Box>
-          <Box py={2}>
+          <Box>
             <BoxContainer onClick={() => setOpen3(!open3)}>
               <Typography
-                py={1}
                 sx={{ fontFamily: "paybooc-Bold", fontSize: "1.2rem" }}
               >
                 {"지역별(해외)"}
@@ -144,7 +141,7 @@ const LeftLayout: FC = ({ children }) => {
               <span>{open3 ? "-" : "+"}</span>
             </BoxContainer>
             {open3 && (
-              <Grid container>
+              <Grid container py={2}>
                 {OVERSEAS.map((item, index) => (
                   <Grid item xs={6} key={index}>
                     <CheckContainerOverseas
@@ -156,6 +153,7 @@ const LeftLayout: FC = ({ children }) => {
               </Grid>
             )}
           </Box>
+          <BoxContainer />
         </BoxContainerWrapper>
       </Grid>
       <Grid item xs={12} sm={12} md={9} pl={isSmall ? "0" : "50px"}>
@@ -172,7 +170,8 @@ const BoxContainer = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  border-top: 1px solid #d8d8d8;
+  padding: 17px 0 21px 0;
   & span {
     font-size: 1.3rem;
   }
