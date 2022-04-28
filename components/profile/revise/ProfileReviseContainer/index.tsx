@@ -18,8 +18,30 @@ import {
   checkPhone,
 } from "@helpers/checkReg";
 
+import AWS from "aws-sdk";
+import { config } from "@config/s3Config";
+
+AWS.config.update({
+  accessKeyId: config.accessKeyID,
+  secretAccessKey: config.secretAccessKey,
+});
+
+const myBucket = new AWS.S3({
+  params: { Bucket: config.bucketName },
+  region: config.region,
+});
+
 const ProfileReviseContainer = () => {
   const router = useRouter();
+
+  const putObjectWrapper = (params) => {
+    return new Promise((resolve, reject) => {
+      myBucket.putObject(params, function (err, result) {
+        if (err) reject(err);
+        if (result) resolve(result);
+      });
+    });
+  };
 
   const [user, setUser] = useState<IUser>();
 
@@ -35,6 +57,7 @@ const ProfileReviseContainer = () => {
   const [emailV, setEmailV] = useState(true);
   const [nickNameV, setNickNameV] = useState(true);
   const [phoneV, setPhoneV] = useState(false);
+  const [profileImage, setProfileImage] = useState<any>();
 
   const onChangeNickName = useCallback(
     (e) => {
@@ -180,6 +203,7 @@ const ProfileReviseContainer = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      submitOnProfileImage();
       const { data } = await API.post("/user/profileRevise", {
         name: name,
         id: id,
@@ -197,6 +221,39 @@ const ProfileReviseContainer = () => {
       console.log(e);
     }
     // toast.info("작업중입니다.");
+  };
+
+  const onClickProfileImage = async () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.addEventListener("change", async () => {
+      if (input?.files) {
+        setProfileImage(input.files[0]);
+      }
+    });
+  };
+
+  const submitOnProfileImage = async () => {
+    try {
+      if (profileImage) {
+        putObjectWrapper({
+          Body: profileImage,
+          Bucket: config.bucketName,
+          Key: `profile/${id}`,
+        })
+          .then((r) => {
+            console.log(r);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -287,6 +344,16 @@ const ProfileReviseContainer = () => {
             btnLabel="확인"
             btnActive={!phoneV}
             onClickBtn={onVerifySMS}
+          />
+          <SignupTextField
+            id="profileImage"
+            label="프로필 사진"
+            value={profileImage?.name}
+            // onChange={onChangeVerified}
+            placeholder="profile Image"
+            btnLabel="search"
+            btnActive={true}
+            onClickBtn={onClickProfileImage}
           />
 
           <Box p={8} sx={{ alignItems: "left", textAlign: "center" }}>

@@ -1,65 +1,60 @@
 import styled from "@emotion/styled";
-import { Box, Button } from "@mui/material";
-import { useRouter } from "next/router";
-import { useCallback, useState, VFC } from "react";
+import { Button, Grid } from "@mui/material";
 import { ICourse } from "types/apiType";
-import { useRecoilValue } from "recoil";
-import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
+import Link from "next/link";
+import { VFC } from "react";
 
 const MainEditorContent: VFC<ICourse> = ({
   idx,
   mainImg,
-  writer,
+  type,
   title,
   shortContent,
-  tags,
-  likeCnts,
-  views,
-  createdAt,
-  isLocal,
-  likeClicked,
   region,
-  schedule,
-  season,
-  updatedAt,
 }) => {
-  const router = useRouter();
-  const onClickProgram = useCallback((id) => {
-    router.push(`/editor/${idx}`);
-  }, []);
-
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
   return (
-    <MainContainer src={`${toBase64(mainImg.data)}`}>
-      <div className="tag">
-        <span>{region}</span>
-      </div>
-      <div className="title">
-        <span>{titleSummary(title)}</span>
-      </div>
-      <div className="content">
-        <span>{contentSummary(shortContent)}</span>
-      </div>
-      <CustomButton onClick={onClickProgram}>바로가기</CustomButton>
-    </MainContainer>
+    <Grid item xs={12} sm={12} md={4}>
+      <WrapperContainer src={`${toBase64(mainImg)}`}>
+        <MainContainer>
+          <div className="tag">
+            <span>{region}</span>
+          </div>
+          <div className="title">
+            <span>{titleSummary(title)}</span>
+          </div>
+          <div className="content">
+            <span>{contentSummary(shortContent)}</span>
+          </div>
+          <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
+            <CustomButton>바로가기</CustomButton>
+          </Link>
+        </MainContainer>
+      </WrapperContainer>
+    </Grid>
   );
 };
 
-const MainContainer = styled.div`
-  width: 346px;
-  display: block;
+const WrapperContainer = styled.div`
   background: url(${(props: { src: string }) => props.src}) no-repeat;
   border-radius: 5px;
+  background-size: cover;
+  height: 50vh;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
   color: #ffffff;
   text-align: center;
-  padding: 5rem;
+  padding: 5rem 1rem;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.5);
 
   :hover {
-    background-color: #ffffff;
-    opacity: 0.6;
+    background: #323fb2b3;
   }
 
   & .tag {
@@ -68,7 +63,7 @@ const MainContainer = styled.div`
     & span {
       background-color: #ff9016;
       padding: 0.3rem 2rem;
-      border-radius: 14px;
+      border-radius: 20px;
     }
   }
   & .title {
@@ -88,7 +83,9 @@ const MainContainer = styled.div`
 `;
 
 const CustomButton = styled(Button)`
-  margin-top: 3rem;
+  // display: block;
+  width: 130px;
+  margin-top: auto;
   color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 5px;

@@ -96,9 +96,9 @@ const CustomEditor = () => {
   const [region2, setRegion2, onChangeRegion2] = useInput("서울");
   const [date1, setDate1, onChangeDate1] = useInput(1);
   const [date2, setDate2, onChangeDate2] = useInput(2);
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
 
   useEffect(() => {
     setRegion2(region1 ? DOMESTIC[0].value : OVERSEAS[0].value);
@@ -128,7 +128,6 @@ const CustomEditor = () => {
         Key: fileName,
       })
         .then((res) => {
-          console.log(res);
           const range = ref.current.getEditorSelection();
           ref.current
             .getEditor()
@@ -206,21 +205,21 @@ const CustomEditor = () => {
   return (
     <MainContainer>
       <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "400px", height: "400px" }}>
-          <MapEditor />
-          <img />
-          <input type="file" accept="image/*" onChange={onChangeDialog} />
-          <div>
-            <TextField placeholder="title" />
-          </div>
-          <div>
-            <TextField placeholder="content" />
-          </div>
-          <DialogActions>
-            <Button onClick={onSubmitDialog}>submit</Button>
-            <Button onClick={onCloseDialog}>close</Button>
-          </DialogActions>
-        </Box>
+        {/* <Box sx={{ width: "400px", height: "400px" }}> */}
+        <MapEditor />
+        <img />
+        <input type="file" accept="image/*" onChange={onChangeDialog} />
+        <div>
+          <TextField placeholder="title" />
+        </div>
+        <div>
+          <TextField placeholder="content" />
+        </div>
+        <DialogActions>
+          <Button onClick={onSubmitDialog}>submit</Button>
+          <Button onClick={onCloseDialog}>close</Button>
+        </DialogActions>
+        {/* </Box> */}
       </Dialog>
       <OptionContainer>
         <div className="checkContainer">

@@ -1,54 +1,79 @@
 import CourseLeftLayout from "@components/course/CourseLeftLayout";
-import { COURSES, ICourseData, REPLYDATA } from "@data/CourseData";
 import { Avatar, Box, Button, Container, TextField } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import DateRangeIcon from "@mui/icons-material/DateRange";
+// import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+// import FavoriteIcon from "@mui/icons-material/Favorite";
+// import DateRangeIcon from "@mui/icons-material/DateRange";
 import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
-import { IComment, ICourse, ICourseDetail } from "types/apiType";
+import { ICourseDetail } from "types/apiType";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { API } from "@src/API";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
+import {
+  getCommentsAll,
+  getCourseDetailBoard,
+  insertCourseComment,
+} from "api/board";
 
 const CourseDetail = () => {
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [like, setLike] = useState(false);
   const [idx, setIdx] = useState<any>();
   const loggedInId = useRecoilValue(idState);
+  const [tmp, setTmp] = useState(1);
+  const updateComment = () => {
+    setTmp(tmp ^ 1);
+  };
+
+  useEffect(() => {
+    if (idx) {
+      getComments({ idx });
+    }
+  }, [tmp, idx]);
+
+  const getComments = async ({ idx }) => {
+    const comments = await getCommentsAll({ idx: idx, type: 2 });
+    const parent = comments.filter((item) => !item.recomment);
+    const child = comments.filter((item) => item.recomment);
+    const res = parent.map((item) => {
+      const resTmp = child.filter((item1) => item.idx === item1.recomment);
+      return { childrenReply: resTmp, ...item };
+    });
+    setComments(res);
+  };
+
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
       try {
-        const { data }: { data: { data: string } } = await API.post(
-          `course/insertCourseComments/${idx}`,
-          {
-            id: loggedInId,
-            content: comment,
-          }
-        );
+        const data = await insertCourseComment({
+          id: loggedInId,
+          content: comment,
+          idx: idx,
+        });
         if (data.data === "success") {
           toast.success("댓글 작성 성공");
-          setComments([
-            ...comments,
-            {
-              id: "admin",
-              content: comment,
-              createdAt: new Date().toISOString(),
-            },
-          ]);
+          // setComments([
+          //   ...comments,
+          //   {
+          //     idx: "999",
+          //     fk_user_comments_id: loggedInId,
+          //     content: comment,
+          //     createdAt: new Date().toISOString(),
+          //     childrenReply: [],
+          //   },
+          // ]);
+          updateComment();
         }
         // }
       } catch (e) {
@@ -66,32 +91,32 @@ const CourseDetail = () => {
     setIdx(id);
 
     if (id) {
-      const { data } = await API.get<ICourseDetail[]>(
-        `/course/courseBoards/${id}`,
-        {
-          // id: loggedInId,
-        }
-      );
+      // const { data } = await API.get<ICourseDetail[]>(
+      //   `/course/courseBoards/${id}`,
+      //   {
+      //     // id: loggedInId,
+      //   }
+      // );
+      const data = await getCourseDetailBoard({
+        id: loggedInId,
+        idx: id,
+      });
       setCourse(data[0]);
-      if (data[0].comments) {
-        setComments(data[0].comments);
-      }
+      // if (data[0].comments) {
+      //   setComments(data[0].comments);
+      // }
+      // setLike(data[0].)
+      getComments({ idx: id });
       // setComments(data[0].comments);
     }
 
     // setCourse(COURSES[Number(id)]);
   };
 
-  const onClickHeart = () => {
-    //TODO
-    toast.info("추가 예정입니다");
-    setLike(!like);
-  };
-
   useEffect(() => {
     getCourse();
     // getComments();
-  }, [router.isReady]);
+  }, []);
 
   return (
     <Container maxWidth="lg">
@@ -106,26 +131,16 @@ const CourseDetail = () => {
                 <div className="subsub">
                   <Avatar
                     alt="user"
+                    src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${course.writer}`}
                     // src={gravatar.url(user, { s: "28px", d: "retro" })}
                     className="avatar"
                   />
                   <div className="subContainer">
                     <div className="title">{course.title}</div>
-                    <div className="dateContainer">
-                      <div className="start">
-                        <span className="bold">출발 예정일</span>
-                        {/* {course.start} */}
-                        <DateRangeIcon />
-                      </div>
-                      <div className="end">
-                        <span className="bold">도착 예정일</span>
-                        {/* {course.end} */}
-                        <DateRangeIcon />
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div className="btns">
+                  {/*
                   <span className="heartLabel"> {course.writer}</span>
                   <Button className="heart" onClick={onClickHeart}>
                     {like ? (
@@ -150,7 +165,7 @@ const CourseDetail = () => {
                       />
                     )}
                   </Button>
-                  {/* <Button className="share" onClick={onClickShare}>
+                   <Button className="share" onClick={onClickShare}>
                     <ShareIcon />
                   </Button> */}
                   <ShareButton
@@ -160,6 +175,7 @@ const CourseDetail = () => {
                   />
                 </div>
               </div>
+
               <div
                 className="detailContent"
                 dangerouslySetInnerHTML={{ __html: course.content }}
@@ -180,19 +196,29 @@ const CourseDetail = () => {
                 <form className="write" onSubmit={onSubmitComment}>
                   <TextField
                     id=""
-                    label=""
                     placeholder="내용을 입력해주세요."
                     value={comment}
                     onChange={onChangeComment}
                     fullWidth
                   />
-                  <Button type="submit" className="btn" variant="contained">
+                  <Button
+                    disabled={!loggedInId || !comment}
+                    type="submit"
+                    className="btn"
+                    variant="contained"
+                  >
                     등록
                   </Button>
                 </form>
                 <div className="reply">
                   {comments.map((item, index) => (
-                    <ReplyContent key={index} {...item} />
+                    <ReplyContent
+                      key={index}
+                      type={2}
+                      update={updateComment}
+                      {...item}
+                      boardIdx={idx}
+                    />
                   ))}
                 </div>
               </ReplyContainer>
@@ -204,7 +230,32 @@ const CourseDetail = () => {
   );
 };
 
+// <div className="dateContainer">
+//   <div className="start">
+//     <span className="bold">출발 예정일</span>
+//     {/* {course.start} */}
+//     <DateRangeIcon />
+//   </div>
+//   <div className="end">
+//     <span className="bold">도착 예정일</span>
+//     {/* {course.end} */}
+//     <DateRangeIcon />
+//   </div>
+// </div>;
+
 const MainContainer = styled(Box)`
+  & .dateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    & div {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+  }
+
   & .titleContainer {
     display: flex;
     padding: 2rem 0;
@@ -219,23 +270,16 @@ const MainContainer = styled(Box)`
       margin-right: 1rem;
     }
     & .subContainer {
-      display: block;
+      display: flex;
+      flex-direction: column;
       & .title {
         font-size: 1.2rem;
         font-weight: bold;
-        margin-bottom: 1rem;
-      }
-      & .dateContainer {
-        display: flex;
-        align-items: center;
-
-        & div {
-          display: flex;
-          align-items: center;
-          margin-right: 1rem;
-        }
+        margin-bottom: auto;
+        margin-top: auto;
       }
     }
+
     & .btns {
       display: flex;
       align-items: end;

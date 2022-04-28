@@ -1,6 +1,6 @@
 import ShadowTag from "@components/ShadowTag";
 import styled from "@emotion/styled";
-import { titleSummary } from "@helpers/programHelper";
+import { titleSummary, toBase64 } from "@helpers/programHelper";
 import { Box, Grid, IconButton } from "@mui/material";
 import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
@@ -9,31 +9,46 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { API } from "@src/API";
+import { likeRecommendBoard, likeThemeBoard } from "api/board";
 
 interface IProp {
   course: ICourse;
+  likeCh: boolean;
 }
 
-const CourseContent: VFC<IProp> = ({ course }) => {
+const CourseContent: VFC<IProp> = ({ course, likeCh }) => {
   const loggedInId = useRecoilValue(idState);
-  const [like, setLike] = useState(course.likeClicked ? true : false);
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
+  const [like, setLike] = useState(course.likeClicked ? 1 : 0);
 
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/main/postLike/${course.idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          setLike(!like);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // API.post(`/main/postLike/${course.idx}`, {
+      //   id: loggedInId,
+      // })
+      //   .then(({ data }) => {
+      //     console.log(data);
+      //     setLike(!like);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      try {
+        if (course.type) {
+          const data = likeThemeBoard({
+            id: loggedInId,
+            idx: course.idx,
+          });
+        } else {
+          const data = likeRecommendBoard({
+            id: loggedInId,
+            idx: course.idx,
+          });
+        }
+        setLike(1 ^ like);
+      } catch (e) {
+        console.log(e);
+      }
     },
     [like]
   );
@@ -41,15 +56,15 @@ const CourseContent: VFC<IProp> = ({ course }) => {
   return (
     <Grid item xs={4} md={4} lg={4}>
       <MainContainer>
-        <PhotoContainer src={`${toBase64(course.mainImg.data)}`}>
-          {like && (
+        <PhotoContainer src={`${toBase64(course.mainImg)}`}>
+          {likeCh && (
             <div className="topContainer">
               <IconButton
                 onClick={onClickLike}
                 sx={{ padding: 0, marginRight: 2, display: "flex" }}
               >
                 <div className="haertContainer">
-                  {true ? (
+                  {like ? (
                     <FavoriteIcon
                       className="fillHeart"
                       sx={{
@@ -62,7 +77,12 @@ const CourseContent: VFC<IProp> = ({ course }) => {
                   ) : (
                     <FavoriteBorderIcon
                       className="heart"
-                      sx={{ width: 28, height: 28 }}
+                      sx={{
+                        width: 28,
+                        height: 28,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
                     />
                   )}
                 </div>

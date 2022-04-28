@@ -1,32 +1,33 @@
 import MapEditor from "@components/MapEditor";
 import styled from "@emotion/styled";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
-  Input,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
   Checkbox,
 } from "@mui/material";
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import useInput from "@hooks/useInput";
+import StarGenerator from "@components/StarGenerator";
 import { v1 } from "uuid";
 // import S3 from "react-aws-s3";
 // import S3FileUpload from "react-s3";
 import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
-import { API, getPayload } from "@src/API";
 import { DOMESTIC, OVERSEAS, SEASON } from "data/OptionData";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
+import { mapSelectedState } from "@store/map";
+import CustomEditorTag from "@components/CustomEditorTag";
+import QuillCSR, { Quill } from "react-quill";
+import { insertThemeBoard, insertRecommendBoard } from "api/board";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -38,19 +39,143 @@ const myBucket = new AWS.S3({
   region: config.region,
 });
 
+const Inline = Quill.import("blots/inline");
+const BlockEmbed = Quill.import("blots/block/embed");
+
+class MapContainerClass extends Inline {
+  static create(params) {
+    const node = super.create();
+    // node.setAttribute("class", val.className);
+    // node.setAttribute("id", val.id);
+    console.log(node, typeof node);
+    node.setAttribute("style", "display: flex");
+    return node;
+  }
+}
+
+MapContainerClass.blotName = "map";
+MapContainerClass.tagName = "div";
+
+class MapContainerImgClass extends BlockEmbed {
+  static create(params) {
+    const node = super.create();
+    // node.setAttribute("class", val.className);
+    // node.setAttribute("id", val.id);
+    // console.log(node, typeof node);
+    node.setAttribute("alt", params);
+    node.setAttribute("src", params);
+    console.log(params);
+    // node.innerHTML = `<div style='display:flex'><div><img src='${params[0]}'/></div></div>`;
+    // node.setAttribute("style", "display: flex");
+    return node;
+  }
+  static value(node) {
+    return {
+      alt: node.getAttribute("alt"),
+      url: node.getAttribute("src"),
+    };
+  }
+}
+MapContainerImgClass.tagName = "img";
+MapContainerImgClass.blotName = "mapImg";
+
+class MapContainerTestClass extends BlockEmbed {
+  static create(params) {
+    const node = super.create();
+    const count = Math.ceil(params[3]);
+    const fillStar = `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        style="fill: #f3c221;"
+      >
+        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
+      </svg>
+    `;
+    const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" style="fill: #f3c221;"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
+    const starsBody = "";
+    for (let i = 0; i < 5; i++) {
+      if (count - 1 >= i) {
+        starsBody += fillStar;
+      } else {
+        starsBody += outlineStar;
+      }
+    }
+    const stars = `<div style="display: flex;">${starsBody}</div>`;
+    const tag = (value) => `<div style="display: inline-block;
+  color: #b69775;
+  font-family: paybooc-Bold;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  margin-right: 5px;
+  border: 1px solid #b69775;
+  border-radius: 12px;">${value}</div>`;
+    const tags = "";
+    for (let i = 0; i < params[4].length; i++) {
+      tags += tag(params[4][i]);
+    }
+    node.innerHTML = `<div style='display:flex; padding: 1rem;'><img src='${params[0]}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${params[0]}/><div style="font-family: paybooc-Light;"><div style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${params[1]}</div><div style="height: 4rem;">${params[2]}</div><div style="height: 2rem">${stars}</div><div style="height: 2rem">${tags}</div></div></div>`;
+    return node;
+  }
+  // static value(node) {
+  //   return {
+  //     alt: node.getAttribute("alt"),
+  //     url: node.getAttribute("src"),
+  //   };
+  // }
+}
+
+MapContainerTestClass.tagName = "div";
+MapContainerTestClass.blotName = "test";
+
+// MapContainerClass.tagName = "div";
+Quill.register("formats/map", MapContainerClass);
+Quill.register("formats/mapImg", MapContainerImgClass);
+Quill.register("formats/test", MapContainerTestClass);
+
+const formats = [
+  "map",
+  "mapImg",
+  "test",
+  "bold",
+  "color",
+  "size",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "image",
+  "list",
+  "indent",
+];
+
 // const Quill = dynamic(import("react-quill"), {
 //   ssr: false,
 //   loading: () => <p>Loading ...</p>,
 // });
-const Quill = dynamic(
-  async () => {
-    const { default: RQ } = await import("react-quill");
-    return function comp({ forwardedRef, ...props }) {
-      return <RQ ref={forwardedRef} {...props} />;
-    };
-  },
-  { ssr: false }
-);
+// const QuillCSR = dynamic(
+//   async () => {
+//     const { default: RQ } = await import("react-quill");
+//     // console.log(RQ.Quill.import("blots/inline"));
+
+//     return function comp({ forwardedRef, ...props }) {
+//       return <RQ ref={forwardedRef} {...props} />;
+//     };
+//   },
+//   { ssr: false }
+// );
+
+// const Inline = dynamic(
+//   async () => {
+//     const inlineChild = await Quill.import("blots/inline");
+//     return inlineChild;
+//   },
+//   {
+//     ssr: false,
+//   }
+// );
+// const Inline = Quill.import("blots/inline");
 
 const ThemeCustomEditor = () => {
   const ref = useRef();
@@ -63,7 +188,9 @@ const ThemeCustomEditor = () => {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([true, false]);
+  const [index, setIndex] = useState(0);
   const isLoggedInId = useRecoilValue(idState);
+  const mapSelectState = useRecoilValue(mapSelectedState);
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -84,16 +211,34 @@ const ThemeCustomEditor = () => {
   };
 
   const onSubmitDialog = () => {
-    console.log();
+    // console.log(Inline);
+    // QuillCSR.register(Block);
+    if (ref.current) {
+      const editor = ref.current.getEditor();
+      const range = editor.getSelection();
+      // // ? editor.getSelection()?.index
+      // // : 0;
+      // console.log(editor.getSelection(), editor, range);
+      // console.log(editor, ref.current.getEditorConfig());
+      // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
+      // editor.insertText(range, " ", { map: mapSelectState });
+      editor.insertEmbed(index, "\n");
+      editor.insertEmbed(index, "test", mapSelectState, Quill.sources.USER);
+      editor.insertEmbed(index, "\n");
+
+      // ref.current.getEditor(index + 3);
+    }
+    // editor.insertEmbed(range + 1, "mapImg", mapSelectState[0]);
+    // console.log(createElementWithClassName());
+    // setValue(value + createElementWithClassName());
+    setOpen(false);
   };
 
-  useEffect(() => {
-    console.log();
-  }, [dialogImg]);
+  // useEffect(() => {}, [dialogImg]);
 
-  const onChangeDialog = (e) => {
-    setDialogImg(e.target.files[0]);
-  };
+  // const onChangeDialog = (e) => {
+  //   setDialogImg(e.target.files[0]);
+  // };
 
   const onTagKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -111,9 +256,9 @@ const ThemeCustomEditor = () => {
   const [region2, setRegion2, onChangeRegion2] = useInput("서울");
   const [date1, setDate1, onChangeDate1] = useInput(1);
   const [date2, setDate2, onChangeDate2] = useInput(2);
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
 
   useEffect(() => {
     setRegion2(region1 ? DOMESTIC[0].value : OVERSEAS[0].value);
@@ -143,7 +288,6 @@ const ThemeCustomEditor = () => {
         Key: fileName,
       })
         .then((res) => {
-          console.log(res);
           const range = ref.current.getEditorSelection();
           ref.current
             .getEditor()
@@ -152,7 +296,8 @@ const ThemeCustomEditor = () => {
               "image",
               `${process.env.NEXT_PUBLIC_S3URL}/${fileName}`
             );
-          ref.current.getEditor(range.index + 1);
+          // \          ref.current.getEditor(range?.index + 1);
+          // ref.current.getEditor(range.index + 1);
         })
         .catch((err) => {
           console.log(err);
@@ -162,6 +307,10 @@ const ThemeCustomEditor = () => {
         });
     });
   }
+
+  useEffect(() => {
+    setIndex(ref.current?.getEditor().getSelection()?.index);
+  }, [value]);
 
   const onSubmit = async () => {
     if (checked[0] + checked[1] !== 1) {
@@ -182,31 +331,77 @@ const ThemeCustomEditor = () => {
       console.log("not main image");
       mainImage = "";
     }
-    API.post(
-      checked[0]
-        ? "recommend/insertRecommendBoards"
-        : "/theme/insertThemeBoards",
-      {
-        title: title,
-        tags: tags,
-        shortContent: shortContent,
-        content: value,
-        mainImg: mainImage,
-        isLocal: region1,
-        schedule: `${date1}박${date2}일`,
-        region: region2,
-        season: season,
-        writer: isLoggedInId,
+    // API.post(
+    //   checked[0]
+    //     ? "recommend/insertRecommendBoards"
+    //     : "/theme/insertThemeBoards",
+    //   {
+    //     title: title,
+    //     tags: tags,
+    //     shortContent: shortContent,
+    //     content: value,
+    //     mainImg: mainImage,
+    //     isLocal: region1,
+    //     schedule: `${date1}박${date2}일`,
+    //     region: region2,
+    //     season: season,
+    //     writer: isLoggedInId,
+    //   }
+    // )
+    //   .then((res) => {
+    //     toast.success("등록완료");
+    //     router.back();
+    //   })
+    //   .catch((err) => {
+    //     toast.error("에러");
+    //     console.log(err);
+    //   });
+    try {
+      if (checked[1]) {
+        const data = await insertThemeBoard({
+          title: title,
+          tags: tags,
+          shortContent: shortContent,
+          content: value,
+          mainImg: mainImage,
+          isLocal: region1,
+          schedule: `${date1}박${date2}일`,
+          region: region2,
+          season: season,
+          id: isLoggedInId,
+        });
+        if (data.data) {
+          toast.success("등록완료");
+          router.back();
+        } else {
+          toast.error("에러");
+          console.log(err);
+        }
+      } else {
+        const data = await insertRecommendBoard({
+          title: title,
+          tags: tags,
+          shortContent: shortContent,
+          content: value,
+          mainImg: mainImage,
+          isLocal: region1,
+          schedule: `${date1}박${date2}일`,
+          region: region2,
+          season: season,
+          id: isLoggedInId,
+        });
+        if (data.data) {
+          toast.success("등록완료");
+          router.back();
+        } else {
+          toast.error("에러");
+          console.log(err);
+        }
       }
-    )
-      .then((res) => {
-        toast.success("등록완료");
-        router.back();
-      })
-      .catch((err) => {
-        toast.error("에러");
-        console.log(err);
-      });
+    } catch (e) {
+      toast.error("에러");
+      console.log("write error", e);
+    }
   };
 
   const modules = useMemo(
@@ -233,22 +428,56 @@ const ThemeCustomEditor = () => {
   );
   return (
     <MainContainer>
-      <Dialog open={open} onClose={onCloseDialog}>
-        <Box sx={{ width: "400px", height: "400px" }}>
-          <MapEditor />
-          <img />
-          <input type="file" accept="image/*" onChange={onChangeDialog} />
-          <div>
-            <TextField placeholder="title" />
-          </div>
-          <div>
-            <TextField placeholder="content" />
+      <Dialog open={open} onClose={onCloseDialog} fullWidth>
+        <ThemeCustomEditorDialog>
+          <div className="themeCustomEditorDialogLayout">
+            <div className="themeCustomEditorDialogBody">
+              <MapEditor />
+              {/* <img /> */}
+              {/* <input type="file" accept="image/*" onChange={onChangeDialog} /> */}
+              <div className="themeCustomEditorDialogContainer">
+                <img
+                  src={mapSelectState[0]}
+                  alt={mapSelectState[0]}
+                  className="themeCustomEditorDialogContainerImg"
+                />
+                <div className="themeCustomEditorDialogContainerBody">
+                  <div className="themeCustomEditorDialogTitle">
+                    {/* 식당명칭이 들어갈 자 */}
+                    {mapSelectState[1]}
+                  </div>
+                  <div className="themeCustomEditorDialogContent">
+                    {/* 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심
+                      문장을 인용하여 이용자에게 보여줄 수 있습니다. 본문에 있는
+                      내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을
+                      인용하여 이용자에게 보여줄 수 있습니다. */}
+                    {mapSelectState[2]}
+                  </div>
+                  <div className="themeCustomEditorDialogScore">
+                    {/* {mapSelectState[3]} */}
+                    <StarGenerator count={mapSelectState[3]} />
+                  </div>
+                  <div className="themeCustomEditorDialogTags">
+                    {mapSelectState[4].map((item, index) => {
+                      return <CustomEditorTag tag={item} key={index} />;
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="themeCustomEditorDialogRightScroll">
+              <ThemeCustomRightScrollTable />
+            </div>
           </div>
           <DialogActions>
-            <Button onClick={onSubmitDialog}>submit</Button>
-            <Button onClick={onCloseDialog}>close</Button>
+            <Button onClick={onSubmitDialog} variant="contained">
+              submit
+            </Button>
+            <Button onClick={onCloseDialog} variant="contained" color="error">
+              close
+            </Button>
           </DialogActions>
-        </Box>
+        </ThemeCustomEditorDialog>
       </Dialog>
       <OptionContainer>
         <div className="checkContainer">
@@ -329,7 +558,7 @@ const ThemeCustomEditor = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <MapAddContainer>
-        <div className="label">
+        {/* <div className="label">
           <Button className="btn" size="small" onClick={() => setDay(day + 1)}>
             +
           </Button>
@@ -337,11 +566,12 @@ const ThemeCustomEditor = () => {
           <Button className="btn" size="small" onClick={() => setDay(day - 1)}>
             -
           </Button>
-        </div>
+        </div> */}
 
         <Button
           onClick={() => {
-            toast.info("추가 예정입니다.");
+            // toast.info("추가 예정입니다.");
+            setOpen(true);
           }}
         >
           <AddLocationIcon />
@@ -356,7 +586,12 @@ const ThemeCustomEditor = () => {
           modules={modules}
           formats={formats}
         /> */}
-        <Quill forwardedRef={ref} onChange={setValue} modules={modules} />
+        <QuillCSR
+          ref={ref}
+          formats={formats}
+          onChange={setValue}
+          modules={modules}
+        />
       </div>
       <TagContainer>
         <TextField
@@ -392,6 +627,53 @@ const ThemeCustomEditor = () => {
 const MainContainer = styled.div`
   & .center {
     text-align: center;
+  }
+`;
+
+const ThemeCustomEditorDialog = styled.div`
+  display: block;
+  padding: 1rem;
+
+  & .themeCustomEditorDialogLayout {
+    display: block;
+
+    & .themeCustomEditorDialogContainer {
+      display: flex;
+
+      & .themeCustomEditorDialogContainerImg {
+        width: 200px;
+        height: 200px;
+        backround-color: black;
+        border-radius: 200px;
+      }
+
+      & .themeCustomEditorDialogContainerBody {
+        // width: 100px;
+        width: 100%;
+        font-family: paybooc-Light;
+        padding: 1rem;
+        padding-left: 2rem;
+
+        & .themeCustomEditorDialogTitle {
+          font-family: paybooc-Bold;
+          height: 2rem;
+          font-size: 1.2rem;
+        }
+
+        & .themeCustomEditorDialogContent {
+          height: 4rem;
+        }
+      }
+    }
+
+    & .themeCustomEditorDialogRightScroll {
+      // overflow: auto;
+      // background-color: black;
+      // width: 200px;
+      // overflow: hidden;
+      // overflow: auto;
+      // border-left: 1px solid #000000;
+    }
   }
 `;
 

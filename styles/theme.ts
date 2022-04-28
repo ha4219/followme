@@ -12,9 +12,9 @@ let theme = createTheme({
       light: "#757ce8",
       // light: "#191919",
       // main: "#3f50b5",
-      main: "#191919",
+      main: "#000000",
       // dark: "#002884",
-      dark: '#191919',
+      dark: "#000000",
       contrastText: "#ffffff",
       // contrastText: "#191919"
     },
@@ -26,7 +26,7 @@ let theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ["Noto Sans KR"].join(","),
+    fontFamily: ["paybooc-Bold"].join(","),
   },
 });
 

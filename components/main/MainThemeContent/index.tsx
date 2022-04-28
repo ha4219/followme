@@ -2,8 +2,7 @@ import TagContainer from "@components/TagContainer";
 import styled from "@emotion/styled";
 import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useCallback, useState, VFC } from "react";
-import gravatar from "gravatar";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { ICourse } from "types/apiType";
@@ -12,6 +11,8 @@ import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
+import { doThemeLike } from "api/theme";
+import { likeThemeBoard } from "api/board";
 
 const MainThemeContent: VFC<ICourse> = ({
   idx,
@@ -30,8 +31,9 @@ const MainThemeContent: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const [like, setLike] = useState(likeClicked);
-  const loggedInId = useRecoilValue(idState);
+  const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
+  const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);
+  const id = useRecoilValue(idState);
   const router = useRouter();
 
   const onClickProgram = useCallback((id) => {
@@ -39,36 +41,34 @@ const MainThemeContent: VFC<ICourse> = ({
   }, []);
 
   const onClickLike = useCallback(
-    async (e) => {
+    (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      API.post(`/theme/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          setLike(like ? 0 : 1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (id) {
+        likeThemeBoard({ idx, id });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
     [like]
   );
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
   return (
     <MainContainer md={3} sm={6} xs={6} lg={3} item>
       <Box sx={{ cursor: "pointer" }} onClick={onClickProgram}>
-        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
+        <PhotoContainer src={`${toBase64(mainImg)}`}>
           <span className="title">{titleSummary(title)}</span>
         </PhotoContainer>
-        <TagContainer tags={tags} />
+        {tags ? <TagContainer tags={tags} /> : <div className="noTags" />}
         <ContentContainer>
           <div className="avatar">
             <Avatar
               alt="user"
+              src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
               // src={gravatar.url(writer, { s: "28px", d: "retro" })}
             />
           </div>
@@ -98,7 +98,7 @@ const MainThemeContent: VFC<ICourse> = ({
               }}
             />
           )}
-          <div className="heartTxt">{likeCnts}</div>
+          <div className="heartTxt">{likeCnt}</div>
         </Button>
         <ShareButton
           url={`${process.env.NEXT_PUBLIC_DEPLOYURL}/theme/${idx}`}
@@ -125,10 +125,11 @@ const PhotoContainer = styled.div`
   height: 327px;
   background: url(${(props: { src: string }) => props.src}) no-repeat;
   padding: 0 1rem;
+  background-size: cover;
   
 
   & .title {
-    padding: 0.2rem;
+    padding: 0.2rem 1rem;
     font-size: 1.1rem;
     font-weight: bold;
     align-self:flex-end
@@ -158,16 +159,24 @@ const BottomContainer = styled.div`
   & .share {
     color: #b9b9b9;
   }
+
+  & .noTags {
+    height: 4rem;
+  }
 `;
 
 const ContentContainer = styled.div`
   display: inline-flex;
+  width: 100%;
   border-bottom: 1px solid #d8d8d8;
   padding: 1rem 0;
+  height: 5rem;
+  overflow: hidden;
   & .avatar {
   }
   & .content {
     padding: 0 1rem;
+    height: 3rem;
   }
 `;
 // background: url(${(props: { src: string }) => props.src}) no-repeat;

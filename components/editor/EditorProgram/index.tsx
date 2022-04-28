@@ -1,15 +1,20 @@
 import styled from "@emotion/styled";
-import { Box, Button, Grid } from "@mui/material";
+import { Avatar, Box, Button, Grid, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, VFC } from "react";
 import { ICourse } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
+import ShareButton from "@components/ShareButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Link from "next/link";
 
 const EditorProgram: VFC<ICourse> = ({
   idx,
   mainImg,
+  type,
   writer,
   title,
   shortContent,
@@ -24,81 +29,187 @@ const EditorProgram: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const router = useRouter();
-  const onClickProgram = useCallback((id) => {
-    router.push(`/editor/${idx}`);
-  }, []);
-
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
+  const [like, setLike] = useState(likeClicked);
+  const onClickLike = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      // setLike(like ? like ^ 1 : 0);
+    },
+    [like]
+  );
 
   return (
-    <MainContainer
-      xs={6}
-      sm={6}
-      md={4}
-      lg={4}
-      src={`${toBase64(mainImg.data)}`}
-      onClick={onClickProgram}
-    >
-      <div className="tag">
-        <span>{region}</span>
-      </div>
-      <div className="title">
-        <span>{titleSummary(title)}</span>
-      </div>
-      <div className="content">
-        <span>{contentSummary(shortContent)}</span>
-      </div>
-      <CustomButton>바로가기</CustomButton>
-    </MainContainer>
+    <EditorContainer item xs={6} sm={6} md={4} lg={4}>
+      <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
+        <div>
+          <div className="editorProgramPhotoWrapper">
+            <EditorProgramPhoto
+              className="editorProgramPhoto"
+              src={`${toBase64(mainImg)}`}
+            >
+              <div className="editorProgramPhotoBest">BEST</div>
+            </EditorProgramPhoto>
+          </div>
+          <div className="editorProgramBody">
+            <div className="editorProgramProps">
+              <div className="editorProgramLeft">
+                <IconButton>
+                  <Avatar
+                    alt="user"
+                    // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                    className="avatar"
+                  />
+                </IconButton>
+                <span className="editorProgramWriter">{writer}</span>
+              </div>
+              <div className="editorProgramRight">
+                <ShareButton
+                  url={window.location.href}
+                  // user={loggedInId}
+                  // des={course.title}
+                />
+                <span className="editorProgramLikeCnt">{likeCnts}</span>
+                <IconButton onClick={onClickLike}>
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="heart"
+                      sx={{ width: 20, height: 20 }}
+                    />
+                  )}
+                </IconButton>
+              </div>
+            </div>
+            <div className="editorProgramTitle">{title}</div>
+            <div className="editorProgramContent">{shortContent}</div>
+            <div className="editorProgramTags">
+              {(tags ? tags : []).map((item, index) => (
+                <span className="editorProgramTag" key={index}>
+                  #{item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Link>
+    </EditorContainer>
   );
 };
 
-const MainContainer = styled(Grid)`
+const EditorProgramPhoto = styled.div`
   background: url(${(props: { src: string }) => props.src}) no-repeat;
-  border-radius: 5px;
-  color: #ffffff;
-  text-align: center;
-  padding: 4.5rem;
-  cursor: pointer;
-
-  :hover {
-    background-color: #ffffff;
-    opacity: 0.6;
-  }
-
-  & .tag {
-    display: inline-block;
-
-    & span {
-      background-color: #ff9016;
-      padding: 0.3rem 1.5rem;
-      border-radius: 14px;
-    }
-  }
-  & .title {
-    padding-top: 1rem;
-    display: block;
-    & span {
-      font-size: 1.4rem;
-    }
-  }
-  & .content {
-    padding-top: 1rem;
-
-    display: block;
-    & span {
-    }
+  & .editorProgramPhotoBest {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-family: paybooc-Bold;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 11px;
+    background-color: #f93b1d;
+    padding: 5px 10px 7px 10px;
+    border-radius: 5px;
+    font-weight: bold;
   }
 `;
 
-const CustomButton = styled(Button)`
-  margin-top: 3rem;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
+const EditorContainer = styled(Grid)`
+  cursor: pointer;
+  font-family: paybooc-Light;
+
+  & .editorProgramPhotoWrapper {
+    width: 100%;
+    height: 20rem;
+
+    & .editorProgramPhoto {
+      width: 100%;
+      background-size: cover;
+      position: relative;
+      height: 20rem;
+      border-radius: 10px;
+
+      & .editorProgramPhotoBest {
+        position: absolute;
+      }
+    }
+  }
+
+  & .editorProgramBody {
+    & .editorProgramProps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+
+      & .editorProgramLeft {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      & .editorProgramRight {
+        display: flex;
+        padding-right: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      & .heart {
+        fill: #ff1d25;
+      }
+
+      & .fillHeart {
+        fill: #ff1d25;
+      }
+
+      & button {
+        padding: 0;
+      }
+
+      & .editorProgramWriter {
+        padding-left: 5px;
+        font-family: paybooc-Bold;
+      }
+
+      & .editorProgramLikeCnt {
+        border-left: 1px solid #d8d8d8;
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        line-height: 15px;
+      }
+    }
+
+    & .editorProgramTitle {
+      font-family: paybooc-Bold;
+      font-size: 1.3rem;
+      height: 3rem;
+    }
+
+    & .editorProgramContent {
+      height: 3rem;
+      line-height: 1.33;
+      letter-spacing: -0.83;
+    }
+
+    & .editorProgramTags {
+      & .editorProgramTag {
+        display: inline-block;
+        font-size: 0.8rem;
+        line-height: 0.92;
+        padding-right: 8px;
+      }
+    }
+  }
 `;
 
 export default EditorProgram;

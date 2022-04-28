@@ -24,3 +24,14 @@ export const mapContentSummary = (text: string): string =>
     : text;
 
 export const dateHelper = (text: string): string => text.slice(0, 10);
+
+export const toBase64 = (mainImg) => {
+  try {
+    if (mainImg.data.length) {
+      return Buffer.from(mainImg?.data);
+    }
+    return "/noimage.jpeg";
+  } catch (e) {
+    return "/noimage.jpeg";
+  }
+};

@@ -5,43 +5,63 @@ export const ContainerFooter = styled.div`
   flex: 1;
   padding: 1rem 0rem;
   padding-bottom: 4rem;
-  background-color: #f8f8fa;
-  color: #616161;
+  // background-color: #f8f8fa;
+  color: #000000;
   margin-top: 2rem;
 
   & .nav {
+    font-family: paybooc-Bold;
     display: flex;
-    justify-content: center;
     align-items: center;
+    border-top: 1px solid #e1e2eb;
+    border-bottom: 1px solid #e1e2eb;
+    padding: 1rem;
     margin-bottom: 1rem;
     & a {
       font-size: 0.9rem;
+      // padding-right: 2rem;
+    }
+
+    & .dividor {
       padding: 1rem;
     }
-  }
 
-  & .help-icons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
-    & svg {
-      margin: 0 1rem;
+    & .footerNavIcon {
+      padding: 7px 7px 2px 7px;
+      border-radius: 28px;
+      width: 28px;
+      height: 28px;
+      margin-left: 10px;
+      background: #bbbbbb;
+
+      :hover {
+        cursor: pointer;
+      }
     }
   }
 
   & .help-des {
     display: block;
     font-size: 0.85rem;
-    line-height: 2rem;
-    & div {
+    line-height: 1.5rem;
+    font-family: paybooc-Medium;
+    & .help-des-between {
       display: flex;
+      justify-content: space-between;
+
+      & b {
+        font-family: paybooc-Bold;
+      }
+    }
+    & div {
+      display: block;
       justify-content: center;
       align-items: center;
     }
   }
 
   & .any {
+    padding-top: 1rem;
     color: #9a9a9a;
   }
 `;
@@ -88,6 +108,14 @@ export const ItemR = styled.div`
   }
 
   & .help-des {
+    & .help-des-between {
+      display: flex;
+      justify-content: space-between;
+
+      & b {
+        font-family: paybooc-Bold;
+      }
+    }
   }
 
   & .help-icons {

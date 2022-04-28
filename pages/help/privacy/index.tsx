@@ -1,12 +1,30 @@
 import HelpLeftLayout from "@components/help/HelpLeftLayout";
 import styled from "@emotion/styled";
-import { Container, Paper } from "@mui/material";
+import { Box, Container, Paper } from "@mui/material";
+import Image from "next/image";
 
 const HelpPrivacy = () => {
   return (
-    <Container maxWidth="lg">
+    <MainContainer maxWidth="lg">
+      <Box className="editorPath" py={1}>
+        <div className="MainContainerPathIcon">
+          <Image
+            src="/icons/icon.home.png"
+            width="18px"
+            height="18px"
+            alt="homeIcon"
+          />
+        </div>
+        <span>
+          <span className="MainContainerPathColor">홈</span>
+          <span className="dividor">|</span>
+          {"개인정보처리방침"}
+        </span>
+      </Box>
+
+      <Box className="editorTitle">{"개인정보처리방침"}</Box>
       <HelpLeftLayout>
-        <MainContainer>
+        <MainBContainer>
           네이버 개인정보처리방침 예시입니다.
           <li id="policy1" className="list_box">
             <h4>1. 처리하는 개인정보 항목</h4>
@@ -66,13 +84,43 @@ const HelpPrivacy = () => {
               있습니다.
             </p>
           </li>
-        </MainContainer>
+        </MainBContainer>
       </HelpLeftLayout>
-    </Container>
+    </MainContainer>
   );
 };
 
-const MainContainer = styled(Paper)`
+const MainContainer = styled(Container)`
+  & .searchContainer {
+    border-radius: 27px;
+  }
+
+  & .MainContainerPathIcon {
+    height: 21px;
+    margin-right: 6px;
+  }
+  & .editorPath {
+    display: flex;
+    font-size: 0.9rem;
+    font-family: paybooc-Medium;
+
+    & .MainContainerPathColor {
+      color: #888888;
+    }
+    & .dividor {
+      padding: 1rem;
+    }
+  }
+  & .editorTitle {
+    font-family: paybooc-Bold;
+    font-size: 2rem;
+    text-align: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #000000;
+  }
+`;
+
+const MainBContainer = styled(Paper)`
   margin: 3rem 0;
 `;
 

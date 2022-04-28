@@ -10,6 +10,7 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { getRecommendAllBoard } from "api/board";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
@@ -26,10 +27,13 @@ const ProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>(
-      "/recommend/recommendBoards",
-      loggedInId !== "" ? { id: loggedInId } : {}
-    );
+    // const { data } = await API.post<ICourse[]>(
+    //   "/recommend/recommendBoards",
+    //   loggedInId !== "" ? { id: loggedInId } : {}
+    // );
+    const data = await getRecommendAllBoard({
+      id: loggedInId,
+    });
     setTravels(
       data.slice(-9).sort((l, r) => {
         if (r.createdAt > l.createdAt) {
@@ -105,18 +109,21 @@ const ProgramList: VFC = () => {
         </TitleContainer>
         <SortedContainer>
           <CustomButton
+            size="small"
             className={sortedType === 0 ? "active" : ""}
             onClick={() => setSortedType(0)}
           >
             추천순
           </CustomButton>
           <CustomButton
+            size="small"
             className={sortedType === 1 ? "active" : ""}
             onClick={() => setSortedType(1)}
           >
             인기순
           </CustomButton>
           <CustomButton
+            size="small"
             className={sortedType === 2 ? "active" : ""}
             onClick={() => setSortedType(2)}
           >
@@ -140,6 +147,7 @@ const TitleContainer = styled.div`
     color: gray;
   }
   & .main {
+    font-family: paybooc-ExtraBold;
     font-size: 2rem;
     letter-spacing: -1.76px;
   }
@@ -162,6 +170,7 @@ const SortedContainer = styled.div`
 const CustomButton = styled(Button)`
   border: 1px solid black;
   margin-left: 5px;
+  height: 30px;
 `;
 
 export default ProgramList;

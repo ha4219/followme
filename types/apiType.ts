@@ -1,8 +1,14 @@
 export interface IComment {
-  id: string;
+  idx: string;
   content: string;
   fk_user_id?: string;
+  fk_user_comments_id: string;
   createdAt: string;
+}
+
+export interface IMergeCourse {
+  theme: ICourse[];
+  recommend: ICourse[];
 }
 
 export interface IUser {
@@ -11,12 +17,13 @@ export interface IUser {
   nickName: string;
   phoneNum: string;
   email: string;
-  points: number;
+  point: string;
   likeCnts: number;
 }
 
 export interface ICourse {
   idx: number;
+  type: number;
   mainImg: any;
   writer: string;
   title: string;
@@ -51,4 +58,77 @@ export interface ICourseDetail {
   views: number;
   writer: string;
   likeClicked?: number;
+}
+
+export interface IBannerType {
+  idx: number;
+  urlTo: string;
+  endDate: string;
+  imgURL: string;
+}
+
+export interface IPointType {
+  content: string;
+  createdAt: string;
+  point: number;
+  type: string;
+}
+
+export interface INoticeType {
+  title: string;
+  createdAt: string;
+  idx: number;
+  content: string;
+  views: number;
+  writer: string;
+}
+
+export interface IFaqType {
+  idx: number;
+  title: string;
+  content: string;
+  writer: string;
+  createdAt: string;
+}
+
+export interface IReportCommentType {
+  idx: number;
+  content: string;
+  createdAt: string;
+  fk_board_idx: number;
+  fk_user_comments_id: string;
+  recomment: number | null;
+  reported: number;
+  type: number;
+  updatedAt: string;
+}
+
+export interface IEnterpriseType {
+  category: string;
+  content: string;
+  id: string;
+  idx: number;
+  latitude: string;
+  longitude: string;
+  name: string;
+  profileImage: string;
+  score: number;
+  tags: string[];
+}
+
+export interface IEnterpriseMenuType {
+  idx: number;
+  fk_user_enterMenus_id: string;
+  name: string;
+  explanation: string;
+  menuImg: string;
+}
+
+export interface IEnterpriseReviewType {
+  idx: number;
+
+  score: number;
+  enterId: string;
+  writer: string;
+  content: string;
 }

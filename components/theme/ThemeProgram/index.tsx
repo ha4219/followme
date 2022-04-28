@@ -1,18 +1,15 @@
-import { Avatar, Box, Grid, IconButton } from "@mui/material";
-import React, { useCallback, useState, VFC } from "react";
-import gravatar from "gravatar";
-
-import { PhotoContainer, DesContainer, ContentContainer } from "./styles";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
-
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import TagContainer from "@components/TagContainer";
+import styled from "@emotion/styled";
+import { Avatar, Grid, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
+import { useCallback, useState, VFC } from "react";
+import { ICourse } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
-import { ICourse } from "types/apiType";
-import { API } from "@src/API";
+import ShareButton from "@components/ShareButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { likeThemeBoard } from "api/board";
 
 const ThemeProgram: VFC<ICourse> = ({
   idx,
@@ -22,107 +19,206 @@ const ThemeProgram: VFC<ICourse> = ({
   shortContent,
   tags,
   likeCnts,
-  views,
-  createdAt,
-  isLocal,
   likeClicked,
-  region,
-  schedule,
-  season,
-  updatedAt,
 }) => {
-  const [like, setLike] = useState(likeClicked === 1);
-  const loggedInId = useRecoilValue(idState);
-
-  const router = useRouter();
-
+  const [like, setLike] = useState<number>(likeClicked ? likeClicked : 0);
+  const [likeCnt, setLikeCnt] = useState(likeCnts ? likeCnts : 0);
+  const id = useRecoilValue(idState);
   const onClickLike = useCallback(
-    async (e) => {
+    (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      API.post(`/theme/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          setLike(!like);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (id) {
+        likeThemeBoard({ idx, id });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
     [like]
   );
-
+  const router = useRouter();
   const onClickProgram = useCallback((id) => {
-    router.push(`/theme/${id}`);
+    router.push(`/theme/${idx}`);
   }, []);
 
   const toBase64 = (arr) => {
     return Buffer.from(arr);
   };
 
+  // return (
+  //   <MainContainer
+  //     xs={6}
+  //     sm={6}
+  //     md={4}
+  //     lg={4}
+  //     src={`${toBase64(mainImg.data)}`}
+  //     onClick={onClickProgram}
+  //   >
+  //     <div className="tag">
+  //       <span>{region}</span>
+  //     </div>
+  //     <div className="title">
+  //       <span>{titleSummary(title)}</span>
+  //     </div>
+  //     <div className="content">
+  //       <span>{contentSummary(shortContent)}</span>
+  //     </div>
+  //     <CustomButton>바로가기</CustomButton>
+  //   </MainContainer>
+  // );
+
   return (
-    <Grid item lg={4} xs={4} md={4}>
-      <Box
-        onClick={() => {
-          onClickProgram(idx);
-        }}
-        sx={{
-          alignItems: "stretch",
-          borderRadius: "0 0 10px 10px",
-          border: "1px solid #d8d8d8",
-          borderTop: 0,
-          paddingBottom: "2rem",
-          cursor: "pointer",
-          overflow: "hidden",
-        }}
-      >
-        <PhotoContainer src={`${toBase64(mainImg.data)}`}>
-          <div className="topContainer">
-            <IconButton
-              onClick={onClickLike}
-              sx={{ padding: 0, marginRight: 2, display: "flex" }}
-            >
-              <div className="haertContainer">
-                {like ? (
-                  <FavoriteIcon
-                    className="fillHeart"
-                    sx={{
-                      width: 28,
-                      height: 28,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    className="heart"
-                    sx={{ width: 28, height: 28 }}
-                  />
-                )}
-              </div>
+    <EditorContainer item xs={6} sm={6} md={4} lg={4} onClick={onClickProgram}>
+      <div className="editorProgramPhotoWrapper">
+        <img
+          className="editorProgramPhoto"
+          src={`${toBase64(mainImg.data)}`}
+          alt={title}
+        />
+      </div>
+      <div className="editorProgramBody">
+        <div className="editorProgramProps">
+          <div className="editorProgramLeft">
+            <IconButton>
+              <Avatar
+                alt="user"
+                src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${writer}`}
+                // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                className="avatar"
+              />
+            </IconButton>
+            <span className="editorProgramWriter">{writer}</span>
+          </div>
+          <div className="editorProgramRight">
+            <ShareButton
+              url={window.location.href}
+              // user={loggedInId}
+              // des={course.title}
+            />
+            <span className="editorProgramLikeCnt">{likeCnt}</span>
+            <IconButton onClick={onClickLike}>
+              {like ? (
+                <FavoriteIcon
+                  className="fillHeart"
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : (
+                <FavoriteBorderIcon
+                  className="heart"
+                  sx={{ width: 20, height: 20 }}
+                />
+              )}
             </IconButton>
           </div>
-        </PhotoContainer>
-        <Box sx={{ padding: "0 1rem" }}>
-          <TagContainer tags={tags} />
-        </Box>
-        <ContentContainer>
-          <IconButton>
-            <Avatar
-              alt="user"
-              // src={gravatar.url(user, { s: "28px", d: "retro" })}
-              className="avatar"
-            />
-          </IconButton>
-          <DesContainer className="description">
-            <div className="title">{titleSummary(title)}</div>
-            <div className="content">{contentSummary(shortContent)}</div>
-          </DesContainer>
-        </ContentContainer>
-      </Box>
-    </Grid>
+        </div>
+        <div className="editorProgramTitle">{titleSummary(title)}</div>
+        <div className="editorProgramContent">
+          {contentSummary(shortContent)}
+        </div>
+        <div className="editorProgramTags">
+          {tags.map((item, index) => (
+            <span className="editorProgramTag" key={index}>
+              #{item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </EditorContainer>
   );
 };
+
+const EditorContainer = styled(Grid)`
+  cursor: pointer;
+  font-family: paybooc-Light;
+
+  & .editorProgramPhotoWrapper {
+    width: 100%;
+    height: 20rem;
+
+    & .editorProgramPhoto {
+      width: 100%;
+      background-size: cover;
+      height: 20rem;
+      border-radius: 10px;
+    }
+  }
+
+  & .editorProgramBody {
+    & .editorProgramProps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+
+      & .editorProgramLeft {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      & .editorProgramRight {
+        display: flex;
+        padding-right: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      & .heart {
+        fill: #ff1d25;
+      }
+
+      & .fillHeart {
+        fill: #ff1d25;
+      }
+
+      & button {
+        padding: 0;
+      }
+
+      & .editorProgramWriter {
+        padding-left: 5px;
+        font-family: paybooc-Bold;
+      }
+
+      & .editorProgramLikeCnt {
+        border-left: 1px solid #d8d8d8;
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        line-height: 15px;
+      }
+    }
+
+    & .editorProgramTitle {
+      font-family: paybooc-Bold;
+      font-size: 1.3rem;
+      height: 3rem;
+    }
+
+    & .editorProgramContent {
+      height: 4rem;
+      line-height: 1.33;
+      letter-spacing: -0.83;
+    }
+
+    & .editorProgramTags {
+      & .editorProgramTag {
+        display: inline-block;
+        font-size: 0.8rem;
+        line-height: 0.92;
+        padding-right: 8px;
+      }
+    }
+  }
+`;
 
 export default ThemeProgram;

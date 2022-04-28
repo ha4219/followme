@@ -1,33 +1,39 @@
 import styled from "@emotion/styled";
 import { Avatar, Button, Container, TextField } from "@mui/material";
-import { API } from "@src/API";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import gravatar from "gravatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
-import { IComment, ICourseDetail } from "types/apiType";
+import { ICourseDetail } from "types/apiType";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
 import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
+import ProgramHeader from "@components/ProgramHeader";
+import {
+  getRecommendDetailBoard,
+  insertRecommentComment,
+  likeRecommendBoard,
+  getCommentsAll,
+} from "api/board";
 
 const RecommendDetail = () => {
   const router = useRouter();
   // const { memberId } = getPayload();
   const [course, setCourse] = useState<ICourseDetail>();
   const [isLoading, setLoading] = useState(true);
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
   const [idx, setIdx] = useState<any>();
   const [like, setLike] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
   const loggedInId = useRecoilValue(idState);
+  const [tmp, setTmp] = useState(1);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -35,58 +41,66 @@ const RecommendDetail = () => {
       setIdx(id);
 
       if (id) {
-        const { data } = await API.post<ICourseDetail[]>(
-          `/recommend/postDetail/${id}`
-          // {
-          //   id: loggedInId,
-          // }
-        );
+        // const { data } = await API.post<ICourseDetail[]>(
+        //   `/recommend/postDetail/${id}`,
+        //   {
+        //     id: loggedInId,
+        //   }
+        // );
+        const data = await getRecommendDetailBoard({
+          id: loggedInId,
+          idx: id,
+        });
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
-        setComments(data[0].comments);
+        // setComments(data[0].comments);
+        getComments({ idx: id });
       }
     } catch (e) {
       console.log("router not ready", e);
     }
   };
 
-  const getComments = async () => {
-    const { id } = router.query;
-    try {
-      if (id) {
-        const { data } = await API.get<IComment[]>(
-          `/recommend/recommendBoards/reply/${id}`,
-          {}
-        );
-        setComments(data);
-      }
-    } catch (e) {
-      console.log("router not ready", e);
-    }
-    setIdx(id);
+  const getComments = async ({ idx }) => {
+    const comments = await getCommentsAll({ idx: idx, type: 0 });
+    const parent = comments.filter((item) => !item.recomment);
+    const child = comments.filter((item) => item.recomment);
+    const res = parent.map((item) => {
+      const resTmp = child.filter((item1) => item.idx === item1.recomment);
+      return { childrenReply: resTmp, ...item };
+    });
+    setComments(res);
   };
 
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
       try {
-        const { data }: { data: { data: string } } = await API.post(
-          `recommend/recommendBoards/insertReply/${idx}`,
-          {
-            id: loggedInId,
-            content: comment,
-          }
-        );
+        // const { data }: { data: { data: string } } = await API.post(
+        //   `recommend/recommendBoards/insertReply/${idx}`,
+        //   {
+        //     id: loggedInId,
+        //     content: comment,
+        //   }
+        // );
+        const data = await insertRecommentComment({
+          id: loggedInId,
+          content: comment,
+          idx: idx,
+        });
         if (data.data === "success") {
-          setComments([
-            ...comments,
-            {
-              id: loggedInId,
-              content: comment,
-              createdAt: new Date().toISOString(),
-            },
-          ]);
+          // setComments([
+          //   ...comments,
+          //   {
+          //     idx: "999",
+          //     fk_user_comments_id: loggedInId,
+          //     content: comment,
+          //     createdAt: new Date().toISOString(),
+          //     childrenReply: [],
+          //   },
+          // ]);
+          setTmp(tmp ^ 1);
         }
       } catch (e) {
         console.log("댓글 작성 실패", e);
@@ -95,35 +109,23 @@ const RecommendDetail = () => {
         setComment("");
       }
     },
-    [comment]
+    [comment, idx]
   );
 
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/main/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          if (course) {
-            if (like) {
-              setLikeCnt(course.likeCnts - 1);
-            } else {
-              setLikeCnt(course.likeCnts);
-            }
-          }
-
-          setLike(1 ^ like);
-        })
-        .catch((err) => {
-          console.log(err.message);
-          if (err.response.status === 403) {
-            router.push("/logout");
-          }
-        });
+      if (loggedInId) {
+        likeRecommendBoard({ idx: idx, id: loggedInId });
+        if (like) {
+          setLikeCnt(likeCnt - 1);
+        } else {
+          setLikeCnt(likeCnt + 1);
+        }
+        setLike(like ^ 1);
+      }
     },
-    [like]
+    [like, idx, likeCnt]
   );
 
   useEffect(() => {
@@ -132,6 +134,16 @@ const RecommendDetail = () => {
     return () => setLoading(false);
   }, [router.isReady]);
 
+  const updateComment = () => {
+    setTmp(tmp ^ 1);
+  };
+
+  useEffect(() => {
+    if (idx) {
+      getComments({ idx });
+    }
+  }, [tmp, idx]);
+
   return (
     <Container maxWidth="lg">
       <Head>
@@ -139,50 +151,57 @@ const RecommendDetail = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       {course && (
-        <EditorDetailLeftLayout
-          tags={course.tags}
-          season={course.season}
-          region={course.region}
-        >
-          <TitleContainer>
-            <div className="sub">
-              <Avatar
-                alt="user"
-                // src={gravatar.url(course ? course.writer : "default", {
-                //   s: "28px",
-                //   d: "retro",
-                // })}
-                className="avatar"
-              />
-              <div className="title">{course?.title}</div>
-            </div>
-            <div className="btns">
-              <span className="heartLabel"> {course.writer}</span>
-              <Button className="heart" onClick={onClickLike}>
-                <span className="heartLabel"> &nbsp;{likeCnt}</span>
-                {like ? (
-                  <FavoriteIcon
-                    className="fillHeart"
-                    sx={{
-                      width: 18,
-                      height: 18,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                ) : (
-                  <FavoriteBorderIcon
-                    className="fillNotHeart"
-                    sx={{
-                      width: 18,
-                      height: 18,
-                      alignItems: "center",
-                      verticalAlign: "center",
-                    }}
-                  />
-                )}
-              </Button>
-              {/* <Button className="share" onClick={onClickShare}>
+        <ProgramHeader title="Ulife 추천코스">
+          <EditorDetailLeftLayout
+            tags={course.tags}
+            season={course.season}
+            region={course.region}
+          >
+            <TitleContainer>
+              <div className="sub">
+                <Avatar
+                  alt="user"
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${course.writer}`}
+                  // src={gravatar.url(course ? course.writer : "default", {
+                  //   s: "28px",
+                  //   d: "retro",
+                  // })}
+                  className="avatar"
+                />
+                <div className="title">{course?.title}</div>
+              </div>
+              <div className="btns">
+                <span className="heartLabel"> {course.writer}</span>
+                <ShareButton
+                  url={window.location.href}
+                  user={loggedInId}
+                  des={course.title}
+                />
+                <Button className="heart" onClick={onClickLike}>
+                  <span className="heartLabel"> &nbsp;{likeCnt}</span>
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="fillNotHeart"
+                      sx={{
+                        width: 18,
+                        height: 18,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  )}
+                </Button>
+                {/* <Button className="share" onClick={onClickShare}>
                   <ShareIcon
                     sx={{
                       width: 18,
@@ -192,48 +211,55 @@ const RecommendDetail = () => {
                     }}
                   />
                 </Button> */}
-              <ShareButton
-                url={window.location.href}
-                user={loggedInId}
-                des={course.title}
+              </div>
+            </TitleContainer>
+            {course && (
+              <ContentContainer
+                dangerouslySetInnerHTML={{ __html: course.content }}
               />
-            </div>
-          </TitleContainer>
-          {course && (
-            <ContentContainer
-              dangerouslySetInnerHTML={{ __html: course.content }}
-            />
-          )}
-          {course && course.writer === loggedInId && (
-            // <ButtonContainer>
-            //   <Button variant="contained">수정</Button>
-            //   <Button variant="contained" color="error">
-            //     삭제
-            //   </Button>
-            // </ButtonContainer>
-            <ReviseDeleteButtons url="recommend" id={loggedInId} idx={idx} />
-          )}
+            )}
+            {course && course.writer === loggedInId && (
+              // <ButtonContainer>
+              //   <Button variant="contained">수정</Button>
+              //   <Button variant="contained" color="error">
+              //     삭제
+              //   </Button>
+              // </ButtonContainer>
+              <ReviseDeleteButtons url="recommend" id={loggedInId} idx={idx} />
+            )}
 
-          <ReplyContainer>
-            <form className="write" onSubmit={onSubmitComment}>
-              <TextField
-                id=""
-                label=""
-                value={comment}
-                onChange={onChangeComment}
-                fullWidth
-              />
-              <Button type="submit" className="btn" variant="contained">
-                등록
-              </Button>
-            </form>
-            <div className="reply">
-              {comments.map((item, index) => (
-                <ReplyContent key={index} {...item} />
-              ))}
-            </div>
-          </ReplyContainer>
-        </EditorDetailLeftLayout>
+            <ReplyContainer>
+              <form className="write" onSubmit={onSubmitComment}>
+                <TextField
+                  id=""
+                  value={comment}
+                  onChange={onChangeComment}
+                  fullWidth
+                />
+                <Button
+                  type="submit"
+                  className="btn"
+                  variant="contained"
+                  disabled={!loggedInId || !comment}
+                >
+                  등록
+                </Button>
+              </form>
+              <div className="reply">
+                {comments.map((item, index) => (
+                  <ReplyContent
+                    key={index}
+                    type={0}
+                    {...item}
+                    boardIdx={idx}
+                    index={index}
+                    update={updateComment}
+                  />
+                ))}
+              </div>
+            </ReplyContainer>
+          </EditorDetailLeftLayout>
+        </ProgramHeader>
       )}
     </Container>
   );

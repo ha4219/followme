@@ -1,10 +1,9 @@
 import ProfileLeftLayout from "@components/profile/ProfileLeftLayout";
 import styled from "@emotion/styled";
-import { Avatar, Box, Button, Container } from "@mui/material";
-import { getUserBoard, getUserProfile } from "api/auth";
+import { Avatar, Box, Container } from "@mui/material";
+import { getUserProfile } from "api/auth";
 import { useState, useEffect } from "react";
-import gravatar from "gravatar";
-import { ICourse, IUser } from "types/apiType";
+import { ICourse, IPointType, IUser } from "types/apiType";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import Link from "next/link";
@@ -14,18 +13,20 @@ import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState, idState } from "@store/auth";
 import { useRouter } from "next/router";
-import CourseBoard from "@components/course/CourseBoard";
 import CourseTable from "@components/course/CourseTable";
-import { COURSES } from "@data/CourseData";
+import ProfilePointHistory from "@components/profile/PointHistory";
+import { getMyCourseBoard, getMyLikeBoard } from "api/profile";
 
 const ProfileHome = () => {
   const router = useRouter();
   const [user, setUser] = useState<IUser>();
   const [myBoards, setMyBoards] = useState<ICourse[]>([]);
   const [likeBoards, setLikeBoards] = useState<ICourse[]>([]);
+  const [pointHistory, setPointHistory] = useState<IPointType[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(authState);
   const loggedInId = useRecoilValue(idState);
   const [isLoading, setLoading] = useState(true);
+  const [courses, setCourses] = useState<any[]>([]);
 
   const getUser = async () => {
     getUserProfile()
@@ -56,11 +57,11 @@ const ProfileHome = () => {
   const getLikeBoard = async () => {
     if (user) {
       try {
-        const { data } = await API.post("/user/likeList", {
+        const data = await getMyLikeBoard({
           id: loggedInId,
         });
-
         const arr = [...data.theme, ...data.recommend];
+
         setLikeBoards(arr.slice(-3));
       } catch (e) {
         console.log("likeBoard", e);
@@ -68,9 +69,41 @@ const ProfileHome = () => {
     }
   };
 
+  const getCourses = async () => {
+    if (user) {
+      try {
+        const data = await getMyCourseBoard({
+          id: loggedInId,
+        });
+
+        setCourses(data.slice(-3));
+      } catch (e) {
+        console.log("mycourse", e);
+      }
+    }
+  };
+
+  // const getPointHistory = async () => {
+  //   if (user) {
+  //     try {
+  //       const data = await getUserPointHistory(loggedInId);
+  //       console.log(data);
+
+  //       setPointHistory(data.slice(-3));
+  //     } catch (e) {
+  //       console.log("profile getPOintHistory", e);
+  //     }
+  //   }
+  // };
+
   useEffect(() => {
-    getMyBoard();
-    getLikeBoard();
+    if (user) {
+      getMyBoard();
+      getLikeBoard();
+      getCourses();
+    }
+
+    // getPointHistory();
   }, [user]);
 
   useEffect(() => {
@@ -86,7 +119,7 @@ const ProfileHome = () => {
               <div className="sub">
                 <Avatar
                   alt="user"
-                  // src={gravatar.url(user.id, { s: "28px", d: "retro" })}
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${loggedInId}`}
                   className="avatar"
                 />
                 <div className="titleContent">
@@ -98,7 +131,7 @@ const ProfileHome = () => {
                 <FavoriteBorderOutlinedIcon className="like" />
                 <div>{`좋아요: ${user.likeCnts}개`}</div>
                 <AttachMoneyOutlinedIcon className="money" />
-                <div>{`포인트: ${user.points}p`}</div>
+                <div>{`포인트: ${user.point ? user.point : 0}p`}</div>
               </div>
             </div>
             <div className="myboard">
@@ -106,20 +139,23 @@ const ProfileHome = () => {
                 <div className="subTitle">내 작성글</div>
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={myBoards} like={false} />
+              <CourseContainer courses={myBoards} like={true} />
             </div>
             <div className="myboard">
               <div className="sub">
                 <div className="subTitle">내 좋아요</div>
                 <Link href="/profile/like">{"더보기 >"}</Link>
               </div>
-              <CourseContainer courses={likeBoards} like={true} />
+              <CourseContainer courses={likeBoards} like={false} />
             </div>
             <div className="mypoint">
               <div className="sub">
                 <div className="subTitle">포인트 내역</div>
-                <Link href="/profile/board">{"더보기 >"}</Link>
+                <Link href="/profile/point">{"더보기 >"}</Link>
               </div>
+              <Box>
+                <ProfilePointHistory length={3} pagination={false} />
+              </Box>
             </div>
             <div className="mycourse">
               <div className="sub">
@@ -127,7 +163,7 @@ const ProfileHome = () => {
                 <Link href="/profile/board">{"더보기 >"}</Link>
               </div>
               <Box py={2}>
-                <CourseTable courses={COURSES.slice(-1)} />
+                <CourseTable courses={courses} />
               </Box>
             </div>
           </ProfileContainer>

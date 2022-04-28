@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { insertCourseBoard } from "api/board";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -114,20 +115,22 @@ const CourseCustomEditor = () => {
   }
 
   const onSubmit = async () => {
-    API.post("course/insertCourseBoards", {
-      title: title,
-      content: value,
-      writer: isLoggedInId,
-    })
-      .then((res) => {
+    try {
+      const data = await insertCourseBoard({
+        title: title,
+        content: value,
+        id: isLoggedInId,
+      });
+      if (data.data === "success") {
         toast.success("등록완료");
         router.back();
-      })
-      .catch((err) => {
+      } else {
         toast.error("에러");
-        console.log(err);
-      });
-    // toast.info("추가 예정입니다");
+      }
+    } catch (e) {
+      toast.error("에러");
+      console.log(e);
+    }
   };
 
   const modules = useMemo(
@@ -161,7 +164,7 @@ const CourseCustomEditor = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <div className="dateContainer">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
           <div className="subContainer">
             <span className="label">출발 예정일</span>
             <DesktopDatePicker
@@ -182,7 +185,7 @@ const CourseCustomEditor = () => {
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
-        </LocalizationProvider>
+        </LocalizationProvider> */}
       </div>
       <div className="quill">
         {/* <QuillToolbar />

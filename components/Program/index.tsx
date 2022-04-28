@@ -15,6 +15,7 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { ICourse } from "types/apiType";
 import { API } from "@src/API";
+import { likeRecommendBoard } from "api/board";
 
 const Program: VFC<ICourse> = ({
   idx,
@@ -41,16 +42,24 @@ const Program: VFC<ICourse> = ({
   const onClickLike = useCallback(
     async (e) => {
       e.stopPropagation();
-      API.post(`/main/postLike/${idx}`, {
-        id: loggedInId,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          setLike(!like);
-        })
-        .catch((err) => {
-          console.log(err);
+      try {
+        const data = await likeRecommendBoard({
+          idx: idx,
+          id: loggedInId,
         });
+        setLike(!like);
+      } catch (e) {}
+      // API.post(`/main/postLike/${idx}`, {
+      //   id: loggedInId,
+      // })
+      //   .then(({ data }) => {
+      //     console.log(data);
+      //     setLike(!like);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      // },
     },
     [like]
   );

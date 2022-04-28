@@ -1,18 +1,66 @@
 import HelpLeftLayout from "@components/help/HelpLeftLayout";
 import styled from "@emotion/styled";
-import { Container, Paper } from "@mui/material";
+import { Box, Container, Paper } from "@mui/material";
+import Image from "next/image";
 
 const HelpUse = () => {
   return (
-    <Container maxWidth="lg">
+    <MainContainer maxWidth="lg">
+      <Box className="editorPath" py={1}>
+        <div className="MainContainerPathIcon">
+          <Image
+            src="/icons/icon.home.png"
+            width="18px"
+            height="18px"
+            alt="homeIcon"
+          />
+        </div>
+        <span>
+          <span className="MainContainerPathColor">홈</span>
+          <span className="dividor">|</span>
+          {"이용약관"}
+        </span>
+      </Box>
+
+      <Box className="editorTitle">{"이용약관"}</Box>
       <HelpLeftLayout>
-        <MainContainer>네이버 예시입니다.</MainContainer>
+        <MainBContainer>네이버 예시입니다.</MainBContainer>
       </HelpLeftLayout>
-    </Container>
+    </MainContainer>
   );
 };
 
-const MainContainer = styled(Paper)`
+const MainContainer = styled(Container)`
+  & .searchContainer {
+    border-radius: 27px;
+  }
+
+  & .MainContainerPathIcon {
+    height: 21px;
+    margin-right: 6px;
+  }
+  & .editorPath {
+    display: flex;
+    font-size: 0.9rem;
+    font-family: paybooc-Medium;
+
+    & .MainContainerPathColor {
+      color: #888888;
+    }
+    & .dividor {
+      padding: 1rem;
+    }
+  }
+  & .editorTitle {
+    font-family: paybooc-Bold;
+    font-size: 2rem;
+    text-align: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #000000;
+  }
+`;
+
+const MainBContainer = styled(Paper)`
   margin: 3rem 0;
 `;
 

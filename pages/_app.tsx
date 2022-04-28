@@ -29,7 +29,6 @@ function MyApp(props: {
           <Layout>
             <Component {...pageProps} />
             <ToastContainer />
-            <Footer />
           </Layout>
         </ThemeProvider>
       </CacheProvider>

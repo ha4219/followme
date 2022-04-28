@@ -9,6 +9,7 @@ import {
   TwitterShareButton,
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Image from "next/image";
 
 interface IProps {
   url: string;
@@ -19,10 +20,6 @@ interface IProps {
 
 const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
   const [open, setOpen] = useState(false);
-
-  // useEffect(() => {
-  //   console.log(Window.kakao);
-  // }, [Window.kakao]);
 
   const onClickKakao = async () => {
     // TODO
@@ -57,11 +54,17 @@ const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
     <>
       <Button
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           setOpen(true);
         }}
       >
-        <ShareIcon sx={{ width: 15, height: 15 }} />
+        <Image
+          src="/icons/icon.share.png"
+          alt="shareIcon"
+          width={18}
+          height={18}
+        />
       </Button>
       <OutSideContainer open={open} onClose={() => setOpen(false)}>
         <div className="container">

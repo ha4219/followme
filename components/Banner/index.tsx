@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { API } from "@src/API";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Banner = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const Banner = () => {
 
   const getBanner = async () => {
     const { data } = await API.get("/main/swipers", {});
-    setImgs(data.slice(7));
+    setImgs(data);
     // setBgs(data.map(item => ));
   };
 
@@ -32,34 +33,11 @@ const Banner = () => {
     getBanner();
   }, []);
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-  // useEffect(async () => {
-  //   const { data } = await API.get(
-  //     "/api/main/swipers",
-  //     {},
-  //     { responseType: "blob" }
-  //   );
-  //   console.warn(data[0].image.data, typeof data[0].image.data);
-
-  //   const tmp = await data.map((item) =>
-  //     URL.createObjectURL(
-  //       new Blob([new Uint8Array(item.image.data)], { type: "image/jpeg" })
-  //     )
-  //   );
-
-  //   setImgs(tmp);
-  //   console.log(tmp);
-
-  //   setBgs(data);
-  // }, []);
-
   return (
     <BannerContainer>
       <Swiper
         // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        modules={[Navigation, Pagination, A11y]}
         spaceBetween={50}
         slidesPerView={1}
         navigation
@@ -68,26 +46,16 @@ const Banner = () => {
         // onSwiper={(swiper) => {}}
         // onSlideChange={() => {}}
       >
-        {/* <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide> */}
         {imgs.map((bg, index) => {
           return (
             <SwiperSlide key={index}>
-              <Image
-                src={`${process.env.NEXT_PUBLIC_S3URL}${bg.imgURL}`}
-                layout="fill"
-                onClick={() => onClick(bg.urlTo)}
-              />
+              <Link href={bg.urlTo}>
+                <img
+                  src={`${bg.imgURL}`}
+                  alt={`${bg.imgURL}}`}
+                  // onClick={() => onClick(bg.urlTo)}
+                />
+              </Link>
             </SwiperSlide>
           );
         })}

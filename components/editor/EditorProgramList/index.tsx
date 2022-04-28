@@ -1,10 +1,6 @@
 import LeftLayout from "@components/LeftLayout";
-import MainEditorContent from "@components/main/MainEditorContent";
-import Program from "@components/Program";
-import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
-import { Box, Button, Grid } from "@mui/material";
-import { API } from "@src/API";
+import { Box, Button, Grid, MenuItem, Pagination, Select } from "@mui/material";
 import { idState } from "@store/auth";
 import {
   domesticState,
@@ -12,18 +8,30 @@ import {
   seasonState,
   tagState,
 } from "@store/tag";
+import { getEditorAllBoardById } from "api/board";
 import { useRouter } from "next/router";
-import { useEffect, useState, VFC } from "react";
+import { useCallback, useEffect, useState, VFC } from "react";
 import { useRecoilValue } from "recoil";
-import { ICourse } from "types/apiType";
+import { ICourse, IMergeCourse } from "types/apiType";
 import EditorProgram from "../EditorProgram";
+
+const SORT = [
+  { name: "추천순", value: 0 },
+  { name: "인기순", value: 1 },
+  { name: "최신순", value: 2 },
+];
+
+const PAGESIZE = [24, 36, 48];
 
 const EditorProgramList: VFC = () => {
   // const [courses, setCourses] = useState<Programs>();
   const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(0);
   const [sortedType, setSortedType] = useState(2);
   const [travels, setTravels] = useState<ICourse[]>([]);
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [perPageSize, setPerPageSize] = useState(24);
   const selectedTag = useRecoilValue(tagState);
   const selectedSeason = useRecoilValue(seasonState);
   const selectedDomestic = useRecoilValue(domesticState);
@@ -31,26 +39,51 @@ const EditorProgramList: VFC = () => {
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
-      id: loggedInId,
-    });
-    setTravels(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
-    setCourses(
-      data.sort((l, r) => {
-        if (r.createdAt > l.createdAt) {
-          return 1;
-        }
-        return -1;
-      })
-    );
+    // const { data } = await API.post<ICourse[]>("/theme/themeBoards", {
+    //   id: loggedInId,
+    // });
+    try {
+      const tmp: IMergeCourse = await getEditorAllBoardById({
+        id: loggedInId,
+      });
+      const data = [...tmp.recommend, ...tmp.theme];
+
+      setSize(Math.ceil(data.length / perPageSize));
+      setTravels(
+        data.sort((l, r) => {
+          if (r.createdAt > l.createdAt) {
+            return 1;
+          }
+          return -1;
+        })
+      );
+      setCourses(
+        data.sort((l, r) => {
+          if (r.createdAt > l.createdAt) {
+            return 1;
+          }
+          return -1;
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
+
+  const onChangeSortedType = useCallback(
+    (e) => {
+      setSortedType(e.target.value);
+    },
+    [sortedType]
+  );
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage - 1);
+  };
+
+  useEffect(() => {
+    setSize(Math.ceil(courses.length / perPageSize));
+  }, [perPageSize, courses]);
 
   useEffect(() => {
     const arr = [...courses];
@@ -79,7 +112,7 @@ const EditorProgramList: VFC = () => {
     let arr = [...travels];
 
     if (selectedTag !== "ALL" && selectedTag !== "") {
-      arr = arr.filter((item) => item.tags.includes(selectedTag));
+      // arr = arr.filter((item) => item.tags.includes(selectedTag));
     }
     if (selectedSeason.length) {
       arr = arr.filter((item) => selectedSeason.includes(item.season));
@@ -118,7 +151,35 @@ const EditorProgramList: VFC = () => {
             </div>
           </TitleContainer>
           <SortedContainer>
-            <CustomButton
+            <Select
+              disableUnderline
+              variant="standard"
+              className="editorProgramListSelect"
+              value={sortedType}
+              onChange={onChangeSortedType}
+            >
+              {SORT.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <div className="editorProgramListPerPage">
+              {PAGESIZE.map((item, index) => (
+                <div
+                  key={index}
+                  className={
+                    item === perPageSize
+                      ? "editorProgramListPerPageItem active"
+                      : "editorProgramListPerPageItem"
+                  }
+                  onClick={() => setPerPageSize(item)}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+            {/* <CustomButton
               className={sortedType === 0 ? "active" : ""}
               onClick={() => setSortedType(0)}
             >
@@ -135,15 +196,15 @@ const EditorProgramList: VFC = () => {
               onClick={() => setSortedType(2)}
             >
               최신순
-            </CustomButton>
+            </CustomButton> */}
           </SortedContainer>
         </HeadContainer>
-        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          {courses.map((item, index) => {
-            return <EditorProgram key={index} {...item} />;
-          })}
+          {courses
+            .slice(page * perPageSize, (page + 1) * perPageSize)
+            .map((item, index) => {
+              return <EditorProgram key={index} {...item} />;
+            })}
         </Grid>
         {/* <RightButton>
           <Button
@@ -155,6 +216,11 @@ const EditorProgramList: VFC = () => {
             글쓰기
           </Button>
         </RightButton> */}
+        <EditorProgramListPagination
+          className="editorProgramListPagination"
+          count={size}
+          onChange={handleChangePage}
+        />
       </LeftLayout>
     </Box>
   );
@@ -162,8 +228,10 @@ const EditorProgramList: VFC = () => {
 
 const TitleContainer = styled.div`
   margin-top: 1rem;
+  font-family: paybooc-Light;
   & .sub {
-    color: gray;
+    font-size: 0.8rem;
+    color: #000000;
   }
   & .main {
     font-size: 2rem;
@@ -171,8 +239,10 @@ const TitleContainer = styled.div`
   }
 
   & .orange {
+    font-family: paybooc-Bold;
     margin-left: 1rem;
     color: #ff9016;
+    font-weight: 300;
   }
 `;
 const HeadContainer = styled.div`
@@ -183,22 +253,38 @@ const HeadContainer = styled.div`
 const SortedContainer = styled.div`
   display: flex;
   padding-top: 2rem;
+  font-family: paybooc-Bold;
 
-  & .active {
-    color: #ffffff;
-    background-color: #000000;
+  & .editorProgramListSelect {
+    height: 20px;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 0;
+    margin-right: 1rem;
+
+    & div {
+      border: 0;
+    }
+  }
+
+  & .editorProgramListPerPage {
+    display: flex;
+    font-size: 0.8rem;
+
+    & .editorProgramListPerPageItem {
+      margin: 0 0.5rem;
+      cursor: pointer;
+    }
+    & .active {
+      border-bottom: 1px solid #000000;
+    }
   }
 `;
 
-const CustomButton = styled(Button)`
-  border: 1px solid black;
-  margin-left: 5px;
-`;
-
-const RightButton = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  justify-content: right;
+const EditorProgramListPagination = styled(Pagination)`
+  & ul {
+    justify-content: center;
+  }
 `;
 
 export default EditorProgramList;

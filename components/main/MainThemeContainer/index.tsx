@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Grid } from "@mui/material";
 import { API } from "@src/API";
 import { idState } from "@store/auth";
+import { getThemeAllBoard } from "api/board";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
@@ -10,20 +11,38 @@ import MainThemeContent from "../MainThemeContent";
 const MainThemeContainer = () => {
   const [travels, setTravels] = useState<ICourse[]>([]);
   const [themes, setThemes] = useState<ICourse[]>([]);
-  const [sortedType, setSortedType] = useState(0);
+  const [sortedType, setSortedType] = useState(2);
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
-    const { data } = await API.post<ICourse[]>(
-      "/theme/themeBoards",
-      loggedInId.length
-        ? {
-            id: loggedInId,
-          }
-        : {}
+    // const { data } = await API.post<ICourse[]>(
+    //   "/theme/themeBoards",
+    //   loggedInId.length
+    //     ? {
+    //         id: loggedInId,
+    //       }
+    //     : {}
+    // );
+    const data = await getThemeAllBoard({
+      id: loggedInId,
+    });
+
+    setTravels(
+      data.slice(-16).sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
     );
-    setTravels(data.slice(-16));
-    setThemes(data.slice(-16));
+    setThemes(
+      data.slice(-16).sort((l, r) => {
+        if (r.createdAt > l.createdAt) {
+          return 1;
+        }
+        return -1;
+      })
+    );
   };
 
   useEffect(() => {
@@ -100,6 +119,7 @@ const TitleContainer = styled.div`
     color: gray;
   }
   & .main {
+    font-family: paybooc-ExtraBold;
     font-size: 2rem;
     letter-spacing: -1.76px;
   }
@@ -122,6 +142,7 @@ const SortedContainer = styled.div`
 const CustomButton = styled(Button)`
   border: 1px solid black;
   margin-left: 5px;
+  height: 30px;
 `;
 
 export default MainThemeContainer;

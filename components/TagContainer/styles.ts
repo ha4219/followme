@@ -4,6 +4,8 @@ import { Box } from "@mui/material";
 export const TagConv = styled(Box)`
   padding: 1rem 0;
   width: 100%;
+  height: 4.1rem;
+  overflow: hidden;
   display: inline-block;
   float: left;
   color: #b69775;

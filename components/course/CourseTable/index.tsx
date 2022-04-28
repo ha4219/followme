@@ -1,6 +1,6 @@
 import { COURSES, ICourseData } from "@data/CourseData";
 import styled from "@emotion/styled";
-import { tableTitleSummary } from "@helpers/programHelper";
+import { dateHelper, tableTitleSummary } from "@helpers/programHelper";
 import {
   Avatar,
   Box,
@@ -10,19 +10,44 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { getCourseCommentsLength } from "api/board";
 import { useRouter } from "next/router";
-import { VFC } from "react";
+import { useEffect, useState } from "react";
 
 interface IProps {
-  courses: ICourseData[];
+  idx: string;
+  title: string;
+  replyCnt: number;
+  writer: string;
+  createdAt: string;
 }
 
-const CourseTable: VFC<IProps> = ({ courses }) => {
+const CourseTable = ({ courses }) => {
   const router = useRouter();
+  const [curCourses, setCurCourses] = useState<IProps[]>([]);
 
   // const onClickRow = (id: number) => {
   //   router.push(`/course/${id}`);
   // };
+
+  const mergeCourses = async () => {
+    const arr = await Promise.all(
+      courses.map(async (item) => {
+        const cs = await getCourseCommentsLength({ idx: item.idx });
+        return { replyCnt: cs, ...item };
+      })
+    );
+    return arr;
+  };
+
+  const getCurCourses = async () => {
+    const arr = await mergeCourses();
+    setCurCourses(arr);
+  };
+
+  useEffect(() => {
+    getCurCourses();
+  }, [courses]);
 
   return (
     <MainContainer maxWidth="md" sx={{ padding: 0 }}>
@@ -30,27 +55,32 @@ const CourseTable: VFC<IProps> = ({ courses }) => {
         <TableHead className="head">
           <TableRow className="head">
             <TableCell align="center">제목</TableCell>
-            <TableCell align="center">답글</TableCell>
-            <TableCell align="center">작성일</TableCell>
+            <TableCell align="center" width={100}>
+              답글
+            </TableCell>
+            <TableCell align="center" width={150}>
+              작성일
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {courses.map((item, index) => (
+          {curCourses.map((item, index) => (
             <TableRow
-              key={index}
+              key={item.idx}
               // onClick={() => onClickRow(item.idx - 1)}
               className="cursor"
             >
               <TableCell className="cellTitle">
                 <Avatar
                   alt="user"
+                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${item.writer}`}
                   // src={gravatar.url(user, { s: "28px", d: "retro" })}
                   className="avatar"
                 />
                 {tableTitleSummary(item.title)}
               </TableCell>
               <TableCell align="center">{item.replyCnt}</TableCell>
-              <TableCell align="center">{item.date}</TableCell>
+              <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -72,7 +102,7 @@ const MainContainer = styled(Box)`
     align-items: center;
 
     & .avatar {
-      margin-right: 1rem;
+      margin-right: 2rem;
     }
   }
 

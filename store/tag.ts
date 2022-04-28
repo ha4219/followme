@@ -24,3 +24,8 @@ export const courseTagState = atom({
   key: "courseTag",
   default: "ALL",
 });
+
+export const leftOpen = atom({
+  key: "leftOpen",
+  default: true,
+});

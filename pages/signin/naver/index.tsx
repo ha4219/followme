@@ -1,61 +1,82 @@
-import axios from "axios";
-import { useEffect } from "react";
+import { LinearProgress } from "@mui/material";
+import { API, setToken } from "@src/API";
+import { authState, idState } from "@store/auth";
+import { getUserProfile } from "api/auth";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
 
 const Naver = () => {
-  const naverGetData = () => {
-    if (window.location.href.includes("access_token")) {
-      const location = window.location.href.split("=")[1];
-      const token = location.split("&")[0];
-      console.log("token", `Bearer ${token}`);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      axios
-        .get("https://openapi.naver.com/v1/nid/me", config)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  const router = useRouter();
+  const [data, setData] = useState();
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [loggedIn, setLoggedIn] = useRecoilState(authState);
+  const [loggedInId, setLoggedInId] = useRecoilState(idState);
+  const setProfile = async () => {
+    try {
+      const { data } = await getUserProfile();
+      toast.success("로그인 성공");
+      setLoggedInId(data.userData[0].id);
+      setTimeout(() => {
+        setLoggedIn("");
+        setLoggedInId("");
+        setToken("");
+        router.push("/logout");
+      }, 30 * 60 * 1000); // 30 * 60 * 1000
+      router.push("/");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const test = async (code) => {
+    try {
+      const { data } = await API.get(`/user/naver/oauth/${code}/code`);
+
+      if (data?.success) {
+        setData(data.success);
+        if (data.success && data) {
+          setToken(data.accessToken);
+          setLoggedIn(data.accessToken);
+          setProfile();
+        }
+      } else {
+        toast.error("해당 계정으로 로그인할 수 없습니다");
+        setTimeout(() => {
+          router.back();
+        }, 5000);
+      }
+
+      // setLoggedInId(id);
+    } catch (e: any) {
+      console.log("send server error", e);
+      setError(e.message);
+      toast.error("해당 계정으로 로그인할 수 없습니다");
+      // router.back();
+      setTimeout(() => {
+        router.back();
+      }, 5000);
     }
   };
   useEffect(() => {
-    naverGetData();
+    try {
+      const code = router.asPath
+        .split("?")[1]
+        .split("&")[0]
+        .replace("code=", "")
+        .replace("&state=", "");
+      setCode(code);
+      test(code);
+    } catch (e) {
+      console.log(e, "naver token not");
+    }
   }, []);
   return (
     <div>
-      <span>1</span>
+      <LinearProgress />
     </div>
   );
 };
-
-export async function getServerSideProps(context) {
-  console.log(context);
-
-  // if (window.location.href.includes("access_token")) {
-  //   const location = window.location.href.split('=')[1];
-  //   const token = location.split('&')[0];
-  //   console.log('token', `Bearer ${token}`);
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     }
-  //   }
-  //   axios.get('https://openapi.naver.com/v1/nid/me', config)
-  //   .then(res => {
-  //     console.log(res);
-  //   }).catch(err => {
-  //     console.log(err);
-
-  //   })
-
-  // }
-  return {
-    props: {},
-  };
-}
 
 export default Naver;

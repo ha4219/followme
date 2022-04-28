@@ -18,12 +18,12 @@ const ProfileOut = () => {
         id: id,
         password: password,
       });
-      if (data.data === 1) {
+      if (data.data === "success") {
         toast.success("followme 탈퇴 성공");
+        router.push("/profile/out/success");
       } else {
         toast.error("followme 탈퇴 실패");
       }
-      router.push("/profile/out/success");
     } catch (e) {
       console.log("error out", e);
       toast.error("followme 탈퇴 실패");

@@ -16,21 +16,18 @@ import { authState, idState } from "@store/auth";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { auth } from "@config/firebaseConfig";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  GoogleAuthProvider,
-  signInWithPopup,
-  FacebookAuthProvider,
-} from "firebase/auth";
+import styled from "@emotion/styled";
+import Image from "next/image";
 
 declare global {
   interface Window {
     naver: any;
     Kakao: any;
+    gapi: any;
   }
 }
+
+const GOOGLE_BUTTON_ID = "google_btn";
 
 const Signin = () => {
   const router = useRouter();
@@ -54,6 +51,12 @@ const Signin = () => {
           setLoggedIn(data.accessToken);
           setLoggedInId(id);
           setToken(data.accessToken);
+          setTimeout(() => {
+            setLoggedIn("");
+            setLoggedInId("");
+            setToken("");
+            router.push("/logout");
+          }, 30 * 60 * 1000); // 30 * 60 * 1000
         }
       } catch (e) {
         toast.error("로그인 실패");
@@ -62,81 +65,11 @@ const Signin = () => {
     [id, password]
   );
 
-  // naver
-  const initNaverLogin = () => {
-    console.log(window.naver);
-
-    const naverLogin = new window.naver.LoginWithNaverId({
-      clientId: process.env.NEXT_PUBLIC_NAVERID,
-      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/signin`,
-      isPopup: false,
-      loginButton: { color: "green", type: 3, height: 44, width: 352 },
-      callbackHandle: true,
-    });
-    naverLogin.init();
-    setNaver(naverLogin);
-  };
-
-  const initKakao = () => {
-    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
-  };
-
-  // kakao
-  const kakaoLogin = () => {
-    try {
-      window.Kakao.Auth.login({
-        success: (response) => {
-          window.Kakao.API.request({
-            url: "/v2/user/me",
-            success: (response) => {
-              console.log(response, "kakao suc");
-            },
-            fail: (err) => {
-              console.log(err, "kakao err");
-            },
-          });
-        },
-        fail: (err) => {
-          console.log(err, "kakao err out");
-        },
-      });
-    } catch (e) {
-      alert("현재 도입 중입니다.");
-    }
-  };
-
   useEffect(() => {
     if (loggedIn) {
       router.push("/");
     }
   }, [loggedIn]);
-
-  useEffect(() => {
-    console.log(
-      naver?.getLoginStatus((status) => {
-        console.log(status);
-        if (status) {
-          console.log(naver.user);
-        }
-      })
-    );
-  }, [naver]);
-
-  const onClickGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((res) => {
-        const credential = GoogleAuthProvider.credentialFromResult(res);
-        const token = credential?.accessToken;
-        const user = res.user;
-        console.log(res, credential, token, user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // return auth.signInWithPopup(provider);
-  };
 
   // const onClickFacebook = () => {
   //   const provider = new FacebookAuthProvider();
@@ -154,22 +87,21 @@ const Signin = () => {
   //     });
   // };
 
-  const init = async () => {
-    try {
-      initNaverLogin();
-      initKakao();
-    } catch (e) {
-      console.log("init social", e);
-    }
-  };
+  const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
+  const kakao_url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
 
-  useEffect(() => {
-    // console.log(naver, Kakao);
-    init();
-  }, []);
+  const naverUrl = "https://followme1.vercel.app/signin/naver";
+  const naver_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVERID}&redirect_uri=${naverUrl}&state=code`;
+
+  const googleUrl = "https://followme1.vercel.app/signin/google";
+  const google_url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLEID}&scope=https://www.googleapis.com/auth/userinfo.profile&redirect_uri=${googleUrl}&response_type=code`;
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: "paybooc-Medium" }}>
+      <meta
+        name="google-signin-client_id"
+        content={process.env.NEXT_PUBLIC_GOOGLEID}
+      />
       <Box py={5}>
         <Typography variant="h6" py={5}>
           로그인
@@ -218,7 +150,7 @@ const Signin = () => {
               }}
             >
               <Link href="/find">아이디 / 비밀번호 찾기</Link>
-              <Link href="/signup">회원가입하기</Link>
+              <Link href="/signup/before">회원가입하기</Link>
             </Box>
 
             <Button type="submit" fullWidth variant="contained" size="large">
@@ -232,46 +164,95 @@ const Signin = () => {
           >
             SNS 계정으로 로그인
           </Box>
-          <div
-            id="naverIdLogin"
-            // sx={{ marginTop: "1rem", backgroundColor: "#03c75a" }}
-            // fullWidth
-            // variant="contained"
-            // size="large"
-          >
-            네이버 로그인
-          </div>
-          <Button
-            onClick={kakaoLogin}
-            sx={{ marginTop: "1rem", backgroundColor: "#fee500" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
-            카카오 로그인
-          </Button>
-          {/* <Button
-            onClick={onClickFacebook}
-            sx={{ marginTop: "1rem", backgroundColor: "#3a5ca9" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
-            Facebook 로그인
-          </Button> */}
-          <Button
-            onClick={onClickGoogle}
-            sx={{ marginTop: "1rem", backgroundColor: "#e74133" }}
-            fullWidth
-            variant="contained"
-            size="large"
-          >
-            Google 로그인
-          </Button>
+          <ShareLoginContainer>
+            <a href={naver_url} className="naver">
+              <span className="LoginButtoniconsNaver">
+                <Image
+                  alt="naverIcon"
+                  src="/icons/icon.naver.png"
+                  width="40px"
+                  height="45px"
+                />
+              </span>
+              <span>네이버 로그인</span>
+            </a>
+            <a href={kakao_url} className="kakao">
+              <span className="LoginButtoniconsKakao">
+                <Image
+                  alt="kakaoIcon"
+                  src="/icons/icon.kakao1.png"
+                  width="18px"
+                  height="17px"
+                />
+              </span>
+
+              <span>카카오 로그인</span>
+            </a>
+            <a href={google_url} className="google">
+              <span className="LoginButtoniconsGoogle">
+                <Image
+                  alt="googleIcon"
+                  src="/icons/icon.google.png"
+                  width="18px"
+                  height="18px"
+                />
+              </span>
+
+              <span>Google 로그인</span>
+            </a>
+          </ShareLoginContainer>
         </Box>
       </Box>
     </Container>
   );
 };
+
+const ShareLoginContainer = styled.div`
+  & a {
+    position: relative;
+    font-family: paybooc-Medium;
+    line-height: 45px;
+
+    height: 45px;
+
+    display: block;
+    width: 100%;
+    text-align: center;
+    // border-radius: 12px;
+    margin: 0.7rem 0;
+
+    & .LoginButtoniconsNaver {
+      position: absolute;
+      left: 6px;
+      top: 0;
+    }
+
+    & .LoginButtoniconsKakao {
+      position: absolute;
+      left: 16px;
+      top: 4px;
+    }
+
+    & .LoginButtoniconsGoogle {
+      position: absolute;
+      left: 16px;
+      top: 4px;
+    }
+  }
+  & .kakao {
+    background-color: #fee500;
+    color: #3b1c1e;
+  }
+
+  & .naver {
+    background-color: #03c75a;
+    color: #ffffff;
+  }
+
+  & .google {
+    background-color: #e74133;
+    color: #ffffff;
+  }
+`;
 
 export default Signin;
