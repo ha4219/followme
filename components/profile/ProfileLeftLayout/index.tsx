@@ -1,5 +1,15 @@
 import styled from "@emotion/styled";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { idState } from "@store/auth";
 import { leftOpen } from "@store/tag";
 import { getUserProfileById } from "api/auth";
@@ -8,6 +18,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState, useCallback } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
+import SearchIcon from "@mui/icons-material/Search";
+import { COURSETAGS } from "@data/CourseData";
+import LeftLayoutTag from "@components/LeftLayoutTag";
 
 const PROFILE = [
   { label: "홈", to: "/profile/home" },
@@ -25,13 +38,31 @@ const ProfileLeftLayout: FC = ({ children }) => {
   const router = useRouter();
   const id = useRecoilValue(idState);
   const [type, setType] = useState(0);
-  const [show, setShow] = useRecoilState(leftOpen);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const [value, setValue] = useState("");
+  const onChangeValue = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [value]
+  );
 
-  // const [show, setShow] = useState(false);
+  const onKeyDownValue = useCallback(
+    (e) => {
+      if (e.keyCode === 13) {
+        setValue("");
+      }
+    },
+    [value]
+  );
 
-  const onChangeShow = useCallback(() => {
-    setShow(!show);
-  }, [show]);
+  const onSubmitValue = useCallback(
+    (e) => {
+      setValue("");
+    },
+    [value]
+  );
 
   const getUser = async () => {
     try {
@@ -51,21 +82,63 @@ const ProfileLeftLayout: FC = ({ children }) => {
 
   return (
     <Grid container py={5}>
-      <Grid xs={12} sm={12} md={3} item>
-        <ProfileLeftContainer>
-          <BoxContainer onClick={onChangeShow}>
+      <Grid xs={12} sm={12} md={3} item sx={{ fontFamily: "paybooc-Medium" }}>
+        <ProfileLeftContainer
+          minWidth={isSmall ? "100%" : "260px"}
+          maxWidth={isSmall ? "100%" : "260px"}
+        >
+          <Box py={2}>
+            <TextField
+              fullWidth
+              value={value}
+              onChange={onChangeValue}
+              onKeyDown={onKeyDownValue}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={onSubmitValue}>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box py={2}>
+            {COURSETAGS.map((tag, index) => (
+              <LeftLayoutTag key={index} tag={tag} />
+            ))}
+          </Box>
+          <BoxContainer>
             <Typography
+              mt={3}
               py={1}
               sx={{ fontFamily: "paybooc-Bold", fontSize: "1.5rem" }}
             >
               {"MyPage"}
             </Typography>
-            <span>{show ? "-" : "+"}</span>
           </BoxContainer>
-          {show && (
-            <div className="btns">
-              {PROFILE.map((item, index) => (
-                <div key={index}>
+          <div className="btns">
+            {PROFILE.map((item, index) => (
+              <BoxContainer key={index}>
+                <Link href={item.to} passHref>
+                  <Button
+                    key={index}
+                    className={
+                      router.pathname === item.to ? "active" : "deactivate"
+                    }
+                  >
+                    <span className="btnLeft">{item.label}</span>
+                    <span className="btnRight">
+                      {router.pathname === item.to ? "-" : "+"}
+                    </span>
+                  </Button>
+                </Link>
+              </BoxContainer>
+            ))}
+            {type === 1 &&
+              ENTER.map((item, index) => (
+                <BoxContainer key={index}>
                   <Link href={item.to} passHref>
                     <Button
                       key={index}
@@ -73,31 +146,18 @@ const ProfileLeftLayout: FC = ({ children }) => {
                         router.pathname === item.to ? "active" : "deactivate"
                       }
                     >
-                      #{item.label}
+                      <span className="btnLeft">{item.label}</span>
+                      <span className="btnRight">
+                        {router.pathname === item.to ? "-" : "+"}
+                      </span>
                     </Button>
                   </Link>
-                </div>
+                </BoxContainer>
               ))}
-              {type === 1 &&
-                ENTER.map((item, index) => (
-                  <div key={index}>
-                    <Link href={item.to} passHref>
-                      <Button
-                        key={index}
-                        className={
-                          router.pathname === item.to ? "active" : "deactivate"
-                        }
-                      >
-                        #{item.label}
-                      </Button>
-                    </Link>
-                  </div>
-                ))}
-            </div>
-          )}
+          </div>
         </ProfileLeftContainer>
       </Grid>
-      <Grid xs={12} sm={12} md={9} item>
+      <Grid xs={12} sm={12} md={9} item pl={isSmall ? "0" : "50px"}>
         {children}
       </Grid>
     </Grid>
@@ -105,30 +165,40 @@ const ProfileLeftLayout: FC = ({ children }) => {
 };
 
 const ProfileLeftContainer = styled(Box)`
-  margin-bottom: 1rem;
   & .title {
     font-size: 1.5rem;
     font-weight: bold;
   }
 
   & .btns {
-    font-family: paybooc-Light;
     font-size: 0.8rem;
+    font-family: paybooc-Light;
+    display: block;
 
+    & .helpLeftLayoutLink {
+      display: block;
+    }
     & .active {
-      // border: 1px solid #0068ff;
+      width: 260px;
+      display: flex;
+      justify-content: space-between;
       color: #0068ff;
       border-radius: 1rem;
-      margin-top: 1rem;
-      display: block;
     }
 
     & .deactivate {
-      display: block;
-
-      // border: 1px solid #b8c3d1;
+      width: 260px;
       border-radius: 1rem;
-      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    & .btnLeft {
+      display: block;
+    }
+
+    & .btnRight {
+      display: block;
     }
   }
 `;
@@ -138,13 +208,8 @@ const BoxContainer = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-right: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-
-  & span {
-    font-size: 1.3rem;
-  }
+  border-top: 1px solid #d8d8d8;
+  padding: 14px 0 15px 0;
 `;
 
 export default ProfileLeftLayout;

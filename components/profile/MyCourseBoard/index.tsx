@@ -22,10 +22,12 @@ import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 import { ICourse } from "types/apiType";
 
+const PAGESIZE = [24, 36, 48];
+
 const MyCourseBoard = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(10);
+  const [perPageSize, setPerPageSize] = useState(24);
   const [size, setSize] = useState(0);
   const [courses, setCourses] = useState<any[]>([]);
   const selectedTag = useRecoilValue(courseTagState);
@@ -66,7 +68,7 @@ const MyCourseBoard = () => {
       });
       getCurCourses(data);
       // setCourses(data);
-      setSize(Math.ceil(data.length / rowsPerPage));
+      setSize(Math.ceil(data.length / perPageSize));
     } catch (e) {
       console.log("course 받아오기 에러", e);
     }
@@ -91,7 +93,32 @@ const MyCourseBoard = () => {
   }, []);
 
   return (
-    <MainContainer maxWidth="md">
+    <MainContainer maxWidth="lg">
+      <HeadContainer>
+        <TitleContainer>
+          <div className="sub">
+            {"내 작성글"}
+            <span className="orange">{courses.length}</span>개
+          </div>
+        </TitleContainer>
+        <SortedContainer>
+          <div className="editorProgramListPerPage">
+            {PAGESIZE.map((item, index) => (
+              <div
+                key={index}
+                className={
+                  item === perPageSize
+                    ? "editorProgramListPerPageItem active"
+                    : "editorProgramListPerPageItem"
+                }
+                onClick={() => setPerPageSize(item)}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </SortedContainer>
+      </HeadContainer>
       <Table>
         <TableHead className="head">
           <TableRow className="head">
@@ -105,10 +132,10 @@ const MyCourseBoard = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
+          {(perPageSize > 0
             ? courses.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
+                page * perPageSize,
+                page * perPageSize + perPageSize
               )
             : courses
           ).map((item, index) => (
@@ -148,6 +175,62 @@ const MyCourseBoard = () => {
     </MainContainer>
   );
 };
+
+const TitleContainer = styled.div`
+  margin-top: 1rem;
+  font-family: paybooc-Light;
+  & .sub {
+    font-size: 0.8rem;
+    color: #000000;
+  }
+  & .main {
+    font-size: 2rem;
+    letter-spacing: -1.76px;
+  }
+
+  & .orange {
+    font-family: paybooc-Bold;
+    margin-left: 1rem;
+    color: #ff9016;
+    font-weight: 300;
+  }
+`;
+const HeadContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2.5rem;
+`;
+
+const SortedContainer = styled.div`
+  display: flex;
+  padding-top: 2rem;
+  font-family: paybooc-Bold;
+
+  & .editorProgramListSelect {
+    height: 20px;
+    font-size: 0.8rem;
+    border: 0;
+    padding: 0;
+    margin-right: 1rem;
+
+    & div {
+      border: 0;
+    }
+  }
+
+  & .editorProgramListPerPage {
+    display: flex;
+    font-size: 0.8rem;
+
+    & .editorProgramListPerPageItem {
+      margin: 0 0.5rem;
+      cursor: pointer;
+    }
+    & .active {
+      border-bottom: 1px solid #000000;
+    }
+  }
+`;
 
 const MainContainer = styled(Container)`
   & .head {

@@ -263,7 +263,7 @@ const Signup = () => {
       <Head>
         <title>회원가입</title>
       </Head>
-      <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
+      <Container maxWidth="lg" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
             <SignupCenterBox>

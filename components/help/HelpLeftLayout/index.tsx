@@ -54,6 +54,7 @@ const HelpLeftLayout: FC = ({ children }) => {
     },
     [value]
   );
+
   return (
     <Grid container py={5}>
       <Grid item xs={12} sm={12} md={3} sx={{ fontFamily: "paybooc-Medium" }}>
@@ -85,7 +86,8 @@ const HelpLeftLayout: FC = ({ children }) => {
           </Box>
           <BoxContainer>
             <Typography
-              py={2}
+              mt={3}
+              py={1}
               sx={{ fontFamily: "paybooc-Bold", fontSize: "1.5rem" }}
             >
               {"고객센터"}
