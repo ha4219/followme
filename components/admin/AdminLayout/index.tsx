@@ -8,7 +8,6 @@ const AdminLayout: FC = ({ children }) => {
     <AdminDrawer>
       <AdminMain>
         <AdminHeader />
-
         {children}
       </AdminMain>
     </AdminDrawer>

@@ -21,10 +21,6 @@ interface IProps {
 const ShareButton: VFC<IProps> = ({ url, des, user, imageUrl }) => {
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(Window.kakao);
-  // }, [Window.kakao]);
-
   const onClickKakao = async () => {
     // TODO
     if (!window.Kakao.isInitialized()) {

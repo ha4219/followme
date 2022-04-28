@@ -23,22 +23,6 @@ const HelpFaqItem: VFC<INoticeType> = ({
   views,
   writer,
 }) => {
-  // const id = useRecoilValue(idState);
-  // const onClickDel = async () => {
-  //   try {
-  //     const data = await delNotice({ idx: idx, id: id });
-  //     if (data.data === "success") {
-  //       toast.success("삭제 성공");
-  //       setShow(false);
-  //     } else {
-  //       toast.error("삭제 실패");
-  //     }
-  //   } catch (e) {
-  //     toast.error("에러");
-  //     console.log("delBanner", e);
-  //   }
-  // };
-
   const [show, setShow] = useState(false);
 
   return (

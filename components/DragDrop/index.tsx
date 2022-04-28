@@ -68,10 +68,6 @@ const DragDrop = ({ url, setUrl }) => {
     [file]
   );
 
-  useEffect(() => {
-    console.log(1, 1, url);
-  }, [url]);
-
   const handleDragIn = useCallback((e: DragEvent): void => {
     e.preventDefault();
     e.stopPropagation();

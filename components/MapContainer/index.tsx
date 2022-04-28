@@ -70,7 +70,8 @@ const MapContainer = () => {
         }
       );
     } catch (e) {
-      toast.error("지원하지 않는 브라우저입니다.");
+      console.warn(e);
+      // toast.error("지원하지 않는 브라우저입니다.");
     }
   };
 
@@ -95,11 +96,6 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (window.kakao) {
-      // window.kakao.map.setCenter(
-      //   new window.kakao.maps.LatLng(curPos.lat, curPos.lon)
-      // );
-    }
     const arr = allData.filter(
       (item) =>
         getDistance(
@@ -135,11 +131,6 @@ const MapContainer = () => {
     }
   }, [mapLatLonState]);
 
-  // useEffect(() => {
-  //   markers.forEach((item) => {
-  //     item.setMap(map);
-  //   });
-  // }, [map, markers]);
   useEffect(() => {
     if (map) {
       for (let i = 0; i < markers.length; i++) {

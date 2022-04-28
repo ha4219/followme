@@ -38,33 +38,9 @@ const MainEditorPickContainer = () => {
     setPage(page < picks.length / mdPerPageSize - 1 ? page + 1 : page);
   }, [page]);
 
-  const onSmRightClick = useCallback(() => {
-    setPage(page < picks.length / smPerPageSize - 1 ? page + 1 : page);
-  }, [page]);
-
   const onLeftClick = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);
   }, [page]);
-
-  // useEffect(() => {
-  //   if (width) {
-  //     setPaerPageSize(width >= 900 ? 3 : 1);
-  //   }
-  // }, [width]);
-
-  //나중에 바꿔
-  // useEffect(() => {
-  //   if (window) {
-  //     const handleResize = () => {
-  //       setWidth(window.innerWidth);
-  //     };
-  //     window.addEventListener("resize", handleResize);
-
-  //     return () => {
-  //       window.removeEventListener("resize", handleResize);
-  //     };
-  //   }
-  // }, []);
 
   useEffect(() => {
     getTravel();

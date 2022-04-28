@@ -33,29 +33,6 @@ const Banner = () => {
     getBanner();
   }, []);
 
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-  // useEffect(async () => {
-  //   const { data } = await API.get(
-  //     "/api/main/swipers",
-  //     {},
-  //     { responseType: "blob" }
-  //   );
-  //   console.warn(data[0].image.data, typeof data[0].image.data);
-
-  //   const tmp = await data.map((item) =>
-  //     URL.createObjectURL(
-  //       new Blob([new Uint8Array(item.image.data)], { type: "image/jpeg" })
-  //     )
-  //   );
-
-  //   setImgs(tmp);
-  //   console.log(tmp);
-
-  //   setBgs(data);
-  // }, []);
-
   return (
     <BannerContainer>
       <Swiper
@@ -69,18 +46,6 @@ const Banner = () => {
         // onSwiper={(swiper) => {}}
         // onSlideChange={() => {}}
       >
-        {/* <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image alt="bg0" src={"/bg.jpeg"} layout="fill" />
-        </SwiperSlide> */}
         {imgs.map((bg, index) => {
           return (
             <SwiperSlide key={index}>

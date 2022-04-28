@@ -199,8 +199,6 @@ const EditorProgramList: VFC = () => {
             </CustomButton> */}
           </SortedContainer>
         </HeadContainer>
-        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {courses
             .slice(page * perPageSize, (page + 1) * perPageSize)

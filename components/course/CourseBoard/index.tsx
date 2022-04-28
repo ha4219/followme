@@ -12,7 +12,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { courseTagState } from "@store/tag";
 import { getCourseAllBoard, getCourseCommentsLength } from "api/board";
@@ -79,11 +78,11 @@ const CourseBoard = () => {
   }, []);
 
   return (
-    <MainContainer maxWidth="md">
+    <MainContainer maxWidth="lg">
       <HeadContainer>
         <TitleContainer>
           <div className="sub">
-            {"Editor's Pick"}
+            {"코스를 부탁해"}
             <span className="orange">{courses.length}</span>개
           </div>
         </TitleContainer>

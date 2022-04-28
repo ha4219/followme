@@ -1,6 +1,4 @@
-import AdminDrawer from "@components/admin/AdminDrawer";
 import Footer from "@components/Footer";
-import MainSearchContaier from "@components/main/MainSearchContainer";
 import Navbar from "@components/Navbar";
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
