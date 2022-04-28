@@ -27,6 +27,7 @@ interface IProps {
   boardIdx: number;
   childrenReply: IComment[];
   type: number;
+  update: any;
 }
 
 const ReplyChildContent = ({
@@ -37,6 +38,7 @@ const ReplyChildContent = ({
   fk_user_comments_id,
   boardIdx,
   type,
+  update,
 }: IProps) => {
   const onClickReport = async () => {
     const check = confirm(
@@ -69,6 +71,7 @@ const ReplyChildContent = ({
         const data = await delComment({ id: id, type: type, idx: idx });
         if (data.data === "success") {
           toast.success("삭제");
+          update();
         }
       }
     } catch (e) {
@@ -128,6 +131,7 @@ const ReplyContent = ({
   fk_user_comments_id,
   boardIdx,
   childrenReply,
+  update,
 }: IProps) => {
   const [value, setValue, onChangeValue] = useInput("");
   const [open, setOpen] = useState(false);
@@ -136,7 +140,7 @@ const ReplyContent = ({
 
   useEffect(() => {
     setChildrenState(childrenReply);
-  }, []);
+  }, [update]);
 
   const onClickDel = async () => {
     const check = confirm(
@@ -148,6 +152,7 @@ const ReplyContent = ({
         const data = await delComment({ id: id, type: type, idx: idx });
         if (data.data === "success") {
           toast.success("삭제");
+          update();
         }
       }
     } catch (e) {
@@ -209,16 +214,17 @@ const ReplyContent = ({
           });
 
           if (data.data === "success") {
-            setChildrenState([
-              ...childrenState,
-              {
-                idx: "-1",
-                content: value,
-                createdAt: new Date().toISOString(),
-                fk_user_comments_id: id,
-              },
-            ]);
+            // setChildrenState([
+            //   ...childrenState,
+            //   {
+            //     idx: "-1",
+            //     content: value,
+            //     createdAt: new Date().toISOString(),
+            //     fk_user_comments_id: id,
+            //   },
+            // ]);
             setValue("");
+            update();
             toast.success("작성완료");
           }
         } else if (type === 1) {
@@ -229,15 +235,16 @@ const ReplyContent = ({
             parentIdx: idx,
           });
           if (data.data === "success") {
-            setChildrenState([
-              ...childrenState,
-              {
-                idx: "-1",
-                content: value,
-                createdAt: new Date().toISOString(),
-                fk_user_comments_id: id,
-              },
-            ]);
+            // setChildrenState([
+            //   ...childrenState,
+            //   {
+            //     idx: "-1",
+            //     content: value,
+            //     createdAt: new Date().toISOString(),
+            //     fk_user_comments_id: id,
+            //   },
+            // ]);
+            update();
             setValue("");
             toast.success("작성완료");
           }
@@ -249,15 +256,16 @@ const ReplyContent = ({
             parentIdx: idx,
           });
           if (data.data === "success") {
-            setChildrenState([
-              ...childrenState,
-              {
-                idx: "-1",
-                content: value,
-                createdAt: new Date().toISOString(),
-                fk_user_comments_id: id,
-              },
-            ]);
+            // setChildrenState([
+            //   ...childrenState,
+            //   {
+            //     idx: "-1",
+            //     content: value,
+            //     createdAt: new Date().toISOString(),
+            //     fk_user_comments_id: id,
+            //   },
+            // ]);
+            update();
             setValue("");
             toast.success("작성완료");
           }
@@ -313,6 +321,7 @@ const ReplyContent = ({
               key={item.idx}
               boardIdx={boardIdx}
               type={type}
+              update={update}
               {...item}
             />
           ))}

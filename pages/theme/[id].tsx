@@ -16,6 +16,7 @@ import EditorDetailLeftLayout from "@components/editor/EditorDetailLeftLayout";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
 import ProgramHeader from "@components/ProgramHeader";
 import {
+  getCommentsAll,
   getThemeDetailBoard,
   insertThemeComment,
   likeThemeBoard,
@@ -32,6 +33,7 @@ const ThemeDetail = () => {
   const [like, setLike] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
   const loggedInId = useRecoilValue(idState);
+  const [tmp, setTmp] = useState(1);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -52,7 +54,7 @@ const ThemeDetail = () => {
         setLike(data[0].likeClicked ? 1 : 0);
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
-        getComments(data[0].comments);
+        getComments({ idx: id });
         // setComments(data[0].comments);
       }
     } catch (e) {
@@ -60,7 +62,8 @@ const ThemeDetail = () => {
     }
   };
 
-  const getComments = (comments) => {
+  const getComments = async ({ idx }) => {
+    const comments = await getCommentsAll({ idx: idx, type: 1 });
     const parent = comments.filter((item) => !item.recomment);
     const child = comments.filter((item) => item.recomment);
     const res = parent.map((item) => {
@@ -68,20 +71,6 @@ const ThemeDetail = () => {
       return { childrenReply: resTmp, ...item };
     });
     setComments(res);
-
-    // const { id } = router.query;
-    // try {
-    //   if (id) {
-    //     const { data } = await API.get<IComment[]>(
-    //       `/theme/themeBoards/reply/${id}`,
-    //       {}
-    //     );
-    //     setComments(data);
-    //   }
-    // } catch (e) {
-    //   console.log("router not ready", e);
-    // }
-    // setIdx(id);
   };
 
   const onSubmitComment = useCallback(
@@ -101,16 +90,18 @@ const ThemeDetail = () => {
           content: comment,
         });
         if (data.data === "success") {
-          setComments([
-            ...comments,
-            {
-              idx: "999",
-              fk_user_comments_id: loggedInId,
-              content: comment,
-              createdAt: new Date().toISOString(),
-              childrenReply: [],
-            },
-          ]);
+          // setComments([
+          //   ...comments,
+          //   {
+          //     idx: "999",
+          //     fk_user_comments_id: loggedInId,
+          //     content: comment,
+          //     createdAt: new Date().toISOString(),
+          //     childrenReply: [],
+          //   },
+          // ]);
+          updateComment();
+          toast.success("댓글 작성 성공");
         }
       } catch (e) {
         console.log("댓글 작성 실패", e);
@@ -143,6 +134,16 @@ const ThemeDetail = () => {
     // getComments();
     return () => setLoading(false);
   }, [router.isReady]);
+
+  const updateComment = () => {
+    setTmp(tmp ^ 1);
+  };
+
+  useEffect(() => {
+    if (idx) {
+      getComments({ idx });
+    }
+  }, [tmp, idx]);
 
   return (
     <Container maxWidth="lg">
@@ -254,7 +255,13 @@ const ThemeDetail = () => {
               </form>
               <div className="reply">
                 {comments.map((item, index) => (
-                  <ReplyContent type={1} key={index} {...item} boardIdx={idx} />
+                  <ReplyContent
+                    update={updateComment}
+                    type={1}
+                    key={index}
+                    {...item}
+                    boardIdx={idx}
+                  />
                 ))}
               </div>
             </ReplyContainer>

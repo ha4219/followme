@@ -187,6 +187,15 @@ export const delThemeComment = async ({ id, idx }) => {
   }
 };
 
+export const getCommentsAll = async ({ idx, type }) => {
+  try {
+    const { data } = await API.get(`/board/${type}/reply/${idx}`);
+    return data;
+  } catch (e) {
+    console.log("getcomment error type", type, e);
+  }
+};
+
 export const reportComment = async ({ idx, commentIdx, type }) => {
   try {
     const { data } = await API.post(`/board/${type}/reply/report/${idx}`, {

@@ -29,6 +29,7 @@ const ProgramHeader: FC<IProps> = ({ title, children }) => {
 };
 
 const ProgramHeaderContainer = styled(Box)`
+  margin-top: 2rem;
   & .editorPath {
     display: flex;
     font-size: 0.9rem;

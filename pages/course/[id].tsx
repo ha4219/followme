@@ -15,7 +15,11 @@ import ShareButton from "@components/ShareButton";
 import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import ReviseDeleteButtons from "@components/ReviseDeleteButtons";
-import { getCourseDetailBoard, insertCourseComment } from "api/board";
+import {
+  getCommentsAll,
+  getCourseDetailBoard,
+  insertCourseComment,
+} from "api/board";
 
 const CourseDetail = () => {
   const router = useRouter();
@@ -26,6 +30,28 @@ const CourseDetail = () => {
   const [like, setLike] = useState(false);
   const [idx, setIdx] = useState<any>();
   const loggedInId = useRecoilValue(idState);
+  const [tmp, setTmp] = useState(1);
+  const updateComment = () => {
+    setTmp(tmp ^ 1);
+  };
+
+  useEffect(() => {
+    if (idx) {
+      getComments({ idx });
+    }
+  }, [tmp, idx]);
+
+  const getComments = async ({ idx }) => {
+    const comments = await getCommentsAll({ idx: idx, type: 2 });
+    const parent = comments.filter((item) => !item.recomment);
+    const child = comments.filter((item) => item.recomment);
+    const res = parent.map((item) => {
+      const resTmp = child.filter((item1) => item.idx === item1.recomment);
+      return { childrenReply: resTmp, ...item };
+    });
+    setComments(res);
+  };
+
   const onSubmitComment = useCallback(
     async (e) => {
       e.preventDefault();
@@ -37,16 +63,17 @@ const CourseDetail = () => {
         });
         if (data.data === "success") {
           toast.success("댓글 작성 성공");
-          setComments([
-            ...comments,
-            {
-              idx: "999",
-              fk_user_comments_id: loggedInId,
-              content: comment,
-              createdAt: new Date().toISOString(),
-              childrenReply: [],
-            },
-          ]);
+          // setComments([
+          //   ...comments,
+          //   {
+          //     idx: "999",
+          //     fk_user_comments_id: loggedInId,
+          //     content: comment,
+          //     createdAt: new Date().toISOString(),
+          //     childrenReply: [],
+          //   },
+          // ]);
+          updateComment();
         }
         // }
       } catch (e) {
@@ -79,42 +106,11 @@ const CourseDetail = () => {
       //   setComments(data[0].comments);
       // }
       // setLike(data[0].)
-      getComments(data[0].comments);
+      getComments({ idx: id });
       // setComments(data[0].comments);
     }
 
     // setCourse(COURSES[Number(id)]);
-  };
-
-  const onClickHeart = () => {
-    //TODO
-    toast.info("추가 예정입니다");
-    setLike(!like);
-  };
-
-  const getComments = (comments) => {
-    const parent = comments.filter((item) => !item.recomment);
-    const child = comments.filter((item) => item.recomment);
-    const res = parent.map((item) => {
-      const resTmp = child.filter((item1) => item.idx === item1.recomment);
-      return { ...item, childrenReply: resTmp };
-    });
-
-    setComments(res);
-
-    // const { id } = router.query;
-    // try {
-    //   if (id) {
-    //     const { data } = await API.get<IComment[]>(
-    //       `/theme/themeBoards/reply/${id}`,
-    //       {}
-    //     );
-    //     setComments(data);
-    //   }
-    // } catch (e) {
-    //   console.log("router not ready", e);
-    // }
-    // setIdx(id);
   };
 
   useEffect(() => {
@@ -219,6 +215,7 @@ const CourseDetail = () => {
                     <ReplyContent
                       key={index}
                       type={2}
+                      update={updateComment}
                       {...item}
                       boardIdx={idx}
                     />

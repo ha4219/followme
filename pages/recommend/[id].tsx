@@ -19,6 +19,7 @@ import {
   getRecommendDetailBoard,
   insertRecommentComment,
   likeRecommendBoard,
+  getCommentsAll,
 } from "api/board";
 
 const RecommendDetail = () => {
@@ -32,6 +33,7 @@ const RecommendDetail = () => {
   const [like, setLike] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
   const loggedInId = useRecoilValue(idState);
+  const [tmp, setTmp] = useState(1);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -53,14 +55,15 @@ const RecommendDetail = () => {
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
         // setComments(data[0].comments);
-        getComments(data[0].comments);
+        getComments({ idx: id });
       }
     } catch (e) {
       console.log("router not ready", e);
     }
   };
 
-  const getComments = (comments) => {
+  const getComments = async ({ idx }) => {
+    const comments = await getCommentsAll({ idx: idx, type: 0 });
     const parent = comments.filter((item) => !item.recomment);
     const child = comments.filter((item) => item.recomment);
     const res = parent.map((item) => {
@@ -68,20 +71,6 @@ const RecommendDetail = () => {
       return { childrenReply: resTmp, ...item };
     });
     setComments(res);
-
-    // const { id } = router.query;
-    // try {
-    //   if (id) {
-    //     const { data } = await API.get<IComment[]>(
-    //       `/theme/themeBoards/reply/${id}`,
-    //       {}
-    //     );
-    //     setComments(data);
-    //   }
-    // } catch (e) {
-    //   console.log("router not ready", e);
-    // }
-    // setIdx(id);
   };
 
   const onSubmitComment = useCallback(
@@ -101,16 +90,17 @@ const RecommendDetail = () => {
           idx: idx,
         });
         if (data.data === "success") {
-          setComments([
-            ...comments,
-            {
-              idx: "999",
-              fk_user_comments_id: loggedInId,
-              content: comment,
-              createdAt: new Date().toISOString(),
-              childrenReply: [],
-            },
-          ]);
+          // setComments([
+          //   ...comments,
+          //   {
+          //     idx: "999",
+          //     fk_user_comments_id: loggedInId,
+          //     content: comment,
+          //     createdAt: new Date().toISOString(),
+          //     childrenReply: [],
+          //   },
+          // ]);
+          setTmp(tmp ^ 1);
         }
       } catch (e) {
         console.log("댓글 작성 실패", e);
@@ -143,6 +133,16 @@ const RecommendDetail = () => {
     // getComments();
     return () => setLoading(false);
   }, [router.isReady]);
+
+  const updateComment = () => {
+    setTmp(tmp ^ 1);
+  };
+
+  useEffect(() => {
+    if (idx) {
+      getComments({ idx });
+    }
+  }, [tmp, idx]);
 
   return (
     <Container maxWidth="lg">
@@ -232,7 +232,6 @@ const RecommendDetail = () => {
               <form className="write" onSubmit={onSubmitComment}>
                 <TextField
                   id=""
-                  label=""
                   value={comment}
                   onChange={onChangeComment}
                   fullWidth
@@ -248,7 +247,14 @@ const RecommendDetail = () => {
               </form>
               <div className="reply">
                 {comments.map((item, index) => (
-                  <ReplyContent key={index} type={0} {...item} boardIdx={idx} />
+                  <ReplyContent
+                    key={index}
+                    type={0}
+                    {...item}
+                    boardIdx={idx}
+                    index={index}
+                    update={updateComment}
+                  />
                 ))}
               </div>
             </ReplyContainer>

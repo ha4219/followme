@@ -6,7 +6,7 @@ import { API } from "@src/API";
 import { idState } from "@store/auth";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { ICourse, ICourseDetail } from "types/apiType";
+import { ICourse } from "types/apiType";
 import Image from "next/image";
 
 const PAGESIZE = [24, 36, 48];
