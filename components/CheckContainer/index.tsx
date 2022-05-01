@@ -41,7 +41,11 @@ export const CheckContainerSeason: VFC<IProps> = ({ tag, value }) => {
 
   return (
     <Box>
-      <Checkbox sx={{ padding: 0, paddingRight: 1 }} onChange={onClick} />
+      <Checkbox
+        sx={{ padding: 0, paddingRight: 1 }}
+        onChange={onClick}
+        checked={selectedSeason.includes(value)}
+      />
       <span>{tag}</span>
     </Box>
   );
@@ -76,7 +80,11 @@ export const CheckContainerDomestic: VFC<IProps> = ({ tag, value }) => {
 
   return (
     <Box>
-      <Checkbox sx={{ padding: 0, paddingRight: 1 }} onChange={onClick} />
+      <Checkbox
+        sx={{ padding: 0, paddingRight: 1 }}
+        onChange={onClick}
+        checked={selectedDomestic.includes(value)}
+      />
       <span>{tag}</span>
     </Box>
   );
@@ -99,10 +107,15 @@ export const CheckContainerOverseas: VFC<IProps> = ({ tag, value }) => {
       }
     }
   };
+  console.log(tag, value);
 
   return (
     <Box sx={{ fontFamily: "paybooc-Light" }}>
-      <Checkbox sx={{ padding: 0, paddingRight: 1 }} onChange={onClick} />
+      <Checkbox
+        sx={{ padding: 0, paddingRight: 1 }}
+        onChange={onClick}
+        checked={selectedOverseas.includes(value)}
+      />
       <span>{tag}</span>
     </Box>
   );

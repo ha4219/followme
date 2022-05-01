@@ -64,7 +64,6 @@ class MapContainerImgClass extends BlockEmbed {
     // console.log(node, typeof node);
     node.setAttribute("alt", params);
     node.setAttribute("src", params);
-    console.log(params);
     // node.innerHTML = `<div style='display:flex'><div><img src='${params[0]}'/></div></div>`;
     // node.setAttribute("style", "display: flex");
     return node;
