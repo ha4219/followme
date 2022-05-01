@@ -14,10 +14,15 @@ import {
   CheckContainerOverseas,
   CheckContainerDomestic,
 } from "@components/CheckContainer";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 // import { DATA } from "@data/LeftCheckBox";
-import { useRecoilState } from "recoil";
-import { tagState } from "@store/tag";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  domesticState,
+  overseasState,
+  seasonState,
+  tagState,
+} from "@store/tag";
 import { DOMESTIC, OVERSEAS, SEASON } from "@data/OptionData";
 import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
@@ -33,6 +38,10 @@ const LeftLayout: FC = ({ children }) => {
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
+
+  const selectedSeason = useRecoilValue(seasonState);
+  const selectedDomestic = useRecoilValue(domesticState);
+  const selectedOverseas = useRecoilValue(overseasState);
 
   const onChangeValue = useCallback(
     (e) => {
@@ -58,6 +67,12 @@ const LeftLayout: FC = ({ children }) => {
     },
     [value]
   );
+
+  useEffect(() => {
+    setOpen1(selectedSeason.length > 0);
+    setOpen2(selectedDomestic.length > 0);
+    setOpen3(selectedOverseas.length > 0);
+  }, []);
 
   return (
     <Grid container>

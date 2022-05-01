@@ -8,7 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
 import { ICourseDetail } from "types/apiType";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
@@ -21,6 +21,8 @@ import {
   likeRecommendBoard,
   getCommentsAll,
 } from "api/board";
+import { enterPickState } from "@store/map";
+import MapDialog from "@components/map/MapDialog";
 
 const RecommendDetail = () => {
   const router = useRouter();
@@ -34,6 +36,8 @@ const RecommendDetail = () => {
   const [likeCnt, setLikeCnt] = useState(0);
   const loggedInId = useRecoilValue(idState);
   const [tmp, setTmp] = useState(1);
+  const [enterPick, setEnterPick] = useRecoilState(enterPickState);
+  const [show, setShow] = useState(false);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -143,6 +147,34 @@ const RecommendDetail = () => {
       getComments({ idx });
     }
   }, [tmp, idx]);
+  const onCheck = (value) => {
+    try {
+      const [idx, id] = value.split(" ");
+      console.log(idx, id);
+
+      if (!idx) {
+        return false;
+      }
+      if (!id) {
+        return false;
+      }
+      if (Number("d") == Number(idx)) {
+        return false;
+      }
+      setEnterPick([Number(idx), id]);
+      return true;
+    } catch (e) {}
+    return false;
+  };
+
+  const onClick = (e) => {
+    if (!onCheck(e.target.className)) return;
+    setShow(true);
+  };
+
+  const onDialogClose = () => {
+    setShow(false);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -150,6 +182,7 @@ const RecommendDetail = () => {
         <title>{course?.title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      {show && <MapDialog onClose={onDialogClose} show={show} />}
       {course && (
         <ProgramHeader title="Ulife 추천코스">
           <EditorDetailLeftLayout
@@ -215,6 +248,7 @@ const RecommendDetail = () => {
             </TitleContainer>
             {course && (
               <ContentContainer
+                onClick={onClick}
                 dangerouslySetInnerHTML={{ __html: course.content }}
               />
             )}

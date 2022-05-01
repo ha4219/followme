@@ -7,7 +7,7 @@ export const mapState = atom({
 
 export const mapSelectedState = atom({
   key: "mapSelect",
-  default: ["", "", "", 0, [""]],
+  default: ["", "", "", 0, [""], -1, ""],
 });
 
 export const curMapState = atom({
@@ -28,4 +28,9 @@ export const enterSignupState = atom({
 export const enterPickState = atom({
   key: "enterkey",
   default: [-1, ""],
+});
+
+export const searchRegion = atom({
+  key: "searchRegion",
+  default: "",
 });
