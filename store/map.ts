@@ -7,7 +7,7 @@ export const mapState = atom({
 
 export const mapSelectedState = atom({
   key: "mapSelect",
-  default: ["", "", "", 0, [""]],
+  default: ["", "", "", 0, [""], -1, ""],
 });
 
 export const curMapState = atom({

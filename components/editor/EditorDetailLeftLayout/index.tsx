@@ -22,9 +22,9 @@ const EditorDetailLeftLayout: FC<IProps> = ({
   season,
   region,
 }) => {
-  const [open1, setOpen1] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
+  const [open1, setOpen1] = useState(true);
+  const [open2, setOpen2] = useState(true);
+  const [open3, setOpen3] = useState(true);
 
   return (
     <Grid container pr={4}>

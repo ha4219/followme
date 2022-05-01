@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Avatar, Button, Container, TextField } from "@mui/material";
+import { Avatar, Button, Container, Dialog, TextField } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyContent from "@components/ReplyContent";
 import useInput from "@hooks/useInput";
 import { ICourseDetail } from "types/apiType";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { toast } from "react-toastify";
 import ShareButton from "@components/ShareButton";
@@ -21,11 +21,15 @@ import {
   insertThemeComment,
   likeThemeBoard,
 } from "api/board";
+import MapDialog from "@components/map/MapDialog";
+import { enterPickState } from "@store/map";
 
 const ThemeDetail = () => {
   const router = useRouter();
   // const { memberId } = getPayload();
   const [course, setCourse] = useState<ICourseDetail>();
+  const [enterPick, setEnterPick] = useRecoilState(enterPickState);
+  const [content, setContent] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [comments, setComments] = useState<any[]>([]);
   const [comment, setComment, onChangeComment] = useInput("");
@@ -34,6 +38,7 @@ const ThemeDetail = () => {
   const [likeCnt, setLikeCnt] = useState(0);
   const loggedInId = useRecoilValue(idState);
   const [tmp, setTmp] = useState(1);
+  const [show, setShow] = useState(false);
 
   const getDetail = async () => {
     const { id } = router.query;
@@ -55,6 +60,7 @@ const ThemeDetail = () => {
         setLikeCnt(data[0].likeCnts);
         setCourse(data[0]);
         getComments({ idx: id });
+
         // setComments(data[0].comments);
       }
     } catch (e) {
@@ -145,12 +151,42 @@ const ThemeDetail = () => {
     }
   }, [tmp, idx]);
 
+  const onCheck = (value) => {
+    try {
+      const [idx, id] = value.split(" ");
+      console.log(idx, id);
+
+      if (!idx) {
+        return false;
+      }
+      if (!id) {
+        return false;
+      }
+      if (Number("d") == Number(idx)) {
+        return false;
+      }
+      setEnterPick([Number(idx), id]);
+      return true;
+    } catch (e) {}
+    return false;
+  };
+
+  const onClick = (e) => {
+    if (!onCheck(e.target.className)) return;
+    setShow(true);
+  };
+
+  const onDialogClose = () => {
+    setShow(false);
+  };
+
   return (
     <Container maxWidth="lg">
       <Head>
         <title>{course?.title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      {show && <MapDialog onClose={onDialogClose} show={show} />}
       {course && (
         <ProgramHeader title="테마여행">
           <EditorDetailLeftLayout
@@ -217,6 +253,7 @@ const ThemeDetail = () => {
             </TitleContainer>
             {course && (
               <ContentContainer
+                onClick={onClick}
                 dangerouslySetInnerHTML={{ __html: course.content }}
               />
             )}
@@ -306,7 +343,7 @@ const TitleContainer = styled.div`
 const ContentContainer = styled.div`
   padding: 1rem;
   border-bottom: 1px solid #c7cacf;
-
+  font-family: paybooc-Medium;
   & img {
     width: 100%;
   }

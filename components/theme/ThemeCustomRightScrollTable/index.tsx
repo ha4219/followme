@@ -24,6 +24,8 @@ const ThemeCustomRightScrollTableItem = ({
   longitude,
   tags,
   score,
+  idx,
+  id,
 }: IEnterpriseType) => {
   const [, setMapLatLonState] = useRecoilState(mapState);
   const [, setMapSelectState] = useRecoilState(mapSelectedState);
@@ -31,7 +33,7 @@ const ThemeCustomRightScrollTableItem = ({
 
   const onClick = () => {
     setMapLatLonState([Number(latitude), Number(longitude)]);
-    setMapSelectState([profileImage, name, content, score, tags]);
+    setMapSelectState([profileImage, name, content, score, tags, idx, id]);
   };
 
   return (
@@ -57,6 +59,7 @@ const ThemeCustomRightScrollTable = () => {
       ...item,
       profileImage: `${toBase64(item.profileImage)}`,
     }));
+
     setData(dataTmp);
   };
 

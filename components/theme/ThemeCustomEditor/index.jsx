@@ -14,8 +14,6 @@ import AddLocationIcon from "@mui/icons-material/AddLocation";
 import useInput from "@hooks/useInput";
 import StarGenerator from "@components/StarGenerator";
 import { v1 } from "uuid";
-// import S3 from "react-aws-s3";
-// import S3FileUpload from "react-s3";
 import AWS from "aws-sdk";
 import { config } from "@config/s3Config";
 import { DOMESTIC, OVERSEAS, SEASON } from "data/OptionData";
@@ -81,6 +79,8 @@ MapContainerImgClass.blotName = "mapImg";
 class MapContainerTestClass extends BlockEmbed {
   static create(params) {
     const node = super.create();
+    const className = `${params[5]} ${params[6]}`;
+
     const count = Math.ceil(params[3]);
     const fillStar = `<svg
         xmlns="http://www.w3.org/2000/svg"
@@ -88,11 +88,12 @@ class MapContainerTestClass extends BlockEmbed {
         height="24"
         viewBox="0 0 24 24"
         style="fill: #f3c221;"
+        class="${className}"
       >
         <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
       </svg>
     `;
-    const outlineStar = `<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" style="fill: #f3c221;"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
+    const outlineStar = `<svg class="${className}" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" style="fill: #f3c221;"><path d="M15.668 8.626l8.332 1.159-6.065 5.874 1.48 8.341-7.416-3.997-7.416 3.997 1.481-8.341-6.064-5.874 8.331-1.159 3.668-7.626 3.669 7.626zm-6.67.925l-6.818.948 4.963 4.807-1.212 6.825 6.068-3.271 6.069 3.271-1.212-6.826 4.964-4.806-6.819-.948-3.002-6.241-3.001 6.241z"/></svg>`;
     const starsBody = "";
     for (let i = 0; i < 5; i++) {
       if (count - 1 >= i) {
@@ -101,9 +102,10 @@ class MapContainerTestClass extends BlockEmbed {
         starsBody += outlineStar;
       }
     }
-    const stars = `<div style="display: flex;">${starsBody}</div>`;
+    const stars = `<div style="display: flex;" class="${className}">${starsBody}</div>`;
     const tag = (value) => `<div style="display: inline-block;
   color: #b69775;
+  class="${className}"
   font-family: paybooc-Bold;
   font-size: 0.8rem;
   padding: 0.2rem;
@@ -114,7 +116,7 @@ class MapContainerTestClass extends BlockEmbed {
     for (let i = 0; i < params[4].length; i++) {
       tags += tag(params[4][i]);
     }
-    node.innerHTML = `<div style='display:flex; padding: 1rem;'><img src='${params[0]}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${params[0]}/><div style="font-family: paybooc-Light;"><div style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${params[1]}</div><div style="height: 4rem;">${params[2]}</div><div style="height: 2rem">${stars}</div><div style="height: 2rem">${tags}</div></div></div>`;
+    node.innerHTML = `<div readonly class="${className}" style='display:flex; padding: 1rem;cursor:pointer;'><img class="${className}" src='${params[0]}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${params[0]}/><div class="${className}" style="font-family: paybooc-Light;"><div class="${className}" style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${params[1]}</div><div class="${className}" style="height: 4rem;">${params[2]}</div><div class="${className}" style="height: 2rem">${stars}</div><div class="${className}" style="height: 2rem">${tags}</div></div></div>`;
     return node;
   }
   // static value(node) {
@@ -148,33 +150,6 @@ const formats = [
   "list",
   "indent",
 ];
-
-// const Quill = dynamic(import("react-quill"), {
-//   ssr: false,
-//   loading: () => <p>Loading ...</p>,
-// });
-// const QuillCSR = dynamic(
-//   async () => {
-//     const { default: RQ } = await import("react-quill");
-//     // console.log(RQ.Quill.import("blots/inline"));
-
-//     return function comp({ forwardedRef, ...props }) {
-//       return <RQ ref={forwardedRef} {...props} />;
-//     };
-//   },
-//   { ssr: false }
-// );
-
-// const Inline = dynamic(
-//   async () => {
-//     const inlineChild = await Quill.import("blots/inline");
-//     return inlineChild;
-//   },
-//   {
-//     ssr: false,
-//   }
-// );
-// const Inline = Quill.import("blots/inline");
 
 const ThemeCustomEditor = () => {
   const ref = useRef();
@@ -330,31 +305,6 @@ const ThemeCustomEditor = () => {
       console.log("not main image");
       mainImage = "";
     }
-    // API.post(
-    //   checked[0]
-    //     ? "recommend/insertRecommendBoards"
-    //     : "/theme/insertThemeBoards",
-    //   {
-    //     title: title,
-    //     tags: tags,
-    //     shortContent: shortContent,
-    //     content: value,
-    //     mainImg: mainImage,
-    //     isLocal: region1,
-    //     schedule: `${date1}박${date2}일`,
-    //     region: region2,
-    //     season: season,
-    //     writer: isLoggedInId,
-    //   }
-    // )
-    //   .then((res) => {
-    //     toast.success("등록완료");
-    //     router.back();
-    //   })
-    //   .catch((err) => {
-    //     toast.error("에러");
-    //     console.log(err);
-    //   });
     try {
       if (checked[1]) {
         const data = await insertThemeBoard({
@@ -557,19 +507,8 @@ const ThemeCustomEditor = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <MapAddContainer>
-        {/* <div className="label">
-          <Button className="btn" size="small" onClick={() => setDay(day + 1)}>
-            +
-          </Button>
-          {day}일차
-          <Button className="btn" size="small" onClick={() => setDay(day - 1)}>
-            -
-          </Button>
-        </div> */}
-
         <Button
           onClick={() => {
-            // toast.info("추가 예정입니다.");
             setOpen(true);
           }}
         >
