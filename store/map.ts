@@ -29,3 +29,8 @@ export const enterPickState = atom({
   key: "enterkey",
   default: [-1, ""],
 });
+
+export const searchRegion = atom({
+  key: "searchRegion",
+  default: "",
+});

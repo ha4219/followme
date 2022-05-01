@@ -104,6 +104,7 @@ export interface IReportCommentType {
 }
 
 export interface IEnterpriseType {
+  [x: string]: any;
   category: string;
   content: string;
   id: string;
@@ -111,6 +112,7 @@ export interface IEnterpriseType {
   latitude: string;
   longitude: string;
   name: string;
+  address: string;
   profileImage: string;
   score: number;
   tags: string[];

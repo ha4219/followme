@@ -7,6 +7,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
@@ -14,6 +16,8 @@ import { mapState, mapSelectedState } from "@store/map";
 import { IEnterpriseType } from "types/apiType";
 import { toBase64 } from "@helpers/programHelper";
 import { getEnterprises } from "api/enterprise";
+import useInput from "@hooks/useInput";
+import { DOMESTIC, OVERSEAS } from "@data/OptionData";
 // import { editorState } from "@store/editor";
 
 const ThemeCustomRightScrollTableItem = ({
@@ -53,13 +57,13 @@ const ThemeCustomRightScrollTableItem = ({
 
 const ThemeCustomRightScrollTable = () => {
   const [data, setData] = useState<IEnterpriseType[]>([]);
+  const [searchRegion, setSerachRegion, onChangeSearchRegion] = useInput("");
   const getEnter = async () => {
     const dataTmp2 = await getEnterprises();
     const dataTmp = dataTmp2.map((item) => ({
       ...item,
       profileImage: `${toBase64(item.profileImage)}`,
     }));
-
     setData(dataTmp);
   };
 
@@ -69,6 +73,16 @@ const ThemeCustomRightScrollTable = () => {
 
   return (
     <TableContainer sx={{ maxHeight: 440 }}>
+      <ThemeCustomRightScrollTableFilterBar>
+        <span>지역 </span>
+        <Select value={searchRegion} onChange={onChangeSearchRegion}>
+          {DOMESTIC.map((item, index) => (
+            <MenuItem key={index} value={item.value}>
+              {item.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </ThemeCustomRightScrollTableFilterBar>
       <ThemeCustomRightScrollTableContainer>
         <TableHead>
           <TableRow>
@@ -78,9 +92,11 @@ const ThemeCustomRightScrollTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((item, index) => (
-            <ThemeCustomRightScrollTableItem key={index} {...item} />
-          ))}
+          {data
+            .filter((item) => item.address.startsWith(searchRegion))
+            .map((item, index) => (
+              <ThemeCustomRightScrollTableItem key={index} {...item} />
+            ))}
         </TableBody>
       </ThemeCustomRightScrollTableContainer>
     </TableContainer>
@@ -99,6 +115,15 @@ const ThemeCustomRightScrollTableItemContainer = styled(TableRow)`
 
 const ThemeCustomRightScrollTableContainer = styled(Table)`
   // overflow: auto;
+`;
+
+const ThemeCustomRightScrollTableFilterBar = styled.div`
+  text-align: right;
+  padding: 0 1rem;
+
+  & span {
+    margin-right: 1rem;
+  }
 `;
 
 export default ThemeCustomRightScrollTable;
