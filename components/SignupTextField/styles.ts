@@ -9,11 +9,23 @@ export const SignupContainer = styled("div")`
     font-family: paybooc-Bold;
     font-size: 1rem;
     align-self: center;
-    width: 130px;
+    // width: 200px;
+    @media screen and (max-width: 900px) {
+      width: 130px;
+    }
+    @media screen and (min-width: 900px) {
+      width: 200px;
+    }
   }
 
   & .textInput {
-    width: 240px;
+    // width: 400px;
+    @media screen and (max-width: 900px) {
+      width: 240px;
+    }
+    @media screen and (min-width: 900px) {
+      width: 400px;
+    }
     height: 40px;
   }
 

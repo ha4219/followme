@@ -413,7 +413,7 @@ const Signup = () => {
           </>
         </Dialog>
       )}
-      <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
+      <Container maxWidth="lg" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
             <SignupCenterBox marginBottom={4}>
@@ -605,10 +605,22 @@ const SignupCenterBox = styled(Box)`
       font-family: paybooc-Bold;
       font-size: 1rem;
       align-self: center;
-      width: 130px;
+      // width: 200px;
+      @media screen and (max-width: 600px) {
+        width: 130px;
+      }
+      @media screen and (min-width: 600px) {
+        width: 200px;
+      }
     }
     & .categoryField {
-      width: 240px;
+      @media screen and (max-width: 900px) {
+        width: 240px;
+      }
+      @media screen and (min-width: 900px) {
+        width: 400px;
+      }
+      // width: 400px;
       height: 40px;
     }
   }
