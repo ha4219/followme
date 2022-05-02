@@ -41,13 +41,16 @@ const SearchProgram = ({
     },
     [like]
   );
+
+  console.log(mainImg);
+
   return (
     <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
       <EditorContainer item xs={6} sm={6} md={4} lg={4}>
         <div className="editorProgramPhotoWrapper">
           <img
             className="editorProgramPhoto"
-            src={`${toBase64(mainImg.data)}`}
+            src={`${toBase64(mainImg)}`}
             alt={title}
           />
         </div>

@@ -2,41 +2,67 @@ import TagContainer from "@components/TagContainer";
 import { COURSETAGS } from "@data/CourseData";
 import estyled from "@emotion/styled";
 import { styled } from "@mui/material/styles";
-import { Box, Button, TextField, Input } from "@mui/material";
+import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { tagState } from "@store/tag";
 import { useRouter } from "next/router";
 import { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { MainPageSubText, MainPageText1, MainPageText2 } from "@data/mainData";
+import useInput from "@hooks/useInput";
 
+const ONEDATE = [
+  "0박",
+  "1박",
+  "2박",
+  "3박",
+  "4박",
+  "5박",
+  "6박",
+  "7박",
+  "8박",
+  "9박+",
+];
+const TWODATE = [
+  "1일",
+  "2일",
+  "3일",
+  "4일",
+  "5일",
+  "6일",
+  "7일",
+  "8일",
+  "9일+",
+];
 const MainSearchContaier = () => {
   const router = useRouter();
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
   const [value, setValue] = useState("");
+  const [oneDate, setoneDate, onChangeOneDate] = useInput(1);
+  const [twoDate, setTwoDate, onChangeTwoDate] = useInput(2);
   const onChangeValue = useCallback(
     (e) => {
       setValue(e.target.value);
     },
     [value]
   );
-  const [date, setDate] = useState(null);
-  const [dateEnd, setDateEnd] = useState(null);
+  // const [date, setDate] = useState(null);
+  // const [dateEnd, setDateEnd] = useState(null);
 
-  const onChangeDate = (newValue) => {
-    console.log(newValue, 1);
+  // const onChangeDate = (newValue) => {
+  //   console.log(newValue, 1);
 
-    setDate(newValue);
-  };
-  const onChangeDateEnd = (newValue) => {
-    setDateEnd(newValue);
-  };
+  //   setDate(newValue);
+  // };
+  // const onChangeDateEnd = (newValue) => {
+  //   setDateEnd(newValue);
+  // };
 
   const onSubmitValue = useCallback(() => {
     // setSelectedTag(value);
-    router.push({ pathname: "/search", query: { value: value } });
+    router.push({
+      pathname: "/search",
+      query: { value: value, date: `${oneDate}박${twoDate}일` },
+    });
   }, [value]);
 
   const onClickTag = useCallback((tag) => {
@@ -64,26 +90,25 @@ const MainSearchContaier = () => {
               onChange={onChangeValue}
             />
           </div>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div className="subContainer">
-              <DesktopDatePicker
-                inputFormat="MM/dd/yyyy"
-                value={date}
-                onChange={onChangeDate}
-                label="출발예정일"
-                renderInput={(params) => <BlackBorderTextField {...params} />}
-              />
-            </div>
-            <div className="subContainer">
-              <DesktopDatePicker
-                inputFormat="MM/dd/yyyy"
-                value={dateEnd}
-                onChange={onChangeDateEnd}
-                label="도착예정일"
-                renderInput={(params) => <BlackBorderTextField {...params} />}
-              />
-            </div>
-          </LocalizationProvider>
+          <Select
+            value={oneDate}
+            sx={{ marginLeft: "1rem" }}
+            onChange={onChangeOneDate}
+            className="mainSearchSelectedInput"
+          >
+            {ONEDATE.map((item, index) => (
+              <MenuItem value={index}>{item}</MenuItem>
+            ))}
+          </Select>
+          <Select
+            value={twoDate}
+            onChange={onChangeOneDate}
+            className="mainSearchSelectedInput"
+          >
+            {TWODATE.map((item, index) => (
+              <MenuItem value={index + 1}>{item}</MenuItem>
+            ))}
+          </Select>
           <Button className="btn" onClick={onSubmitValue}>
             검색
           </Button>
@@ -127,6 +152,10 @@ const MainContainer = estyled.div`
   min-width: 50%;
   padding-bottom: 8rem;
   text-align: center;
+
+  & .mainSearchSelectedInput {
+    border: 1px solid black;
+  }
 
   & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: black;
@@ -228,5 +257,26 @@ const MainContainer = estyled.div`
     }
   }
 `;
+
+// <LocalizationProvider dateAdapter={AdapterDateFns}>
+//   <div className="subContainer">
+//     <DesktopDatePicker
+//       inputFormat="MM/dd/yyyy"
+//       value={date}
+//       onChange={onChangeDate}
+//       label="출발예정일"
+//       renderInput={(params) => <BlackBorderTextField {...params} />}
+//     />
+//   </div>
+//   <div className="subContainer">
+//     <DesktopDatePicker
+//       inputFormat="MM/dd/yyyy"
+//       value={dateEnd}
+//       onChange={onChangeDateEnd}
+//       label="도착예정일"
+//       renderInput={(params) => <BlackBorderTextField {...params} />}
+//     />
+//   </div>
+// </LocalizationProvider>;
 
 export default MainSearchContaier;

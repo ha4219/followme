@@ -23,7 +23,13 @@ const SORT = [
 ];
 const PAGESIZE = [24, 36, 48];
 
-const SearchProgramList = ({ value }: { value: string }) => {
+const SearchProgramList = ({
+  value,
+  filterDate,
+}: {
+  value: string;
+  filterDate?: string;
+}) => {
   const router = useRouter();
 
   const [travels, setTravels] = useState<ICourse[]>([]);
@@ -43,8 +49,11 @@ const SearchProgramList = ({ value }: { value: string }) => {
 
   const getTravel = async () => {
     const data1 = await searchCourse({ value });
-    const data = data1.filter((item) => item.type === 0 || item.type === 1);
+    let data = data1.filter((item) => item.type === 0 || item.type === 1);
 
+    if (filterDate) {
+      data = data.filter((item) => item.schedule === filterDate);
+    }
     setTravels(
       data.sort((l, r) => {
         if (r.createdAt > l.createdAt) {
@@ -170,28 +179,8 @@ const SearchProgramList = ({ value }: { value: string }) => {
                 </div>
               ))}
             </div>
-            {/* <CustomButton
-              className={sortedType === 0 ? "active" : ""}
-              onClick={() => setSortedType(0)}
-            >
-              추천순
-            </CustomButton>
-            <CustomButton
-              className={sortedType === 1 ? "active" : ""}
-              onClick={() => setSortedType(1)}
-            >
-              인기순
-            </CustomButton>
-            <CustomButton
-              className={sortedType === 2 ? "active" : ""}
-              onClick={() => setSortedType(2)}
-            >
-              최신순
-            </CustomButton> */}
           </SortedContainer>
         </HeadContainer>
-        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid item xs> */}
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {courses
             .slice(page * perPageSize, (page + 1) * perPageSize)
