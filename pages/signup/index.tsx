@@ -266,7 +266,7 @@ const Signup = () => {
       <Container maxWidth="lg" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
-            <SignupCenterBox>
+            <SignupCenterBox marginBottom={4}>
               <Box className="signupCenterBoxCenter">
                 <Typography variant="h6" color="initial" pl={2}>
                   회원가입
@@ -351,36 +351,7 @@ const Signup = () => {
                 />
               </Box>
             </SignupCenterBox>
-            <Divider
-              sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
-            />
-            <SignupCenterBox>
-              <Box py={4} className="signupCenterBoxCenterR">
-                <Box px={2} pb={2}>
-                  <div>
-                    <Checkbox checked={checked[0]} onChange={handleChange2} />
-                    <span>회원약관 (필수)</span>
-                  </div>
-                  <div>
-                    <Checkbox checked={checked[1]} onChange={handleChange3} />
-                    <span>개인정보 처리방침 (필수)</span>
-                  </div>
-                  <div>
-                    <Checkbox checked={checked[2]} onChange={handleChange4} />
-                    <span>개인정보 제 3자 이용동의 (필수)</span>
-                  </div>
-                </Box>
-                <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
-                <Box mt={2}>
-                  <Checkbox
-                    checked={checked[0] && checked[1] && checked[2]}
-                    // indeterminate={checked[0] !== checked[1]}
-                    onChange={handleChange1}
-                  />
-                  <span>모든 약관에 동의합니다</span>
-                </Box>
-              </Box>
-            </SignupCenterBox>
+
             <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
             <Box p={8} sx={{ alignItems: "center", textAlign: "center" }}>
               <Button
