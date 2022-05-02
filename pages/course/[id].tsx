@@ -155,34 +155,6 @@ const CourseDetail = () => {
                   </div>
                 </div>
                 <div className="btns">
-                  {/*
-                  <span className="heartLabel"> {course.writer}</span>
-                  <Button className="heart" onClick={onClickHeart}>
-                    {like ? (
-                      <FavoriteIcon
-                        className="fillHeart"
-                        sx={{
-                          width: 15,
-                          height: 15,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    ) : (
-                      <FavoriteBorderIcon
-                        className="fillNotHeart"
-                        sx={{
-                          width: 15,
-                          height: 15,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    )}
-                  </Button>
-                   <Button className="share" onClick={onClickShare}>
-                    <ShareIcon />
-                  </Button> */}
                   <ShareButton
                     url={window.location.href}
                     des={course.title}

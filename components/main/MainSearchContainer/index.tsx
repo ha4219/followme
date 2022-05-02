@@ -97,7 +97,9 @@ const MainSearchContaier = () => {
             className="mainSearchSelectedInput"
           >
             {ONEDATE.map((item, index) => (
-              <MenuItem value={index}>{item}</MenuItem>
+              <MenuItem value={index} key={index}>
+                {item}
+              </MenuItem>
             ))}
           </Select>
           <Select
@@ -106,7 +108,9 @@ const MainSearchContaier = () => {
             className="mainSearchSelectedInput"
           >
             {TWODATE.map((item, index) => (
-              <MenuItem value={index + 1}>{item}</MenuItem>
+              <MenuItem value={index + 1} key={index}>
+                {item}
+              </MenuItem>
             ))}
           </Select>
           <Button className="btn" onClick={onSubmitValue}>

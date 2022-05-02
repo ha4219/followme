@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { IComment, ICourse, ICourseDetail } from "types/apiType";
 import { API } from "@src/API";
+import { updateCourseBoard, getCourseDetailBoard } from "api/board";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -34,7 +35,7 @@ const Quill = dynamic(
   { ssr: false }
 );
 
-const CourseReivseEditor = ({ idx }) => {
+const CourseReivseEditor = ({ idx, id }) => {
   const ref = useRef();
   const router = useRouter();
   const [value, setValue] = useState("");
@@ -53,11 +54,12 @@ const CourseReivseEditor = ({ idx }) => {
 
   const getCourse = async () => {
     if (idx) {
-      const { data } = await API.get(`/course/courseBoards/${idx}`, {
-        // id: loggedInId,
-      });
+      // const { data } = await API.get(`/course/courseBoards/${idx}`, {
+      //   // id: loggedInId,
+      // });
+      const data = await getCourseDetailBoard({ id, idx });
       setTitle(data[0].title);
-      // setValue(data[0].content);
+      setValue(data[0].content);
 
       // setCourse(data[0]);
       // if (data[0].comments) {
@@ -65,17 +67,11 @@ const CourseReivseEditor = ({ idx }) => {
       // }
       // setComments(data[0].comments);
     }
-
-    // setCourse(COURSES[Number(id)]);
   };
 
   useEffect(() => {
     getCourse();
   }, []);
-
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
 
   const putObjectWrapper = (params) => {
     return new Promise((resolve, reject) => {
@@ -122,10 +118,11 @@ const CourseReivseEditor = ({ idx }) => {
   }
 
   const onSubmit = async () => {
-    API.post("course/insertCourseBoards", {
+    updateCourseBoard({
       title: title,
       content: value,
-      writer: isLoggedInId,
+      id: isLoggedInId,
+      idx: idx,
     })
       .then((res) => {
         toast.success("등록완료");
@@ -168,30 +165,7 @@ const CourseReivseEditor = ({ idx }) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <div className="dateContainer">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <div className="subContainer">
-            <span className="label">출발 예정일</span>
-            <DesktopDatePicker
-              label="출발 예정일"
-              inputFormat="MM/dd/yyyy"
-              value={date1}
-              onChange={onChangeDate1}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
-          <div className="subContainer">
-            <span className="label">도착 예정일</span>
-            <DesktopDatePicker
-              label="도착 예정일"
-              inputFormat="MM/dd/yyyy"
-              value={date2}
-              onChange={onChangeDate2}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
-        </LocalizationProvider>
-      </div>
+
       <div className="quill">
         {/* <QuillToolbar />
         <Quill
@@ -226,7 +200,7 @@ const CourseReivseEditor = ({ idx }) => {
       </TagContainer> */}
       <div className="center">
         <Button variant="contained" onClick={onSubmit}>
-          등록
+          수정
         </Button>
       </div>
     </MainContainer>
@@ -285,5 +259,32 @@ const TagContainer = styled.div`
     }
   }
 `;
+
+{
+  /* <div className="dateContainer">
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <div className="subContainer">
+      <span className="label">출발 예정일</span>
+      <DesktopDatePicker
+        label="출발 예정일"
+        inputFormat="MM/dd/yyyy"
+        value={date1}
+        onChange={onChangeDate1}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </div>
+    <div className="subContainer">
+      <span className="label">도착 예정일</span>
+      <DesktopDatePicker
+        label="도착 예정일"
+        inputFormat="MM/dd/yyyy"
+        value={date2}
+        onChange={onChangeDate2}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </div>
+  </LocalizationProvider>
+</div>; */
+}
 
 export default CourseReivseEditor;

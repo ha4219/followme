@@ -14,7 +14,13 @@ interface IProps {
 const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
   const router = useRouter();
   const onClickRevise = useCallback(() => {
-    router.push(`/${url}/revise`);
+    router.push({
+      pathname: `/${url}/revise`,
+      query: {
+        id,
+        idx,
+      },
+    });
   }, []);
 
   const onClickDelete = useCallback(async () => {
@@ -61,9 +67,9 @@ const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
 
   return (
     <ButtonContainer>
-      {/*<Button variant="contained" onClick={onClickRevise}>
+      <Button variant="contained" onClick={onClickRevise}>
         수정
-  </Button>*/}
+      </Button>
       <Button variant="contained" color="error" onClick={onClickDelete}>
         삭제
       </Button>

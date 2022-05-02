@@ -83,7 +83,7 @@ const CourseBoard = () => {
         <TitleContainer>
           <div className="sub">
             {"코스를 부탁해"}
-            <span className="orange">{courses.length}</span>개
+            <span className="orange">{curCourses.length}</span>개
           </div>
         </TitleContainer>
         <SortedContainer>

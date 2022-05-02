@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 
 const CourseRevise = () => {
   const router = useRouter();
+  const { id, idx } = router.query;
+
   return (
     <Container maxWidth="md">
       <Box>
-        <CourseReivseEditor idx={1} />
+        <CourseReivseEditor idx={idx} id={id} />
       </Box>
     </Container>
   );

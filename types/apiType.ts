@@ -23,6 +23,7 @@ export interface IUser {
 
 export interface ICourse {
   idx: number;
+  fk_user_boards_id?: string;
   type: number;
   mainImg: any;
   writer: string;

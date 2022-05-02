@@ -387,7 +387,7 @@ export const getCourseDetailBoard = async ({ id, idx }) => {
 export const insertCourseBoard = async ({ id, title, content }) => {
   try {
     const { data } = await API.post(`/board/2/insert`, {
-      writer: id,
+      id: id,
       title: title,
       content: content,
       startDate: "2022-04-05T03:53:47.990Z",
@@ -461,5 +461,52 @@ export const searchCourse = async ({ value }) => {
   } catch (e) {
     console.log("search e", e);
     return [];
+  }
+};
+
+export const updateCourseBoard = async ({ id, idx, title, content }) => {
+  try {
+    const { data } = await API.post(`/board/2/modify/${idx}`, {
+      id: id,
+      title: title,
+      content: content,
+    });
+    return data;
+  } catch (e) {
+    console.log("course update e", e);
+  }
+};
+
+export const updateTypeBoard = async ({
+  type,
+  id,
+  idx,
+  title,
+  content,
+  shortContent,
+  mainImg,
+  isLocal,
+  schedule,
+  region,
+  tags,
+  season,
+}) => {
+  try {
+    const { data } = await API.post(`/board/${type}/modify/${idx}`, {
+      id: id,
+      title: title,
+      shortContent: shortContent,
+      content: content,
+      mainImg: mainImg,
+      isLocal: isLocal,
+      schedule: schedule,
+      region: region,
+      tags: tags,
+      season: season,
+      type: type,
+    });
+    return data;
+  } catch (e) {
+    console.log("type board update e", e);
   }
 };
