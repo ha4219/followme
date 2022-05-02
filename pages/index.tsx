@@ -1,13 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "@styles/Home.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Banner from "@components/Banner";
 import ProgramList from "@components/ProgramList";
-import { API } from "@src/API";
-import { Box, Container, Button } from "@mui/material";
-import MapContainer from "@components/MapContainer";
-import styled from "@emotion/styled";
+import { Container } from "@mui/material";
 import MainMapContainer from "@components/main/MainMapContainer";
 import MainEditorPickContainer from "@components/main/MainEditorPickContainer";
 import MainThemeContainer from "@components/main/MainThemeContainer";

@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 
 const Search = () => {
   const router = useRouter();
-  const { value } = router.query;
+  const { value, date } = router.query;
   return (
     <Container maxWidth="lg">
       <Head>
         <title>{`${value} 검색 결과`}</title>
       </Head>
-      <SearchProgramList value={value as string} />
+      <SearchProgramList value={value as string} filterDate={date as string} />
     </Container>
   );
 };

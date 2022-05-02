@@ -43,7 +43,7 @@ const CourseLeftLayout: FC = ({ children }) => {
   );
 
   return (
-    <Grid container>
+    <Grid container py={2}>
       <Grid item xs={12} sm={12} md={3} sx={{ fontFamily: "paybooc-Medium" }}>
         <BoxContainerWrapper
           minWidth={isSmall ? "100%" : "260px"}

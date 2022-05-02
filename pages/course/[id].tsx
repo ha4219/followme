@@ -4,9 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-// import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-// import FavoriteIcon from "@mui/icons-material/Favorite";
-// import DateRangeIcon from "@mui/icons-material/DateRange";
+import Image from "next/image";
 import useInput from "@hooks/useInput";
 import ReplyContent from "@components/ReplyContent";
 import { ICourseDetail } from "types/apiType";
@@ -119,10 +117,27 @@ const CourseDetail = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg">
+    <MainContainerWrapper maxWidth="lg">
       <Head>
         <title>{course ? course.title : "detail"}</title>
       </Head>
+      <Box className="editorPath" py={1}>
+        <div className="MainContainerPathIcon">
+          <Image
+            src="/icons/icon.home.png"
+            width="18px"
+            height="18px"
+            alt="homeIcon"
+          />
+        </div>
+        <span>
+          <span className="MainContainerPathColor">홈</span>
+          <span className="dividor">|</span>
+          {"코스를 부탁해"}
+        </span>
+      </Box>
+
+      <Box className="editorTitle">{"코스를 부탁해"}</Box>
       <CourseLeftLayout>
         <MainContainer py={2}>
           {course && (
@@ -140,34 +155,6 @@ const CourseDetail = () => {
                   </div>
                 </div>
                 <div className="btns">
-                  {/*
-                  <span className="heartLabel"> {course.writer}</span>
-                  <Button className="heart" onClick={onClickHeart}>
-                    {like ? (
-                      <FavoriteIcon
-                        className="fillHeart"
-                        sx={{
-                          width: 15,
-                          height: 15,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    ) : (
-                      <FavoriteBorderIcon
-                        className="fillNotHeart"
-                        sx={{
-                          width: 15,
-                          height: 15,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    )}
-                  </Button>
-                   <Button className="share" onClick={onClickShare}>
-                    <ShareIcon />
-                  </Button> */}
                   <ShareButton
                     url={window.location.href}
                     des={course.title}
@@ -226,22 +213,38 @@ const CourseDetail = () => {
           )}
         </MainContainer>
       </CourseLeftLayout>
-    </Container>
+    </MainContainerWrapper>
   );
 };
+const MainContainerWrapper = styled(Container)`
+  & .searchContainer {
+    border-radius: 27px;
+  }
 
-// <div className="dateContainer">
-//   <div className="start">
-//     <span className="bold">출발 예정일</span>
-//     {/* {course.start} */}
-//     <DateRangeIcon />
-//   </div>
-//   <div className="end">
-//     <span className="bold">도착 예정일</span>
-//     {/* {course.end} */}
-//     <DateRangeIcon />
-//   </div>
-// </div>;
+  & .MainContainerPathIcon {
+    height: 21px;
+    margin-right: 6px;
+  }
+  & .editorPath {
+    display: flex;
+    font-size: 0.9rem;
+    font-family: paybooc-Medium;
+
+    & .MainContainerPathColor {
+      color: #888888;
+    }
+    & .dividor {
+      padding: 1rem;
+    }
+  }
+  & .editorTitle {
+    font-family: paybooc-Bold;
+    font-size: 2rem;
+    text-align: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #000000;
+  }
+`;
 
 const MainContainer = styled(Box)`
   & .dateContainer {

@@ -31,9 +31,9 @@ import { enterSignupState } from "@store/map";
 import MapOneMarker from "@components/signup/MapOneMarker";
 import DragDrop from "@components/DragDrop";
 import DaumPostcode from "react-daum-postcode";
-import {submitOnProfileImage} from '@helpers/s3UploadHelper';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { submitOnProfileImage } from "@helpers/s3UploadHelper";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 declare global {
   interface Window {
@@ -63,7 +63,7 @@ const Signup = () => {
   const [address, setAddress, onChangeAddress] = useInput("");
   const [content, setContent, onChangeContent] = useInput("");
   // const [provider, setProvider, onChangeProvider] = useInput("");
-  const [category, setCategory, ] = useInput("맛집");
+  const [category, setCategory] = useInput("맛집");
   // const [profileImage, setProfileImage, onChangeProfileImage] = useInput("");
   const [profileImage, setProfileImage] = useState<any>();
   const [tag, setTag] = useState("");
@@ -84,14 +84,14 @@ const Signup = () => {
     document.head.appendChild(mapScript);
 
     const onLoadKakaoMap = () => {
-      window.kakao.maps.load(() => {        
+      window.kakao.maps.load(() => {
         const container = document.getElementById("map");
         const options = {
           center: new window.kakao.maps.LatLng(33, 126),
         };
         const map = new window.kakao.maps.Map(container, options);
         window.kakao.map = map;
-        
+
         setLoading(false);
       });
     };
@@ -106,8 +106,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (!isLoading) {
-
-      const geocoder = new window.kakao.maps.services.Geocoder();      
+      const geocoder = new window.kakao.maps.services.Geocoder();
       setGeo(geocoder);
     }
   }, [isLoading]);
@@ -328,9 +327,9 @@ const Signup = () => {
     async (e) => {
       e.preventDefault();
       try {
-        submitOnProfileImage({profileImage, id});
-      } catch(e) {
-        console.log('s3 upload', e);
+        submitOnProfileImage({ profileImage, id });
+      } catch (e) {
+        console.log("s3 upload", e);
       }
 
       try {
@@ -414,10 +413,10 @@ const Signup = () => {
           </>
         </Dialog>
       )}
-      <Container maxWidth="md" sx={{ fontFamily: "paybooc-Medium" }}>
+      <Container maxWidth="lg" sx={{ fontFamily: "paybooc-Medium" }}>
         <Box py={10}>
           <form onSubmit={onSubmit}>
-            <SignupCenterBox>
+            <SignupCenterBox marginBottom={4}>
               <Box className="signupCenterBoxCenter">
                 <Typography variant="h6" color="initial" pl={2}>
                   기업 회원가입
@@ -518,9 +517,7 @@ const Signup = () => {
                   btnLabel=""
                 />
                 <div className="selectDiv">
-                  <div className="categoryLabel">
-                    카테고리
-                  </div>
+                  <div className="categoryLabel">카테고리</div>
                   <Select
                     labelId="category-label"
                     id="category"
@@ -554,36 +551,6 @@ const Signup = () => {
                   btnActive={true}
                   onClickBtn={onClickProfileImage}
                 />
-              </Box>
-            </SignupCenterBox>
-            <Divider
-              sx={{ borderWidth: 1, borderColor: "#3e3e3e", marginTop: "4rem" }}
-            />
-            <SignupCenterBox>
-              <Box py={4} className="signupCenterBoxCenterR">
-                <Box px={2} pb={2}>
-                  <div>
-                    <Checkbox checked={checked[0]} onChange={handleChange2} />
-                    <span>회원약관 (필수)</span>
-                  </div>
-                  <div>
-                    <Checkbox checked={checked[1]} onChange={handleChange3} />
-                    <span>개인정보 처리방침 (필수)</span>
-                  </div>
-                  <div>
-                    <Checkbox checked={checked[2]} onChange={handleChange4} />
-                    <span>개인정보 제 3자 이용동의 (필수)</span>
-                  </div>
-                </Box>
-                <Divider sx={{ borderWidth: 1, borderColor: "#dcdce6" }} />
-                <Box mt={2}>
-                  <Checkbox
-                    checked={checked[0] && checked[1] && checked[2]}
-                    // indeterminate={checked[0] !== checked[1]}
-                    onChange={handleChange1}
-                  />
-                  <span>모든 약관에 동의합니다</span>
-                </Box>
               </Box>
             </SignupCenterBox>
             <Divider sx={{ borderWidth: 1, borderColor: "#3e3e3e" }} />
@@ -638,10 +605,22 @@ const SignupCenterBox = styled(Box)`
       font-family: paybooc-Bold;
       font-size: 1rem;
       align-self: center;
-      width: 130px;
+      // width: 200px;
+      @media screen and (max-width: 600px) {
+        width: 130px;
+      }
+      @media screen and (min-width: 600px) {
+        width: 200px;
+      }
     }
     & .categoryField {
-      width: 240px;
+      @media screen and (max-width: 900px) {
+        width: 240px;
+      }
+      @media screen and (min-width: 900px) {
+        width: 400px;
+      }
+      // width: 400px;
       height: 40px;
     }
   }

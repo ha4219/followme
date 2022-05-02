@@ -16,6 +16,7 @@ const EditorProgram: VFC<ICourse> = ({
   mainImg,
   type,
   writer,
+  fk_user_boards_id,
   title,
   shortContent,
   tags,
@@ -57,11 +58,12 @@ const EditorProgram: VFC<ICourse> = ({
                 <IconButton>
                   <Avatar
                     alt="user"
+                    src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${fk_user_boards_id}`}
                     // src={gravatar.url(user, { s: "28px", d: "retro" })}
                     className="avatar"
                   />
                 </IconButton>
-                <span className="editorProgramWriter">{writer}</span>
+                <span className="editorProgramWriter">{fk_user_boards_id}</span>
               </div>
               <div className="editorProgramRight">
                 <ShareButton
