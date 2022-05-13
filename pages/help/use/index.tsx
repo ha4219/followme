@@ -1,4 +1,5 @@
 import HelpLeftLayout from "@components/help/HelpLeftLayout";
+import { use } from "@data/use";
 import styled from "@emotion/styled";
 import { Box, Container, Paper } from "@mui/material";
 import Image from "next/image";
@@ -24,7 +25,7 @@ const HelpUse = () => {
 
       <Box className="editorTitle">{"이용약관"}</Box>
       <HelpLeftLayout>
-        <MainBContainer>네이버 예시입니다.</MainBContainer>
+        <MainBContainer>{use}</MainBContainer>
       </HelpLeftLayout>
     </MainContainer>
   );
@@ -62,6 +63,12 @@ const MainContainer = styled(Container)`
 
 const MainBContainer = styled(Paper)`
   margin: 3rem 0;
+  padding: 1rem;
+  white-space: pre-wrap;
+  overflow: auto;
+  height: 800px;
+  font-family: paybooc-Medium;
+  border: 1px solid black;
 `;
 
 export default HelpUse;
