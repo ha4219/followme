@@ -384,35 +384,37 @@ const ThemeCustomEditor = () => {
               <MapEditor />
               {/* <img /> */}
               {/* <input type="file" accept="image/*" onChange={onChangeDialog} /> */}
-              <div className="themeCustomEditorDialogContainer">
-                <img
-                  src={mapSelectState[0]}
-                  alt={mapSelectState[0]}
-                  className="themeCustomEditorDialogContainerImg"
-                />
-                <div className="themeCustomEditorDialogContainerBody">
-                  <div className="themeCustomEditorDialogTitle">
-                    {/* 식당명칭이 들어갈 자 */}
-                    {mapSelectState[1]}
-                  </div>
-                  <div className="themeCustomEditorDialogContent">
-                    {/* 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심
+              {mapSelectState[5] !== -1 && (
+                <div className="themeCustomEditorDialogContainer">
+                  <img
+                    src={mapSelectState[0]}
+                    alt={mapSelectState[0]}
+                    className="themeCustomEditorDialogContainerImg"
+                  />
+                  <div className="themeCustomEditorDialogContainerBody">
+                    <div className="themeCustomEditorDialogTitle">
+                      {/* 식당명칭이 들어갈 자 */}
+                      {mapSelectState[1]}
+                    </div>
+                    <div className="themeCustomEditorDialogContent">
+                      {/* 본문에 있는 내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심
                       문장을 인용하여 이용자에게 보여줄 수 있습니다. 본문에 있는
                       내용 중, 해당 컨텐츠를 잘 설명할 수 있는 핵심 문장을
                       인용하여 이용자에게 보여줄 수 있습니다. */}
-                    {mapSelectState[2]}
-                  </div>
-                  <div className="themeCustomEditorDialogScore">
-                    {/* {mapSelectState[3]} */}
-                    <StarGenerator count={mapSelectState[3]} />
-                  </div>
-                  <div className="themeCustomEditorDialogTags">
-                    {mapSelectState[4].map((item, index) => {
-                      return <CustomEditorTag tag={item} key={index} />;
-                    })}
+                      {mapSelectState[2]}
+                    </div>
+                    <div className="themeCustomEditorDialogScore">
+                      {/* {mapSelectState[3]} */}
+                      <StarGenerator count={mapSelectState[3]} />
+                    </div>
+                    <div className="themeCustomEditorDialogTags">
+                      {mapSelectState[4].map((item, index) => {
+                        return <CustomEditorTag tag={item} key={index} />;
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="themeCustomEditorDialogRightScroll">
               <ThemeCustomRightScrollTable />
