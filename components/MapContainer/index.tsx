@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   curLimitDis,
   curMapState,
+  enterPickState,
   mapSelectedState,
   mapState,
 } from "@store/map";
@@ -18,6 +19,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
+import MapDialog from "@components/map/MapDialog";
 
 declare global {
   interface Window {
@@ -37,6 +39,9 @@ const MapContainer = () => {
   const [page, setPage] = useState(0);
   const [clickList, setClickList] = useState([]);
   const perPage = 3;
+  const [show, setShow] = useState(false);
+  const [enterPick, setEnterPick] = useRecoilState(enterPickState);
+
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
   const [curMapLatLonState, setCurMapLatLonState] = useRecoilState(curMapState);
   const [markers, setMarkers] = useState<any[]>([]);
@@ -64,9 +69,9 @@ const MapContainer = () => {
         },
         errorMessage,
         {
-          // enableHighAccuracy: true,
-          // maximumAge: 300000,
-          // timeout: 10000,
+          enableHighAccuracy: true,
+          maximumAge: 300000,
+          timeout: 10000,
         }
       );
     } catch (e) {
@@ -76,6 +81,8 @@ const MapContainer = () => {
   };
 
   const errorMessage = (err) => {
+    console.log(err);
+
     switch (err.code) {
       case err.PERMISSION_DENIED:
         toast.error("Geolocation API 사용을 허용해주세요");
@@ -139,6 +146,14 @@ const MapContainer = () => {
           limitDis
         ) {
           markers[i].marker.setMap(map);
+          window.kakao.maps.event.addListener(
+            markers[i].marker,
+            "click",
+            function (e) {
+              setShow(true);
+              setEnterPick([markers[i].idx, markers[i].id]);
+            }
+          );
         } else {
           markers[i].marker.setMap(null);
         }
@@ -179,6 +194,8 @@ const MapContainer = () => {
             marker: marker,
             lat: Number(data[i].latitude),
             lon: Number(data[i].longitude),
+            idx: data[i].idx,
+            id: data[i].id,
           });
           // marker.setMap(map);
         }
@@ -190,8 +207,13 @@ const MapContainer = () => {
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
 
+  const onClose = useCallback(() => {
+    setShow(false);
+  }, [show]);
+
   return (
     <MainMapContainer>
+      {show && <MapDialog onClose={onClose} show={show} />}
       <MapContent id="map" />
       <BottomDiv>
         <div className="head">

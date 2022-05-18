@@ -28,6 +28,8 @@ import {
   checkPhone,
 } from "@helpers/checkReg";
 import styled from "@emotion/styled";
+import { submitOnProfileImage } from "@helpers/s3UploadHelper";
+import { convertURLtoFile } from "@helpers/programHelper";
 
 declare global {
   interface Window {
@@ -208,26 +210,6 @@ const Signup = () => {
       });
   }, [verified]);
 
-  const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked([
-      event.target.checked,
-      event.target.checked,
-      event.target.checked,
-    ]);
-  };
-
-  const handleChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked([event.target.checked, checked[1], checked[2]]);
-  };
-
-  const handleChange3 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked([checked[0], event.target.checked, checked[2]]);
-  };
-
-  const handleChange4 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked([checked[0], checked[1], event.target.checked]);
-  };
-
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -245,6 +227,16 @@ const Signup = () => {
         if (data.data === "success") {
           toast.success("회원가입 성공");
           router.push("/signup/success");
+
+          const img = await convertURLtoFile(
+            "https://followme1.vercel.app/userIcon.png"
+          );
+          console.log(img);
+
+          submitOnProfileImage({
+            id: id,
+            profileImage: img,
+          });
         }
       } catch (e) {
         toast.error("회원가입 실패");

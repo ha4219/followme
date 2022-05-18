@@ -56,7 +56,7 @@ const ProfileReviseContainer = () => {
   const [verified, setVerified, onChangeVerified] = useInput("");
   const [emailV, setEmailV] = useState(true);
   const [nickNameV, setNickNameV] = useState(true);
-  const [phoneV, setPhoneV] = useState(false);
+  const [phoneV, setPhoneV] = useState(true);
   const [profileImage, setProfileImage] = useState<any>();
 
   const onChangeNickName = useCallback(
@@ -329,21 +329,8 @@ const ProfileReviseContainer = () => {
             id="phone"
             label="휴대폰"
             value={phone}
-            onChange={onChangePhone}
-            placeholder="휴대폰 번호 확인"
-            btnLabel="인증번호 받기"
-            btnActive={!phoneV}
-            onClickBtn={onSendSMS}
-          />
-          <SignupTextField
-            id="phoneCh"
-            label="인증번호"
-            value={verified}
-            onChange={onChangeVerified}
-            placeholder="인증번호 확인"
-            btnLabel="확인"
-            btnActive={!phoneV}
-            onClickBtn={onVerifySMS}
+            disabled={true}
+            placeholder={""}
           />
           <SignupTextField
             id="profileImage"

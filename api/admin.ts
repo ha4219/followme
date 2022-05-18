@@ -39,6 +39,27 @@ export const addNotice = async ({ writer, title, content, createdAt }) => {
   }
 };
 
+export const reviseNotice = async ({
+  idx,
+  writer,
+  title,
+  content,
+  createdAt,
+}) => {
+  try {
+    const { data } = await API.post(`/board/3/modify/${idx}`, {
+      title: title,
+      content: content,
+      id: writer,
+      createdAt: createdAt,
+      type: 3,
+    });
+    return data;
+  } catch (e) {
+    console.log("revise notice", e);
+  }
+};
+
 export const getNotice = async () => {
   try {
     const { data } = await API.post(`/board/3/allPosts`);
@@ -80,6 +101,31 @@ export const getFaq = async () => {
   } catch (e) {
     console.log("all faq", e);
     return [];
+  }
+};
+
+export const getFaqDetail = async ({ idx }) => {
+  try {
+    const { data } = await API.post(`/board/4/detail/${idx}`);
+    return data;
+  } catch (e) {
+    console.log("detail faq", e);
+    return [];
+  }
+};
+
+export const reviseFaq = async ({ idx, writer, title, content, createdAt }) => {
+  try {
+    const { data } = await API.post(`/board/4/modify/${idx}`, {
+      title: title,
+      content: content,
+      id: writer,
+      createdAt: createdAt,
+      type: 4,
+    });
+    return data;
+  } catch (e) {
+    console.log("revise notice", e);
   }
 };
 

@@ -20,15 +20,6 @@ const MainEditorPickContainer = () => {
   // const [width, setWidth] = useRecoilState(windowState);
 
   const getTravel = async () => {
-    // const { data } = await API.post<ICourse[]>(
-    //   "/theme/themeBoards",
-    //   loggedInId.length
-    //     ? {
-    //         id: loggedInId,
-    //       }
-    //     : {}
-    // );
-    // setPicks(data.slice(-9));
     const tmp: IMergeCourse = await getEditorAllBoard({});
     const data = [...tmp.recommend, ...tmp.theme];
     setPicks(data.slice(-9));
@@ -36,7 +27,7 @@ const MainEditorPickContainer = () => {
 
   const onRightClick = useCallback(() => {
     setPage(page < picks.length / mdPerPageSize - 1 ? page + 1 : page);
-  }, [page]);
+  }, [mdPerPageSize, page, picks.length]);
 
   const onLeftClick = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);

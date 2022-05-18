@@ -12,6 +12,7 @@ interface Props {
   placeholder: string;
   helperText?: string;
   btnLabel?: string;
+  disabled?: boolean;
   btnActive?: boolean;
   onClickBtn?: () => void;
 }
@@ -27,12 +28,14 @@ const SignupTextField = ({
   btnLabel,
   btnActive,
   onClickBtn,
+  disabled,
 }: Props) => {
   return (
     <SignupContainer>
       <div className="label">{label}</div>
       <div className="inputContainer">
         <TextField
+          disabled={disabled}
           className="textInput"
           type={type}
           value={value}

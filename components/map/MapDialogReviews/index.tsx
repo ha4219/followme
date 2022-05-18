@@ -9,6 +9,7 @@ import { useRecoilValue } from "recoil";
 import { IEnterpriseReviewType } from "types/apiType";
 import MapDialogReviewStar from "../MapDialogReviewStar";
 import CommentEditor from "../CommentEditor";
+import MapDialogStars from "../MapDialogStars";
 
 const MapDialogReviewItem = ({
   idx,
@@ -59,10 +60,15 @@ const MapDialogReviewItem = ({
               </div>
             </div>
           </div>
-          <div
-            className="mapDialogReviewItemContent"
-            dangerouslySetInnerHTML={{ __html: content }}
-          ></div>
+          <div className="mapDialogReviewItemContentWrapper">
+            <div className="mapDialogReviewItemContentStar">
+              <MapDialogStars score={5} />
+            </div>
+            <div
+              className="mapDialogReviewItemContent"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          </div>
         </MapDialogReviewItemContainer>
       )}
     </>
@@ -196,11 +202,14 @@ const MapDialogReviewItemContainer = styled.div`
     }
   }
 
-  & .mapDialogReviewItemContent {
+  & .mapDialogReviewItemContentWrapper {
     font-family: paybooc-Light;
     width: 100%;
     font-size: 0.7rem;
 
+    & . mapDialogReviewItemContentStar {
+      height: 10px;
+    }
     & img {
       width: 200px;
       height: 200px;
