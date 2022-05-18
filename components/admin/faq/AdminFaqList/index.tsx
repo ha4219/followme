@@ -7,10 +7,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Link,
 } from "@mui/material";
 import { idState } from "@store/auth";
 import { delFaq, getFaq } from "api/admin";
+import Link from "next/link";
 import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -43,8 +43,15 @@ const AdminFaqItem: VFC<IFaqType> = ({ title, content, idx, createdAt }) => {
       {/* <TableCell>{views}</TableCell> */}
       <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
+        <Link href={{ pathname: `faq/revise`, query: { idx: idx } }} passHref>
+          <Button variant="contained" color="primary">
+            수정
+          </Button>
+        </Link>
+      </TableCell>
+      <TableCell>
         <Button onClick={onClickDel} variant="contained" color="error">
-          del
+          삭제
         </Button>
       </TableCell>
     </TableRow>
@@ -78,7 +85,8 @@ const AdminFaqList = () => {
             <TableCell>title</TableCell>
             <TableCell>content</TableCell>
             <TableCell>createAt</TableCell>
-            <TableCell>Del</TableCell>
+            <TableCell>수정</TableCell>
+            <TableCell>삭제</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

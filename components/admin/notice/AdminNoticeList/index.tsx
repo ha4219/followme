@@ -7,10 +7,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Link,
 } from "@mui/material";
 import { idState } from "@store/auth";
 import { delNotice, getNotice } from "api/admin";
+import Link from "next/link";
 import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -50,8 +50,18 @@ const AdminNoticeItem: VFC<INoticeType> = ({
       <TableCell>{views}</TableCell>
       <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
+        <Link
+          href={{ pathname: "notice/revise", query: { idx: idx } }}
+          passHref
+        >
+          <Button variant="contained" color="primary">
+            수정
+          </Button>
+        </Link>
+      </TableCell>
+      <TableCell>
         <Button onClick={onClickDel} variant="contained" color="error">
-          del
+          삭제
         </Button>
       </TableCell>
     </TableRow>
@@ -81,7 +91,8 @@ const AdminNoticeList = () => {
             <TableCell>content</TableCell>
             <TableCell>views</TableCell>
             <TableCell>createAt</TableCell>
-            <TableCell>Del</TableCell>
+            <TableCell>수정</TableCell>
+            <TableCell>삭제</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
