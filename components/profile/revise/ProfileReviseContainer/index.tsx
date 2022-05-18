@@ -330,6 +330,7 @@ const ProfileReviseContainer = () => {
             label="휴대폰"
             value={phone}
             disabled={true}
+            placeholder={""}
           />
           <SignupTextField
             id="profileImage"
