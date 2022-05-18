@@ -66,12 +66,6 @@ const ProfileEnterpriseDetail = () => {
   };
 
   const getUser = async () => {
-    // const data = await getUserProfileById({ id });
-
-    // setUser(data.userData[0]);
-    // getEnterDetail(data.userData[0].idx);
-    // getEnterReview(data.userData[0].idx);
-    // getEnterMenu(data.userData[0].idx);
     try {
       const data = await getEnterprises();
       const target = data.find((item) => item.id === id);

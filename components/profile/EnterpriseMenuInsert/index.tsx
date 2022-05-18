@@ -4,6 +4,7 @@ import useInput from "@hooks/useInput";
 import { Button, TextField } from "@mui/material";
 import { idState } from "@store/auth";
 import { insertEnterpriseMenu } from "api/enterprise";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
@@ -13,6 +14,7 @@ const ProfileEnterpriseMenuInsert = () => {
   const [explanation, setExplanation, onChangeExplanation] = useInput("");
   const [menuImg, setMenuImg] = useState("");
   const id = useRecoilValue(idState);
+  const router = useRouter();
 
   const onSubmit = useCallback(async () => {
     try {
@@ -25,6 +27,7 @@ const ProfileEnterpriseMenuInsert = () => {
         });
         if (data.data === "success") {
           toast.success("성공");
+          router.reload();
         }
       }
     } catch (e) {
