@@ -23,7 +23,7 @@ const ONEDATE = [
   "9박+",
 ];
 const TWODATE = [
-  "N일",
+  "-일",
   "1일",
   "2일",
   "3일",

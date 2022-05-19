@@ -27,8 +27,6 @@ declare global {
   }
 }
 
-const GOOGLE_BUTTON_ID = "google_btn";
-
 const Signin = () => {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useRecoilState(authState);
@@ -70,22 +68,6 @@ const Signin = () => {
       router.push("/");
     }
   }, [loggedIn]);
-
-  // const onClickFacebook = () => {
-  //   const provider = new FacebookAuthProvider();
-  //   signInWithPopup(auth, provider)
-  //     .then((res) => {
-  //       console.log(res);
-
-  //       const credential = FacebookAuthProvider.credentialFromResult(res);
-  //       const token = credential.accessToken;
-  //       const user = res.user;
-  //       console.log(res, credential, token, user);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const kakaoUrl = "https://followme1.vercel.app/signin/kakao";
   const kakao_url = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAOSECRET}&redirect_uri=${kakaoUrl}&response_type=code`;
@@ -149,7 +131,10 @@ const Signin = () => {
                 fontSize: "0.8rem",
               }}
             >
-              <Link href="/find">아이디 / 비밀번호 찾기</Link>
+              <span>
+                <Link href="signin/findId">아이디 찾기</Link>/
+                <Link href="signin/findPw">비밀번호 찾기</Link>
+              </span>
               <Link href="/signup/before">회원가입하기</Link>
             </Box>
 
