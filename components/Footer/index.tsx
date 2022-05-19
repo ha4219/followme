@@ -8,6 +8,30 @@ import MusicVideoIcon from "@mui/icons-material/MusicVideo";
 import HealingIcon from "@mui/icons-material/Healing";
 
 const Footer = () => {
+  const onClickKakao = async () => {
+    // TODO
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAOSECRET);
+    }
+    try {
+      window.Kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: "카카오톡으로 공유된 여행 정보를 확인해주세요!, Follow me",
+          description: "여행 정보를 한눈에! FOLLOW ME!!",
+          imageUrl: `${process.env.NEXT_PUBLIC_S3URL}/logo.ico`,
+          link: {
+            webUrl: `${process.env.NEXT_PUBLIC_DEPLOYURL}`,
+            mobileWebUrl: `${process.env.NEXT_PUBLIC_DEPLOYURL}`,
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    console.log(window.Kakao);
+  };
+
   return (
     <ContainerFooter>
       <div className="nav">
@@ -24,7 +48,7 @@ const Footer = () => {
             <Link href="/help/use">이용약관</Link>
           </div>
           <div>
-            <Link href={""} passHref>
+            <span onClick={() => onClickKakao()}>
               <span className="footerNavIcon">
                 <Image
                   width="14px"
@@ -33,7 +57,7 @@ const Footer = () => {
                   alt="kakaoIcon"
                 />
               </span>
-            </Link>
+            </span>
             <Link href={""} passHref>
               <span className="footerNavIcon">
                 <Image

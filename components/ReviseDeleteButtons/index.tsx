@@ -14,11 +14,14 @@ interface IProps {
 const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
   const router = useRouter();
   const onClickRevise = useCallback(() => {
+    console.log(url);
+
     router.push({
       pathname: `/${url}/revise`,
       query: {
         id,
         idx,
+        type: url === "recommend" ? 0 : 1,
       },
     });
   }, []);

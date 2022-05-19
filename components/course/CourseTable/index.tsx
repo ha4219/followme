@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { getCourseCommentsLength } from "api/board";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -65,23 +66,26 @@ const CourseTable = ({ courses }) => {
         </TableHead>
         <TableBody>
           {curCourses.map((item, index) => (
-            <TableRow
-              key={item.idx}
-              // onClick={() => onClickRow(item.idx - 1)}
-              className="cursor"
-            >
-              <TableCell className="cellTitle">
-                <Avatar
-                  alt="user"
-                  src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${item.writer}`}
-                  // src={gravatar.url(user, { s: "28px", d: "retro" })}
-                  className="avatar"
-                />
-                {tableTitleSummary(item.title)}
-              </TableCell>
-              <TableCell align="center">{item.replyCnt}</TableCell>
-              <TableCell align="center">{dateHelper(item.createdAt)}</TableCell>
-            </TableRow>
+            <Link key={item.idx} href={`/course/${item.idx}`} passHref>
+              <TableRow
+                // onClick={() => onClickRow(item.idx - 1)}
+                className="cursor"
+              >
+                <TableCell className="cellTitle">
+                  <Avatar
+                    alt="user"
+                    src={`${process.env.NEXT_PUBLIC_S3URL}/profile/${item.writer}`}
+                    // src={gravatar.url(user, { s: "28px", d: "retro" })}
+                    className="avatar"
+                  />
+                  {tableTitleSummary(item.title)}
+                </TableCell>
+                <TableCell align="center">{item.replyCnt}</TableCell>
+                <TableCell align="center">
+                  {dateHelper(item.createdAt)}
+                </TableCell>
+              </TableRow>
+            </Link>
           ))}
         </TableBody>
       </Table>

@@ -1,6 +1,16 @@
+import CourseTable from "@components/course/CourseTable";
 import LeftLayout from "@components/LeftLayout";
+import ProgramHeader from "@components/ProgramHeader";
 import styled from "@emotion/styled";
-import { Box, Button, Grid, MenuItem, Pagination, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Pagination,
+  Select,
+  Table,
+} from "@mui/material";
 import { idState } from "@store/auth";
 import {
   tagState,
@@ -34,6 +44,7 @@ const SearchProgramList = ({
 
   const [travels, setTravels] = useState<ICourse[]>([]);
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courseRequests, setCourseRequests] = useState<ICourse[]>([]);
 
   const selectedTag = useRecoilValue(tagState);
   const selectedSeason = useRecoilValue(seasonState);
@@ -48,8 +59,14 @@ const SearchProgramList = ({
   const loggedInId = useRecoilValue(idState);
 
   const getTravel = async () => {
+    console.log(1111, value);
+
     const data1 = await searchCourse({ value });
     let data = data1.filter((item) => item.type === 0 || item.type === 1);
+    const dataCourse = data1.filter(
+      (item) => !(item.type === 0 || item.type === 1)
+    );
+    setCourseRequests(dataCourse);
 
     if (filterDate) {
       data = data.filter((item) => item.schedule === filterDate);
@@ -110,45 +127,46 @@ const SearchProgramList = ({
     setCourses(arr);
   }, [sortedType]);
 
-  useEffect(() => {
-    let arr = [...travels];
+  // useEffect(() => {
+  //   let arr = [...travels];
 
-    if (selectedTag !== "ALL" && selectedTag !== "") {
-      arr = arr.filter((item) => item.tags.includes(selectedTag));
-    }
-    if (selectedSeason.length) {
-      arr = arr.filter((item) => selectedSeason.includes(item.season));
-    }
-    if (selectedDomestic.length) {
-      arr = arr.filter(
-        (item) => item.isLocal && selectedDomestic.includes(item.region)
-      );
-    } else if (selectedOverseas.length) {
-      arr = arr.filter(
-        (item) => !item.isLocal && selectedOverseas.includes(item.region)
-      );
-    }
+  //   if (selectedTag !== "ALL" && selectedTag !== "") {
+  //     arr = arr.filter((item) => item.tags.includes(selectedTag));
+  //   }
+  //   if (selectedSeason.length) {
+  //     arr = arr.filter((item) => selectedSeason.includes(item.season));
+  //   }
+  //   if (selectedDomestic.length) {
+  //     arr = arr.filter(
+  //       (item) => item.isLocal && selectedDomestic.includes(item.region)
+  //     );
+  //   } else if (selectedOverseas.length) {
+  //     arr = arr.filter(
+  //       (item) => !item.isLocal && selectedOverseas.includes(item.region)
+  //     );
+  //   }
 
-    setCourses(arr);
-  }, [
-    selectedTag,
-    selectedSeason,
-    selectedOverseas,
-    selectedDomestic,
-    travels,
-  ]);
+  //   setCourses(arr);
+  // }, [
+  //   selectedTag,
+  //   selectedSeason,
+  //   selectedOverseas,
+  //   selectedDomestic,
+  //   travels,
+  // ]);
 
   useEffect(() => {
     getTravel();
-  }, []);
+  }, [value]);
 
   return (
     <Box sx={{ paddingY: 2 }}>
+      <ProgramHeader title={`"${value}"에 대한 검색 결과`} />
       <LeftLayout>
         <HeadContainer>
           <TitleContainer>
             <div className="sub">
-              {"검색결과"}
+              {"Ulife 추천코스 및 테마여행 검색결과"}
               <span className="orange">{courses.length}</span>개
             </div>
           </TitleContainer>
@@ -193,6 +211,13 @@ const SearchProgramList = ({
           count={size}
           onChange={handleChangePage}
         />
+        <TitleContainer>
+          <div className="sub">
+            {"코스를 부탁해 검색결과"}
+            <span className="orange">{courseRequests.length}</span>개
+          </div>
+        </TitleContainer>
+        <CourseTable courses={courseRequests} />
       </LeftLayout>
     </Box>
   );

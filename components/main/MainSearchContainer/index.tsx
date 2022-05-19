@@ -23,6 +23,7 @@ const ONEDATE = [
   "9박+",
 ];
 const TWODATE = [
+  "-일",
   "1일",
   "2일",
   "3일",
@@ -37,31 +38,22 @@ const MainSearchContaier = () => {
   const router = useRouter();
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
   const [value, setValue] = useState("");
-  const [oneDate, setoneDate, onChangeOneDate] = useInput(1);
-  const [twoDate, setTwoDate, onChangeTwoDate] = useInput(2);
+  const [oneDate, setoneDate, onChangeOneDate] = useInput(0);
+  const [twoDate, setTwoDate, onChangeTwoDate] = useInput(0);
   const onChangeValue = useCallback(
     (e) => {
       setValue(e.target.value);
     },
     [value]
   );
-  // const [date, setDate] = useState(null);
-  // const [dateEnd, setDateEnd] = useState(null);
-
-  // const onChangeDate = (newValue) => {
-  //   console.log(newValue, 1);
-
-  //   setDate(newValue);
-  // };
-  // const onChangeDateEnd = (newValue) => {
-  //   setDateEnd(newValue);
-  // };
 
   const onSubmitValue = useCallback(() => {
     // setSelectedTag(value);
+    const tmp =
+      oneDate === 0 && twoDate === 0 ? undefined : `${oneDate}박${twoDate}일`;
     router.push({
       pathname: "/search",
-      query: { value: value, date: `${oneDate}박${twoDate}일` },
+      query: { value: value, date: tmp },
     });
   }, [value]);
 
@@ -108,7 +100,7 @@ const MainSearchContaier = () => {
             className="mainSearchSelectedInput"
           >
             {TWODATE.map((item, index) => (
-              <MenuItem value={index + 1} key={index}>
+              <MenuItem value={index} key={index}>
                 {item}
               </MenuItem>
             ))}

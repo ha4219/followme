@@ -57,6 +57,7 @@ const Navbar = () => {
 
   const onSubmitValue = useCallback(() => {
     // setSelectedTag(value);
+    setValue("");
     router.push({
       pathname: "/search",
       query: {

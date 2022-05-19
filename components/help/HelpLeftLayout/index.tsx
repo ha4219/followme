@@ -42,18 +42,22 @@ const HelpLeftLayout: FC = ({ children }) => {
   const onKeyDownValue = useCallback(
     (e) => {
       if (e.keyCode === 13) {
-        setValue("");
+        onSubmitValue();
       }
     },
     [value]
   );
 
-  const onSubmitValue = useCallback(
-    (e) => {
-      setValue("");
-    },
-    [value]
-  );
+  const onSubmitValue = useCallback(() => {
+    // setSelectedTag(value);
+    setValue("");
+    router.push({
+      pathname: "/search",
+      query: {
+        value: value,
+      },
+    });
+  }, [value]);
 
   return (
     <Grid container py={5}>
@@ -137,7 +141,7 @@ const ProfileLeftContainer = styled(Box)`
       display: block;
     }
     & .active {
-      width: 260px;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       color: #0068ff;
@@ -145,7 +149,7 @@ const ProfileLeftContainer = styled(Box)`
     }
 
     & .deactivate {
-      width: 260px;
+      width: 100%;
       border-radius: 1rem;
       display: flex;
       justify-content: space-between;
