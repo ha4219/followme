@@ -12,9 +12,11 @@ import {
 import { FC, useCallback, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import LeftLayoutTag from "@components/LeftLayoutTag";
+import { useRouter } from "next/router";
 
 const CourseLeftLayout: FC = ({ children }) => {
   const theme = useTheme();
+  const router = useRouter();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
 
   const [value, setValue] = useState("");
@@ -29,18 +31,22 @@ const CourseLeftLayout: FC = ({ children }) => {
   const onKeyDownValue = useCallback(
     (e) => {
       if (e.keyCode === 13) {
-        setValue("");
+        onSubmitValue();
       }
     },
     [value]
   );
 
-  const onSubmitValue = useCallback(
-    (e) => {
-      setValue("");
-    },
-    [value]
-  );
+  const onSubmitValue = useCallback(() => {
+    // setSelectedTag(value);
+    setValue("");
+    router.push({
+      pathname: "/search",
+      query: {
+        value: value,
+      },
+    });
+  }, [value]);
 
   return (
     <Grid container py={2}>

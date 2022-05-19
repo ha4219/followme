@@ -28,9 +28,11 @@ import { COURSETAGS } from "@data/CourseData";
 import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
 import LeftLayoutTag from "@components/LeftLayoutTag";
+import { useRouter } from "next/router";
 
 const LeftLayout: FC = ({ children }) => {
   const theme = useTheme();
+  const router = useRouter();
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -53,20 +55,33 @@ const LeftLayout: FC = ({ children }) => {
   const onKeyDownValue = useCallback(
     (e) => {
       if (e.keyCode === 13) {
-        setSelectedTag(value);
-        setValue("");
+        // setSelectedTag(value);
+        // setValue("");
+        onSubmitValue();
       }
     },
     [value]
   );
 
-  const onSubmitValue = useCallback(
-    (e) => {
-      setSelectedTag(value);
-      setValue("");
-    },
-    [value]
-  );
+  // const onSubmitValue = useCallback(
+  //   (e) => {
+  //     setSelectedTag(value);
+  //     setValue("");
+  //   },
+  //   [value]
+  // );
+  const onSubmitValue = useCallback(() => {
+    // setSelectedTag(value);
+    console.log(value);
+
+    router.push({
+      pathname: "/search",
+      query: {
+        value: value,
+      },
+    });
+    setValue("");
+  }, [router, value]);
 
   useEffect(() => {
     setOpen1(selectedSeason.length > 0);
