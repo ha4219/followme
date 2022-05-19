@@ -42,8 +42,6 @@ const SearchProgram = ({
     [like]
   );
 
-  console.log(mainImg);
-
   return (
     <Link href={type ? `/theme/${idx}` : `/recommend/${idx}`} passHref>
       <EditorContainer item xs={6} sm={6} md={4} lg={4}>

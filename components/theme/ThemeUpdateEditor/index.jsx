@@ -25,7 +25,12 @@ import ThemeCustomRightScrollTable from "../ThemeCustomRightScrollTable";
 import { mapSelectedState } from "@store/map";
 import CustomEditorTag from "@components/CustomEditorTag";
 import QuillCSR, { Quill } from "react-quill";
-import { insertThemeBoard, insertRecommendBoard } from "api/board";
+import {
+  insertThemeBoard,
+  insertRecommendBoard,
+  getThemeDetailBoard,
+  getRecommendDetailBoard,
+} from "api/board";
 
 AWS.config.update({
   accessKeyId: config.accessKeyID,
@@ -45,7 +50,6 @@ class MapContainerClass extends Inline {
     const node = super.create();
     // node.setAttribute("class", val.className);
     // node.setAttribute("id", val.id);
-    console.log(node, typeof node);
     node.setAttribute("style", "display: flex");
     return node;
   }
@@ -152,19 +156,42 @@ const formats = [
 ];
 
 const ThemeCustomEditor = () => {
-  const ref = useRef();
   const router = useRouter();
+  const { idx, id, type } = router.query;
+  const ref = useRef();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
-  const [dialogImg, setDialogImg] = useState();
-  const [day, setDay] = useState(1);
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([true, false]);
   const [index, setIndex] = useState(0);
   const isLoggedInId = useRecoilValue(idState);
   const mapSelectState = useRecoilValue(mapSelectedState);
+
+  const getDetail = async () => {
+    try {
+      if (type === "1") {
+        setChecked([0, 1]);
+        const res = await getThemeDetailBoard({ id, idx });
+        setTitle(res[0].title);
+        setTags(res[0].tags);
+        const tmp0 = res[0].schedule.split("박");
+        const tmp1 = tmp0[1].split("일");
+        setDate1(parseInt(tmp0[0]));
+        setDate2(parseInt(tmp1[0]));
+      } else {
+        setChecked([1, 0]);
+        const res = await getRecommendDetailBoard({ id, idx });
+        setTitle(res[0].title);
+        setTags(res[0].tags);
+        const tmp0 = res[0].schedule.split("박");
+        const tmp1 = tmp0[1].split("일");
+        setDate1(parseInt(tmp0[0]));
+        setDate2(parseInt(tmp1[0]));
+      }
+    } catch (e) {}
+  };
 
   const onCloseDialog = useCallback(() => {
     setOpen(false);
@@ -185,34 +212,15 @@ const ThemeCustomEditor = () => {
   };
 
   const onSubmitDialog = () => {
-    // console.log(Inline);
-    // QuillCSR.register(Block);
     if (ref.current) {
       const editor = ref.current.getEditor();
       const range = editor.getSelection();
-      // // ? editor.getSelection()?.index
-      // // : 0;
-      // console.log(editor.getSelection(), editor, range);
-      // console.log(editor, ref.current.getEditorConfig());
-      // editor.insertEmbed(range + 1, "boldbold", true, Quill.sources.USER);
-      // editor.insertText(range, " ", { map: mapSelectState });
       editor.insertEmbed(index, "\n");
       editor.insertEmbed(index, "test", mapSelectState, Quill.sources.USER);
       editor.insertEmbed(index, "\n");
-
-      // ref.current.getEditor(index + 3);
     }
-    // editor.insertEmbed(range + 1, "mapImg", mapSelectState[0]);
-    // console.log(createElementWithClassName());
-    // setValue(value + createElementWithClassName());
     setOpen(false);
   };
-
-  // useEffect(() => {}, [dialogImg]);
-
-  // const onChangeDialog = (e) => {
-  //   setDialogImg(e.target.files[0]);
-  // };
 
   const onTagKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -285,6 +293,10 @@ const ThemeCustomEditor = () => {
   useEffect(() => {
     setIndex(ref.current?.getEditor().getSelection()?.index);
   }, [value]);
+
+  useEffect(() => {
+    getDetail();
+  }, []);
 
   const onSubmit = async () => {
     if (checked[0] + checked[1] !== 1) {
