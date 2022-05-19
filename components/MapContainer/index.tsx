@@ -37,7 +37,6 @@ const MapContainer = () => {
   const [allData, setAllData] = useState<IEnterpriseType[]>([]);
   const [map, setMap] = useState();
   const [page, setPage] = useState(0);
-  const [clickList, setClickList] = useState([]);
   const perPage = 3;
   const [show, setShow] = useState(false);
   const [enterPick, setEnterPick] = useRecoilState(enterPickState);
