@@ -137,7 +137,7 @@ const ProfileLeftContainer = styled(Box)`
       display: block;
     }
     & .active {
-      width: 260px;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       color: #0068ff;
@@ -145,7 +145,7 @@ const ProfileLeftContainer = styled(Box)`
     }
 
     & .deactivate {
-      width: 260px;
+      width: 100%;
       border-radius: 1rem;
       display: flex;
       justify-content: space-between;
