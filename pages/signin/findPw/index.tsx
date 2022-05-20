@@ -13,11 +13,13 @@ import useInput from "@hooks/useInput";
 import { useCallback, useEffect, useState } from "react";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PhoneIcon from "@mui/icons-material/Phone";
 import { auth } from "@config/firebaseConfig";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { checkPhone } from "@helpers/checkReg";
 import { toast } from "react-toastify";
 import { phoneVerifyAndPass } from "@helpers/signUpHelper";
+import { doFindPW } from "api/auth";
 
 declare global {
   interface Window {
@@ -30,11 +32,25 @@ const FindPw = () => {
   const [id, setId, onChangeId] = useInput("");
   const [phone, setPhone, onChangePhone] = useInput("");
   const [verified, setVerified, onChangeVerified] = useInput("");
-  const [success, onSuccess] = useState(false);
+  const [password, setPassowrd, onChangePassword] = useInput("");
+  const [checkPassword, setCheckPassword, onChangeCheckPassword] = useInput("");
+  const [success, setSuccess] = useState(false);
   const [phoneV, setPhoneV] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await doFindPW({
+        id: id,
+        phoneNum: phone,
+        password: password,
+      });
+      if (res.data === "success") {
+        setSuccess(true);
+      }
+    } catch (e) {
+      console.log("findId error", e);
+    }
   };
 
   const initilizeCaptcha = () => {
@@ -110,7 +126,7 @@ const FindPw = () => {
               className="icon"
               sx={{ width: 80, height: 80 }}
             />
-            <div className="title">회원가입이 완료되었습니다.</div>
+            <div className="title">비밀번호 변경이 완료되었습니다.</div>
           </div>
           <div className="btns">
             <Link href="/">
@@ -129,9 +145,10 @@ const FindPw = () => {
             </Typography>
             <Box>
               <form onSubmit={onSubmit}>
-                <div>
+                <div className="textFieldWrapper">
                   <TextField
                     value={id}
+                    size="small"
                     onChange={onChangeId}
                     type="id"
                     placeholder="ID를 입력해주세요."
@@ -142,32 +159,60 @@ const FindPw = () => {
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ marginBottom: "1rem" }}
+                    sx={{ marginBottom: "1rem", marginRight: "5rem" }}
                   />
+                  <span />
                 </div>
-                <div>
+                <div className="textFieldWrapper">
                   <TextField
                     value={phone}
+                    size="small"
                     onChange={onChangePhone}
                     placeholder="휴대폰 번호를 입력해주세요."
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <LockOutlinedIcon />
+                          <PhoneIcon />
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ marginBottom: "1rem" }}
+                    sx={{ marginBottom: "1rem", marginRight: "1rem" }}
                   />
                   <Button variant="contained" onClick={onSendSMS}>
                     전송
                   </Button>
                 </div>
-                <div>
+                <div className="textFieldWrapper">
                   <TextField
                     value={verified}
+                    size="small"
                     onChange={onChangeVerified}
                     placeholder="인증번호를 입력하세요."
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PhoneIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      marginBottom: "1rem",
+                      marginRight: "1rem",
+                    }}
+                  />
+                  <Button variant="contained" onClick={onVerifySMS}>
+                    인증
+                  </Button>
+                </div>
+
+                <div className="textFieldWrapper">
+                  <TextField
+                    value={password}
+                    size="small"
+                    onChange={onChangePassword}
+                    type="password"
+                    disabled={!phoneV}
+                    placeholder="비밀번호를 입력해주세요."
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -175,15 +220,34 @@ const FindPw = () => {
                         </InputAdornment>
                       ),
                     }}
-                    sx={{ marginBottom: "1rem" }}
+                    sx={{ marginBottom: "1rem", marginRight: "5rem" }}
                   />
-                  <Button variant="contained" onClick={onVerifySMS}>
-                    전송
-                  </Button>
+                </div>
+                <div className="textFieldWrapper">
+                  <TextField
+                    value={checkPassword}
+                    size="small"
+                    disabled={!phoneV}
+                    onChange={onChangeCheckPassword}
+                    type="password"
+                    placeholder="비밀번호를 다시 입력해주세요."
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockOutlinedIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ marginBottom: "1rem", marginRight: "5rem" }}
+                  />
                 </div>
                 <div className="topMargin">
-                  <Button type="submit" variant="contained" disabled={!phoneV}>
-                    찾기
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={!phoneV && password === checkPassword}
+                  >
+                    변경
                   </Button>
                 </div>
               </form>
@@ -255,6 +319,14 @@ const MainFixContainer = styled(Box)`
     }
   }
 
+  & .textFieldWrapper {
+    // display: flex;
+    padding: 1rem;
+
+    & .sameHeight {
+      height: 40px;
+    }
+  }
   & .content {
     padding: 1rem;
   }
