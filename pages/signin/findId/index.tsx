@@ -13,14 +13,24 @@ import useInput from "@hooks/useInput";
 import { useState } from "react";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { doFindId } from "api/auth";
+import { checkPhone } from "@helpers/checkReg";
 
 const FindId = () => {
   const [name, setName, onChangeName] = useInput("");
   const [phone, setPhone, onChangePhone] = useInput("");
-  const [success, onSuccess] = useState(false);
+  const [id, setId] = useState([]);
+  const [success, setSuccess] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await doFindId({ name: name, phoneNum: phone });
+      setId(res.map((item) => item.id));
+      setSuccess(true);
+    } catch (e) {
+      console.log("findId error", e);
+    }
   };
 
   return (
@@ -33,14 +43,19 @@ const FindId = () => {
               className="icon"
               sx={{ width: 80, height: 80 }}
             />
-            <div className="title">회원가입이 완료되었습니다.</div>
+            <div className="title">
+              {id.length
+                ? `총 ${id.length}개의 아이디를 찾았습니다.`
+                : "아이디를 찾지 못했습니다."}
+            </div>
+            {id.map((item) => item)}
           </div>
           <div className="btns">
-            <Link href="/">
-              <a className="main">메인으로</a>
-            </Link>
             <Link href="/signin">
-              <a className="login">로그인</a>
+              <a className="main">로그인</a>
+            </Link>
+            <Link href="/signin/findPw">
+              <a className="login">비밀번호 찾기</a>
             </Link>
           </div>
         </MainContainer>
@@ -83,7 +98,11 @@ const FindId = () => {
                   />
                 </div>
                 <div className="topMargin">
-                  <Button type="submit" variant="contained">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={!(name && checkPhone(phone))}
+                  >
                     찾기
                   </Button>
                 </div>
@@ -109,6 +128,7 @@ const MainContainer = styled(Box)`
     }
     & .title {
       margin-top: 1rem;
+      margin-bottom: 1rem;
       font-size: 1.2rem;
     }
   }
