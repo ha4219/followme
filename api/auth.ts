@@ -40,3 +40,44 @@ export const doKakaoSignin = async (token: string) => {
     console.log(e);
   }
 };
+
+export const doFindId = async ({
+  name,
+  phoneNum,
+}: {
+  name: string;
+  phoneNum: string;
+}) => {
+  try {
+    const { data } = await API.post(`/user/findID`, {
+      name,
+      phoneNum,
+    });
+    return data;
+  } catch (e) {
+    console.log("find id error", e);
+    return [];
+  }
+};
+
+export const doFindPW = async ({
+  id,
+  phoneNum,
+  password,
+}: {
+  id: string;
+  phoneNum: string;
+  password: string;
+}) => {
+  try {
+    const { data } = await API.post(`/user/updatePW`, {
+      id,
+      phoneNum,
+      password,
+    });
+    return data;
+  } catch (e) {
+    console.log("find password error", e);
+    return [];
+  }
+};
