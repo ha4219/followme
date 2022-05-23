@@ -20,7 +20,7 @@ const ONEDATE = [
   "6박",
   "7박",
   "8박",
-  "9박+",
+  "9박",
 ];
 const TWODATE = [
   "-일",
@@ -32,7 +32,7 @@ const TWODATE = [
   "6일",
   "7일",
   "8일",
-  "9일+",
+  "9일",
 ];
 const MainSearchContaier = () => {
   const router = useRouter();
@@ -96,7 +96,7 @@ const MainSearchContaier = () => {
           </Select>
           <Select
             value={twoDate}
-            onChange={onChangeOneDate}
+            onChange={onChangeTwoDate}
             className="mainSearchSelectedInput"
           >
             {TWODATE.map((item, index) => (
