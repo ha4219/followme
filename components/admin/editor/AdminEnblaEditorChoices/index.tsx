@@ -96,6 +96,7 @@ const AdminEnbaleEditorChoices = () => {
   const [curEnablPicks, setCurEnablePicks] = useState<ICourse[]>([]);
   const [curEditorPicks, setCurEditorPicks] = useState<ICourse[]>([]);
   const [editorIdxs, setEditorIdxs] = useRecoilState(editorState);
+
   useEffect(() => {
     const arrTrue: ICourse[] = [];
     const arrFalse: ICourse[] = [];
