@@ -43,7 +43,10 @@ const Signin = () => {
           id: id,
           password: password,
         });
-
+        if (data?.data === "admin approval is required.") {
+          toast.info("관리자 승인이 필요합니다.");
+          return;
+        }
         if (data?.success) {
           toast.success("로그인 성공");
           setLoggedIn(data.accessToken);

@@ -1,7 +1,4 @@
 {
-  "endOfLine": "lf",
-  "parser": "typescript",
-  "printWidth": 80,
   "tabWidth": 2,
-  "trailingComma": "es5"
+  "useTabs": false
 }

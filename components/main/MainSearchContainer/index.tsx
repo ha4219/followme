@@ -11,6 +11,7 @@ import { MainPageSubText, MainPageText1, MainPageText2 } from "@data/mainData";
 import useInput from "@hooks/useInput";
 
 const ONEDATE = [
+  "-박",
   "0박",
   "1박",
   "2박",
@@ -20,7 +21,7 @@ const ONEDATE = [
   "6박",
   "7박",
   "8박",
-  "9박+",
+  "9박",
 ];
 const TWODATE = [
   "-일",
@@ -32,7 +33,7 @@ const TWODATE = [
   "6일",
   "7일",
   "8일",
-  "9일+",
+  "9일",
 ];
 const MainSearchContaier = () => {
   const router = useRouter();
@@ -50,7 +51,9 @@ const MainSearchContaier = () => {
   const onSubmitValue = useCallback(() => {
     // setSelectedTag(value);
     const tmp =
-      oneDate === 0 && twoDate === 0 ? undefined : `${oneDate}박${twoDate}일`;
+      oneDate === 0 && twoDate === 0
+        ? undefined
+        : `${oneDate - 1}박${twoDate}일`;
     router.push({
       pathname: "/search",
       query: { value: value, date: tmp },
@@ -96,7 +99,7 @@ const MainSearchContaier = () => {
           </Select>
           <Select
             value={twoDate}
-            onChange={onChangeOneDate}
+            onChange={onChangeTwoDate}
             className="mainSearchSelectedInput"
           >
             {TWODATE.map((item, index) => (
