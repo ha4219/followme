@@ -30,7 +30,6 @@ interface PageProps {
 }
 
 const pages: PageProps[] = [
-  { label: "Home", target: "" },
   { label: "Editor's pick", target: "editor" },
   { label: "Ulife 추천코스", target: "recommend" },
   { label: "테마여행", target: "theme" },
@@ -183,24 +182,26 @@ const Navbar = () => {
               // justifyContent: "center",
             }}
           >
-            <Button
-              onClick={(event) => onHandleNavItemClick(event, 0)}
-              sx={[
-                {
-                  textTransform: "none",
-                  my: 2,
-                  color: router.pathname === "/" ? "#ffffff" : "#000000",
-                  display: "block",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  paddingBottom: 0,
-                  paddingTop: "1.1rem",
-                  marginBottom: 0,
-                },
-              ]}
-            >
-              <Logo />
-            </Button>
+            <Link href="/" passHref>
+              <Button
+                onClick={(event) => onHandleNavItemClick(event, 0)}
+                sx={[
+                  {
+                    textTransform: "none",
+                    my: 2.7,
+                    color: router.pathname === "/" ? "#ffffff" : "#000000",
+                    display: "block",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    paddingBottom: 0,
+                    paddingTop: "1.1rem",
+                    marginBottom: 0,
+                  },
+                ]}
+              >
+                <Logo />
+              </Button>
+            </Link>
             {pages.map((page, index) => (
               <Button
                 key={index}

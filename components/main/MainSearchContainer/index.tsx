@@ -11,6 +11,7 @@ import { MainPageSubText, MainPageText1, MainPageText2 } from "@data/mainData";
 import useInput from "@hooks/useInput";
 
 const ONEDATE = [
+  "-박",
   "0박",
   "1박",
   "2박",
@@ -50,7 +51,9 @@ const MainSearchContaier = () => {
   const onSubmitValue = useCallback(() => {
     // setSelectedTag(value);
     const tmp =
-      oneDate === 0 && twoDate === 0 ? undefined : `${oneDate}박${twoDate}일`;
+      oneDate === 0 && twoDate === 0
+        ? undefined
+        : `${oneDate - 1}박${twoDate}일`;
     router.push({
       pathname: "/search",
       query: { value: value, date: tmp },
