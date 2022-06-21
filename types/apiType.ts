@@ -135,3 +135,27 @@ export interface IEnterpriseReviewType {
   writer: string;
   content: string;
 }
+
+export interface IUserDataType {
+  address: string | null;
+  category: string | null;
+  content: string | null;
+  createdAt: string;
+  deletedAt: string | null;
+  email: string;
+  id: string;
+  idx: number;
+  latitude: string | null;
+  likeCnts: number;
+  longitude: string | null;
+  name: string;
+  nickName: string;
+  password: string;
+  phoneNum: string;
+  profileImage: string | null;
+  provider: string | null;
+  score: number | null;
+  type: number;
+  updatedAt: string;
+  waiting: number;
+}

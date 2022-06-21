@@ -13,7 +13,7 @@ import Notes from "@mui/icons-material/Notes";
 import ViewCarousel from "@mui/icons-material/ViewCarousel";
 import Drawer from "@mui/material/Drawer";
 import ReportIcon from "@mui/icons-material/Report";
-
+import ApiIcon from "@mui/icons-material/Api";
 import React, { FC } from "react";
 import Link from "next/link";
 import Logo from "@components/Logo";
@@ -34,6 +34,7 @@ const ADMINLEFTLAYOUTDETAIL = [
   { name: "FAQ", value: "/admin/faq", icon: <Quiz /> },
   { name: "BANNER", value: "/admin/banner", icon: <ViewCarousel /> },
   { name: "신고", value: "/admin/report", icon: <ReportIcon /> },
+  { name: "기업", value: "/admin/enterApprove", icon: <ApiIcon /> },
 ];
 
 const drawer = (

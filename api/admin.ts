@@ -187,3 +187,26 @@ export const delComment = async ({ type, idx, id }) => {
     console.log("del comment", e);
   }
 };
+
+export const getAllEnterWaitList = async ({ id }) => {
+  try {
+    const { data } = await API.post(`/user/approvalList`, {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("getAllEnterWaitList", e);
+  }
+};
+
+export const setAllEnterWaitList = async ({ id, enterprises }) => {
+  try {
+    const { data } = await API.post(`/user/approvalConfirm`, {
+      id: id,
+      enterprises: enterprises,
+    });
+    return data;
+  } catch (e) {
+    console.log("setAllEnterWaitList", e);
+  }
+};
