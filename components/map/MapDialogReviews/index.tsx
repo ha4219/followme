@@ -5,11 +5,12 @@ import { idState } from "@store/auth";
 import { delEnterpriseReview, insertEnterpriseReview } from "api/enterprise";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { IEnterpriseReviewType } from "types/apiType";
 import MapDialogReviewStar from "../MapDialogReviewStar";
 import CommentEditor from "../CommentEditor";
 import MapDialogStars from "../MapDialogStars";
+import { isNecessaryRequest } from "@store/util";
 
 const MapDialogReviewItem = ({
   idx,
@@ -75,23 +76,6 @@ const MapDialogReviewItem = ({
   );
 };
 
-const DATA: IEnterpriseReviewType[] = [
-  {
-    idx: 0,
-    score: 5,
-    writer: "dongha",
-    content: "testtest",
-    enterId: "dongha",
-  },
-  {
-    idx: 1,
-    score: 5,
-    writer: "dongha",
-    content: "testtest",
-    enterId: "dongha",
-  },
-];
-
 const MapDialogReviews = ({
   reviews,
   enterId,
@@ -103,6 +87,7 @@ const MapDialogReviews = ({
   const [score, setScore] = useState(0);
   const [content, setContent, onChangeContent] = useInput("");
   const id = useRecoilValue(idState);
+  const [isNecessaryRe, setIsNecessaryRe] = useRecoilState(isNecessaryRequest);
 
   const onClick = async () => {
     if (!id) {
@@ -118,6 +103,7 @@ const MapDialogReviews = ({
       });
       if (data.data === "success") {
         toast.success("성공");
+        setIsNecessaryRe(!isNecessaryRe);
       }
     } catch (e) {
       console.log("insert enter review ", e);
@@ -143,7 +129,6 @@ const MapDialogReviews = ({
           <div>
             <CommentEditor setValue={setContent} />
           </div>
-          {/*<TextField fullWidth value={content} onChange={onChangeContent} />*/}
           <Button
             variant="contained"
             onClick={onClick}

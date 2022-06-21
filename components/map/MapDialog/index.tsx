@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { toBase64 } from "@helpers/programHelper";
 import { Dialog } from "@mui/material";
 import { enterPickState } from "@store/map";
+import { isNecessaryRequest } from "@store/util";
 import {
   getEnterpriseDetail,
   getEnterpriseMenu,
@@ -21,6 +22,7 @@ interface IProps {
 
 const MapDialog = ({ onClose, show }: IProps) => {
   const enterPick = useRecoilValue(enterPickState);
+  const isNecessaryRe = useRecoilValue(isNecessaryRequest);
   const [enterprise, setEnterPrise] = useState();
   const [menus, setMenu] = useState([]);
   const [reviews, setReview] = useState([]);
@@ -74,6 +76,12 @@ const MapDialog = ({ onClose, show }: IProps) => {
       getEnterReview();
     }
   }, [enterPick]);
+
+  useEffect(() => {
+    if (enterPick[0] !== -1) {
+      getEnterReview();
+    }
+  }, [isNecessaryRe]);
 
   return (
     <Dialog open={show} onClose={onClose}>
