@@ -107,12 +107,20 @@ const ReplyChildContent = ({
                 신고하기
               </div>
               {id === fk_user_comments_id && (
-                <div
-                  className="replyContentContainerReport"
-                  onClick={onClickDel}
-                >
-                  삭제하기
-                </div>
+                <>
+                  <div
+                    className="replyContentContainerReport"
+                    onClick={onClickDel}
+                  >
+                    수정하기
+                  </div>
+                  <div
+                    className="replyContentContainerReport"
+                    onClick={onClickDel}
+                  >
+                    삭제하기
+                  </div>
+                </>
               )}
             </>
           )}
@@ -201,9 +209,51 @@ const ReplyContent = ({
     }
   };
 
+  const onClickRevise = async () => {
+    const check = confirm(
+      // "신고하기",
+      `${fk_user_comments_id}님을 신고하시겠습니까?`
+    );
+    try {
+      if (check) {
+        if (type === 0) {
+          const data = await reportRecommendCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        } else if (type === 1) {
+          const data = await reportThemeCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        } else if (type === 2) {
+          const data = await reportCourseCommentBoard({
+            // id: id,
+            idx: boardIdx,
+            commentIdx: idx,
+          });
+          if (data.data === "success") {
+            toast.success("신고완료");
+          }
+        }
+      }
+    } catch (e) {
+      console.log("report error", e);
+    }
+  };
+
   const onSubmitValue = useCallback(
     async (e) => {
       e.preventDefault();
+      console.warn(e);
       try {
         if (type === 0) {
           const data = await insertRecommendChildComment({
@@ -306,9 +356,14 @@ const ReplyContent = ({
                 신고하기
               </div>
               {id === fk_user_comments_id && (
-                <div className="report" onClick={onClickDel}>
-                  삭제하기
-                </div>
+                <>
+                  <div className="report" onClick={onClickRevise}>
+                    수정하기
+                  </div>
+                  <div className="report" onClick={onClickDel}>
+                    삭제하기
+                  </div>
+                </>
               )}
             </>
           )}
@@ -328,7 +383,13 @@ const ReplyContent = ({
         </div>
         {open && (
           <form className="write" onSubmit={onSubmitValue}>
-            <TextField id="" value={value} onChange={onChangeValue} fullWidth />
+            <TextField
+              id="replyField"
+              value={value}
+              onChange={onChangeValue}
+              fullWidth
+              multiline
+            />
             <Button
               disabled={!id || !value}
               type="submit"
@@ -456,11 +517,3 @@ const ReplyContentContainer = styled.div`
 `;
 
 export default ReplyContent;
-function insertRecommentChildComment(arg0: {
-  id: any;
-  idx: number;
-  content: any;
-  parentIdx: string;
-}): any {
-  throw new Error("Function not implemented.");
-}

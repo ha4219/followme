@@ -269,6 +269,7 @@ const RecommendDetail = () => {
                   value={comment}
                   onChange={onChangeComment}
                   fullWidth
+                  multiline
                 />
                 <Button
                   type="submit"

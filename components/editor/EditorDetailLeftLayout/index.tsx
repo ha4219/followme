@@ -30,11 +30,6 @@ const EditorDetailLeftLayout: FC<IProps> = ({
     <Grid container pr={4}>
       <Grid xs={12} sm={12} md={3} item>
         <Box py={2}>
-          {tags.map((tag, index) => (
-            <EditorTag key={index} tag={tag} />
-          ))}
-        </Box>
-        <Box py={2}>
           <BoxContainer onClick={() => setOpen1(!open1)}>
             <Typography
               py={1}
@@ -108,6 +103,11 @@ const EditorDetailLeftLayout: FC<IProps> = ({
               ))}
             </Grid>
           )}
+        </Box>
+        <Box py={2}>
+          {tags.map((tag, index) => (
+            <EditorTag key={index} tag={tag} />
+          ))}
         </Box>
       </Grid>
       <Grid xs={12} sm={12} md={9} item>
