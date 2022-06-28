@@ -568,6 +568,10 @@ const MainContainer = styled.div`
   & .center {
     text-align: center;
   }
+
+  & .ql-editor {
+    min-height: 200px;
+  }
 `;
 
 const ThemeCustomEditorDialog = styled.div`

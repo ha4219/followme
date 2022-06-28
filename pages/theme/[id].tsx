@@ -275,6 +275,7 @@ const ThemeDetail = () => {
                   value={comment}
                   onChange={onChangeComment}
                   fullWidth
+                  multiline
                   placeholder={
                     loggedInId.length
                       ? ""

@@ -10,6 +10,8 @@ import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Link from "next/link";
+import { likeThemeBoard, likeRecommendBoard } from "api/board";
+import ProgramBottomTag from "@components/ProgramBottomTag";
 
 const EditorProgram: VFC<ICourse> = ({
   idx,
@@ -30,12 +32,23 @@ const EditorProgram: VFC<ICourse> = ({
   season,
   updatedAt,
 }) => {
-  const [like, setLike] = useState(likeClicked);
+  const [like, setLike] = useState(likeClicked ? likeClicked : 0);
+  const id = useRecoilValue(idState);
   const onClickLike = useCallback(
     (e) => {
       e.preventDefault();
       e.stopPropagation();
-      // setLike(like ? like ^ 1 : 0);
+
+      try {
+        if (type) {
+          likeThemeBoard({ id, idx });
+        } else {
+          likeRecommendBoard({ id, idx });
+        }
+        setLike(like ^ 1);
+      } catch (e) {
+        console.log("editors pick like error", e);
+      }
     },
     [like]
   );
@@ -94,9 +107,7 @@ const EditorProgram: VFC<ICourse> = ({
             <div className="editorProgramContent">{shortContent}</div>
             <div className="editorProgramTags">
               {(tags ? tags : []).map((item, index) => (
-                <span className="editorProgramTag" key={index}>
-                  #{item}
-                </span>
+                <ProgramBottomTag tag={item} key={index} />
               ))}
             </div>
           </div>
@@ -195,12 +206,14 @@ const EditorContainer = styled(Grid)`
       font-family: paybooc-Bold;
       font-size: 1.3rem;
       height: 3rem;
+      overflow: hidden;
     }
 
     & .editorProgramContent {
       height: 3rem;
       line-height: 1.33;
       letter-spacing: -0.83;
+      overflow: hidden;
     }
 
     & .editorProgramTags {

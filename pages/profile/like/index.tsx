@@ -28,8 +28,10 @@ const ProfileLike = () => {
     const data = await getMyLikeBoard({
       id: loggedInId,
     });
-    const arr = [...data.theme, ...data.recommend];
+    const recommend = data?.recommend.map((item) => ({ ...item, type: 0 }));
+    const theme = data?.theme.map((item) => ({ ...item, type: 1 }));
 
+    const arr = [...recommend, ...theme];
     setSize(Math.ceil(arr.length / perPageSize));
     setBoards(arr);
   };

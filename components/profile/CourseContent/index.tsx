@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { idState } from "@store/auth";
 import { API } from "@src/API";
 import { likeRecommendBoard, likeThemeBoard } from "api/board";
+import Link from "next/link";
 
 interface IProp {
   course: ICourse;
@@ -53,52 +54,63 @@ const CourseContent: VFC<IProp> = ({ course, likeCh }) => {
     [like]
   );
 
+  console.log(course);
+
   return (
     <Grid item xs={4} md={4} lg={4}>
-      <MainContainer>
-        <PhotoContainer src={`${toBase64(course.mainImg)}`}>
-          {likeCh && (
-            <div className="topContainer">
-              <IconButton
-                onClick={onClickLike}
-                sx={{ padding: 0, marginRight: 2, display: "flex" }}
-              >
-                <div className="haertContainer">
-                  {like ? (
-                    <FavoriteIcon
-                      className="fillHeart"
-                      sx={{
-                        width: 28,
-                        height: 28,
-                        alignItems: "center",
-                        verticalAlign: "center",
-                      }}
-                    />
-                  ) : (
-                    <FavoriteBorderIcon
-                      className="heart"
-                      sx={{
-                        width: 28,
-                        height: 28,
-                        alignItems: "center",
-                        verticalAlign: "center",
-                      }}
-                    />
-                  )}
-                </div>
-              </IconButton>
+      <Link
+        href={`/${course.type ? "theme" : "recommend"}/${course.idx}`}
+        passHref
+      >
+        <MainContainer>
+          <PhotoContainer src={`${toBase64(course.mainImg)}`}>
+            {likeCh && (
+              <div className="topContainer">
+                <span className="editorProgramPhotoBest">
+                  {course.type ? "테마" : "추천"}
+                </span>
+
+                <IconButton
+                  onClick={onClickLike}
+                  sx={{ padding: 0, marginRight: 2, display: "flex" }}
+                >
+                  <div className="haertContainer">
+                    {like ? (
+                      <FavoriteIcon
+                        className="fillHeart"
+                        sx={{
+                          width: 28,
+                          height: 28,
+                          alignItems: "center",
+                          verticalAlign: "center",
+                        }}
+                      />
+                    ) : (
+                      <FavoriteBorderIcon
+                        className="heart"
+                        sx={{
+                          width: 28,
+                          height: 28,
+                          alignItems: "center",
+                          verticalAlign: "center",
+                        }}
+                      />
+                    )}
+                  </div>
+                </IconButton>
+              </div>
+            )}
+          </PhotoContainer>
+          <div className="courseContent">
+            <div className="courseTitle">{titleSummary(course.title)}</div>
+            <div className="courseTags">
+              {course.tags.slice(-3).map((item, index) => (
+                <ShadowTag tag={item} key={index} />
+              ))}
             </div>
-          )}
-        </PhotoContainer>
-        <div className="courseContent">
-          <div className="courseTitle">{titleSummary(course.title)}</div>
-          <div className="courseTags">
-            {course.tags.slice(-3).map((item, index) => (
-              <ShadowTag tag={item} key={index} />
-            ))}
           </div>
-        </div>
-      </MainContainer>
+        </MainContainer>
+      </Link>
     </Grid>
   );
 };
@@ -134,6 +146,8 @@ const PhotoContainer = styled.div<PhotoProps>`
   border-radius: 12px;
   background-size: cover;
 
+  
+
   :hover {
     background-color: #ffffff;
     opacity: 0.6;
@@ -141,8 +155,22 @@ const PhotoContainer = styled.div<PhotoProps>`
 
   & .topContainer {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     
+    & .editorProgramPhotoBest {
+      margin-left: 10px;
+      margin-top: 10px;
+      height: 20px;
+      font-family: paybooc-Bold;
+      color: #ffffff;
+      font-size: 12px;
+      line-height: 11px;
+      background-color: #f93b1d;
+      padding: 5px 10px 7px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
     & .haertContainer {
       margin-top: 5px;
       & .heart {

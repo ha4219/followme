@@ -46,7 +46,11 @@ const ProfileHome = () => {
           id: loggedInId,
         });
 
-        const arr = [...data.theme, ...data.recommend];
+        const recommend = data?.recommend.map((item) => ({ ...item, type: 0 }));
+        const theme = data?.theme.map((item) => ({ ...item, type: 1 }));
+
+        const arr = [...recommend, ...theme];
+
         setMyBoards(arr.slice(-3));
       } catch (e) {
         console.log("myBoard", e);
@@ -60,8 +64,10 @@ const ProfileHome = () => {
         const data = await getMyLikeBoard({
           id: loggedInId,
         });
-        const arr = [...data.theme, ...data.recommend];
+        const recommend = data?.recommend.map((item) => ({ ...item, type: 0 }));
+        const theme = data?.theme.map((item) => ({ ...item, type: 1 }));
 
+        const arr = [...recommend, ...theme];
         setLikeBoards(arr.slice(-3));
       } catch (e) {
         console.log("likeBoard", e);
