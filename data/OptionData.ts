@@ -39,8 +39,28 @@ export const DOMESTIC: IName[] = [
     name: "강원",
   },
   {
+    value: "경북",
+    name: "경북",
+  },
+  {
     value: "경남",
     name: "경남",
+  },
+  {
+    value: "충북",
+    name: "충북",
+  },
+  {
+    value: "충남",
+    name: "충남",
+  },
+  {
+    value: "전북",
+    name: "전북",
+  },
+  {
+    value: "전남",
+    name: "전남",
   },
 ];
 

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import { tagState } from "@store/tag";
+import { useRouter } from "next/router";
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
 
@@ -10,12 +11,17 @@ interface IProps {
 
 const LeftLayoutTag: VFC<IProps> = ({ tag }) => {
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
+  const router = useRouter();
   const onClick = () => {
-    if (selectedTag === tag) {
-      setSelectedTag("");
-    } else {
-      setSelectedTag(tag);
-    }
+    // if (selectedTag === tag) {
+    //   setSelectedTag("");
+    // } else {
+    //   setSelectedTag(tag);
+    // }
+    router.push({
+      pathname: "/search",
+      query: { value: tag },
+    });
   };
   return (
     <MainContainer

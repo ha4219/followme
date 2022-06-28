@@ -107,7 +107,6 @@ export const CheckContainerOverseas: VFC<IProps> = ({ tag, value }) => {
       }
     }
   };
-  console.log(tag, value);
 
   return (
     <Box sx={{ fontFamily: "paybooc-Light" }}>
