@@ -10,6 +10,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { addNotice, getNoticeDetail, reviseNotice } from "api/admin";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import CommentEditor from "@components/map/CommentEditor";
 
 const AdminNoticeWriteEditor = () => {
   const id = useRecoilValue(idState);
@@ -83,14 +84,17 @@ const AdminNoticeWriteEditor = () => {
           fullWidth
           onChange={onChangeTitle}
         />
-        <TextField
+        {/* <TextField
           className="adminNoticeWriteEditorContainerField adminNoticeWriteEditorContainerArea"
           label="내용"
           multiline={true}
           value={content}
           fullWidth
           onChange={onChangeContent}
-        />
+        /> */}
+        <div className="adminNoticeWriteEditorContainerField adminNoticeWriteEditorContainerArea">
+          <CommentEditor setValue={setContent} />
+        </div>
         <div className="adminNoticeWriteEditorContainerBtns">
           <Button type="submit" variant="contained">
             REVISE

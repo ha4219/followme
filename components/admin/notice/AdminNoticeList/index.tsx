@@ -47,7 +47,9 @@ const AdminNoticeItem: VFC<INoticeType> = ({
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
       <TableCell>{title}</TableCell>
-      <TableCell>{content}</TableCell>
+      <TableCell>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </TableCell>
       <TableCell>{views}</TableCell>
       <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
