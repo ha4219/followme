@@ -10,14 +10,12 @@ import { IEnterpriseReviewType } from "types/apiType";
 
 const MapDialogReviewItem = ({
   idx,
-  score,
   writer,
   content,
   enterId,
 }: IEnterpriseReviewType) => {
   const id = useRecoilValue(idState);
   const onClickDel = async () => {
-    // toast.info("추후 진행");
     try {
       const data = await delEnterpriseReview({ idx: idx, writer: id });
       if (data.data === "success") {
@@ -51,23 +49,6 @@ const MapDialogReviewItem = ({
     </MapDialogReviewItemContainer>
   );
 };
-
-const DATA: IEnterpriseReviewType[] = [
-  {
-    idx: 0,
-    score: 5,
-    writer: "dongha",
-    content: "testtest",
-    enterId: "dongha",
-  },
-  {
-    idx: 1,
-    score: 5,
-    writer: "dongha",
-    content: "testtest",
-    enterId: "dongha",
-  },
-];
 
 const MapDialogReviews = ({
   reviews,

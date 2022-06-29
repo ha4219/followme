@@ -32,6 +32,12 @@ const MainMapContainer = () => {
           >
             20km이내
           </CustomButton>
+          <CustomButton
+            className={limitDis === -1 ? "active" : ""}
+            onClick={() => setLimitDis(-1)}
+          >
+            전체
+          </CustomButton>
         </SortedContainer>
       </HeadContainer>
       <MapContainer />

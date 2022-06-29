@@ -130,10 +130,12 @@ export interface IEnterpriseMenuType {
 export interface IEnterpriseReviewType {
   idx: number;
 
-  score: number;
   enterId: string;
   writer: string;
   content: string;
+  user: {
+    score: number;
+  };
 }
 
 export interface IUserDataType {

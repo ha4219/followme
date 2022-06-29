@@ -102,17 +102,22 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    const arr = allData.filter(
-      (item) =>
-        getDistance(
-          // curMapLatLonState[0],
-          // curMapLatLonState[1],
-          curPos.lat,
-          curPos.lon,
-          Number(item.latitude),
-          Number(item.longitude)
-        ) <= limitDis
-    );
+    let arr: any[] = [];
+    if (limitDis === -1) {
+      arr = [...allData];
+    } else {
+      arr = allData.filter(
+        (item) =>
+          getDistance(
+            // curMapLatLonState[0],
+            // curMapLatLonState[1],
+            curPos.lat,
+            curPos.lon,
+            Number(item.latitude),
+            Number(item.longitude)
+          ) <= limitDis
+      );
+    }
 
     setData(arr);
     // setData(mapDummyData);

@@ -11,6 +11,7 @@ import Dashboard from "@mui/icons-material/Dashboard";
 import Quiz from "@mui/icons-material/Quiz";
 import Notes from "@mui/icons-material/Notes";
 import ViewCarousel from "@mui/icons-material/ViewCarousel";
+import GroupIcon from "@mui/icons-material/Group";
 import Drawer from "@mui/material/Drawer";
 import ReportIcon from "@mui/icons-material/Report";
 import ApiIcon from "@mui/icons-material/Api";
@@ -35,6 +36,7 @@ const ADMINLEFTLAYOUTDETAIL = [
   { name: "BANNER", value: "/admin/banner", icon: <ViewCarousel /> },
   { name: "신고", value: "/admin/report", icon: <ReportIcon /> },
   { name: "기업", value: "/admin/enterApprove", icon: <ApiIcon /> },
+  { name: "유저", value: "/admin/users", icon: <GroupIcon /> },
 ];
 
 const drawer = (

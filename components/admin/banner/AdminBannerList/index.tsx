@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { showConfirm } from "@helpers/messageHelper";
 import {
   Button,
   Table,
@@ -6,10 +7,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Link,
 } from "@mui/material";
 import { API } from "@src/API";
 import { delBanner } from "api/admin";
+import Link from "next/link";
 import { useEffect, useState, VFC } from "react";
 import { toast } from "react-toastify";
 import { IBannerType } from "types/apiType";
@@ -45,8 +46,28 @@ const AdminBannerItem: VFC<IBannerType> = ({ idx, imgURL, urlTo, endDate }) => {
       </TableCell>
       <TableCell>{endDate}</TableCell>
       <TableCell>
-        <Button onClick={onClickDel} variant="contained" color="error">
-          del
+        <Link
+          href={{
+            pathname: "/admin/banner/revise",
+            query: {
+              idx: idx,
+              imgURL: imgURL,
+              urlTo: urlTo,
+              endDate: endDate,
+            },
+          }}
+          passHref
+        >
+          <Button variant="contained">수정</Button>
+        </Link>
+      </TableCell>
+      <TableCell>
+        <Button
+          onClick={() => showConfirm(onClickDel)}
+          variant="contained"
+          color="error"
+        >
+          삭제
         </Button>
       </TableCell>
     </TableRow>
@@ -80,7 +101,8 @@ const AdminBannerList = () => {
             <TableCell>Image</TableCell>
             <TableCell>UrlTo</TableCell>
             <TableCell>EndDate</TableCell>
-            <TableCell>Del</TableCell>
+            <TableCell>수정</TableCell>
+            <TableCell>삭제</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

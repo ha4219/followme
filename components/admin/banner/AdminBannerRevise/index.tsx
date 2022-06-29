@@ -4,17 +4,18 @@ import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Button, TextField } from "@mui/material";
 import { idState } from "@store/auth";
-import { addBanner } from "api/admin";
+import { reviseBanner } from "api/admin";
 import { useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 
-const AdminBannerWritter = () => {
+const AdminBannerRevise = () => {
   const router = useRouter();
-  const [url, setUrl] = useState("");
-  const [endDate, setEndDate] = useState(new Date().toISOString());
-  const [urlTo, setUrlTo] = useState("");
+  const [url, setUrl] = useState<any>("");
+  const [endDate, setEndDate] = useState<any>(new Date().toISOString());
+  const [urlTo, setUrlTo] = useState<any>("");
+  const [idx, setIdx] = useState<any>();
   const id = useRecoilValue(idState);
   const onChangeUrlTo = useCallback(
     (e) => {
@@ -33,25 +34,33 @@ const AdminBannerWritter = () => {
     (e) => {
       e.preventDefault();
       try {
-        addBanner({
+        reviseBanner({
           imgURL: url,
           urlTo: urlTo,
           endDate: endDate,
           id: id,
+          idx: idx,
         }).then((res: any) => {
           if (res?.data === "success") {
-            toast.success("작성완료");
+            toast.success("수정완료");
             // router.back();
           } else {
-            toast.error("작성실패");
+            toast.error("수정실패");
           }
         });
       } catch (e) {
         console.log(e);
       }
     },
-    [url, endDate, urlTo]
+    [idx, url, endDate, urlTo, id]
   );
+  useEffect(() => {
+    const { idx, imgURL, urlTo, endDate } = router.query;
+    setUrlTo(urlTo);
+    setIdx(idx);
+    setEndDate(endDate);
+    setUrl(imgURL);
+  }, [router.isReady]);
 
   return (
     <AdminBannerWriterContainer>
@@ -115,4 +124,4 @@ const AdminBannerWriterContainer = styled.div`
   }
 `;
 
-export default AdminBannerWritter;
+export default AdminBannerRevise;
