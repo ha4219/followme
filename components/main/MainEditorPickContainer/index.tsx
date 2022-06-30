@@ -53,7 +53,7 @@ const MainEditorPickContainer = () => {
             </CustomButton>
           </BtnContainer>
         </HeadContainer>
-        <BodyContainer item sm={6} md={9}>
+        <BodyContainer item xs={6} sm={6} md={9}>
           {/* <Grid container spacing={1}>
             {picks
               .slice(page * perPageSize, (page + 1) * perPageSize)
@@ -64,7 +64,7 @@ const MainEditorPickContainer = () => {
           <Grid
             container
             spacing={1}
-            sx={{ display: { sm: "none", md: "flex" } }}
+            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
           >
             {picks
               .slice(page * mdPerPageSize, (page + 1) * mdPerPageSize)
@@ -75,7 +75,7 @@ const MainEditorPickContainer = () => {
           <Grid
             container
             spacing={1}
-            sx={{ display: { sm: "flex", md: "none" } }}
+            sx={{ display: { xs: "flex", sm: "flex", md: "none" } }}
           >
             {picks
               .slice(page * smPerPageSize, (page + 1) * smPerPageSize)

@@ -1,19 +1,10 @@
 import styled from "@emotion/styled";
 import React, { useCallback, useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
-import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
-import { mapDummyData, MapDataType } from "@data/MapData";
-import { mapTitleSummary, toBase64 } from "@helpers/programHelper";
-import dynamic from "next/dynamic";
+import { toBase64 } from "@helpers/programHelper";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  curLimitDis,
-  curMapState,
-  enterPickState,
-  mapSelectedState,
-  mapState,
-} from "@store/map";
+import { curLimitDis, curMapState, enterPickState, mapState } from "@store/map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { getDistance } from "@helpers/mapHelper";
@@ -30,8 +21,8 @@ declare global {
 
 const MapContainer = () => {
   const [curPos, setCurPos] = useState({
-    lat: 37.0933576573074,
-    lon: 127.1852009841304,
+    lat: 37.56,
+    lon: 126.9753,
   });
   const [data, setData] = useState<IEnterpriseType[]>([]);
   const [allData, setAllData] = useState<IEnterpriseType[]>([]);
@@ -75,11 +66,10 @@ const MapContainer = () => {
       );
     } catch (e) {
       console.warn(e);
-      // toast.error("지원하지 않는 브라우저입니다.");
     }
   };
 
-  const errorMessage = (err) => {
+  const errorMessage = async (err) => {
     console.log(err);
 
     switch (err.code) {
@@ -96,6 +86,17 @@ const MapContainer = () => {
         toast.error("알 수 없는 오류입니다.");
         break;
     }
+    setCurMapLatLonState([curPos.lat, curPos.lon]);
+    const dataTmp2 = await getEnterprises();
+    const dataTmp = dataTmp2.map((item) => ({
+      ...item,
+      profileImage: `${toBase64(item.profileImage)}`,
+    }));
+    kakaoMapInit({
+      lat: curPos.lat,
+      lon: curPos.lon,
+      dataTmp: dataTmp,
+    });
   };
   useEffect(() => {
     mapInit();
@@ -193,6 +194,7 @@ const MapContainer = () => {
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].name,
+            text: data[i].name,
           });
           mms.push({
             marker: marker,

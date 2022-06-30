@@ -71,8 +71,10 @@ const MapDiv: VFC<IEnterpriseType> = ({
     <Container onClick={onClick}>
       <ImgContainer src={profileImage} alt={name} />
       <DesContainer>
-        <div className="title">{mapTitleSummary(name)}</div>
-        <div className="content">{mapContentSummary(content)}</div>
+        <div className="title">{mapTitleSummary(name ? name : "")}</div>
+        <div className="content">
+          {mapContentSummary(content ? content : "")}
+        </div>
         <div className="mapDivTags">
           <TagContainer tags={tags.slice(-3)} />
         </div>
