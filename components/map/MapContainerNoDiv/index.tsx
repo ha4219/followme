@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
 import React, { useCallback, useEffect, useState } from "react";
-import MapDiv from "@components/MapDiv";
-import { Button, Grid } from "@mui/material";
+import { Button } from "@mui/material";
 import { toast } from "react-toastify";
-import { mapDummyData, MapDataType } from "@data/MapData";
 import { mapTitleSummary, toBase64 } from "@helpers/programHelper";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import {
   curLimitDis,
+  curMapState,
   enterPickState,
   mapSelectedState,
   mapState,
@@ -38,6 +37,7 @@ const MapContainerNoDiv = () => {
   const [show, setShow] = useState(false);
   const [limitDis, setLimitDis] = useRecoilState(curLimitDis);
   const [enterPick, setEnterPick] = useRecoilState(enterPickState);
+  const [curMapLatLonState, setCurMapLatLonState] = useRecoilState(curMapState);
 
   const onClose = useCallback(() => {
     setShow(false);
@@ -73,7 +73,7 @@ const MapContainerNoDiv = () => {
     }
   };
 
-  const errorMessage = (err) => {
+  const errorMessage = async (err) => {
     switch (err.code) {
       case err.PERMISSION_DENIED:
         toast.error("Geolocation API 사용을 허용해주세요");
@@ -88,6 +88,17 @@ const MapContainerNoDiv = () => {
         toast.error("알 수 없는 오류입니다.");
         break;
     }
+    setCurMapLatLonState([curPos.lat, curPos.lon]);
+    const dataTmp2 = await getEnterprises();
+    const dataTmp = dataTmp2.map((item) => ({
+      ...item,
+      profileImage: `${toBase64(item.profileImage)}`,
+    }));
+    kakaoMapInit({
+      lat: curPos.lat,
+      lon: curPos.lon,
+      dataTmp: dataTmp,
+    });
   };
   useEffect(() => {
     mapInit();
@@ -98,19 +109,31 @@ const MapContainerNoDiv = () => {
       for (let i = 0; i < markers.length; i++) {
         if (
           getDistance(markers[i].lat, markers[i].lon, curPos.lat, curPos.lon) <
-          limitDis
+            limitDis ||
+          limitDis === -1
         ) {
-          markers[i].marker.setMap(map);
-          window.kakao.maps.event.addListener(
-            markers[i].marker,
-            "click",
-            function (e) {
-              setShow(true);
-              setEnterPick([markers[i].idx, markers[i].id]);
-            }
-          );
+          if (
+            markers[i].lat &&
+            markers[i].lon &&
+            33 < markers[i].lat &&
+            markers[i].lat < 38 &&
+            markers[i].lon > 120 &&
+            markers[i].lon < 140
+          ) {
+            markers[i].marker.setMap(map);
+            markers[i].info.open(map, markers[i].marker);
+            window.kakao.maps.event.addListener(
+              markers[i].marker,
+              "click",
+              function (e) {
+                setShow(true);
+                setEnterPick([markers[i].idx, markers[i].id]);
+              }
+            );
+          }
         } else {
           markers[i].marker.setMap(null);
+          markers[i].info.open(null);
         }
       }
     }
@@ -186,10 +209,14 @@ const MapContainerNoDiv = () => {
 
           const iwContent = `<div style='display:flex; padding: 1rem;'><img src='${data[i].url}' style="width: 200px; height: 200px;margin-right: 1rem; border-radius: 200px" alt=${data[i].url}/><div style="font-family: paybooc-Light;"><div style="font-family: paybooc-Bold; height: 2rem; font-size: 1.2rem;">${data[i].title}</div><div style="height: 4rem;">${data[i].content}</div><div style="height: 2rem">${stars}</div><div style="height: 2rem">${tags}</div></div></div>`;
 
+          // const infowindow = new window.kakao.maps.InfoWindow({
+          //   // position: latlon,w
+          //   content: iwContent,
+          //   removable: true,
+          // });
           const infowindow = new window.kakao.maps.InfoWindow({
-            // position: latlon,w
-            content: iwContent,
-            removable: true,
+            position: latlon,
+            content: `<span>${data[i].name}</span>`,
           });
           // mms.push(marker);
           // ins.push(infowindow);
@@ -241,6 +268,12 @@ const MapContainerNoDiv = () => {
             onClick={() => setLimitDis(20000)}
           >
             20km이내
+          </CustomButton>
+          <CustomButton
+            className={limitDis === -1 ? "active" : ""}
+            onClick={() => setLimitDis(-1)}
+          >
+            전체
           </CustomButton>
         </SortedContainer>
       </HeadContainer>

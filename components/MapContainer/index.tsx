@@ -148,19 +148,31 @@ const MapContainer = () => {
       for (let i = 0; i < markers.length; i++) {
         if (
           getDistance(markers[i].lat, markers[i].lon, curPos.lat, curPos.lon) <
-          limitDis
+            limitDis ||
+          limitDis === -1
         ) {
-          markers[i].marker.setMap(map);
-          window.kakao.maps.event.addListener(
-            markers[i].marker,
-            "click",
-            function (e) {
-              setShow(true);
-              setEnterPick([markers[i].idx, markers[i].id]);
-            }
-          );
+          if (
+            markers[i].lat &&
+            markers[i].lon &&
+            33 < markers[i].lat &&
+            markers[i].lat < 38 &&
+            markers[i].lon > 120 &&
+            markers[i].lon < 140
+          ) {
+            markers[i].marker.setMap(map);
+            markers[i].info.open(map, markers[i].marker);
+            window.kakao.maps.event.addListener(
+              markers[i].marker,
+              "click",
+              function (e) {
+                setShow(true);
+                setEnterPick([markers[i].idx, markers[i].id]);
+              }
+            );
+          }
         } else {
           markers[i].marker.setMap(null);
+          markers[i].info.open(null);
         }
       }
     }
@@ -196,13 +208,19 @@ const MapContainer = () => {
             title: data[i].name,
             text: data[i].name,
           });
+          const infowindow = new window.kakao.maps.InfoWindow({
+            position: latlon,
+            content: `<span>${data[i].name}</span>`,
+          });
           mms.push({
             marker: marker,
+            info: infowindow,
             lat: Number(data[i].latitude),
             lon: Number(data[i].longitude),
             idx: data[i].idx,
             id: data[i].id,
           });
+
           // marker.setMap(map);
         }
         setMarkers(mms);
