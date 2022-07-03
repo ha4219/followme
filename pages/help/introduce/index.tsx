@@ -2,6 +2,7 @@ import { Box, Container } from "@mui/material";
 import HelpLeftLayout from "@components/help/HelpLeftLayout";
 import styled from "@emotion/styled";
 import Image from "next/image";
+import HelpMapWrapper from "@components/help/HelpMapWrapper";
 
 const HelpIntroduce = () => {
   return (
@@ -60,6 +61,7 @@ const HelpIntroduce = () => {
             </div>
           </div>
         </MainBContainer>
+        <HelpMapWrapper />
       </HelpLeftLayout>
     </MainContainer>
   );
