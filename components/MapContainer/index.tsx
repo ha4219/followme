@@ -11,7 +11,7 @@ import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
 import MapDialog from "@components/map/MapDialog";
-import { Grid, Table, TableBody } from "@mui/material";
+import { Box, Grid, Table, TableBody } from "@mui/material";
 
 declare global {
   interface Window {
@@ -251,12 +251,10 @@ const MapContainer = () => {
         <Grid
           item
           xs={12}
-          sm={12}
-          md={3}
           sx={{
             display: {
               xs: "flex",
-              sm: "flex",
+              sm: "none",
               md: "none",
             },
           }}
@@ -280,18 +278,20 @@ const MapContainer = () => {
               ))}
           </BottomDiv>
         </Grid>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} sm={8} md={9}>
           <MapContent id="map" />
         </Grid>
         <Grid
           item
-          md={3}
+          sm={4}
+          md={4}
           sx={{
             display: {
               xs: "none",
-              sm: "none",
+              sm: "flex",
               md: "flex",
             },
+            overflow: "hidden",
           }}
         >
           <BottomDiv>
@@ -306,13 +306,13 @@ const MapContainer = () => {
                 </button>
               </div>
             </div>
-            <div>
+            <Box sx={{ overflow: "hidden" }}>
               {data
                 .slice(page * perPage, (page + 1) * perPage)
                 .map((item, index) => (
                   <MapDiv key={index} {...item} />
                 ))}
-            </div>
+            </Box>
           </BottomDiv>
         </Grid>
       </Grid>

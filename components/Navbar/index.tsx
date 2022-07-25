@@ -126,7 +126,9 @@ const Navbar = () => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon
+                sx={{ color: router.pathname === "/" ? "#ffffff" : "#000000" }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -156,14 +158,6 @@ const Navbar = () => {
               ))}
             </Menu>
           </Box>
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            LOGO
-          </Typography> */}
           <Box
             sx={{
               flexGrow: 1,
@@ -171,15 +165,29 @@ const Navbar = () => {
               hover: "cursor",
             }}
           >
-            <Button sx={{ textTransform: "none" }}>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => router.push("/signin")}
+            >
               <Logo />
             </Button>
           </Box>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNavMenu}
+            color="inherit"
+          >
+            <MenuIcon
+              sx={{ color: router.pathname === "/" ? "#ffffff" : "#000000" }}
+            />
+          </IconButton>
           <Box
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
-              // justifyContent: "center",
             }}
           >
             <Link href="/" passHref>

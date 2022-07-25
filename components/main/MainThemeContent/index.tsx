@@ -58,7 +58,7 @@ const MainThemeContent: VFC<ICourse> = ({
   );
 
   return (
-    <MainContainer md={3} sm={6} xs={6} lg={3} item>
+    <MainContainer md={3} sm={6} xs={12} lg={3} item>
       <Box sx={{ cursor: "pointer" }} onClick={onClickProgram}>
         <PhotoContainer src={`${toBase64(mainImg)}`}>
           <span className="title">{titleSummary(title)}</span>

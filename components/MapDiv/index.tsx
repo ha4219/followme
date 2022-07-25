@@ -110,6 +110,7 @@ const Container = styled(Button)`
   padding-bottom: 0;
   align-items: top;
   height: 100%;
+  overflow: hidden;
 `;
 
 const ImgContainer = styled.img`
@@ -135,7 +136,7 @@ const DesContainer = styled.div`
   }
 
   & .mapDivTags {
-    height: 3rem;
+    height: 1rem;
     overflow: hidden;
   }
   & .dis {
