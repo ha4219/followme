@@ -150,9 +150,9 @@ const UserManipluateList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* {data.map((item) => (
+          {data.map((item) => (
             <AdminUserItem key={item.idx} {...item} />
-          ))} */}
+          ))}
         </TableBody>
       </Table>
       <Box>

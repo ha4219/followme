@@ -53,28 +53,6 @@ const RecommendProgramDif: VFC<ICourse> = ({
     router.push(`/recommend/${idx}`);
   }, []);
 
-  // return (
-  //   <MainContainer
-  //     xs={6}
-  //     sm={6}
-  //     md={4}
-  //     lg={4}
-  //     src={`${toBase64(mainImg.data)}`}
-  //     onClick={onClickProgram}
-  //   >
-  //     <div className="tag">
-  //       <span>{region}</span>
-  //     </div>
-  //     <div className="title">
-  //       <span>{titleSummary(title)}</span>
-  //     </div>
-  //     <div className="content">
-  //       <span>{contentSummary(shortContent)}</span>
-  //     </div>
-  //     <CustomButton>바로가기</CustomButton>
-  //   </MainContainer>
-  // );
-
   return (
     <EditorContainer item xs={6} sm={6} md={4} lg={4} onClick={onClickProgram}>
       <div className="editorProgramPhotoWrapper">

@@ -575,7 +575,7 @@ const ThemeCustomEditor = () => {
       </TagContainer>
       <div className="center">
         <Button variant="contained" onClick={onSubmit}>
-          등록
+          수정
         </Button>
       </div>
     </MainContainer>

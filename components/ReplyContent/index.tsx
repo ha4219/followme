@@ -29,6 +29,7 @@ interface IProps {
   childrenReply: IComment[];
   type: number;
   update: any;
+  parentIdx?: number;
 }
 
 const ReplyChildContent = ({
@@ -40,6 +41,7 @@ const ReplyChildContent = ({
   boardIdx,
   type,
   update,
+  parentIdx,
 }: IProps) => {
   const [value, setValue, onChangeValue] = useInput("");
   // const [open, setOpen] = useState(false);
@@ -67,7 +69,8 @@ const ReplyChildContent = ({
     }
   };
 
-  const onClickRevise = async () => {
+  const onClickRevise = async (e) => {
+    e.preventDefault();
     try {
       const data = await updateBoardComment({
         id: id,
@@ -75,10 +78,13 @@ const ReplyChildContent = ({
         idx: boardIdx,
         commentIdx: idx,
         content: value,
-        parentIdx: fk_user_comments_id,
+        parentIdx: parentIdx,
       });
       if (data.data === "success") {
         toast.success("수정완료");
+        setIsRevise(false);
+        update();
+        setValue("");
       }
     } catch (e) {
       console.log("revise error", e);
@@ -133,7 +139,11 @@ const ReplyChildContent = ({
               {id === fk_user_comments_id && (
                 <>
                   <div
-                    className="replyContentContainerReport"
+                    className={
+                      isRevise
+                        ? "replyContentContainerReport recommentActive"
+                        : "replyContentContainerReport"
+                    }
                     onClick={() => setIsRevise((prev) => !prev)}
                   >
                     수정하기
@@ -215,7 +225,9 @@ const ReplyContent = ({
     }
   };
 
-  const onClickReport = async () => {
+  const onClickReport = async (e) => {
+    e.preventDefault();
+
     const check = confirm(
       // "신고하기",
       `${fk_user_comments_id}님을 신고하시겠습니까?`
@@ -256,7 +268,9 @@ const ReplyContent = ({
     }
   };
 
-  const onClickRevise = async () => {
+  const onClickRevise = async (e) => {
+    e.preventDefault();
+
     try {
       const data = await updateBoardComment({
         id: id,
@@ -268,6 +282,8 @@ const ReplyContent = ({
       });
       if (data.data === "success") {
         toast.success("수정완료");
+        setIsRevise(false);
+        update();
       }
     } catch (e) {
       console.log("revise error", e);
@@ -426,6 +442,7 @@ const ReplyContent = ({
               boardIdx={boardIdx}
               type={type}
               update={update}
+              parentIdx={idx}
               {...item}
             />
           ))}
@@ -562,6 +579,11 @@ const ReplyContentContainer = styled.div`
     cursor: pointer;
     color: #888888;
     font-size: 0.8rem;
+  }
+
+  & .recommentActive {
+    color: #ff9016;
+    text-decoration: underline;
   }
 `;
 

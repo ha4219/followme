@@ -8,7 +8,7 @@ import { idState } from "@store/auth";
 import ShareButton from "@components/ShareButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { contentSummary, titleSummary } from "@helpers/programHelper";
+import { contentSummary, titleSummary, toBase64 } from "@helpers/programHelper";
 import { likeThemeBoard } from "api/board";
 
 const ThemeProgram: VFC<ICourse> = ({
@@ -44,32 +44,6 @@ const ThemeProgram: VFC<ICourse> = ({
   const onClickProgram = useCallback((id) => {
     router.push(`/theme/${idx}`);
   }, []);
-
-  const toBase64 = (arr) => {
-    return Buffer.from(arr);
-  };
-
-  // return (
-  //   <MainContainer
-  //     xs={6}
-  //     sm={6}
-  //     md={4}
-  //     lg={4}
-  //     src={`${toBase64(mainImg.data)}`}
-  //     onClick={onClickProgram}
-  //   >
-  //     <div className="tag">
-  //       <span>{region}</span>
-  //     </div>
-  //     <div className="title">
-  //       <span>{titleSummary(title)}</span>
-  //     </div>
-  //     <div className="content">
-  //       <span>{contentSummary(shortContent)}</span>
-  //     </div>
-  //     <CustomButton>바로가기</CustomButton>
-  //   </MainContainer>
-  // );
 
   return (
     <EditorContainer item xs={6} sm={6} md={4} lg={4} onClick={onClickProgram}>

@@ -465,12 +465,19 @@ export const searchCourse = async ({ value }) => {
   }
 };
 
-export const updateCourseBoard = async ({ id, idx, title, content }) => {
+export const updateCourseBoard = async ({
+  id,
+  idx,
+  title,
+  content,
+  createdAt,
+}) => {
   try {
     const { data } = await API.put(`/board/2/${idx}`, {
-      id: id,
+      writer: id,
       title: title,
       content: content,
+      createdAt: createdAt,
     });
     return data;
   } catch (e) {
@@ -523,20 +530,18 @@ export const updateBoardComment = async ({
   commentIdx,
 }) => {
   try {
-    const delFirst = await delComment({ id: id, type: type, idx: commentIdx });
-    if (delFirst.data !== "success") {
-      throw new Error("not del");
-    }
     if (parentIdx) {
-      const { data } = await API.post(`/board/${type}/reply/insert/${idx}`, {
+      const { data } = await API.put(`/board/${type}/reply/update/${idx}`, {
         id: id,
+        idx: commentIdx,
         parent: parentIdx,
         content: content,
       });
       return data;
     } else {
-      const { data } = await API.post(`/board/${type}/reply/insert/${idx}`, {
+      const { data } = await API.put(`/board/${type}/reply/update/${idx}`, {
         id: id,
+        idx: commentIdx,
         content: content,
       });
       return data;
