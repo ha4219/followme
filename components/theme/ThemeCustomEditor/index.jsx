@@ -1,4 +1,4 @@
-import MapEditor from "@components/MapEditor";
+import MapEditor from "@components/MapEditorWrapper";
 import styled from "@emotion/styled";
 import {
   Button,

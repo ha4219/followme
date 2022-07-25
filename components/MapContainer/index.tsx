@@ -11,7 +11,7 @@ import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
 import MapDialog from "@components/map/MapDialog";
-import { Box, Grid, Table, TableBody } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 declare global {
   interface Window {

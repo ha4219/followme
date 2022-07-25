@@ -172,18 +172,6 @@ const Navbar = () => {
               <Logo />
             </Button>
           </Box>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleOpenNavMenu}
-            color="inherit"
-          >
-            <MenuIcon
-              sx={{ color: router.pathname === "/" ? "#ffffff" : "#000000" }}
-            />
-          </IconButton>
           <Box
             sx={{
               flexGrow: 1,
