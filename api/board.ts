@@ -1,5 +1,6 @@
 import { API, getPayload, getToken } from "@src/API";
 import { IMergeCourse, IReportCommentType } from "types/apiType";
+import { delComment } from "./admin";
 
 export const deleteBoard = async ({ url, id, idx }) => {
   const urlTo = url[0].toUpperCase() + url.slice(1);
@@ -466,7 +467,7 @@ export const searchCourse = async ({ value }) => {
 
 export const updateCourseBoard = async ({ id, idx, title, content }) => {
   try {
-    const { data } = await API.post(`/board/2/modify/${idx}`, {
+    const { data } = await API.put(`/board/2/${idx}`, {
       id: id,
       title: title,
       content: content,
@@ -490,10 +491,11 @@ export const updateTypeBoard = async ({
   region,
   tags,
   season,
+  createdAt,
 }) => {
   try {
-    const { data } = await API.post(`/board/${type}/modify/${idx}`, {
-      id: id,
+    const { data } = await API.put(`/board/${type}/${idx}`, {
+      writer: id,
       title: title,
       shortContent: shortContent,
       content: content,
@@ -504,9 +506,42 @@ export const updateTypeBoard = async ({
       tags: tags,
       season: season,
       type: type,
+      createdAt: createdAt,
     });
     return data;
   } catch (e) {
     console.log("type board update e", e);
+  }
+};
+
+export const updateBoardComment = async ({
+  id,
+  type,
+  idx,
+  content,
+  parentIdx,
+  commentIdx,
+}) => {
+  try {
+    const delFirst = await delComment({ id: id, type: type, idx: commentIdx });
+    if (delFirst.data !== "success") {
+      throw new Error("not del");
+    }
+    if (parentIdx) {
+      const { data } = await API.post(`/board/${type}/reply/insert/${idx}`, {
+        id: id,
+        parent: parentIdx,
+        content: content,
+      });
+      return data;
+    } else {
+      const { data } = await API.post(`/board/${type}/reply/insert/${idx}`, {
+        id: id,
+        content: content,
+      });
+      return data;
+    }
+  } catch (e) {
+    throw new Error("not update create");
   }
 };

@@ -284,7 +284,7 @@ const MapContainer = () => {
         <Grid
           item
           sm={4}
-          md={4}
+          md={3}
           sx={{
             display: {
               xs: "none",

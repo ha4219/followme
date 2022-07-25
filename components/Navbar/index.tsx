@@ -23,6 +23,7 @@ import { checkToken, setToken } from "@src/API";
 import { toast } from "react-toastify";
 import SearchIcon from "@mui/icons-material/Search";
 import { tagState } from "@store/tag";
+import { getUserProfile } from "api/auth";
 
 interface PageProps {
   label: string;
@@ -47,6 +48,7 @@ const Navbar = () => {
   const [isMain, setIsMain] = useState(true);
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
   const [value, setValue] = useState("");
+
   const onChangeValue = useCallback(
     (e) => {
       setValue(e.target.value);
@@ -71,10 +73,22 @@ const Navbar = () => {
     }
   }, []);
 
+  const checkLogin = async () => {
+    try {
+      await getUserProfile();
+    } catch (e) {
+      setLoggedIn("");
+      setLoggedInId("");
+      toast.error("토큰 만료");
+      router.push("/signin");
+    }
+  };
+
   useEffect(() => {
     if (router.pathname) {
       setIsMain(router.pathname === "/");
     }
+    checkLogin();
   }, [router.pathname]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
