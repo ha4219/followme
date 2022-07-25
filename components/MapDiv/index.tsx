@@ -7,7 +7,7 @@ import {
   mapTitleSummary,
   titleSummary,
 } from "@helpers/programHelper";
-import { Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, TableRow, Typography } from "@mui/material";
 import { curMapState, mapState } from "@store/map";
 import { VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -68,16 +68,17 @@ const MapDiv: VFC<IEnterpriseType> = ({
     setMapLatLonState([Number(latitude), Number(longitude)]);
   };
   return (
-    <Grid item>
+    <Box sx={{ height: "130px", marginBottom: "1rem", width: "100%" }}>
       <Container onClick={onClick}>
         <ImgContainer src={profileImage} alt={name} />
         <DesContainer>
-          <Typography noWrap variant="body1">
-            {name}
+          <Typography variant="body1" sx={{ overflow: "hidden" }}>
+            {mapTitleSummary(name)}
           </Typography>
-          <div className="content">
+          <Typography className="content" variant="body2">
             {mapContentSummary(content ? content : "")}
-          </div>
+          </Typography>
+
           <div className="mapDivTags">
             <TagContainer tags={tags.slice(-3)} />
           </div>
@@ -92,7 +93,7 @@ const MapDiv: VFC<IEnterpriseType> = ({
           </div>
         </DesContainer>
       </Container>
-    </Grid>
+    </Box>
   );
 };
 
@@ -108,7 +109,7 @@ const Container = styled(Button)`
   padding-top: 0;
   padding-bottom: 0;
   align-items: top;
-  margin-bottom: 5px;
+  height: 100%;
 `;
 
 const ImgContainer = styled.img`
@@ -120,17 +121,22 @@ const ImgContainer = styled.img`
 
 const DesContainer = styled.div`
   display: inline-block;
+  width: auto;
+  overflow: hidden;
 
   & .title {
+    display: inline-block;
     font-weight: bold;
     padding-bottom: 7px;
   }
   & .content {
+    font-weight: normal;
     font-size: 0.8rem;
   }
 
   & .mapDivTags {
     height: 3rem;
+    overflow: hidden;
   }
   & .dis {
     color: #00a0e0;

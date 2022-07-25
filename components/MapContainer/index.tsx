@@ -11,7 +11,7 @@ import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
 import MapDialog from "@components/map/MapDialog";
-import { Grid } from "@mui/material";
+import { Grid, Table, TableBody } from "@mui/material";
 
 declare global {
   interface Window {
@@ -126,8 +126,8 @@ const MapContainer = () => {
   }, [curMapLatLonState, limitDis]);
 
   const onNextPage = useCallback(() => {
-    setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
-  }, [page, data.length]);
+    setPage(page + 1 < Math.floor(data.length / perPage) ? page + 1 : page);
+  }, [page, data]);
 
   const onPrevPage = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);
@@ -240,9 +240,13 @@ const MapContainer = () => {
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
 
+  const onClose = useCallback(() => {
+    setShow(false);
+  }, [show]);
+
   return (
     <div>
-      {/* {show && <MapDialog onClose={onClose} show={show} />} */}
+      {show && <MapDialog onClose={onClose} show={show} />}
       <Grid container>
         <Grid
           item
@@ -302,13 +306,13 @@ const MapContainer = () => {
                 </button>
               </div>
             </div>
-            <Grid direction="column" container>
+            <div>
               {data
                 .slice(page * perPage, (page + 1) * perPage)
                 .map((item, index) => (
                   <MapDiv key={index} {...item} />
                 ))}
-            </Grid>
+            </div>
           </BottomDiv>
         </Grid>
       </Grid>
