@@ -45,6 +45,7 @@ const CourseReivseEditor = ({ idx, id }) => {
   const isLoggedInId = useRecoilValue(idState);
   const [date1, setDate1] = useState();
   const [date2, setDate2] = useState();
+  const [detail, setDetail] = useState();
   const onChangeDate1 = (newValue) => {
     setDate1(newValue);
   };
@@ -60,7 +61,7 @@ const CourseReivseEditor = ({ idx, id }) => {
       const data = await getCourseDetailBoard({ id, idx });
       setTitle(data[0].title);
       setValue(data[0].content);
-
+      setDetail(data[0]);
       // setCourse(data[0]);
       // if (data[0].comments) {
       //   setComments(data[0].comments);

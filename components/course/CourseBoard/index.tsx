@@ -48,7 +48,7 @@ const CourseBoard = () => {
   };
 
   const getCurCourses = async (courses) => {
-    const arr = await mergeCourses(courses);
+    const arr = await (await mergeCourses(courses)).reverse();
     setCurCourses(arr);
   };
 
