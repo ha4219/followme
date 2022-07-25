@@ -11,6 +11,7 @@ import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
 import MapDialog from "@components/map/MapDialog";
+import { Grid } from "@mui/material";
 
 declare global {
   interface Window {
@@ -196,6 +197,14 @@ const MapContainer = () => {
         const map = new window.kakao.maps.Map(container, options);
 
         window.kakao.map = map;
+        window.kakao.maps.event.addListener(map, "dragend", () => {
+          if (!map) {
+            return;
+          }
+          const latlng = map.getCenter();
+          setCurPos({ lat: latlng.Ma, lon: latlng.La });
+          setCurMapLatLonState([latlng.Ma, latlng.La]);
+        });
         setMap(map);
         const mms: any[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -231,45 +240,87 @@ const MapContainer = () => {
     return () => mapScript.removeEventListener("load", onLoadKakaoMap);
   };
 
-  const onClose = useCallback(() => {
-    setShow(false);
-  }, [show]);
-
   return (
-    <MainMapContainer>
-      {show && <MapDialog onClose={onClose} show={show} />}
-      <MapContent id="map" />
-      <BottomDiv>
-        <div className="head">
-          <div className="label">장소</div>
-          <div className="bts">
-            <button onClick={onPrevPage}>
-              <KeyboardArrowLeftIcon />
-            </button>
-            <button onClick={onNextPage}>
-              <ChevronRightIcon />
-            </button>
-          </div>
-        </div>
-        {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
-          <MapDiv key={index} {...item} />
-        ))}
-      </BottomDiv>
-    </MainMapContainer>
+    <div>
+      {/* {show && <MapDialog onClose={onClose} show={show} />} */}
+      <Grid container>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={3}
+          sx={{
+            display: {
+              xs: "flex",
+              sm: "flex",
+              md: "none",
+            },
+          }}
+        >
+          <BottomDiv>
+            <div className="head">
+              <div className="label">장소</div>
+              <div className="bts">
+                <button onClick={onPrevPage}>
+                  <KeyboardArrowLeftIcon />
+                </button>
+                <button onClick={onNextPage}>
+                  <ChevronRightIcon />
+                </button>
+              </div>
+            </div>
+            {data
+              .slice(page * perPage, (page + 1) * perPage)
+              .map((item, index) => (
+                <MapDiv key={index} {...item} />
+              ))}
+          </BottomDiv>
+        </Grid>
+        <Grid item xs={12} md={9}>
+          <MapContent id="map" />
+        </Grid>
+        <Grid
+          item
+          md={3}
+          sx={{
+            display: {
+              xs: "none",
+              sm: "none",
+              md: "flex",
+            },
+          }}
+        >
+          <BottomDiv>
+            <div className="head">
+              <div className="label">장소</div>
+              <div className="bts">
+                <button onClick={onPrevPage}>
+                  <KeyboardArrowLeftIcon />
+                </button>
+                <button onClick={onNextPage}>
+                  <ChevronRightIcon />
+                </button>
+              </div>
+            </div>
+            <Grid direction="column" container>
+              {data
+                .slice(page * perPage, (page + 1) * perPage)
+                .map((item, index) => (
+                  <MapDiv key={index} {...item} />
+                ))}
+            </Grid>
+          </BottomDiv>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
-const MainMapContainer = styled.div`
-  display: flex;
-`;
-
 const BottomDiv = styled.div`
-  // display: block;
   height: 500px;
-  width: 500px;
+  width: 100%;
   display: inline-block;
   flex-direction: column;
-  // overflow: hidden;
   font-family: paybooc-Medium;
   padding: 1rem;
   background-color: #edeef8;
@@ -286,7 +337,6 @@ const BottomDiv = styled.div`
 `;
 
 export const MapContent = styled.div`
-  // aspect-ratio: 320 / 220;
   width: 100%;
   height: 500px;
 `;
