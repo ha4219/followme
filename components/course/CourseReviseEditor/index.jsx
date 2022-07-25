@@ -124,6 +124,7 @@ const CourseReivseEditor = ({ idx, id }) => {
       content: value,
       id: isLoggedInId,
       idx: idx,
+      createdAt: detail.createdAt,
     })
       .then((res) => {
         toast.success("등록완료");
