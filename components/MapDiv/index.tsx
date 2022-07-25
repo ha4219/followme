@@ -7,7 +7,7 @@ import {
   mapTitleSummary,
   titleSummary,
 } from "@helpers/programHelper";
-import { Button } from "@mui/material";
+import { Box, Button, Grid, TableRow, Typography } from "@mui/material";
 import { curMapState, mapState } from "@store/map";
 import { VFC } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -68,27 +68,32 @@ const MapDiv: VFC<IEnterpriseType> = ({
     setMapLatLonState([Number(latitude), Number(longitude)]);
   };
   return (
-    <Container onClick={onClick}>
-      <ImgContainer src={profileImage} alt={name} />
-      <DesContainer>
-        <div className="title">{mapTitleSummary(name ? name : "")}</div>
-        <div className="content">
-          {mapContentSummary(content ? content : "")}
-        </div>
-        <div className="mapDivTags">
-          <TagContainer tags={tags.slice(-3)} />
-        </div>
-        <div className="dis">
-          {getDistance(
-            curMapLatLonState[0],
-            curMapLatLonState[1],
-            Number(latitude),
-            Number(longitude)
-          )}
-          m
-        </div>
-      </DesContainer>
-    </Container>
+    <Box sx={{ height: "130px", marginBottom: "1rem", width: "100%" }}>
+      <Container onClick={onClick}>
+        <ImgContainer src={profileImage} alt={name} />
+        <DesContainer>
+          <Typography variant="body1" sx={{ overflow: "hidden" }}>
+            {mapTitleSummary(name)}
+          </Typography>
+          <Typography className="content" variant="body2">
+            {mapContentSummary(content ? content : "")}
+          </Typography>
+
+          <div className="mapDivTags">
+            <TagContainer tags={tags.slice(-3)} />
+          </div>
+          <div className="dis">
+            {getDistance(
+              curMapLatLonState[0],
+              curMapLatLonState[1],
+              Number(latitude),
+              Number(longitude)
+            )}
+            m
+          </div>
+        </DesContainer>
+      </Container>
+    </Box>
   );
 };
 
@@ -97,13 +102,15 @@ const Container = styled(Button)`
   display: flex;
   padding: 1rem;
   border-radius: 10px;
+  width: 100%;
+  justify-content: left;
   box-shadow: 0 0 6px 0 rgba(5, 16, 106, 0.12);
   text-align: left;
   padding-top: 0;
   padding-bottom: 0;
   align-items: top;
-
-  margin-bottom: 5px;
+  height: 100%;
+  overflow: hidden;
 `;
 
 const ImgContainer = styled.img`
@@ -115,18 +122,22 @@ const ImgContainer = styled.img`
 
 const DesContainer = styled.div`
   display: inline-block;
-  width: 230px;
+  width: auto;
+  overflow: hidden;
 
   & .title {
+    display: inline-block;
     font-weight: bold;
     padding-bottom: 7px;
   }
   & .content {
+    font-weight: normal;
     font-size: 0.8rem;
   }
 
   & .mapDivTags {
-    height: 3rem;
+    height: 1rem;
+    overflow: hidden;
   }
   & .dis {
     color: #00a0e0;

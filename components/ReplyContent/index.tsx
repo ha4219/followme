@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { dateHelper } from "@helpers/programHelper";
 import useInput from "@hooks/useInput";
-import { Avatar, Button, TextField } from "@mui/material";
+import { Avatar, Button, TextField, Box } from "@mui/material";
 import { IComment } from "types/apiType";
 import { useState, useCallback, useEffect } from "react";
 import { useRecoilValue } from "recoil";
@@ -14,6 +14,7 @@ import {
   reportCourseCommentBoard,
   reportRecommendCommentBoard,
   reportComment,
+  updateBoardComment,
 } from "api/board";
 import { toast } from "react-toastify";
 import { delComment } from "api/admin";
@@ -40,6 +41,11 @@ const ReplyChildContent = ({
   type,
   update,
 }: IProps) => {
+  const [value, setValue, onChangeValue] = useInput("");
+  // const [open, setOpen] = useState(false);
+  // const [childrenState, setChildrenState] = useState<IComment[]>([]);
+  const [isRevise, setIsRevise] = useState(false);
+
   const onClickReport = async () => {
     const check = confirm(
       // "신고하기",
@@ -58,6 +64,24 @@ const ReplyChildContent = ({
       }
     } catch (e) {
       console.log("report error", e);
+    }
+  };
+
+  const onClickRevise = async () => {
+    try {
+      const data = await updateBoardComment({
+        id: id,
+        type: type,
+        idx: boardIdx,
+        commentIdx: idx,
+        content: value,
+        parentIdx: fk_user_comments_id,
+      });
+      if (data.data === "success") {
+        toast.success("수정완료");
+      }
+    } catch (e) {
+      console.log("revise error", e);
     }
   };
 
@@ -110,7 +134,7 @@ const ReplyChildContent = ({
                 <>
                   <div
                     className="replyContentContainerReport"
-                    onClick={onClickDel}
+                    onClick={() => setIsRevise((prev) => !prev)}
                   >
                     수정하기
                   </div>
@@ -126,7 +150,29 @@ const ReplyChildContent = ({
           )}
         </div>
       </div>
-      <div className="replyContentContainerContent">{content}</div>
+      <>
+        {isRevise ? (
+          <form className="write" onSubmit={onClickRevise}>
+            <TextField
+              id="replyField"
+              value={value}
+              onChange={onChangeValue}
+              fullWidth
+              multiline
+            />
+            <Button
+              disabled={!id || !value}
+              type="submit"
+              className="btn"
+              variant="contained"
+            >
+              수정
+            </Button>
+          </form>
+        ) : (
+          <div className="replyContentContainerContent">{content}</div>
+        )}
+      </>
     </ReplyContentContainer>
   );
 };
@@ -145,6 +191,7 @@ const ReplyContent = ({
   const [open, setOpen] = useState(false);
   const [childrenState, setChildrenState] = useState<IComment[]>([]);
   const id = useRecoilValue(idState);
+  const [isRevise, setIsRevise] = useState(false);
 
   useEffect(() => {
     setChildrenState(childrenReply);
@@ -210,43 +257,20 @@ const ReplyContent = ({
   };
 
   const onClickRevise = async () => {
-    const check = confirm(
-      // "신고하기",
-      `${fk_user_comments_id}님을 신고하시겠습니까?`
-    );
     try {
-      if (check) {
-        if (type === 0) {
-          const data = await reportRecommendCommentBoard({
-            // id: id,
-            idx: boardIdx,
-            commentIdx: idx,
-          });
-          if (data.data === "success") {
-            toast.success("신고완료");
-          }
-        } else if (type === 1) {
-          const data = await reportThemeCommentBoard({
-            // id: id,
-            idx: boardIdx,
-            commentIdx: idx,
-          });
-          if (data.data === "success") {
-            toast.success("신고완료");
-          }
-        } else if (type === 2) {
-          const data = await reportCourseCommentBoard({
-            // id: id,
-            idx: boardIdx,
-            commentIdx: idx,
-          });
-          if (data.data === "success") {
-            toast.success("신고완료");
-          }
-        }
+      const data = await updateBoardComment({
+        id: id,
+        type: type,
+        idx: boardIdx,
+        commentIdx: idx,
+        content: value,
+        parentIdx: undefined,
+      });
+      if (data.data === "success") {
+        toast.success("수정완료");
       }
     } catch (e) {
-      console.log("report error", e);
+      console.log("revise error", e);
     }
   };
 
@@ -340,7 +364,29 @@ const ReplyContent = ({
       />
       <div className="content">
         <div className="replyId">{fk_user_comments_id}</div>
-        <div className="replyContent">{content}</div>
+        <>
+          {isRevise ? (
+            <form className="write" onSubmit={onClickRevise}>
+              <TextField
+                id="replyField"
+                value={value}
+                onChange={onChangeValue}
+                fullWidth
+                multiline
+              />
+              <Button
+                disabled={!id || !value}
+                type="submit"
+                className="btn"
+                variant="contained"
+              >
+                수정
+              </Button>
+            </form>
+          ) : (
+            <div className="replyContent">{content}</div>
+          )}
+        </>
         <div className="replyContentFlex">
           <div className="replyDate">{dateHelper(createdAt)}</div>
 
@@ -357,7 +403,10 @@ const ReplyContent = ({
               </div>
               {id === fk_user_comments_id && (
                 <>
-                  <div className="report" onClick={onClickRevise}>
+                  <div
+                    className={isRevise ? "report recommentActive" : "report"}
+                    onClick={() => setIsRevise((prev) => !prev)}
+                  >
                     수정하기
                   </div>
                   <div className="report" onClick={onClickDel}>

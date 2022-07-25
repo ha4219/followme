@@ -6,6 +6,11 @@ import {
   TableHead,
   TableRow,
   Checkbox,
+  Box,
+  Pagination,
+  TextField,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
@@ -16,6 +21,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { IUserDataType } from "types/apiType";
 import { toast } from "react-toastify";
 import { showConfirm } from "@helpers/messageHelper";
+import useInput from "@hooks/useInput";
+import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 type IAdminEnterChoieType = IUserDataType;
 
@@ -61,20 +69,41 @@ const AdminUserItem = ({
     </TableRow>
   );
 };
+const PERPAGE = 10;
 
 const UserManipluateList = () => {
   const id = useRecoilValue(idState);
   const checkList = useRecoilValue(checkedList);
+  const [value, setValue, onChangeValue] = useInput("");
   const [data, setData] = useState<IUserDataType[]>([]);
+  const [allData, setAllData] = useState<IUserDataType[]>([]);
+
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(1);
 
   const getEnterList = async () => {
     try {
       const res = await getAllCustomer({ id: id });
       setData(res);
+      setAllData(res);
     } catch (e) {
       console.log(e);
     }
   };
+
+  const onRefreshValue = (e) => {
+    e.preventDefault();
+    setData(allData);
+  };
+  const onSubmitValue = (e) => {
+    e.preventDefault();
+    setData(allData.filter((item) => item.id.search(value) !== -1));
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage - 1);
+  };
+
   useEffect(() => {
     getEnterList();
   }, []);
@@ -85,9 +114,30 @@ const UserManipluateList = () => {
 
   return (
     <MainContainer>
-      <div className="adminEnbaleEditorChoicesContainerLabel">
-        미승인 기업 아이디
-      </div>
+      <AdminEnableEditorChoicesFilterContainer>
+        <div className="adminEnbaleEditorChoicesContainerLabel">
+          모든 유저 정보
+        </div>
+        <div className="adminEnbaleEditorChoicesContainerFilter">
+          <TextField
+            label="filter"
+            value={value}
+            onChange={onChangeValue}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={onRefreshValue}>
+                    <RefreshIcon />
+                  </IconButton>
+                  <IconButton onClick={onSubmitValue}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+      </AdminEnableEditorChoicesFilterContainer>
       <Table>
         <TableHead>
           <TableRow>
@@ -105,6 +155,14 @@ const UserManipluateList = () => {
           ))} */}
         </TableBody>
       </Table>
+      <Box>
+        <Pagination
+          className="pagination"
+          count={size}
+          page={page + 1}
+          onChange={handleChangePage}
+        />
+      </Box>
     </MainContainer>
   );
 };
@@ -124,6 +182,19 @@ const MainContainer = styled.div`
     width: 100px;
     height: 100px;
   }
+
+  & .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+`;
+
+const AdminEnableEditorChoicesFilterContainer = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 1rem 0;
 `;
 
 export default UserManipluateList;

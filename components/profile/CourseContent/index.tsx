@@ -54,8 +54,6 @@ const CourseContent: VFC<IProp> = ({ course, likeCh }) => {
     [like]
   );
 
-  console.log(course);
-
   return (
     <Grid item xs={4} md={4} lg={4}>
       <Link
@@ -64,42 +62,40 @@ const CourseContent: VFC<IProp> = ({ course, likeCh }) => {
       >
         <MainContainer>
           <PhotoContainer src={`${toBase64(course.mainImg)}`}>
-            {likeCh && (
-              <div className="topContainer">
-                <span className="editorProgramPhotoBest">
-                  {course.type ? "테마" : "추천"}
-                </span>
+            <div className="topContainer">
+              <span className="editorProgramPhotoBest">
+                {course.type ? "테마" : "추천"}
+              </span>
 
-                <IconButton
-                  onClick={onClickLike}
-                  sx={{ padding: 0, marginRight: 2, display: "flex" }}
-                >
-                  <div className="haertContainer">
-                    {like ? (
-                      <FavoriteIcon
-                        className="fillHeart"
-                        sx={{
-                          width: 28,
-                          height: 28,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    ) : (
-                      <FavoriteBorderIcon
-                        className="heart"
-                        sx={{
-                          width: 28,
-                          height: 28,
-                          alignItems: "center",
-                          verticalAlign: "center",
-                        }}
-                      />
-                    )}
-                  </div>
-                </IconButton>
-              </div>
-            )}
+              <IconButton
+                onClick={onClickLike}
+                sx={{ padding: 0, marginRight: 2, display: "flex" }}
+              >
+                <div className="haertContainer">
+                  {like ? (
+                    <FavoriteIcon
+                      className="fillHeart"
+                      sx={{
+                        width: 28,
+                        height: 28,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      className="heart"
+                      sx={{
+                        width: 28,
+                        height: 28,
+                        alignItems: "center",
+                        verticalAlign: "center",
+                      }}
+                    />
+                  )}
+                </div>
+              </IconButton>
+            </div>
           </PhotoContainer>
           <div className="courseContent">
             <div className="courseTitle">{titleSummary(course.title)}</div>
@@ -143,6 +139,7 @@ const MainContainer = styled(Box)`
 const PhotoContainer = styled.div<PhotoProps>`
   height: 30vh;
   background: url(${(props) => props.src}) no-repeat;
+  background-position: center;
   border-radius: 12px;
   background-size: cover;
 

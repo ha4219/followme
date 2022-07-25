@@ -6,11 +6,14 @@ import { useRecoilState } from "recoil";
 
 export const getUserProfile = async () => {
   const { memberId } = getPayload();
-
-  const res = await API.post(`/user/profile`, {
-    id: memberId,
-  });
-  return res;
+  try {
+    const res = await API.post(`/user/profile`, {
+      id: memberId,
+    });
+    return res;
+  } catch (e) {
+    throw new Error("check jwt");
+  }
 };
 
 export const getUserProfileById = async ({ id }) => {

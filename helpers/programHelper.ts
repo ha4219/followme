@@ -1,14 +1,14 @@
 const TITLELENGTH = 10;
-const CONTENTLENGTH = 20;
+const CONTENTLENGTH = 15;
 const TABLETITLELENGTH = 80;
 const MAPTITLELENGTH = 30;
-const MAPCONTENTLENGTH = 50;
+const MAPCONTENTLENGTH = 15;
 
 export const titleSummary = (title: string): string =>
   title.length >= TITLELENGTH ? title.slice(0, TITLELENGTH) + "..." : title;
 
 export const contentSummary = (text: string): string =>
-  text.length >= TITLELENGTH ? text.slice(0, CONTENTLENGTH) + "..." : text;
+  text.length >= CONTENTLENGTH ? text.slice(0, CONTENTLENGTH) + "..." : text;
 
 export const tableTitleSummary = (text: string): string =>
   text.length >= TABLETITLELENGTH

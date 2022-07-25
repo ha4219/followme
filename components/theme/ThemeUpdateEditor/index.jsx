@@ -26,8 +26,7 @@ import { mapSelectedState } from "@store/map";
 import CustomEditorTag from "@components/CustomEditorTag";
 import QuillCSR, { Quill } from "react-quill";
 import {
-  insertThemeBoard,
-  insertRecommendBoard,
+  updateTypeBoard,
   getThemeDetailBoard,
   getRecommendDetailBoard,
 } from "api/board";
@@ -168,6 +167,7 @@ const ThemeCustomEditor = () => {
   const [index, setIndex] = useState(0);
   const isLoggedInId = useRecoilValue(idState);
   const mapSelectState = useRecoilValue(mapSelectedState);
+  const [detail, setData] = useState();
 
   const getDetail = async () => {
     try {
@@ -180,6 +180,7 @@ const ThemeCustomEditor = () => {
         const tmp1 = tmp0[1].split("일");
         setDate1(parseInt(tmp0[0]));
         setDate2(parseInt(tmp1[0]));
+        setData(res[0]);
       } else {
         setChecked([1, 0]);
         const res = await getRecommendDetailBoard({ id, idx });
@@ -189,6 +190,7 @@ const ThemeCustomEditor = () => {
         const tmp1 = tmp0[1].split("일");
         setDate1(parseInt(tmp0[0]));
         setDate2(parseInt(tmp1[0]));
+        setData(res[0]);
       }
     } catch (e) {}
   };
@@ -319,7 +321,7 @@ const ThemeCustomEditor = () => {
     }
     try {
       if (checked[1]) {
-        const data = await insertThemeBoard({
+        const data = await updateTypeBoard({
           title: title,
           tags: tags,
           shortContent: shortContent,
@@ -330,6 +332,9 @@ const ThemeCustomEditor = () => {
           region: region2,
           season: season,
           id: isLoggedInId,
+          idx: idx,
+          type: type,
+          createdAt: detail.createdAt,
         });
         if (data.data) {
           toast.success("등록완료");
@@ -339,7 +344,7 @@ const ThemeCustomEditor = () => {
           console.log(err);
         }
       } else {
-        const data = await insertRecommendBoard({
+        const data = await updateTypeBoard({
           title: title,
           tags: tags,
           shortContent: shortContent,
@@ -350,6 +355,9 @@ const ThemeCustomEditor = () => {
           region: region2,
           season: season,
           id: isLoggedInId,
+          idx: idx,
+          type: type,
+          createdAt: detail.createdAt,
         });
         if (data.data) {
           toast.success("등록완료");

@@ -14,7 +14,7 @@ const MainEditorContent: VFC<ICourse> = ({
   region,
 }) => {
   return (
-    <Grid item xs={12} sm={12} md={4}>
+    <Grid item xs={6} sm={6} md={4}>
       <WrapperContainer src={`${toBase64(mainImg)}`}>
         <MainContainer>
           <div className="tag">

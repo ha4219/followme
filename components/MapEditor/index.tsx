@@ -38,7 +38,7 @@ const MapEditor = () => {
   // const [marker, setMarker] = useState();
   const [map, setMap] = useState();
   const [mapLatLonState, setMapLatLonState] = useRecoilState(mapState);
-  const errorMessage = (err) => {
+  const errorMessage = async (err) => {
     switch (err.code) {
       case err.PERMISSION_DENIED:
         toast.error("Geolocation API 사용을 허용해주세요");
@@ -53,6 +53,10 @@ const MapEditor = () => {
         toast.error("알 수 없는 오류입니다.");
         break;
     }
+    kakaoMapInit({
+      lat: curPos.lat,
+      lon: curPos.lon,
+    });
   };
 
   const kakaoMapInit = async ({ lat, lon }) => {
