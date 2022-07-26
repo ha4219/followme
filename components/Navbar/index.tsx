@@ -75,7 +75,9 @@ const Navbar = () => {
 
   const checkLogin = async () => {
     try {
-      await getUserProfile();
+      if (loggedInId.length) {
+        await getUserProfile();
+      }
     } catch (e) {
       setLoggedIn("");
       setLoggedInId("");
