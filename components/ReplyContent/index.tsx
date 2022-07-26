@@ -29,7 +29,7 @@ interface IProps {
   childrenReply: IComment[];
   type: number;
   update: any;
-  parentIdx?: number;
+  parentIdx?: number | string;
 }
 
 const ReplyChildContent = ({
