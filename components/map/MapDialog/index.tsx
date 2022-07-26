@@ -63,7 +63,7 @@ const MapDialog = ({ onClose, show }: IProps) => {
   const getEnterReview = async () => {
     try {
       const data = await getEnterpriseReview({ idx: enterPick[1] });
-      setReview(data);
+      setReview(data.users);
     } catch (e) {
       console.log("enter detail error ", e);
     }

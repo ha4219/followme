@@ -14,7 +14,7 @@ import { isNecessaryRequest } from "@store/util";
 
 const MapDialogReviewItem = ({
   idx,
-  user,
+  score,
   writer,
   content,
   enterId,
@@ -63,7 +63,7 @@ const MapDialogReviewItem = ({
           </div>
           <div className="mapDialogReviewItemContentWrapper">
             <div className="mapDialogReviewItemContentStar">
-              <MapDialogStars score={user.score} />
+              <MapDialogStars score={score} />
             </div>
             <div
               className="mapDialogReviewItemContent"

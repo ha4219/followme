@@ -133,9 +133,7 @@ export interface IEnterpriseReviewType {
   enterId: string;
   writer: string;
   content: string;
-  user: {
-    score: number;
-  };
+  score: number;
 }
 
 export interface IUserDataType {
