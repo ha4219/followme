@@ -50,7 +50,7 @@ const ThemeProgram: VFC<ICourse> = ({
       <div className="editorProgramPhotoWrapper">
         <img
           className="editorProgramPhoto"
-          src={`${toBase64(mainImg.data)}`}
+          src={`${toBase64(mainImg)}`}
           alt={title}
         />
       </div>
