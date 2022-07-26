@@ -15,7 +15,7 @@ const MainEditorPickContainer = () => {
   const theme = useTheme();
   const [page, setPage] = useState(0);
   const [mdPerPageSize, setPaerPageSize] = useState(3);
-  const [smPerPageSize, setPerPageSize] = useState(1);
+  const [smPerPageSize, setPerPageSize] = useState(2);
   const loggedInId = useRecoilValue(idState);
   // const [width, setWidth] = useRecoilState(windowState);
 
@@ -40,50 +40,52 @@ const MainEditorPickContainer = () => {
   return (
     <MainContainer container>
       <Container sx={{ display: "flex" }}>
-        <HeadContainer item sm={6} md={3}>
-          <TitleContainer>
-            <div className="sub">{"Editor's Pick"}</div>
-            <div className="main">추천 여행지</div>
-            <div className="content">간단한 설명이 들어갈 자리입니다.</div>
-          </TitleContainer>
-          <BtnContainer>
-            <CustomButton onClick={onLeftClick}>{"<"}</CustomButton>
-            <CustomButton sx={{ borderLeft: "" }} onClick={onRightClick}>
-              {">"}
-            </CustomButton>
-          </BtnContainer>
-        </HeadContainer>
-        <BodyContainer item sm={6} md={9}>
-          {/* <Grid container spacing={1}>
+        <Grid container>
+          <HeadContainer item xs={12} sm={6} md={3}>
+            <TitleContainer>
+              <div className="sub">{"Editor's Pick"}</div>
+              <div className="main">추천 여행지</div>
+              <div className="content">간단한 설명이 들어갈 자리입니다.</div>
+            </TitleContainer>
+            <BtnContainer>
+              <CustomButton onClick={onLeftClick}>{"<"}</CustomButton>
+              <CustomButton sx={{ borderLeft: "" }} onClick={onRightClick}>
+                {">"}
+              </CustomButton>
+            </BtnContainer>
+          </HeadContainer>
+          <BodyContainer item xs={12} sm={6} md={9}>
+            {/* <Grid container spacing={1}>
             {picks
               .slice(page * perPageSize, (page + 1) * perPageSize)
               .map((item) => (
                 <MainEditorContent key={item.idx} {...item} />
               ))}
           </Grid> */}
-          <Grid
-            container
-            spacing={1}
-            sx={{ display: { sm: "none", md: "flex" } }}
-          >
-            {picks
-              .slice(page * mdPerPageSize, (page + 1) * mdPerPageSize)
-              .map((item) => (
-                <MainEditorContent key={item.idx} {...item} />
-              ))}
-          </Grid>
-          <Grid
-            container
-            spacing={1}
-            sx={{ display: { sm: "flex", md: "none" } }}
-          >
-            {picks
-              .slice(page * smPerPageSize, (page + 1) * smPerPageSize)
-              .map((item) => (
-                <MainEditorContent key={item.idx} {...item} />
-              ))}
-          </Grid>
-        </BodyContainer>
+            <Grid
+              container
+              spacing={1}
+              sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
+            >
+              {picks
+                .slice(page * mdPerPageSize, (page + 1) * mdPerPageSize)
+                .map((item) => (
+                  <MainEditorContent key={item.idx} {...item} />
+                ))}
+            </Grid>
+            <Grid
+              container
+              spacing={1}
+              sx={{ display: { xs: "flex", sm: "flex", md: "none" } }}
+            >
+              {picks
+                .slice(page * smPerPageSize, (page + 1) * smPerPageSize)
+                .map((item) => (
+                  <MainEditorContent key={item.idx} {...item} />
+                ))}
+            </Grid>
+          </BodyContainer>
+        </Grid>
       </Container>
     </MainContainer>
   );
@@ -137,6 +139,7 @@ const CustomButton = styled(Button)`
   font-weight: bold;
   font-family: paybooc-ExtraBold;
   padding: 0.8rem 0;
+  height: 50px;
 `;
 
 export default MainEditorPickContainer;

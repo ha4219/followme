@@ -15,6 +15,22 @@ export const addBanner = async ({ imgURL, urlTo, endDate, id }) => {
   return;
 };
 
+export const reviseBanner = async ({ imgURL, urlTo, endDate, id, idx }) => {
+  try {
+    const { data } = await API.put("/main/swiper", {
+      imgURL: imgURL,
+      urlTo: urlTo,
+      endDate: endDate,
+      id: id,
+      idx: idx,
+    });
+    return data;
+  } catch (e) {
+    console.log("revise baner ", e);
+  }
+  return;
+};
+
 export const delBanner = async ({ idx }) => {
   try {
     const { data } = await API.post(`/main/deleteSwipers/${idx}`);
@@ -208,5 +224,25 @@ export const setAllEnterWaitList = async ({ id, enterprises }) => {
     return data;
   } catch (e) {
     console.log("setAllEnterWaitList", e);
+  }
+};
+
+export const getAllCustomer = async ({ id }) => {
+  try {
+    const { data } = await API.post(`/user/customers`, {
+      id: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("getCustomerAdmin", e);
+  }
+};
+
+export const delCustomer = async ({ id, userId }) => {
+  try {
+    const { data } = await API.delete(`/user/${userId}`);
+    return data;
+  } catch (e) {
+    console.log("delCustomerAdmin", e);
   }
 };

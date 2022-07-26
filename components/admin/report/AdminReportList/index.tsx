@@ -14,10 +14,12 @@ import { useRecoilValue } from "recoil";
 import { IReportCommentType } from "types/apiType";
 import { dateHelper } from "@helpers/programHelper";
 import { delComment } from "api/admin";
+import Link from "next/link";
 
 const AdminReportItem = ({
   idx,
   fk_user_comments_id,
+  fk_board_idx,
   content,
   reported,
   updatedAt,
@@ -43,7 +45,11 @@ const AdminReportItem = ({
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
       <TableCell>{fk_user_comments_id}</TableCell>
-      <TableCell>{content}</TableCell>
+      <TableCell>
+        <Link href={`/${type ? "theme" : "recommend"}/${fk_board_idx}`}>
+          {content}
+        </Link>
+      </TableCell>
       <TableCell>{reported}</TableCell>
       <TableCell>{dateHelper(updatedAt)}</TableCell>
       <TableCell>

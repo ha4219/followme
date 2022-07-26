@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { showConfirm } from "@helpers/messageHelper";
 import { dateHelper } from "@helpers/programHelper";
 import {
   Button,
@@ -46,7 +47,9 @@ const AdminNoticeItem: VFC<INoticeType> = ({
     <TableRow sx={{ display: show ? "table-row" : "none" }}>
       <TableCell>{idx}</TableCell>
       <TableCell>{title}</TableCell>
-      <TableCell>{content}</TableCell>
+      <TableCell>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </TableCell>
       <TableCell>{views}</TableCell>
       <TableCell>{dateHelper(createdAt)}</TableCell>
       <TableCell>
@@ -60,7 +63,11 @@ const AdminNoticeItem: VFC<INoticeType> = ({
         </Link>
       </TableCell>
       <TableCell>
-        <Button onClick={onClickDel} variant="contained" color="error">
+        <Button
+          onClick={() => showConfirm(onClickDel)}
+          variant="contained"
+          color="error"
+        >
           삭제
         </Button>
       </TableCell>

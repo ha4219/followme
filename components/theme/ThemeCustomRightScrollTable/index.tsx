@@ -75,7 +75,11 @@ const ThemeCustomRightScrollTable = () => {
     <TableContainer sx={{ maxHeight: 440 }}>
       <ThemeCustomRightScrollTableFilterBar>
         <span>지역 </span>
-        <Select value={searchRegion} onChange={onChangeSearchRegion}>
+        <Select
+          value={searchRegion}
+          label={null}
+          onChange={onChangeSearchRegion}
+        >
           {DOMESTIC.map((item, index) => (
             <MenuItem key={index} value={item.value}>
               {item.name}
@@ -92,11 +96,12 @@ const ThemeCustomRightScrollTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data
-            .filter((item) => item.address.startsWith(searchRegion))
-            .map((item, index) => (
-              <ThemeCustomRightScrollTableItem key={index} {...item} />
-            ))}
+          {data &&
+            data
+              .filter((item) => item.address?.startsWith(searchRegion))
+              .map((item, index) => (
+                <ThemeCustomRightScrollTableItem key={index} {...item} />
+              ))}
         </TableBody>
       </ThemeCustomRightScrollTableContainer>
     </TableContainer>

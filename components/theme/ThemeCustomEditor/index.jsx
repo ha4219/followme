@@ -1,4 +1,4 @@
-import MapEditor from "@components/MapEditor";
+import MapEditor from "@components/MapEditorWrapper";
 import styled from "@emotion/styled";
 import {
   Button,
@@ -8,6 +8,7 @@ import {
   Select,
   TextField,
   Checkbox,
+  Grid,
 } from "@mui/material";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
@@ -431,76 +432,78 @@ const ThemeCustomEditor = () => {
         </ThemeCustomEditorDialog>
       </Dialog>
       <OptionContainer>
-        <div className="checkContainer">
-          <div className="checkbox">
-            <Checkbox checked={checked[0]} onChange={handleChange1} />
-            <span>추천코스</span>
+        <Grid container>
+          <div className="checkContainer">
+            <div className="checkbox">
+              <Checkbox checked={checked[0]} onChange={handleChange1} />
+              <span>추천코스</span>
+            </div>
+            <div className="checkbox">
+              <Checkbox checked={checked[1]} onChange={handleChange2} />
+              <span>테마여행</span>
+            </div>
           </div>
-          <div className="checkbox">
-            <Checkbox checked={checked[1]} onChange={handleChange2} />
-            <span>테마여행</span>
-          </div>
-        </div>
-        <div className="season">
-          <p className="label">계절</p>
-          <Select value={season} onChange={onChangeSeason} label="선택">
-            {SEASON.map((item, index) => (
-              <MenuItem key={index} value={item.value}>
-                {item.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-        <div className="region">
-          <p className="label">지역</p>
-          <Select value={region1} onChange={onChangeRegion1} label="선택">
-            <MenuItem value={1}>국내</MenuItem>
-            <MenuItem value={0}>해외</MenuItem>
-          </Select>
-          {region1 ? (
-            <Select value={region2} onChange={onChangeRegion2}>
-              {DOMESTIC.map((item, index) => (
+          <div className="season">
+            <p className="label">계절</p>
+            <Select value={season} onChange={onChangeSeason} label="선택">
+              {SEASON.map((item, index) => (
                 <MenuItem key={index} value={item.value}>
                   {item.name}
                 </MenuItem>
               ))}
             </Select>
-          ) : (
-            <Select value={region2} onChange={onChangeRegion2}>
-              {OVERSEAS.map((item, index) => (
-                <MenuItem key={index} value={item.value}>
-                  {item.name}
-                </MenuItem>
-              ))}
+          </div>
+          <div className="region">
+            <p className="label">지역</p>
+            <Select value={region1} onChange={onChangeRegion1} label="선택">
+              <MenuItem value={1}>국내</MenuItem>
+              <MenuItem value={0}>해외</MenuItem>
             </Select>
-          )}
-        </div>
-        <div className="date">
-          <p className="label">일정</p>
-          <Select value={date1} onChange={onChangeDate1}>
-            <MenuItem value={0}>0박</MenuItem>
-            <MenuItem value={1}>1박</MenuItem>
-            <MenuItem value={2}>2박</MenuItem>
-            <MenuItem value={3}>3박</MenuItem>
-            <MenuItem value={4}>4박</MenuItem>
-            <MenuItem value={5}>5박</MenuItem>
-            <MenuItem value={6}>6박</MenuItem>
-            <MenuItem value={7}>7박</MenuItem>
-            <MenuItem value={8}>8박</MenuItem>
-            <MenuItem value={9}>9박+</MenuItem>
-          </Select>
-          <Select value={date2} onChange={onChangeDate2}>
-            <MenuItem value={1}>1일</MenuItem>
-            <MenuItem value={2}>2일</MenuItem>
-            <MenuItem value={3}>3일</MenuItem>
-            <MenuItem value={4}>4일</MenuItem>
-            <MenuItem value={5}>5일</MenuItem>
-            <MenuItem value={6}>6일</MenuItem>
-            <MenuItem value={7}>7일</MenuItem>
-            <MenuItem value={8}>8일</MenuItem>
-            <MenuItem value={9}>9일+</MenuItem>
-          </Select>
-        </div>
+            {region1 ? (
+              <Select value={region2} onChange={onChangeRegion2}>
+                {DOMESTIC.map((item, index) => (
+                  <MenuItem key={index} value={item.value}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            ) : (
+              <Select value={region2} onChange={onChangeRegion2}>
+                {OVERSEAS.map((item, index) => (
+                  <MenuItem key={index} value={item.value}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          </div>
+          <div className="date">
+            <p className="label">일정</p>
+            <Select value={date1} onChange={onChangeDate1}>
+              <MenuItem value={0}>0박</MenuItem>
+              <MenuItem value={1}>1박</MenuItem>
+              <MenuItem value={2}>2박</MenuItem>
+              <MenuItem value={3}>3박</MenuItem>
+              <MenuItem value={4}>4박</MenuItem>
+              <MenuItem value={5}>5박</MenuItem>
+              <MenuItem value={6}>6박</MenuItem>
+              <MenuItem value={7}>7박</MenuItem>
+              <MenuItem value={8}>8박</MenuItem>
+              <MenuItem value={9}>9박+</MenuItem>
+            </Select>
+            <Select value={date2} onChange={onChangeDate2}>
+              <MenuItem value={1}>1일</MenuItem>
+              <MenuItem value={2}>2일</MenuItem>
+              <MenuItem value={3}>3일</MenuItem>
+              <MenuItem value={4}>4일</MenuItem>
+              <MenuItem value={5}>5일</MenuItem>
+              <MenuItem value={6}>6일</MenuItem>
+              <MenuItem value={7}>7일</MenuItem>
+              <MenuItem value={8}>8일</MenuItem>
+              <MenuItem value={9}>9일+</MenuItem>
+            </Select>
+          </div>
+        </Grid>
       </OptionContainer>
       <TextField
         fullWidth

@@ -2,6 +2,7 @@ import { Box, Container } from "@mui/material";
 import HelpLeftLayout from "@components/help/HelpLeftLayout";
 import styled from "@emotion/styled";
 import Image from "next/image";
+import HelpMapWrapper from "@components/help/HelpMapWrapper";
 
 const HelpIntroduce = () => {
   return (
@@ -26,85 +27,41 @@ const HelpIntroduce = () => {
       <HelpLeftLayout>
         <MainBContainer className="content">
           <div className="content_head">
-            <h2 className="page_title">네이버 예시 소개</h2>
+            <h2 className="page_title">FOLLOW ME</h2>
             <p className="page_info">
-              네이버는 미래 기술을 누구나 손쉽게 사용할 수 있도록
-              기술플랫폼으로서의 변화를 추구하며,
-              <br />
-              수많은 개인과 다양한 파트너들이 성공이라는 꽃을 피울 수 있도록
-              경쟁력을 키우며 다가올 미래를 준비하겠습니다.
+              주식회사 팔로미는 국내 및 해외등의 여행정보를 제공하는 플랫폼
+              기업입니다. 여행에 대한 전문적 지식 및 경험을 바탕으로 알찬 정보를
+              제공하여 유라이프에서 제공하는 모든 서비스를 통해 고객분들의 많은
+              지식과 행복한 여행이 될 수 있도록 최대한 보답하고자 노력하고
+              있습니다.
             </p>
-          </div>
-          <div className="spot summary">
-            <img src="/back.jpeg" alt="네이버 소개 이미지" />
           </div>
           <div className="content_container">
             <div className="content_box">
               <dl>
-                <dt className="content_box_left">NAVER</dt>
+                <dt className="content_box_left">서비스</dt>
                 <dd className="content_box_right">
                   <p className="content_box_text">
-                    네이버(주)는 글로벌 ICT 기업으로서 한국 최대 검색포털
-                    네이버를 서비스하고 있고, 그 계열사에서 모바일 메신저 라인,
-                    동영상 카메라 스노우, 디지털 만화 서비스 네이버웹툰,
-                    메타버스 서비스 제페토 등을 서비스하고 있습니다. 또한,
-                    네이버(주)는 인공지능, 로보틱스, 모빌리티 등 미래 기술에
-                    대한 지속적인 연구개발을 통해 기술 플랫폼의 변화와 혁신을
-                    추구하며 세계 각국의 수많은 이용자와 다양한 파트너들이 함께
-                    성장할 수 있도록 노력하고 있습니다.
+                    여행에 대한 일정 문의 부터 숙소, 맛집 등의 여행에 필수적인
+                    정보를 제공하고 서로 여행경로를 공유함으로 여행, 관광에 대한
+                    건전하고 알찬 정보제공 및 공유의 장을 만들고자 합니다.
                   </p>
-                </dd>
-              </dl>
-            </div>
-            <div className="content_box">
-              <dl>
-                <dt className="content_box_left">
-                  COMPANY
-                  <br />
-                  PROFILE
-                </dt>
-                <dd className="content_box_right">
-                  <table className="table">
-                    <caption>COMPANY PROFILE 설명</caption>
-                    <tbody>
-                      <tr>
-                        <th scope="row">설립연도</th>
-                        <td>1999년 6월</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">본사 위치</th>
-                        <td>경기도 성남시 분당구</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">주요서비스</th>
-                        <td>온라인 검색포털, 모바일 메신저 플랫폼</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">주요사업</th>
-                        <td>온라인 광고 및 콘텐츠 사업</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">해외 계열 법인</th>
-                        <td>
-                          일본, 미국, 프랑스, 중국, 베트남, 대만, 태국,
-                          인도네시아 외
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">매출액</th>
-                        <td>5조 304억 원 (2020년)</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">전체인력</th>
-                        <td>4,103명 (본사 기준, 2020년 기준)</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <p className="content_box_text">
+                    1. 유라이프의 전문 에디터들이 국내 및 해외에 대한 여행정보
+                    제공
+                  </p>
+                  <p className="content_box_text">
+                    2. 고객들간 여행 정보 공유 및 SNS기반의 서비스 편의 제공
+                  </p>
+                  <p className="content_box_text">
+                    3. 고객 및 유라이프등 고객이 원하는 여행경로 설계 및 공유
+                  </p>
                 </dd>
               </dl>
             </div>
           </div>
         </MainBContainer>
+        <HelpMapWrapper />
       </HelpLeftLayout>
     </MainContainer>
   );

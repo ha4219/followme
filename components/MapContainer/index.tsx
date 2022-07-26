@@ -1,25 +1,17 @@
 import styled from "@emotion/styled";
 import React, { useCallback, useEffect, useState } from "react";
 import MapDiv from "@components/MapDiv";
-import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
-import { mapDummyData, MapDataType } from "@data/MapData";
-import { mapTitleSummary, toBase64 } from "@helpers/programHelper";
-import dynamic from "next/dynamic";
+import { toBase64 } from "@helpers/programHelper";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  curLimitDis,
-  curMapState,
-  enterPickState,
-  mapSelectedState,
-  mapState,
-} from "@store/map";
+import { curLimitDis, curMapState, enterPickState, mapState } from "@store/map";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { getDistance } from "@helpers/mapHelper";
 import { IEnterpriseType } from "types/apiType";
 import { getEnterprises } from "api/enterprise";
 import MapDialog from "@components/map/MapDialog";
+import { Box, Grid } from "@mui/material";
 
 declare global {
   interface Window {
@@ -30,8 +22,8 @@ declare global {
 
 const MapContainer = () => {
   const [curPos, setCurPos] = useState({
-    lat: 37.0933576573074,
-    lon: 127.1852009841304,
+    lat: 37.56,
+    lon: 126.9753,
   });
   const [data, setData] = useState<IEnterpriseType[]>([]);
   const [allData, setAllData] = useState<IEnterpriseType[]>([]);
@@ -75,11 +67,10 @@ const MapContainer = () => {
       );
     } catch (e) {
       console.warn(e);
-      // toast.error("지원하지 않는 브라우저입니다.");
     }
   };
 
-  const errorMessage = (err) => {
+  const errorMessage = async (err) => {
     console.log(err);
 
     switch (err.code) {
@@ -96,31 +87,47 @@ const MapContainer = () => {
         toast.error("알 수 없는 오류입니다.");
         break;
     }
+    setCurMapLatLonState([curPos.lat, curPos.lon]);
+    const dataTmp2 = await getEnterprises();
+    const dataTmp = dataTmp2.map((item) => ({
+      ...item,
+      profileImage: `${toBase64(item.profileImage)}`,
+    }));
+    kakaoMapInit({
+      lat: curPos.lat,
+      lon: curPos.lon,
+      dataTmp: dataTmp,
+    });
   };
   useEffect(() => {
     mapInit();
   }, []);
 
   useEffect(() => {
-    const arr = allData.filter(
-      (item) =>
-        getDistance(
-          // curMapLatLonState[0],
-          // curMapLatLonState[1],
-          curPos.lat,
-          curPos.lon,
-          Number(item.latitude),
-          Number(item.longitude)
-        ) <= limitDis
-    );
+    let arr: any[] = [];
+    if (limitDis === -1) {
+      arr = [...allData];
+    } else {
+      arr = allData.filter(
+        (item) =>
+          getDistance(
+            // curMapLatLonState[0],
+            // curMapLatLonState[1],
+            curPos.lat,
+            curPos.lon,
+            Number(item.latitude),
+            Number(item.longitude)
+          ) <= limitDis
+      );
+    }
 
     setData(arr);
     // setData(mapDummyData);
   }, [curMapLatLonState, limitDis]);
 
   const onNextPage = useCallback(() => {
-    setPage(page < Math.floor(data.length / perPage) ? page + 1 : page);
-  }, [page, data.length]);
+    setPage(page + 1 < Math.floor(data.length / perPage) ? page + 1 : page);
+  }, [page, data]);
 
   const onPrevPage = useCallback(() => {
     setPage(page > 0 ? page - 1 : page);
@@ -142,19 +149,31 @@ const MapContainer = () => {
       for (let i = 0; i < markers.length; i++) {
         if (
           getDistance(markers[i].lat, markers[i].lon, curPos.lat, curPos.lon) <
-          limitDis
+            limitDis ||
+          limitDis === -1
         ) {
-          markers[i].marker.setMap(map);
-          window.kakao.maps.event.addListener(
-            markers[i].marker,
-            "click",
-            function (e) {
-              setShow(true);
-              setEnterPick([markers[i].idx, markers[i].id]);
-            }
-          );
+          if (
+            markers[i].lat &&
+            markers[i].lon &&
+            33 < markers[i].lat &&
+            markers[i].lat < 38 &&
+            markers[i].lon > 120 &&
+            markers[i].lon < 140
+          ) {
+            markers[i].marker.setMap(map);
+            markers[i].info.open(map, markers[i].marker);
+            window.kakao.maps.event.addListener(
+              markers[i].marker,
+              "click",
+              function (e) {
+                setShow(true);
+                setEnterPick([markers[i].idx, markers[i].id]);
+              }
+            );
+          }
         } else {
           markers[i].marker.setMap(null);
+          markers[i].info.open(null);
         }
       }
     }
@@ -178,6 +197,14 @@ const MapContainer = () => {
         const map = new window.kakao.maps.Map(container, options);
 
         window.kakao.map = map;
+        window.kakao.maps.event.addListener(map, "dragend", () => {
+          if (!map) {
+            return;
+          }
+          const latlng = map.getCenter();
+          setCurPos({ lat: latlng.Ma, lon: latlng.La });
+          setCurMapLatLonState([latlng.Ma, latlng.La]);
+        });
         setMap(map);
         const mms: any[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -188,14 +215,21 @@ const MapContainer = () => {
           const marker = new window.kakao.maps.Marker({
             position: latlon,
             title: data[i].name,
+            text: data[i].name,
+          });
+          const infowindow = new window.kakao.maps.InfoWindow({
+            position: latlon,
+            content: `<span>${data[i].name}</span>`,
           });
           mms.push({
             marker: marker,
+            info: infowindow,
             lat: Number(data[i].latitude),
             lon: Number(data[i].longitude),
             idx: data[i].idx,
             id: data[i].id,
           });
+
           // marker.setMap(map);
         }
         setMarkers(mms);
@@ -211,40 +245,86 @@ const MapContainer = () => {
   }, [show]);
 
   return (
-    <MainMapContainer>
+    <div>
       {show && <MapDialog onClose={onClose} show={show} />}
-      <MapContent id="map" />
-      <BottomDiv>
-        <div className="head">
-          <div className="label">장소</div>
-          <div className="bts">
-            <button onClick={onPrevPage}>
-              <KeyboardArrowLeftIcon />
-            </button>
-            <button onClick={onNextPage}>
-              <ChevronRightIcon />
-            </button>
-          </div>
-        </div>
-        {data.slice(page * perPage, (page + 1) * perPage).map((item, index) => (
-          <MapDiv key={index} {...item} />
-        ))}
-      </BottomDiv>
-    </MainMapContainer>
+      <Grid container>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: {
+              xs: "flex",
+              sm: "none",
+              md: "none",
+            },
+          }}
+        >
+          <BottomDiv>
+            <div className="head">
+              <div className="label">장소</div>
+              <div className="bts">
+                <button onClick={onPrevPage}>
+                  <KeyboardArrowLeftIcon />
+                </button>
+                <button onClick={onNextPage}>
+                  <ChevronRightIcon />
+                </button>
+              </div>
+            </div>
+            {data
+              .slice(page * perPage, (page + 1) * perPage)
+              .map((item, index) => (
+                <MapDiv key={index} {...item} />
+              ))}
+          </BottomDiv>
+        </Grid>
+        <Grid item xs={12} sm={8} md={9}>
+          <MapContent id="map" />
+        </Grid>
+        <Grid
+          item
+          sm={4}
+          md={3}
+          sx={{
+            display: {
+              xs: "none",
+              sm: "flex",
+              md: "flex",
+            },
+            overflow: "hidden",
+          }}
+        >
+          <BottomDiv>
+            <div className="head">
+              <div className="label">장소</div>
+              <div className="bts">
+                <button onClick={onPrevPage}>
+                  <KeyboardArrowLeftIcon />
+                </button>
+                <button onClick={onNextPage}>
+                  <ChevronRightIcon />
+                </button>
+              </div>
+            </div>
+            <Box sx={{ overflow: "hidden" }}>
+              {data
+                .slice(page * perPage, (page + 1) * perPage)
+                .map((item, index) => (
+                  <MapDiv key={index} {...item} />
+                ))}
+            </Box>
+          </BottomDiv>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
-const MainMapContainer = styled.div`
-  display: flex;
-`;
-
 const BottomDiv = styled.div`
-  // display: block;
   height: 500px;
-  width: 500px;
+  width: 100%;
   display: inline-block;
   flex-direction: column;
-  // overflow: hidden;
   font-family: paybooc-Medium;
   padding: 1rem;
   background-color: #edeef8;
@@ -261,7 +341,6 @@ const BottomDiv = styled.div`
 `;
 
 export const MapContent = styled.div`
-  // aspect-ratio: 320 / 220;
   width: 100%;
   height: 500px;
 `;

@@ -69,7 +69,7 @@ const ThemeProgram: VFC<ICourse> = ({
   }, []);
 
   return (
-    <Grid item lg={4} xs={6} md={4} sm={6}>
+    <Grid item lg={4} xs={12} md={4} sm={6}>
       <ParentMainContainer>
         <TopContainer>
           <IconButton

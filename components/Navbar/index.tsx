@@ -23,6 +23,7 @@ import { checkToken, setToken } from "@src/API";
 import { toast } from "react-toastify";
 import SearchIcon from "@mui/icons-material/Search";
 import { tagState } from "@store/tag";
+import { getUserProfile } from "api/auth";
 
 interface PageProps {
   label: string;
@@ -47,6 +48,7 @@ const Navbar = () => {
   const [isMain, setIsMain] = useState(true);
   const [selectedTag, setSelectedTag] = useRecoilState(tagState);
   const [value, setValue] = useState("");
+
   const onChangeValue = useCallback(
     (e) => {
       setValue(e.target.value);
@@ -71,10 +73,22 @@ const Navbar = () => {
     }
   }, []);
 
+  const checkLogin = async () => {
+    try {
+      await getUserProfile();
+    } catch (e) {
+      setLoggedIn("");
+      setLoggedInId("");
+      toast.error("토큰 만료");
+      router.push("/signin");
+    }
+  };
+
   useEffect(() => {
     if (router.pathname) {
       setIsMain(router.pathname === "/");
     }
+    checkLogin();
   }, [router.pathname]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -126,7 +140,9 @@ const Navbar = () => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon
+                sx={{ color: router.pathname === "/" ? "#ffffff" : "#000000" }}
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -156,14 +172,6 @@ const Navbar = () => {
               ))}
             </Menu>
           </Box>
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-          >
-            LOGO
-          </Typography> */}
           <Box
             sx={{
               flexGrow: 1,
@@ -171,7 +179,10 @@ const Navbar = () => {
               hover: "cursor",
             }}
           >
-            <Button sx={{ textTransform: "none" }}>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => router.push("/signin")}
+            >
               <Logo />
             </Button>
           </Box>
@@ -179,7 +190,6 @@ const Navbar = () => {
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
-              // justifyContent: "center",
             }}
           >
             <Link href="/" passHref>

@@ -1,5 +1,6 @@
 import { API, getPayload, getToken } from "@src/API";
 import { IMergeCourse, IReportCommentType } from "types/apiType";
+import { delComment } from "./admin";
 
 export const deleteBoard = async ({ url, id, idx }) => {
   const urlTo = url[0].toUpperCase() + url.slice(1);
@@ -464,12 +465,19 @@ export const searchCourse = async ({ value }) => {
   }
 };
 
-export const updateCourseBoard = async ({ id, idx, title, content }) => {
+export const updateCourseBoard = async ({
+  id,
+  idx,
+  title,
+  content,
+  createdAt,
+}) => {
   try {
-    const { data } = await API.post(`/board/2/modify/${idx}`, {
-      id: id,
+    const { data } = await API.put(`/board/2/${idx}`, {
+      writer: id,
       title: title,
       content: content,
+      createdAt: createdAt,
     });
     return data;
   } catch (e) {
@@ -490,10 +498,11 @@ export const updateTypeBoard = async ({
   region,
   tags,
   season,
+  createdAt,
 }) => {
   try {
-    const { data } = await API.post(`/board/${type}/modify/${idx}`, {
-      id: id,
+    const { data } = await API.put(`/board/${type}/${idx}`, {
+      writer: id,
       title: title,
       shortContent: shortContent,
       content: content,
@@ -504,9 +513,40 @@ export const updateTypeBoard = async ({
       tags: tags,
       season: season,
       type: type,
+      createdAt: createdAt,
     });
     return data;
   } catch (e) {
     console.log("type board update e", e);
+  }
+};
+
+export const updateBoardComment = async ({
+  id,
+  type,
+  idx,
+  content,
+  parentIdx,
+  commentIdx,
+}) => {
+  try {
+    if (parentIdx) {
+      const { data } = await API.put(`/board/${type}/reply/update/${idx}`, {
+        id: id,
+        idx: commentIdx,
+        parent: parentIdx,
+        content: content,
+      });
+      return data;
+    } else {
+      const { data } = await API.put(`/board/${type}/reply/update/${idx}`, {
+        id: id,
+        idx: commentIdx,
+        content: content,
+      });
+      return data;
+    }
+  } catch (e) {
+    throw new Error("not update create");
   }
 };

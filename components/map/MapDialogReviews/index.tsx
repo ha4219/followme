@@ -63,7 +63,7 @@ const MapDialogReviewItem = ({
           </div>
           <div className="mapDialogReviewItemContentWrapper">
             <div className="mapDialogReviewItemContentStar">
-              <MapDialogStars score={5} />
+              <MapDialogStars score={score} />
             </div>
             <div
               className="mapDialogReviewItemContent"
