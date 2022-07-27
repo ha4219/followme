@@ -309,6 +309,17 @@ export const delRecommendBoard = async ({ id, idx }) => {
   }
 };
 
+export const delCourseBoard = async ({ id, idx }) => {
+  try {
+    const { data } = await API.post(`/board/2/delete/${idx}`, {
+      writer: id,
+    });
+    return data;
+  } catch (e) {
+    console.log("del course board", e);
+  }
+};
+
 export const likeRecommendBoard = async ({ id, idx }) => {
   try {
     const { data } = await API.post(`/board/0/like/${idx}`, {

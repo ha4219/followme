@@ -168,12 +168,6 @@ const CourseDetail = () => {
                 dangerouslySetInnerHTML={{ __html: course.content }}
               />
               {course && course.writer === loggedInId && (
-                // <ButtonContainer>
-                //   <Button variant="contained">수정</Button>
-                //   <Button variant="contained" color="error">
-                //     삭제
-                //   </Button>
-                // </ButtonContainer>
                 <ReviseDeleteButtons url="course" id={loggedInId} idx={idx} />
               )}
               <ReplyContainer>

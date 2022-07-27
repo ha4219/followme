@@ -1,6 +1,11 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
-import { deleteBoard, delRecommendBoard, delThemeBoard } from "api/board";
+import {
+  delCourseBoard,
+  deleteBoard,
+  delRecommendBoard,
+  delThemeBoard,
+} from "api/board";
 import { useRouter } from "next/router";
 import { useCallback, VFC } from "react";
 import { toast } from "react-toastify";
@@ -14,8 +19,6 @@ interface IProps {
 const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
   const router = useRouter();
   const onClickRevise = useCallback(() => {
-    console.log(url);
-
     router.push({
       pathname: `/${url}/revise`,
       query: {
@@ -40,6 +43,10 @@ const ReviseDeleteButtons: VFC<IProps> = ({ url, id, idx }) => {
           idx: idx,
         });
       } else {
+        data = await delCourseBoard({
+          id: id,
+          idx: idx,
+        });
       }
       if (data.data === "success") {
         toast.success("삭제 완료");

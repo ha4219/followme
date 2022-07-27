@@ -40,14 +40,7 @@ const MapDialogReviewItem = ({
         <MapDialogReviewItemContainer>
           <div className="mapDialogReviewItemProfile">
             <div className="mapDialogReviewItemProfileAvatarContainer">
-              <Avatar
-                alt="user"
-                // src={gravatar.url(id ? id : "default", {
-                //   s: "28px",
-                //   d: "retro",
-                // })}
-                className="mapDialogReviewItemProfileAvatar"
-              />
+              <Avatar alt="user" className="mapDialogReviewItemProfileAvatar" />
               <div>
                 <div>{writer}</div>
                 {id === writer && (
